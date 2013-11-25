@@ -816,7 +816,7 @@
 
 #pragma mark --SelectedImageDelegate
 
--(void)didFinishSelectingImage:(NSArray *)imageArray
+- (void)didFinishSelectingImage:(NSArray *)imageArray
 {
     if ([imageArray count] == 0 || !imageSessionExists) {
         return;
@@ -868,7 +868,7 @@
     }
 }
 
--(void) onInviteEvent:(NSNotification*)notification
+- (void)onInviteEvent:(NSNotification*)notification
 {
 	NgnInviteEventArgs* eargs = [notification object];
 	if(![[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession] || _audioSessionID != eargs.sessionId){
