@@ -51,6 +51,7 @@
     BOOL getIndexArray;
     BOOL beginDownload;
     BOOL didEndCall;
+    BOOL shouldPlayRingTone;
     
     double videoBeginTime;
 }
@@ -129,7 +130,7 @@
             // 因为目前无法检测网络状态,所以不加入此功能
 //            [self addNetworkIndicator];
             [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
-            [[SipStackUtils sharedInstance].soundService playRingBackTone];
+            shouldPlayRingTone = YES;
             break;
         }
         case ReceivingCall: {
@@ -150,6 +151,7 @@
             [self addPickupAndRejectButton];
             // Raise the Caller bulletin board
             [self raiseCallerBulletinBoard];
+            shouldPlayRingTone = NO;
             break;
         }
         default: {
@@ -178,10 +180,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
-//        UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
-//        [_bigProfileImage performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
-//    }];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (shouldPlayRingTone) {
+        [[SipStackUtils sharedInstance].soundService playRingBackTone];
+        shouldPlayRingTone = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -919,8 +926,8 @@
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
   
     //LLGG
-   [self dismissViewControllerAnimated:YES completion:nil];
-//   [self changeViewAppearanceToInCall];
+   //[self dismissViewControllerAnimated:YES completion:nil];
+   [self changeViewAppearanceToInCall];
     
     if (!_didEndCallBySelf) {
         if (_viewState == InCall) {
@@ -948,8 +955,6 @@
 -(void) updateViewAndState{
 	if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
 		switch ([[SipStackUtils sharedInstance].audioService getAudioSessionState]) {
-            
-                
 			case INVITE_STATE_INPROGRESS:
 			{
                 break;
@@ -1077,6 +1082,9 @@
     else if ([message isEqualToString:kNewImageComing]) {
         [_imageDispVC scrollTO:_imageDispVC.totalNumber * PageWidth];
     }
+    else if ([message isEqualToString:kImageDispCancel]){
+        [_imageDispVC cancelFromRemoteyParty];
+    }
     else if ([message isEqualToString:kCancelAddImage]){
         if ([_imageDispVC.images count] == 0) {
             [_imageDispVC cancelFromRemoteyParty];
@@ -1112,7 +1120,7 @@
     else if ([message isEqualToString:kDoodleCancel]){
 //        [self showImageVC];
         if (_imageDispVC) {
-            [_imageDispVC cancelFromRemoteyParty];
+            [_imageDispVC cancelDoodleFromRemoteyParty];
         }
         else {
             [self dismissViewControllerAnimated:YES completion:nil];

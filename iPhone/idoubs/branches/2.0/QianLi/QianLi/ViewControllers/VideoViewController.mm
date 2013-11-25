@@ -113,7 +113,7 @@
 #pragma mark  -- UIWebViewDelegate --
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    NSLog(@"error load:%@", [[webView.request URL] absoluteString]);
+    //NSLog(@"error load:%@", [[webView.request URL] absoluteString]);
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -138,12 +138,12 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    NSLog(@"finish load:%@", [[webView.request URL] absoluteString]);
+    //NSLog(@"finish load:%@", [[webView.request URL] absoluteString]);
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    NSLog(@"did start url:%@", [[webView.request URL] absoluteString]);
+    //NSLog(@"did start url:%@", [[webView.request URL] absoluteString]);
 }
 
 - (void)loadWebSite
@@ -166,8 +166,15 @@
 
 - (void)cancelFromRemote
 {
-    [_moviePlayer cancelMoviePlayer];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if (_moviePlayer) {
+        [_moviePlayer cancelMoviePlayer];
+        [_moviePlayer dismissViewControllerAnimated:YES completion:^{
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
+    }
+    else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
     // add to history
     if ([_vedioThumbs count] == 0) {
         [_vedioThumbs addObject:[self smallScreenshot]];
@@ -189,7 +196,7 @@
 {
     if (_moviePlayer) {
         [_moviePlayer cancelMoviePlayer];
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [_moviePlayer dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
