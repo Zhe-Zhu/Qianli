@@ -926,8 +926,8 @@
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
   
     //LLGG
-   //[self dismissViewControllerAnimated:YES completion:nil];
-   [self changeViewAppearanceToInCall];
+   [self dismissViewControllerAnimated:YES completion:nil];
+   //[self changeViewAppearanceToInCall];
     
     if (!_didEndCallBySelf) {
         if (_viewState == InCall) {
