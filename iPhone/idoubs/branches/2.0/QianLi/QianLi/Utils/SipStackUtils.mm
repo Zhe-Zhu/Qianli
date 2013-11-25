@@ -383,6 +383,8 @@ static SipStackUtils * sipStackUtilsInstance;
                         [[SipStackUtils sharedInstance].historyService addEvent:audioVC.activeEvent];
                         NSInteger badge = [UIApplication sharedApplication].applicationIconBadgeNumber;
                         [UIApplication sharedApplication].applicationIconBadgeNumber = 1 + badge;
+                        QianLiAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+                        [appDelegate setTabItemBadge:1 + badge];
                     }
                 }
             }

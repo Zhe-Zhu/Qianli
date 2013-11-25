@@ -77,7 +77,6 @@
 @property(nonatomic, strong) UINavigationControllerPortraitViewController *selectPhotoViewController;
 
 @property(nonatomic) BOOL didEndCallBySelf;
-//@property(nonatomic)
 
 @end
 
@@ -528,6 +527,7 @@
 
 - (void)pressButtonEndCall
 {
+    [[SipStackUtils sharedInstance].audioService hangUpCall];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [callingIndicatorSequence stop];
     [timer invalidate]; // 停止计时并从Runloop中释放
@@ -558,7 +558,6 @@
                                    selector: @selector(timerSuicideTick)
                                    userInfo: nil
                                     repeats: NO];
-    [[SipStackUtils sharedInstance].audioService hangUpCall];
 }
 
 # pragma mark Receieve a Call View Methods
@@ -1042,7 +1041,10 @@
 {
     NSString *info = notification.object;
     NSArray* words = [info componentsSeparatedByString:kSeparator];
-    NSString *message = [words objectAtIndex:0];
+    NSString *message;
+    if ([words count] > 0) {
+       message = [words objectAtIndex:0];
+    }
     
     if ([message isEqualToString:kBeginImage]) {
         [self openSpeaker];
@@ -1281,7 +1283,6 @@
             offset.x = [[words objectAtIndex:2] floatValue];
             offset.y = [[words objectAtIndex:3] floatValue];
             _browser.remoteOffset = offset;
-            
             _browser.remoteURL = [words objectAtIndex:1];
             _browser.fromRemote = YES;
             // 调整一些讨厌的URL

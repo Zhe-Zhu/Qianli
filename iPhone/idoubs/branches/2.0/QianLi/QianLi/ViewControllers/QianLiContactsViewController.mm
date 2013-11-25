@@ -83,7 +83,7 @@
     [_friendsTableView setTableHeaderView:_buttonInviteFriends];
     
     _friendsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-
+    _friendsTableView.contentInset = UIEdgeInsetsMake(0,0,65,0);
 }
 
 - (void)viewWillAppear:(BOOL)animated

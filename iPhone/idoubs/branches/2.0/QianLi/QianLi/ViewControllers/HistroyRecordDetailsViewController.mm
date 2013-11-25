@@ -44,7 +44,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    //_historyDetailTableView.contentInset = UIEdgeInsetsMake(10,0,70,0);
     _shouldLoad = NO;
     loadTimes = 1;
    // [self editHistory:nil];

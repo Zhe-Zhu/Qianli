@@ -457,7 +457,7 @@
     AssetGroupPickerController *assetVC = [storyboard instantiateViewControllerWithIdentifier:@"AssetGroupPickerVC"];
     assetVC.delegate = self;
     
-    [[SipStackUtils sharedInstance].messageService sendMessage:kAddNewImage  toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+    //[[SipStackUtils sharedInstance].messageService sendMessage:kAddNewImage  toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
     UINavigationController *navigationVC = [[UINavigationController alloc] init];
     navigationVC.viewControllers = @[assetVC];
     _addMoreImagesController = navigationVC;

@@ -418,7 +418,7 @@
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [cancelButton addTarget:self action:@selector(cancelHistory) forControlEvents:UIControlEventTouchUpInside];
-    cancelButton.frame = CGRectMake(15, 25, 45, 30);
+    cancelButton.frame = CGRectMake(15, 25, 60, 30);
     [cancelButton setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
     [cancelButton setTintColor:[UIColor colorWithRed:250/255.0 green:250/255.0 blue:250/255.0 alpha:1.0]];
     [view addSubview:cancelButton];
