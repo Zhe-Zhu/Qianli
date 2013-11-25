@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6C58125C-CAE7-4778-A700-6FE4AECD9DD5</string>
+	<key>IDESourceControlProjectName</key>
+	<string>QianLi</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>F658688C-27ED-4BBE-9CBC-4A385D5FF22B</key>
+		<string>svn://192.168.1.200/APP/QianLi/branches/QianLiWithVoiceModule</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iPhone/idoubs/branches/2.0/QianLi/QianLi.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>5C42AB4C-933C-4118-9CFD-6A1500763800</key>
+		<string>../../RestKit/Vendor/AFNetworking</string>
+		<key>878DBE3D-D988-4074-8371-3F21870D14C6</key>
+		<string>../../RestKit/Vendor/TransitionKit</string>
+		<key>94CEE989-9109-4B01-8410-C994F218A520</key>
+		<string>../../RestKit</string>
+		<key>F658688C-27ED-4BBE-9CBC-4A385D5FF22B</key>
+		<string>../../../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>F658688C-27ED-4BBE-9CBC-4A385D5FF22B</key>
+		<string>svn://192.168.1.200/APP</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>svn://192.168.1.200/APP/QianLi/branches/QianLiWithVoiceModule/iPhone/idoubs/branches/2.0/QianLi/QianLi.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>F658688C-27ED-4BBE-9CBC-4A385D5FF22B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryBranchesRelativeLocationKey</key>
+			<string>QianLi/branches</string>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlRepositoryTagsRelativeLocationKey</key>
+			<string>QianLi/tags</string>
+			<key>IDESourceControlRepositoryTrunkRelativeLocationKey</key>
+			<string>QianLi/trunk</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F658688C-27ED-4BBE-9CBC-4A385D5FF22B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>QianLiWithVoiceModuleLatest</string>
+		</dict>
+	</array>
+</dict>
+</plist>

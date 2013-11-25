@@ -1,0 +1,148 @@
+/* 
+  Localizable.strings
+  QianLi
+
+  Created by lutan on 10/7/13.
+  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
+*/
+
+"CONNECTSIP" = "Connected to sip server now";
+
+// Push notification
+"PUSHCALLING" = "%@: incoming call";
+"PUSHACTIONKEY" = "answer";
+"APPOINTMENT" ="%@ wants to talk with you";
+"APPOINTMENTACTIONKEY" = "OK";
+"MISSEDCALL" = "%@: missed call";
+"missedcallactionkey" = "see details";
+"contactTitle" = "Contacts";
+"recentCalls" = "Recents";
+"alertNotificationTitle" = "Notification is closed";
+"alertNotificationBody" = "Don't miss a Qianli call - please turn your push notification on! Enter your iPhone settings and tap on Notification center. Go to Qianli and make sure the notifications are on.";
+"alertNotificationButton" = "Done";
+"historyReceivedCall" = "Received Qianli call";
+"historyCall" = "Qianli call";
+"historyAppointment" = "Send appointment";
+"unknownName" = " ";
+"historyDetailMore" = "More";
+"historyDetailTime" = "%dmin %d sec";
+"historyDetailTimeSecond" = "%d sec";
+"historyDetailCancel" = "Call cancelled";
+"historyDetailReject" = "Call rejected";
+"historyDetailMissedCall" = "Missed Call";
+"historyDetailAppointment" = "Qianli appointment";
+"historyDetailMoreCall" = "Qianli Call";
+"historyDetailMoreAppointment" = "Qianli Appointment";
+"signUpEditProfileTitle" = "More Information";
+"Cancel" = "Cancel";
+"Album" = "Album";
+"Camera" = "Camera";
+"beginToUse" = "Let's Start";
+"helpViewOneTitle" = "Welcome to Qianli";
+"helpViewTwoTitle" = "Better Communication";
+"helpViewTwoQuote" = "We could have more than voice to express our thoughts";
+"helpViewTwoDescription" = "You can share pictures,website link and other interesting information during the call.";
+"helpViewThreeTitle" = "Feel Together";
+"helpViewThreeQuote" = "Just think about the feeling when someone is around";
+"helpViewThreeDescription" = "When you share pictures or videos with others, Qianli can sychronize your screens and make it more interesting.";
+"helpViewFourTitle" = "Busy or not?";
+"helpViewFourDescription" = "Send an appointment through Qianli. They will call back if they are available.";
+"unset" = " ";
+"send" = "Send";
+"addMore" = "Add more";
+"doodle" = "Doodle";
+"save" = "Save";
+"eraser" = "Eraser";
+"pen" = "Pen";
+"Clear" = "Clear";
+"Synchronize" = "Syn";
+"webEndBrowser" = "End browsing";
+"taobao" = "taobao.com";
+"yhd" = "yhd.com";
+"jd" = "jd.com";
+"connecting" = "connecting...";
+"callingPhoto" = "Photo";
+"callingVideo" = "Video";
+"callingShopping" = "Shopping";
+"callingBrowser" = "Browser";
+"callingComingCallText" = "want to talk";
+"watchVideo" = "watch video";
+"handWriting" = "hand writing";
+"webBrowsing" = "browse website";
+"shareImage" = "share image";
+"callingRingingText" = "ringing...";
+"Quit" = "Cancel";
+"emailSubject" = "Join Qianli with me!";
+"emailBody" = "Qianli is a free VOIP app, which allows you to share pictures, url links or even videos with others while talking. To know more and how to download Qianli, please click: https://www.smore.com/x0hc";
+"emailWarningTitle" = "Can't send email";
+"emailWarningMessage" = "We can't send out email. Please check your email setting.";
+"emailWarningOK" = "OK";
+"signOutBody" = "This action will remove all your data from our server, are you sure you want to countinue?";
+"signOutTitle" = "Watch out";
+"signOutConfirm" = "Sign out";
+"numberConfirmation" = "Is the number correct? \n\n  %@ %@  \n\nThe captcha would be sent to this number.";
+"numberConfirmationTitle" = "Check the number";
+"Confirm" = "Confirm";
+"countryCode" = "Choose country code";
+"registerErrorTitle" = "Oops!";
+"registerErrorMessage" = "Some errors happened when we tried to register. Please try again.";
+"noNetworkTitle" = "Is network available?";
+"noNetworkMessage" = "We can't access the network. Please check whether the network is available and try again.";
+"noCaptcha" = "No code";
+"captchaErrorTitle" = "Wrong code";
+"captchaErrorMessage" = "Code verification fails. Please find the verification SMS and check whether the code is correct.";
+"captchaErrorButton" = "Retype";
+"sendAgain" = "\nPlease check if the number is correct.\n\n %@ \n\nClick [Confirm] to send again.";
+"sendAgainAgain" = "It may take a while to receive the verification SMS. If there are some problems, you may contact us directly:\n theashstudio@gmail.com";
+"sendAgainAgainTitle" = "Still not received SMS";
+"sendAgainTitle" = "No SMS";
+"inviteFriend" = "Invite friends";
+"noContact" = "No contact";
+"noContactBody" = "Click upper button to invite your friends";
+"noContactBody2" = "to join Qianli!";
+"contactAlertTitle" = "Access contacts";
+"contactAlertBody" = "Please allow Qianli to access your contacts, so you can call friends who are using Qianli.";
+"iknow" = "OK";
+"setting" = "Setting";
+"labelProfile" = "Profile";
+"labelSMS" = "Invite friends by SMS";
+"labelEmail" = "Invite friends by Email";
+"labelFeedback" = "Feedback";
+"labelSignout" = "Sign out";
+"labelAvatar" = "Avatar";
+"labelBigPhoto" = "Photo in the call";
+"labelName" = "Name";
+"labelPhoneNumber" = "Phone No.";
+"signUpPhoneNumber" = "Your phone number";
+"signUpCountryCode" = "China (+86)";
+"welcome" = "Welcome to Qianli";
+"continue" = "Continue";
+"hintText" = "The verification code is already sent by SMS";
+"captchaTitle" = "Verification Code";
+"back" = "Back";
+"inputName" = "Enter your name";
+"done" = "Done";
+"historyDetailMoreClear" = "Clean up";
+"request" = "Call request";
+"call" = "Qianli call";
+"photoCount" = "%d photos";
+
+"urlInput" = "Input url or search";
+"go" = "Go";
+"helpViewOneDescription" = "Qianli is a VOIP app. With Qianli in your phone, you and your friends can enjoy free and stable voice call.";
+
+//date
+"yesterday" = "Yesterday";
+"monday" = "Monday";
+"tuesday" = "Tuesday";
+"wednesday" = "Wednesday";
+"thursday" = "Thursday";
+"friday" = "Friday";
+"saturday" = "Saturday";
+"sunday" = "Sunday";
+
+"version" = "Version";
+"labelAbout" = "About Qianli";
+
+//Local notification
+"IncomingCallWithOutName" = "you have a call now, tap to answer";

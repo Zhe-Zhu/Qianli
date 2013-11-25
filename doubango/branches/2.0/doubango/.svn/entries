@@ -1,0 +1,294 @@
+10
+
+dir
+1258
+svn://lutan@192.168.1.200/APP/QianLi/branches/QianLiWithVoiceModule/doubango/branches/2.0/doubango
+svn://lutan@192.168.1.200/APP
+
+
+
+2013-11-07T09:38:25.781800Z
+1240
+lutan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+16c71cb0-fdd6-44a4-a935-81604a587dc5
+
+tinySAK
+dir
+
+tinyHTTP
+dir
+
+schemas
+dir
+
+tinyDSHOW
+dir
+
+tinyDEMO
+dir
+
+tinyNET
+dir
+
+dtmf
+dir
+
+bindings
+dir
+
+tinySIP
+dir
+
+tinyXCAP
+dir
+
+configure.ac
+file
+
+
+
+
+2013-10-10T06:43:30.000000Z
+78cffe459931c2f3c57c47c4325dafeb
+2013-08-19T03:16:22.643508Z
+1107
+lutan
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+10225
+
+Samples
+dir
+
+images
+dir
+
+tinySMS
+dir
+
+tinyIPSec
+dir
+
+contributors.txt
+file
+
+
+
+
+2013-10-10T06:43:30.000000Z
+ca831584d39ce11ee8f9e8171dc51170
+2013-08-19T03:16:22.643508Z
+1107
+lutan
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+419
+
+autogen.sh
+file
+
+
+
+
+2013-10-10T06:43:30.000000Z
+3f11a2e0570d66a7f5b7ab4bee9cd1f8
+2013-08-19T03:16:22.643508Z
+1107
+lutan
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+330
+
+plugins
+dir
+
+tinyMEDIA
+dir
+
+tinyMSRP
+dir
+
+g729a
+dir
+
+version_w32.sh
+file
+
+
+
+
+2013-10-10T06:43:30.000000Z
+4aa3f0da61b8c6bcdde836c6b4037f2d
+2013-08-19T03:16:22.643508Z
+1107
+lutan
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1089
+
+tinySDP
+dir
+
+g729b
+dir
+
+rtpdump
+dir
+
+tinyROHC
+dir
+
+thirdparties
+dir
+
+website
+dir
+
+win32
+dir
+
+xcode
+dir
+
+tinySIGCOMP
+dir
+
+android-projects
+dir
+
+documentation
+dir
+
+tinyRTP
+dir
+
+Makefile.am
+file
+
+
+
+
+2013-10-10T06:43:30.000000Z
+adb80bfd4d37061687ed0a239f90ef71
+2013-08-19T03:16:22.643508Z
+1107
+lutan
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+222
+
+tinyDAV
+dir
+
+android-utils
+dir
+
