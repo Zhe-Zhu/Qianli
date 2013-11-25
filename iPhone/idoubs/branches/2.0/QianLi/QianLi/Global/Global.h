@@ -88,6 +88,7 @@ nil]
 #define kPlayVideo @"PLAYVIDEO"
 #define kVideoCancel @"VIDEOCANCEL"
 #define kVideoSyn @"VIDEOSYN"
+#define kImageDispCancel @"IMAGEDISPCANCEL"
 #define kVideoPlayerCancel @"PLAYERCANCEL"
 #define kVideoPlaying @"VIDEOPLAYING"
 #define kVideoStop @"VIDEOSTOP"

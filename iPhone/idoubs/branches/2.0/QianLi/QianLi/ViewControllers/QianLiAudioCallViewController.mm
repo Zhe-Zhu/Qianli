@@ -51,6 +51,7 @@
     BOOL getIndexArray;
     BOOL beginDownload;
     BOOL didEndCall;
+    BOOL shouldPlayRingTone;
     
     double videoBeginTime;
 }
@@ -76,7 +77,6 @@
 @property(nonatomic, strong) UINavigationControllerPortraitViewController *selectPhotoViewController;
 
 @property(nonatomic) BOOL didEndCallBySelf;
-//@property(nonatomic)
 
 @end
 
@@ -129,7 +129,7 @@
             // 因为目前无法检测网络状态,所以不加入此功能
 //            [self addNetworkIndicator];
             [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
-            [[SipStackUtils sharedInstance].soundService playRingBackTone];
+            shouldPlayRingTone = YES;
             break;
         }
         case ReceivingCall: {
@@ -150,6 +150,7 @@
             [self addPickupAndRejectButton];
             // Raise the Caller bulletin board
             [self raiseCallerBulletinBoard];
+            shouldPlayRingTone = NO;
             break;
         }
         default: {
@@ -178,10 +179,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
-//        UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
-//        [_bigProfileImage performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
-//    }];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (shouldPlayRingTone) {
+        [[SipStackUtils sharedInstance].soundService playRingBackTone];
+        shouldPlayRingTone = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -249,7 +255,7 @@
     NSRunLoop *runloop = [NSRunLoop currentRunLoop];
     timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateTimeLabel) userInfo:nil repeats:YES];
     [runloop addTimer:timer forMode:NSRunLoopCommonModes];
-    [runloop addTimer:timer forMode:UITrackingRunLoopMode];
+//    [runloop addTimer:timer forMode:UITrackingRunLoopMode];
     
     // 加入缓慢出现的动画效果
     [UIView animateWithDuration:1.2f animations:^{
@@ -521,6 +527,7 @@
 
 - (void)pressButtonEndCall
 {
+    [[SipStackUtils sharedInstance].audioService hangUpCall];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [callingIndicatorSequence stop];
     [timer invalidate]; // 停止计时并从Runloop中释放
@@ -546,14 +553,11 @@
     }
     
     // starts timer suicide
-    [self updateViewAndState];
-    //[[SipStackUtils sharedInstance].audioService releaseAudioSession];
     [NSTimer scheduledTimerWithTimeInterval: 0.5
                                      target: self
                                    selector: @selector(timerSuicideTick)
                                    userInfo: nil
                                     repeats: NO];
-    [[SipStackUtils sharedInstance].audioService hangUpCall];
 }
 
 # pragma mark Receieve a Call View Methods
@@ -811,7 +815,7 @@
 
 #pragma mark --SelectedImageDelegate
 
--(void)didFinishSelectingImage:(NSArray *)imageArray
+- (void)didFinishSelectingImage:(NSArray *)imageArray
 {
     if ([imageArray count] == 0 || !imageSessionExists) {
         return;
@@ -863,7 +867,7 @@
     }
 }
 
--(void) onInviteEvent:(NSNotification*)notification
+- (void)onInviteEvent:(NSNotification*)notification
 {
 	NgnInviteEventArgs* eargs = [notification object];
 	if(![[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession] || _audioSessionID != eargs.sessionId){
@@ -920,7 +924,7 @@
   
     //LLGG
    [self dismissViewControllerAnimated:YES completion:nil];
-//   [self changeViewAppearanceToInCall];
+   //[self changeViewAppearanceToInCall];
     
     if (!_didEndCallBySelf) {
         if (_viewState == InCall) {
@@ -948,8 +952,6 @@
 -(void) updateViewAndState{
 	if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
 		switch ([[SipStackUtils sharedInstance].audioService getAudioSessionState]) {
-            
-                
 			case INVITE_STATE_INPROGRESS:
 			{
                 break;
@@ -1039,7 +1041,10 @@
 {
     NSString *info = notification.object;
     NSArray* words = [info componentsSeparatedByString:kSeparator];
-    NSString *message = [words objectAtIndex:0];
+    NSString *message;
+    if ([words count] > 0) {
+       message = [words objectAtIndex:0];
+    }
     
     if ([message isEqualToString:kBeginImage]) {
         [self openSpeaker];
@@ -1077,6 +1082,9 @@
     else if ([message isEqualToString:kNewImageComing]) {
         [_imageDispVC scrollTO:_imageDispVC.totalNumber * PageWidth];
     }
+    else if ([message isEqualToString:kImageDispCancel]){
+        [_imageDispVC cancelFromRemoteyParty];
+    }
     else if ([message isEqualToString:kCancelAddImage]){
         if ([_imageDispVC.images count] == 0) {
             [_imageDispVC cancelFromRemoteyParty];
@@ -1112,7 +1120,7 @@
     else if ([message isEqualToString:kDoodleCancel]){
 //        [self showImageVC];
         if (_imageDispVC) {
-            [_imageDispVC cancelFromRemoteyParty];
+            [_imageDispVC cancelDoodleFromRemoteyParty];
         }
         else {
             [self dismissViewControllerAnimated:YES completion:nil];
@@ -1275,7 +1283,6 @@
             offset.x = [[words objectAtIndex:2] floatValue];
             offset.y = [[words objectAtIndex:3] floatValue];
             _browser.remoteOffset = offset;
-            
             _browser.remoteURL = [words objectAtIndex:1];
             _browser.fromRemote = YES;
             // 调整一些讨厌的URL

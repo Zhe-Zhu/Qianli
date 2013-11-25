@@ -380,49 +380,57 @@
 
 - (void)cancel
 {
-    [self cancelFromRemoteyParty];
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    [[SipStackUtils sharedInstance].messageService sendMessage:kDoodleCancel toRemoteParty:remotePartyNumber];
+    if (_doodleView) {
+        [self cancelDoodleFromRemoteyParty];
+        [[SipStackUtils sharedInstance].messageService sendMessage:kDoodleCancel toRemoteParty:remotePartyNumber];
+    }
+    else{
+        [self cancelFromRemoteyParty];
+        [[SipStackUtils sharedInstance].messageService sendMessage:kImageDispCancel toRemoteParty:remotePartyNumber];
+    }
 }
 
 - (void)cancelFromRemoteyParty
 {
-    if (!_doodlebackView) {
-        if (_chooesPhoto) {
-            [_chooesPhoto dismissWithClickedButtonIndex:[_chooesPhoto cancelButtonIndex] animated:YES];
-        }
-        if (_addMoreImagesController) {
-            [_addMoreImagesController popViewControllerAnimated:NO];
-            [_addMoreImagesController dismissViewControllerAnimated:YES completion:nil];
-        }
-        [self.navigationController popViewControllerAnimated:YES];
-        [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
-            NSLog(@"end session");
-        }];
-        
-        // Add to history
-        NSMutableArray *array = [NSMutableArray array];
-        for (UIImage *image in _images) {
-            [array addObject:[image imageByResizing:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
-        }
-        NSData *imageData = [NSKeyedArchiver archivedDataWithRootObject:array];
-        NgnHistoryImageEvent *imageEvent = [NgnHistoryEvent createImageEventWithStatus:HistoryEventStatus_Incoming andRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] andContent:imageData];
-        imageEvent.start = _starTime;
-        imageEvent.end = [[NSDate date] timeIntervalSince1970];
-        if (_isIncoming) {
-            imageEvent.status = HistoryEventStatus_Incoming;
-        }
-        else{
-            imageEvent.status = HistoryEventStatus_Outgoing;
-        }
-        [[SipStackUtils sharedInstance].historyService addEvent:(NgnHistoryEvent *)imageEvent];
+    if (_doodleView) {
+        [self cancelDoodleFromRemoteyParty];
+    }
+    if (_chooesPhoto) {
+        [_chooesPhoto dismissWithClickedButtonIndex:[_chooesPhoto cancelButtonIndex] animated:YES];
+    }
+    if (_addMoreImagesController) {
+        [_addMoreImagesController dismissViewControllerAnimated:YES completion:nil];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+    [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
+        NSLog(@"end session");
+    }];
+    
+    // Add to history
+    NSMutableArray *array = [NSMutableArray array];
+    for (UIImage *image in _images) {
+        [array addObject:[image imageByResizing:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
+    }
+    NSData *imageData = [NSKeyedArchiver archivedDataWithRootObject:array];
+    NgnHistoryImageEvent *imageEvent = [NgnHistoryEvent createImageEventWithStatus:HistoryEventStatus_Incoming andRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] andContent:imageData];
+    imageEvent.start = _starTime;
+    imageEvent.end = [[NSDate date] timeIntervalSince1970];
+    if (_isIncoming) {
+        imageEvent.status = HistoryEventStatus_Incoming;
     }
     else{
-        _toolBar.hidden = NO;
-        [_doodlebackView removeFromSuperview];
-        [_doodleView removeFromSuperview];
-        [_doodleToolBar removeFromSuperview];
+        imageEvent.status = HistoryEventStatus_Outgoing;
     }
+    [[SipStackUtils sharedInstance].historyService addEvent:(NgnHistoryEvent *)imageEvent];
+}
+
+- (void)cancelDoodleFromRemoteyParty
+{
+    _toolBar.hidden = NO;
+    [_doodlebackView removeFromSuperview];
+    [_doodleView removeFromSuperview];
+    [_doodleToolBar removeFromSuperview];
 }
 
 - (IBAction)addMoreImage:(id)sender
@@ -433,7 +441,6 @@
 }
 
 #pragma mark  --ActionSheet Delegate
-
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
@@ -450,7 +457,7 @@
     AssetGroupPickerController *assetVC = [storyboard instantiateViewControllerWithIdentifier:@"AssetGroupPickerVC"];
     assetVC.delegate = self;
     
-    [[SipStackUtils sharedInstance].messageService sendMessage:kAddNewImage  toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+    //[[SipStackUtils sharedInstance].messageService sendMessage:kAddNewImage  toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
     UINavigationController *navigationVC = [[UINavigationController alloc] init];
     navigationVC.viewControllers = @[assetVC];
     _addMoreImagesController = navigationVC;
