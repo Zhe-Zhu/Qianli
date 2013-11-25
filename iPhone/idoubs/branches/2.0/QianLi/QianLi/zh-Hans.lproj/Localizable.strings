@@ -155,3 +155,7 @@
 
 //Local notification
 "IncomingCallWithOutName" = "你有一个电话，点击接听";
+"micOn" = "麦克风已开启";
+"micOff" = "麦克风关闭";
+"speakerOff" = "扬声器关闭";
+"speakerOn" = "扬声器开启";
