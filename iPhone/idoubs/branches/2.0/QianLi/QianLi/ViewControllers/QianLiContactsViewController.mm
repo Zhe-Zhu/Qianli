@@ -57,34 +57,6 @@
 {
     [super viewDidLoad];
     [self setCountryCodes];
-    
-//    UISearchDisplayController *searchDisController = [[UISearchDisplayController alloc]
-//                        initWithSearchBar:_searchBar contentsController:self];
-//    _searchController = searchDisController;
-//    _searchController.delegate = self;
-//    _searchController.searchResultsDataSource = self;
-//    _searchController.searchResultsDelegate = self;
-
-//    if (self.savedSearchTerm)
-//	{
-//        [self.searchController setActive:self.searchWasActive];
-//        [self.searchController.searchBar setText:_savedSearchTerm];
-//        self.savedSearchTerm = nil;
-//    }
-	
-//	self.searchDisplayController.searchResultsTableView.scrollEnabled = YES;
-//	self.searchDisplayController.searchBar.showsCancelButton = YES;
-//    searchDisplayIsOn = NO;
-   //[self getAddressBookPermission];
-//    _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(5, 0, 320, 40)];
-//    _searchBar.placeholder = @"Search";
-//    _searchBar.delegate = self;
-//    if (IS_OS_7_OR_LATER) {
-//        _searchBar.barTintColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
-//    }
-//    _searchBar.showsCancelButton = NO;
-    
-    // button - invite friends
     CGFloat buttonHeight = 60;
     _buttonInviteFriends = [UIButton buttonWithType:UIButtonTypeSystem];
     _buttonInviteFriends.frame = CGRectMake(5, 39, 320, buttonHeight);
@@ -108,15 +80,8 @@
     if (!IS_OS_7_OR_LATER) {
         [_buttonInviteFriends setBackgroundImage:[UIImage imageNamed:@"iOS6InviteFriendsBackground.png"] forState:UIControlStateNormal];
     }
-    
-//    UISearchBar *baseSearchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 40+buttonHeight-1)];
-//    [baseSearchBar addSubview:_searchBar];
-//    [baseSearchBar addSubview:_buttonInviteFriends];
-//    [_friendsTableView setTableHeaderView:baseSearchBar];
-    
     [_friendsTableView setTableHeaderView:_buttonInviteFriends];
     
-//    _friendsTableView.contentOffset = CGPointMake(0, _buttonInviteFriends.frame.size.height);
     _friendsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
 }
@@ -130,7 +95,21 @@
         _allContacts = [[NSMutableArray alloc] init];
     }
     didLoadFromStarting = YES;
-    [self showAllContacts];
+    [self getAllQianLiFriends];
+    int contactNumber = 0;
+    for (NSArray *contactArray in _contacts) {
+        if ([contactArray count] > 0) {
+            contactNumber = 1;
+            break;
+        };
+    }
+    if (contactNumber == 0) {
+        [self begionToUpdateContact];
+        didLoadFromStarting = NO;
+    }
+    else{
+        [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    }
     // 如果没有联系人则显示"提示邀请好友加入"界面
     [self showOrHideNoContacts];
 }

@@ -57,7 +57,7 @@
     [MobClick beginEvent:@"watchVideo"];
     
     NSError *setCategoryError = nil;
-    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: &setCategoryError];
+    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error: &setCategoryError];
     
     if (setCategoryError){
         NSLog(@"error");
@@ -74,7 +74,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-   // [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+    [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
 }
 
 - (BOOL)prefersStatusBarHidden
