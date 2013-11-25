@@ -1044,7 +1044,10 @@
 {
     NSString *info = notification.object;
     NSArray* words = [info componentsSeparatedByString:kSeparator];
-    NSString *message = [words objectAtIndex:0];
+    NSString *message;
+    if ([words count] > 0) {
+       message = [words objectAtIndex:0];
+    }
     
     if ([message isEqualToString:kBeginImage]) {
         [self openSpeaker];
