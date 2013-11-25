@@ -256,7 +256,7 @@
     NSRunLoop *runloop = [NSRunLoop currentRunLoop];
     timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateTimeLabel) userInfo:nil repeats:YES];
     [runloop addTimer:timer forMode:NSRunLoopCommonModes];
-    [runloop addTimer:timer forMode:UITrackingRunLoopMode];
+//    [runloop addTimer:timer forMode:UITrackingRunLoopMode];
     
     // 加入缓慢出现的动画效果
     [UIView animateWithDuration:1.2f animations:^{
@@ -553,8 +553,6 @@
     }
     
     // starts timer suicide
-    [self updateViewAndState];
-    //[[SipStackUtils sharedInstance].audioService releaseAudioSession];
     [NSTimer scheduledTimerWithTimeInterval: 0.5
                                      target: self
                                    selector: @selector(timerSuicideTick)

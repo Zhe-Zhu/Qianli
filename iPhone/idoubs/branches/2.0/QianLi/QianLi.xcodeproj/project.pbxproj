@@ -140,6 +140,24 @@
 		CE17DA5117CDF0F500E40227 /* phoneGrey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE17DA4F17CDF0F500E40227 /* phoneGrey@2x.png */; };
 		CE17DA5217CDF0F500E40227 /* phoneWhite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE17DA5017CDF0F500E40227 /* phoneWhite@2x.png */; };
 		CE1E8CAE1842F61D00A956A2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1E8CAD1842F61D00A956A2 /* libPods.a */; };
+		CE1E8CCB1843374700A956A2 /* AboutQianLiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E8CCA1843374700A956A2 /* AboutQianLiViewController.m */; };
+		CE1E8CF31843377A00A956A2 /* appointment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CE21843377A00A956A2 /* appointment@2x.png */; };
+		CE1E8CF41843377A00A956A2 /* barButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CE31843377A00A956A2 /* barButton@2x.png */; };
+		CE1E8CF51843377A00A956A2 /* barButtonBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CE41843377A00A956A2 /* barButtonBack@2x.png */; };
+		CE1E8CF61843377A00A956A2 /* barButtonBackDisabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CE51843377A00A956A2 /* barButtonBackDisabled@2x.png */; };
+		CE1E8CF71843377A00A956A2 /* barButtonBackPressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CE61843377A00A956A2 /* barButtonBackPressed@2x.png */; };
+		CE1E8CF81843377A00A956A2 /* barButtonDisabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CE71843377A00A956A2 /* barButtonDisabled@2x.png */; };
+		CE1E8CF91843377A00A956A2 /* barButtonPressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CE81843377A00A956A2 /* barButtonPressed@2x.png */; };
+		CE1E8CFA1843377A00A956A2 /* iOS6CallNavigationBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CE91843377A00A956A2 /* iOS6CallNavigationBackground@2x.png */; };
+		CE1E8CFB1843377A00A956A2 /* iOS6contactIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CEA1843377A00A956A2 /* iOS6contactIcon@2x.png */; };
+		CE1E8CFC1843377A00A956A2 /* iOS6historyIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CEB1843377A00A956A2 /* iOS6historyIcon@2x.png */; };
+		CE1E8CFD1843377A00A956A2 /* iOS6InviteFriendsBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CEC1843377A00A956A2 /* iOS6InviteFriendsBackground@2x.png */; };
+		CE1E8CFE1843377A00A956A2 /* iOS6settingIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CED1843377A00A956A2 /* iOS6settingIcon@2x.png */; };
+		CE1E8CFF1843377A00A956A2 /* iOS6SignUpNavigationBarBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CEE1843377A00A956A2 /* iOS6SignUpNavigationBarBackground@2x.png */; };
+		CE1E8D001843377A00A956A2 /* iOS6TabbarBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CEF1843377A00A956A2 /* iOS6TabbarBackground@2x.png */; };
+		CE1E8D011843377A00A956A2 /* iOS6TabbarEmptySelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CF01843377A00A956A2 /* iOS6TabbarEmptySelected@2x.png */; };
+		CE1E8D021843377A00A956A2 /* settingInformation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CF11843377A00A956A2 /* settingInformation@2x.png */; };
+		CE1E8D031843377A00A956A2 /* trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CF21843377A00A956A2 /* trash@2x.png */; };
 		CE22107117E17DA300DE9F77 /* arrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE22107017E17DA300DE9F77 /* arrowRight@2x.png */; };
 		CE345F6517CB13FF009D52D4 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = CE345F4217CB13FF009D52D4 /* add.png */; };
 		CE345F6617CB13FF009D52D4 /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE345F4317CB13FF009D52D4 /* add@2x.png */; };
@@ -604,6 +622,25 @@
 		CE17DA4F17CDF0F500E40227 /* phoneGrey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phoneGrey@2x.png"; sourceTree = "<group>"; };
 		CE17DA5017CDF0F500E40227 /* phoneWhite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phoneWhite@2x.png"; sourceTree = "<group>"; };
 		CE1E8CAD1842F61D00A956A2 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
+		CE1E8CC91843374700A956A2 /* AboutQianLiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutQianLiViewController.h; sourceTree = "<group>"; };
+		CE1E8CCA1843374700A956A2 /* AboutQianLiViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutQianLiViewController.m; sourceTree = "<group>"; };
+		CE1E8CE21843377A00A956A2 /* appointment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "appointment@2x.png"; sourceTree = "<group>"; };
+		CE1E8CE31843377A00A956A2 /* barButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barButton@2x.png"; sourceTree = "<group>"; };
+		CE1E8CE41843377A00A956A2 /* barButtonBack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barButtonBack@2x.png"; sourceTree = "<group>"; };
+		CE1E8CE51843377A00A956A2 /* barButtonBackDisabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barButtonBackDisabled@2x.png"; sourceTree = "<group>"; };
+		CE1E8CE61843377A00A956A2 /* barButtonBackPressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barButtonBackPressed@2x.png"; sourceTree = "<group>"; };
+		CE1E8CE71843377A00A956A2 /* barButtonDisabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barButtonDisabled@2x.png"; sourceTree = "<group>"; };
+		CE1E8CE81843377A00A956A2 /* barButtonPressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barButtonPressed@2x.png"; sourceTree = "<group>"; };
+		CE1E8CE91843377A00A956A2 /* iOS6CallNavigationBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS6CallNavigationBackground@2x.png"; sourceTree = "<group>"; };
+		CE1E8CEA1843377A00A956A2 /* iOS6contactIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS6contactIcon@2x.png"; sourceTree = "<group>"; };
+		CE1E8CEB1843377A00A956A2 /* iOS6historyIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS6historyIcon@2x.png"; sourceTree = "<group>"; };
+		CE1E8CEC1843377A00A956A2 /* iOS6InviteFriendsBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS6InviteFriendsBackground@2x.png"; sourceTree = "<group>"; };
+		CE1E8CED1843377A00A956A2 /* iOS6settingIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS6settingIcon@2x.png"; sourceTree = "<group>"; };
+		CE1E8CEE1843377A00A956A2 /* iOS6SignUpNavigationBarBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS6SignUpNavigationBarBackground@2x.png"; sourceTree = "<group>"; };
+		CE1E8CEF1843377A00A956A2 /* iOS6TabbarBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS6TabbarBackground@2x.png"; sourceTree = "<group>"; };
+		CE1E8CF01843377A00A956A2 /* iOS6TabbarEmptySelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS6TabbarEmptySelected@2x.png"; sourceTree = "<group>"; };
+		CE1E8CF11843377A00A956A2 /* settingInformation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingInformation@2x.png"; sourceTree = "<group>"; };
+		CE1E8CF21843377A00A956A2 /* trash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash@2x.png"; sourceTree = "<group>"; };
 		CE22107017E17DA300DE9F77 /* arrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowRight@2x.png"; sourceTree = "<group>"; };
 		CE345F4217CB13FF009D52D4 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
 		CE345F4317CB13FF009D52D4 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
@@ -926,6 +963,8 @@
 				50B1D63417CB2E5500DC67E7 /* ImagePickerViewController.h */,
 				50B1D63517CB2E5500DC67E7 /* ImagePickerViewController.mm */,
 				50B1D63917CB34E000DC67E7 /* AssetGroupPickerController.h */,
+				CE1E8CC91843374700A956A2 /* AboutQianLiViewController.h */,
+				CE1E8CCA1843374700A956A2 /* AboutQianLiViewController.m */,
 				50B1D63A17CB34E000DC67E7 /* AssetGroupPickerController.mm */,
 				CE345FA117CB14FA009D52D4 /* SettingViewController.h */,
 				CE345FA217CB14FA009D52D4 /* SettingViewController.mm */,
@@ -1114,6 +1153,23 @@
 		505A077617B09FB40053E1B7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CE1E8CE21843377A00A956A2 /* appointment@2x.png */,
+				CE1E8CE31843377A00A956A2 /* barButton@2x.png */,
+				CE1E8CE41843377A00A956A2 /* barButtonBack@2x.png */,
+				CE1E8CE51843377A00A956A2 /* barButtonBackDisabled@2x.png */,
+				CE1E8CE61843377A00A956A2 /* barButtonBackPressed@2x.png */,
+				CE1E8CE71843377A00A956A2 /* barButtonDisabled@2x.png */,
+				CE1E8CE81843377A00A956A2 /* barButtonPressed@2x.png */,
+				CE1E8CE91843377A00A956A2 /* iOS6CallNavigationBackground@2x.png */,
+				CE1E8CEA1843377A00A956A2 /* iOS6contactIcon@2x.png */,
+				CE1E8CEB1843377A00A956A2 /* iOS6historyIcon@2x.png */,
+				CE1E8CEC1843377A00A956A2 /* iOS6InviteFriendsBackground@2x.png */,
+				CE1E8CED1843377A00A956A2 /* iOS6settingIcon@2x.png */,
+				CE1E8CEE1843377A00A956A2 /* iOS6SignUpNavigationBarBackground@2x.png */,
+				CE1E8CEF1843377A00A956A2 /* iOS6TabbarBackground@2x.png */,
+				CE1E8CF01843377A00A956A2 /* iOS6TabbarEmptySelected@2x.png */,
+				CE1E8CF11843377A00A956A2 /* settingInformation@2x.png */,
+				CE1E8CF21843377A00A956A2 /* trash@2x.png */,
 				CE09D1841831C9540070CDE2 /* MenuBarItemBrowser@2x.png */,
 				CE09D1851831C9540070CDE2 /* MenuBarItemCamera@2x.png */,
 				CE09D1861831C9540070CDE2 /* MenuBarItemDoodle@2x.png */,
@@ -1543,9 +1599,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE1E8CF51843377A00A956A2 /* barButtonBack@2x.png in Resources */,
 				CEBAFC43182200540021764A /* cameraTakePhoto4@2x.png in Resources */,
+				CE1E8CF81843377A00A956A2 /* barButtonDisabled@2x.png in Resources */,
 				509474E317DDDC1C006A1612 /* NgnDataBase.db in Resources */,
 				509474E417DDDC1C006A1612 /* NgnDataBase.sql in Resources */,
+				CE1E8D031843377A00A956A2 /* trash@2x.png in Resources */,
 				CE8027A517DF0D0600E84BC9 /* settingSMS@2x.png in Resources */,
 				503DCDDE18068CAB00514A33 /* ringbacktone.wav in Resources */,
 				CEB99B5E18210199000551E1 /* icon57.png in Resources */,
@@ -1564,21 +1623,26 @@
 				CE345F6F17CB13FF009D52D4 /* contactsPhoneIcon@2x.png in Resources */,
 				CE345F8217CB13FF009D52D4 /* settingIcon@2x.png in Resources */,
 				CE345F7217CB13FF009D52D4 /* end.png in Resources */,
+				CE1E8CFB1843377A00A956A2 /* iOS6contactIcon@2x.png in Resources */,
 				CE345F6917CB13FF009D52D4 /* buttonContinueBackground@2x.png in Resources */,
 				CEBAFC4E182225560021764A /* browserHistory@2x.png in Resources */,
 				CE7CE9F617CF339B0042F057 /* requestLoading@2x.png in Resources */,
+				CE1E8D011843377A00A956A2 /* iOS6TabbarEmptySelected@2x.png in Resources */,
 				CE5D0D7B182CB2D7001536CB /* repliesCountBackground@2x.png in Resources */,
 				CE345F6D17CB13FF009D52D4 /* contactIcon@2x.png in Resources */,
 				CE4E88D317DD75200012D34E /* indicatorSymbolMissedCall@2x.png in Resources */,
 				CE6D2A5B18067EEF00AF6289 /* crossForSync@2x.png in Resources */,
 				CE5EC9E7180508A800BDE0B0 /* videoPause@2x.png in Resources */,
 				CE4E88F717DDBCC30012D34E /* phoneBlack@2x.png in Resources */,
+				CE1E8CF41843377A00A956A2 /* barButton@2x.png in Resources */,
 				CE8A390917F97AB9002F651A /* helpButton@2x.png in Resources */,
 				503DCDDF18068CAB00514A33 /* ringtone.mp3 in Resources */,
 				CEBAFC45182200540021764A /* cameraTakePhoto2@2x.png in Resources */,
 				CE8027B217DF179C00E84BC9 /* settingName@2x.png in Resources */,
+				CE1E8CFF1843377A00A956A2 /* iOS6SignUpNavigationBarBackground@2x.png in Resources */,
 				CE7CEA1517CF52E20042F057 /* requestTalkWhite@2x.png in Resources */,
 				CE09D18A1831C9540070CDE2 /* MenuBarItemCamera@2x.png in Resources */,
+				CE1E8D021843377A00A956A2 /* settingInformation@2x.png in Resources */,
 				CE345F8117CB13FF009D52D4 /* rejectTheCall@2x.png in Resources */,
 				CE17DA5117CDF0F500E40227 /* phoneGrey@2x.png in Resources */,
 				CE345F7817CB13FF009D52D4 /* lineUnderPhoneNumber.png in Resources */,
@@ -1587,13 +1651,16 @@
 				CE8A390D17F981CA002F651A /* helpImage4@2x.png in Resources */,
 				CE09D18D1831C9540070CDE2 /* MenuBarItemVideo@2x.png in Resources */,
 				CE5D0D78182C9E15001536CB /* umFeedback.bundle in Resources */,
+				CE1E8CF71843377A00A956A2 /* barButtonBackPressed@2x.png in Resources */,
 				CE17DA5217CDF0F500E40227 /* phoneWhite@2x.png in Resources */,
 				CEBAFC41182200540021764A /* cameraTakePhoto6@2x.png in Resources */,
 				CEBAFC3F182200540021764A /* cameraTakePhoto8@2x.png in Resources */,
 				CE345F8017CB13FF009D52D4 /* pickupTheCall@2x.png in Resources */,
 				CE345F6B17CB13FF009D52D4 /* callingIndicator@2x.png in Resources */,
 				CE6D2A6018069B9B00AF6289 /* bigPhotoCoverIphone5@2x.png in Resources */,
+				CE1E8CFC1843377A00A956A2 /* iOS6historyIcon@2x.png in Resources */,
 				CED66B9317CC4D8D002FBD32 /* MenuBarItemPhoto@2x.png in Resources */,
+				CE1E8CFE1843377A00A956A2 /* iOS6settingIcon@2x.png in Resources */,
 				CE09D18C1831C9540070CDE2 /* MenuBarItemShopping@2x.png in Resources */,
 				CE4A136317D87B6E0073232C /* phoneCallReverse@2x.png in Resources */,
 				CE345F8317CB13FF009D52D4 /* settingIconSelected@2x.png in Resources */,
@@ -1605,8 +1672,10 @@
 				CEB99B7D18210CE1000551E1 /* cameraFlashOn@2x.png in Resources */,
 				CE345F6A17CB13FF009D52D4 /* callingIndicator.png in Resources */,
 				CE5ECA041805303400BDE0B0 /* videoPlay@2x.png in Resources */,
+				CE1E8CF31843377A00A956A2 /* appointment@2x.png in Resources */,
 				CE345F7317CB13FF009D52D4 /* end@2x.png in Resources */,
 				CE8027A917DF0E3A00E84BC9 /* settingEmail@2x.png in Resources */,
+				CE1E8CF61843377A00A956A2 /* barButtonBackDisabled@2x.png in Resources */,
 				CEB99B8018210E28000551E1 /* cameraTakePhotoPressed@2x.png in Resources */,
 				CEBAFC4C182223990021764A /* browserForward@2x.png in Resources */,
 				CE44E5F517E8169400EEE22B /* profileButtonCancel@2x.png in Resources */,
@@ -1666,7 +1735,9 @@
 				CE15EF261824EA750053AB38 /* defaultBigPhoto.png in Resources */,
 				CE345F7417CB13FF009D52D4 /* galGadot.jpg in Resources */,
 				CE6D2A40180659CE00AF6289 /* checkmarkForSync@2x.png in Resources */,
+				CE1E8D001843377A00A956A2 /* iOS6TabbarBackground@2x.png in Resources */,
 				505A077F17B0A3DA0053E1B7 /* icon.png in Resources */,
+				CE1E8CFD1843377A00A956A2 /* iOS6InviteFriendsBackground@2x.png in Resources */,
 				CE4A136117D878EC0073232C /* phoneCall@2x.png in Resources */,
 				505A078C17B0A9430053E1B7 /* checkBox.png in Resources */,
 				CED94FCD17E022D000C02444 /* arrowLeft@2x.png in Resources */,
@@ -1680,11 +1751,13 @@
 				50028A3817B37E2300029312 /* baloon_out.png in Resources */,
 				CEBAFC1B1821FAE10021764A /* cameraTakePhotoBackground@2x.png in Resources */,
 				CEB99B7B18210CE1000551E1 /* cameraRotation@2x.png in Resources */,
+				CE1E8CF91843377A00A956A2 /* barButtonPressed@2x.png in Resources */,
 				CEBAFC42182200540021764A /* cameraTakePhoto5@2x.png in Resources */,
 				CE44E5F617E8169400EEE22B /* profileButtonDone@2x.png in Resources */,
 				CE8027B417DF179C00E84BC9 /* settingAvatar@2x.png in Resources */,
 				50028A3917B37E2300029312 /* baloon_out@2x.png in Resources */,
 				CE345F6817CB13FF009D52D4 /* balloon_out@2x.png in Resources */,
+				CE1E8CFA1843377A00A956A2 /* iOS6CallNavigationBackground@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1740,6 +1813,7 @@
 				502AA60217C721F400FA2F27 /* ErrorHandling.mm in Sources */,
 				502AA60317C721F400FA2F27 /* HistoryService.mm in Sources */,
 				502AA60417C721F400FA2F27 /* MessageService.mm in Sources */,
+				CE1E8CCB1843374700A956A2 /* AboutQianLiViewController.m in Sources */,
 				500C2B0217D0ADE0004391AF /* QianLiUIMenuBar.m in Sources */,
 				509E1D8A180E9197002097D4 /* HistoryTransUtils.mm in Sources */,
 				50267E5F17EF4DA300A0F5F2 /* UserDataTransUtils.m in Sources */,
@@ -1888,8 +1962,8 @@
 			baseConfigurationReference = DE0DB9F8308441E09E15B242 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: zhe zhu (2R9T57S85A)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhe zhu (2R9T57S85A)";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_LIBS = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/i386;
 				"DOUBANGO_LIBS[arch=armv7]" = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/armv7;
@@ -1971,8 +2045,8 @@
 			baseConfigurationReference = DE0DB9F8308441E09E15B242 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: zhe zhu (2R9T57S85A)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhe zhu (2R9T57S85A)";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_LIBS = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/i386;
 				"DOUBANGO_LIBS[arch=armv7]" = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/armv7;
