@@ -603,7 +603,7 @@
 		CE17DA4D17CDEDC200E40227 /* CheckmarkWhite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CheckmarkWhite@2x.png"; sourceTree = "<group>"; };
 		CE17DA4F17CDF0F500E40227 /* phoneGrey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phoneGrey@2x.png"; sourceTree = "<group>"; };
 		CE17DA5017CDF0F500E40227 /* phoneWhite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phoneWhite@2x.png"; sourceTree = "<group>"; };
-		CE1E8CAD1842F61D00A956A2 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
+		CE1E8CAD1842F61D00A956A2 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		CE22107017E17DA300DE9F77 /* arrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowRight@2x.png"; sourceTree = "<group>"; };
 		CE345F4217CB13FF009D52D4 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
 		CE345F4317CB13FF009D52D4 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
