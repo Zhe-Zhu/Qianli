@@ -20,6 +20,7 @@
 #import "WebBrowser.h"
 #import "MobClick.h"
 #import "Utils.h"
+#import "SVStatusHUD.h"
 
 @interface QianLiAudioCallViewController ()
 {
@@ -64,7 +65,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *bigProfileImage;
 @property (weak, nonatomic) IBOutlet UIImageView *blurImage;
 
-@property bool isMicroPhoneOn;
+@property bool isNoMicroPhoneOn;
 @property bool isSpeakerOn;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (strong, nonatomic) UILabel *calling;
@@ -285,8 +286,8 @@
 
     [_buttonMicroPhone setTarget:self];
     [_buttonMicroPhone setAction:@selector(pressButtonMicroPhone)];
-    _isMicroPhoneOn = NO;
-    [[SipStackUtils sharedInstance].audioService configureMute:_isMicroPhoneOn];
+    _isNoMicroPhoneOn = NO;
+    [[SipStackUtils sharedInstance].audioService configureMute:_isNoMicroPhoneOn];
     
     [_buttonSpeaker setImage:[UIImage imageNamed:@"speaker.png"]];
     [_buttonSpeaker setTintColor:[UIColor colorWithRed:70/255.0 green:70/255.0 blue:70/255.0 alpha:1.0f]];
@@ -463,16 +464,18 @@
 
 - (void)pressButtonMicroPhone
 {
-    if (_isMicroPhoneOn) {
+    if (_isNoMicroPhoneOn) {
         // deactivate this button
         [_buttonMicroPhone setTintColor:inactiveButtonTintColor];
-
+        // show the UIActivityView
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"micOn.png"] status:NSLocalizedString(@"micOn", nil)];
     }
     else {
         [_buttonMicroPhone setTintColor:activeButtonTintColor];
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"micOff.png"] status:NSLocalizedString(@"micOff", nil)];
     }
-    _isMicroPhoneOn = !_isMicroPhoneOn;
-    [[SipStackUtils sharedInstance].audioService configureMute:_isMicroPhoneOn];
+    _isNoMicroPhoneOn = !_isNoMicroPhoneOn;
+    [[SipStackUtils sharedInstance].audioService configureMute:_isNoMicroPhoneOn];
 }
 
 - (void)pressButtonSpeaker
@@ -480,11 +483,12 @@
     if (_isSpeakerOn) {
         // deactivate this button
         [_buttonSpeaker setTintColor:inactiveButtonTintColor];
-        
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOff.png"] status:NSLocalizedString(@"speakerOff", nil)];
     }
     else {
         // activate this button
         [_buttonSpeaker setTintColor:activeButtonTintColor];
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
     }
     // record current button state
     _isSpeakerOn = !_isSpeakerOn;

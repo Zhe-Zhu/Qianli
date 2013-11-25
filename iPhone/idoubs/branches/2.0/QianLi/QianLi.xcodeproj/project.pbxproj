@@ -158,6 +158,11 @@
 		CE1E8D011843377A00A956A2 /* iOS6TabbarEmptySelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CF01843377A00A956A2 /* iOS6TabbarEmptySelected@2x.png */; };
 		CE1E8D021843377A00A956A2 /* settingInformation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CF11843377A00A956A2 /* settingInformation@2x.png */; };
 		CE1E8D031843377A00A956A2 /* trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8CF21843377A00A956A2 /* trash@2x.png */; };
+		CE1E8D0B184384B600A956A2 /* SVStatusHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E8D0A184384B600A956A2 /* SVStatusHUD.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE1E8D27184384C800A956A2 /* micOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8D22184384C800A956A2 /* micOff@2x.png */; };
+		CE1E8D28184384C800A956A2 /* micOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8D23184384C800A956A2 /* micOn@2x.png */; };
+		CE1E8D2A184384C800A956A2 /* speakerOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8D25184384C800A956A2 /* speakerOff@2x.png */; };
+		CE1E8D2B184384C800A956A2 /* speakerOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8D26184384C800A956A2 /* speakerOn@2x.png */; };
 		CE22107117E17DA300DE9F77 /* arrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE22107017E17DA300DE9F77 /* arrowRight@2x.png */; };
 		CE345F6517CB13FF009D52D4 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = CE345F4217CB13FF009D52D4 /* add.png */; };
 		CE345F6617CB13FF009D52D4 /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE345F4317CB13FF009D52D4 /* add@2x.png */; };
@@ -641,6 +646,12 @@
 		CE1E8CF01843377A00A956A2 /* iOS6TabbarEmptySelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS6TabbarEmptySelected@2x.png"; sourceTree = "<group>"; };
 		CE1E8CF11843377A00A956A2 /* settingInformation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingInformation@2x.png"; sourceTree = "<group>"; };
 		CE1E8CF21843377A00A956A2 /* trash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash@2x.png"; sourceTree = "<group>"; };
+		CE1E8D09184384B600A956A2 /* SVStatusHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVStatusHUD.h; sourceTree = "<group>"; };
+		CE1E8D0A184384B600A956A2 /* SVStatusHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVStatusHUD.m; sourceTree = "<group>"; };
+		CE1E8D22184384C800A956A2 /* micOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "micOff@2x.png"; sourceTree = "<group>"; };
+		CE1E8D23184384C800A956A2 /* micOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "micOn@2x.png"; sourceTree = "<group>"; };
+		CE1E8D25184384C800A956A2 /* speakerOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOff@2x.png"; sourceTree = "<group>"; };
+		CE1E8D26184384C800A956A2 /* speakerOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOn@2x.png"; sourceTree = "<group>"; };
 		CE22107017E17DA300DE9F77 /* arrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowRight@2x.png"; sourceTree = "<group>"; };
 		CE345F4217CB13FF009D52D4 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
 		CE345F4317CB13FF009D52D4 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
@@ -899,6 +910,7 @@
 		2F81373817AFB54500DB23F2 /* QianLi */ = {
 			isa = PBXGroup;
 			children = (
+				CE1E8D08184384B600A956A2 /* SVStatusHUD */,
 				CE5D0D56182C8AF8001536CB /* UmengSDK */,
 				503DCDDB18068CAB00514A33 /* Sound */,
 				50630D1017E012FF004C12BB /* KeyChain */,
@@ -1153,6 +1165,10 @@
 		505A077617B09FB40053E1B7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CE1E8D22184384C800A956A2 /* micOff@2x.png */,
+				CE1E8D23184384C800A956A2 /* micOn@2x.png */,
+				CE1E8D25184384C800A956A2 /* speakerOff@2x.png */,
+				CE1E8D26184384C800A956A2 /* speakerOn@2x.png */,
 				CE1E8CE21843377A00A956A2 /* appointment@2x.png */,
 				CE1E8CE31843377A00A956A2 /* barButton@2x.png */,
 				CE1E8CE41843377A00A956A2 /* barButtonBack@2x.png */,
@@ -1345,6 +1361,15 @@
 				CE17DA3017CDAA1900E40227 /* RMSwipeTableViewCell.m */,
 			);
 			path = RMSwipeTableViewCell;
+			sourceTree = "<group>";
+		};
+		CE1E8D08184384B600A956A2 /* SVStatusHUD */ = {
+			isa = PBXGroup;
+			children = (
+				CE1E8D09184384B600A956A2 /* SVStatusHUD.h */,
+				CE1E8D0A184384B600A956A2 /* SVStatusHUD.m */,
+			);
+			path = SVStatusHUD;
 			sourceTree = "<group>";
 		};
 		CE345FC717CB5BC0009D52D4 /* LiveBlur */ = {
@@ -1620,6 +1645,7 @@
 				CE345F6E17CB13FF009D52D4 /* contactIconSelected@2x.png in Resources */,
 				CEB99B5D18210199000551E1 /* icon114.png in Resources */,
 				CE22107117E17DA300DE9F77 /* arrowRight@2x.png in Resources */,
+				CE1E8D2B184384C800A956A2 /* speakerOn@2x.png in Resources */,
 				CE345F6F17CB13FF009D52D4 /* contactsPhoneIcon@2x.png in Resources */,
 				CE345F8217CB13FF009D52D4 /* settingIcon@2x.png in Resources */,
 				CE345F7217CB13FF009D52D4 /* end.png in Resources */,
@@ -1665,6 +1691,7 @@
 				CE4A136317D87B6E0073232C /* phoneCallReverse@2x.png in Resources */,
 				CE345F8317CB13FF009D52D4 /* settingIconSelected@2x.png in Resources */,
 				CE8027B317DF179C00E84BC9 /* settingPhoto@2x.png in Resources */,
+				CE1E8D2A184384C800A956A2 /* speakerOff@2x.png in Resources */,
 				CE345F7017CB13FF009D52D4 /* disclosureIndicator@2x.png in Resources */,
 				CE8027A817DF0E3A00E84BC9 /* settingPower@2x.png in Resources */,
 				CE345F7717CB13FF009D52D4 /* inviteFriend@2x.png in Resources */,
@@ -1679,6 +1706,7 @@
 				CEB99B8018210E28000551E1 /* cameraTakePhotoPressed@2x.png in Resources */,
 				CEBAFC4C182223990021764A /* browserForward@2x.png in Resources */,
 				CE44E5F517E8169400EEE22B /* profileButtonCancel@2x.png in Resources */,
+				CE1E8D28184384C800A956A2 /* micOn@2x.png in Resources */,
 				50D0CA8A180298A600D246FD /* Localizable.strings in Resources */,
 				CE688EB1180BE61C00CDF37B /* choosingImages@2x.png in Resources */,
 				CE345F7617CB13FF009D52D4 /* historyIconSelected@2x.png in Resources */,
@@ -1725,6 +1753,7 @@
 				2F81374517AFB54500DB23F2 /* Default.png in Resources */,
 				CE688EB3180BE73300CDF37B /* choosingImagesShort@2x.png in Resources */,
 				2F81374717AFB54500DB23F2 /* Default@2x.png in Resources */,
+				CE1E8D27184384C800A956A2 /* micOff@2x.png in Resources */,
 				2F81374917AFB54500DB23F2 /* Default-568h@2x.png in Resources */,
 				CE5F66B017E94A100098E161 /* doodleDraw@2x.png in Resources */,
 				505A076D17B094740053E1B7 /* MainStoryboard.storyboard in Resources */,
@@ -1847,6 +1876,7 @@
 				2F81375517AFB63700DB23F2 /* SignUpViewController.mm in Sources */,
 				CE345FA617CB14FA009D52D4 /* SignUpVerificationCodeViewControllerSimpleVersion.mm in Sources */,
 				CE8027AC17DF102200E84BC9 /* SettingProfileViewController.m in Sources */,
+				CE1E8D0B184384B600A956A2 /* SVStatusHUD.m in Sources */,
 				507B182218116ADA00DE6D88 /* WebHistoryCell.m in Sources */,
 				CE3A1C3317FD1A1B00051970 /* SettingChangeNameViewController.m in Sources */,
 				50CEC3C517EEE34200BBE3BA /* QianLiContactsAccessor.m in Sources */,
