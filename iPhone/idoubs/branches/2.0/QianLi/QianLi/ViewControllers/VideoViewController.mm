@@ -167,16 +167,19 @@
 
 - (void)cancelFromRemote
 {
+    [self addHistory];
     if (_moviePlayer) {
-        [_moviePlayer cancelMoviePlayer];
-        [_moviePlayer dismissViewControllerAnimated:YES completion:^{
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }];
+        [_moviePlayer dismissViewControllerAnimated:NO completion:nil];
+        [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:2.0];
     }
     else{
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-    [self addHistory];
+}
+
+- (void)dismissSelf
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)addHistory
@@ -202,7 +205,7 @@
 {
     if (_moviePlayer) {
         [_moviePlayer cancelMoviePlayer];
-        [_moviePlayer dismissViewControllerAnimated:YES completion:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

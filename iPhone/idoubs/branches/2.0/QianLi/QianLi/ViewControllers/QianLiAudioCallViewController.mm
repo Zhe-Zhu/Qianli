@@ -549,13 +549,8 @@
         [menuBar dismiss];
         menuBar=nil;
     }
-    
     // starts timer suicide
-    [NSTimer scheduledTimerWithTimeInterval: 0.5
-                                     target: self
-                                   selector: @selector(timerSuicideTick)
-                                   userInfo: nil
-                                    repeats: NO];
+    [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:0.5];
 }
 
 # pragma mark Receieve a Call View Methods
@@ -901,11 +896,7 @@
 			// releases session
 			// starts timer suicide
             //[[SipStackUtils sharedInstance].audioService releaseAudioSession];
-			[NSTimer scheduledTimerWithTimeInterval: 0.5
-                                             target: self
-                                           selector: @selector(timerSuicideTick)
-                                           userInfo: nil
-                                            repeats: NO];
+            [self timerSuicideTick];
 			break;
 		}
 	}
@@ -921,7 +912,7 @@
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
   
     //LLGG
-   [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissAllViewController];
    //[self changeViewAppearanceToInCall];
     
     if (!_didEndCallBySelf) {
@@ -942,9 +933,29 @@
     }
 }
 
-- (void)hasCall
+- (void)dismissAllViewController
 {
-    //add some code
+    if (_vedioVC) {
+        [_vedioVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_imageDispVC) {
+        [_imageDispVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_browser) {
+        [_browser dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_shoppingVC) {
+        [_shoppingVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_drawingVC) {
+        [_drawingVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:1.0];
+}
+
+- (void)dismissSelf
+{
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) updateViewAndState{
@@ -968,7 +979,6 @@
 			{
                 [[SipStackUtils sharedInstance].soundService stopRingBackTone];
                 [[SipStackUtils sharedInstance].soundService stopRingTone];
-                [self hasCall];
                 [self changeViewAppearanceToInCall];
 				break;
 			}
