@@ -18,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *inviteBarButton;
+
+@property (strong, nonatomic) UIBarButtonItem *sendIvitation;
+
 @property (nonatomic, copy) NSString *savedSearchTerm;
 @property (nonatomic) BOOL searchWasActive;
 - (IBAction)inviteFriends:(id)sender;
@@ -36,6 +39,7 @@
     UIBarButtonItem *sendInvitation = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"send", nil) style:UIBarButtonItemStylePlain target:self action:@selector(inviteFriends:)];
     sendInvitation.tintColor = [UIColor whiteColor];
     [self.navigationItem setRightBarButtonItem:sendInvitation];
+    _sendIvitation = sendInvitation;
     [self.navigationItem setTitle:NSLocalizedString(@"inviteFriend", nil)];
    // [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
 
@@ -598,6 +602,7 @@
         activityIndicator.frame = CGRectMake(275, (frame.size.height - activitySize) / 2.0, activitySize, activitySize);
         [self.navigationController.navigationBar addSubview:activityIndicator];
         [activityIndicator startAnimating];
+        [self.navigationItem setRightBarButtonItem:nil];
         
         //TODO: change the text
         MFMessageComposeViewController *messageVC = [[MFMessageComposeViewController alloc] init];
@@ -612,6 +617,7 @@
         [self presentViewController:messageVC animated:YES completion:^{
             [activityIndicator stopAnimating];
             [activityIndicator removeFromSuperview];
+            [self.navigationItem setRightBarButtonItem:_sendIvitation];
         }];
     }
 }
