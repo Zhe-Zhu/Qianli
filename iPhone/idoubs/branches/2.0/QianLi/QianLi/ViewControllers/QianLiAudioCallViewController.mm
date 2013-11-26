@@ -83,7 +83,7 @@
 
 @implementation QianLiAudioCallViewController
 
-#define inactiveButtonTintColor [UIColor colorWithRed:70/255.0 green:70/255.0 blue:70/255.0 alpha:1.0f]
+#define inactiveButtonTintColor [UIColor colorWithRed:110/255.0 green:110/255.0 blue:110/255.0 alpha:1.0f]
 #define activeButtonTintColor [UIColor colorWithRed:94/255.0 green:201/255.0 blue:217/255.0 alpha:1.0f]
 
 @synthesize imageDispVC = _imageDispVC;
@@ -278,7 +278,7 @@
 - (void)presentAllCallingIcons
 {
     [_buttonMicroPhone setImage:[UIImage imageNamed:@"microPhone.png"]];
-    [_buttonMicroPhone setTintColor:[UIColor colorWithRed:70/255.0 green:70/255.0 blue:70/255.0 alpha:1.0f]];
+    [_buttonMicroPhone setTintColor:inactiveButtonTintColor];
     if (!IS_OS_7_OR_LATER) {
         [_buttonMicroPhone setBackButtonBackgroundImage:[UIImage imageNamed:@"microPhone.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
         _buttonMicroPhone.title = Nil;
@@ -290,7 +290,7 @@
     [[SipStackUtils sharedInstance].audioService configureMute:_isNoMicroPhoneOn];
     
     [_buttonSpeaker setImage:[UIImage imageNamed:@"speaker.png"]];
-    [_buttonSpeaker setTintColor:[UIColor colorWithRed:70/255.0 green:70/255.0 blue:70/255.0 alpha:1.0f]];
+    [_buttonSpeaker setTintColor:inactiveButtonTintColor];
     if (!IS_OS_7_OR_LATER) {
         [_buttonSpeaker setBackButtonBackgroundImage:[UIImage imageNamed:@"speaker.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
         _buttonSpeaker.title = Nil;
