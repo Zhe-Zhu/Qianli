@@ -1045,7 +1045,7 @@
                         <viewControllerLayoutGuide type="top" id="hbf-tN-i1g"/>
                         <viewControllerLayoutGuide type="bottom" id="IFR-67-ogL"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ur9-te-2sS" customClass="HandDrawingView">
+                    <view key="view" contentMode="scaleToFill" id="ur9-te-2sS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -1097,6 +1097,9 @@
                             <constraint firstItem="dhq-fg-yNc" firstAttribute="leading" secondItem="4Sy-OI-SYJ" secondAttribute="trailing" constant="31" id="uWf-ln-AsP"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="ereaser" destination="YaO-9Q-sPB" id="WEE-OS-ZpY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MQ0-4m-rZ3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

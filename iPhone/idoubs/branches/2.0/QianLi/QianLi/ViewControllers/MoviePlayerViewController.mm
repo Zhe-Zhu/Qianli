@@ -78,7 +78,8 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionMixWithOthers error: NULL];
+     [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
 }
 

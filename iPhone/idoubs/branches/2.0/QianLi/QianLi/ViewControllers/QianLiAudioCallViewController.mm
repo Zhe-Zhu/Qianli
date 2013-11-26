@@ -297,7 +297,6 @@
     [_buttonSpeaker setTarget:self];
     [_buttonSpeaker setAction:@selector(pressButtonSpeaker)];
     _isSpeakerOn = NO;
-    //[[SipStackUtils sharedInstance].audioService configureSpeakerEnabled:_isSpeakerOn];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
     
     [_buttonAdd setImage:[UIImage imageNamed:@"add.png"]];
