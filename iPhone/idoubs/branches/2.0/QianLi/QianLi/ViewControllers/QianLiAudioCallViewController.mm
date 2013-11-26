@@ -549,13 +549,8 @@
         [menuBar dismiss];
         menuBar=nil;
     }
-    
     // starts timer suicide
-    [NSTimer scheduledTimerWithTimeInterval: 0.5
-                                     target: self
-                                   selector: @selector(timerSuicideTick)
-                                   userInfo: nil
-                                    repeats: NO];
+    [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:0.5];
 }
 
 # pragma mark Receieve a Call View Methods
@@ -901,11 +896,7 @@
 			// releases session
 			// starts timer suicide
             //[[SipStackUtils sharedInstance].audioService releaseAudioSession];
-			[NSTimer scheduledTimerWithTimeInterval: 0.5
-                                             target: self
-                                           selector: @selector(timerSuicideTick)
-                                           userInfo: nil
-                                            repeats: NO];
+            [self timerSuicideTick];
 			break;
 		}
 	}
@@ -922,7 +913,6 @@
   
     //LLGG
     [self dismissAllViewController];
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
    //[self changeViewAppearanceToInCall];
     
     if (!_didEndCallBySelf) {
@@ -960,6 +950,12 @@
     if (_drawingVC) {
         [_drawingVC dismissViewControllerAnimated:NO completion:nil];
     }
+    [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:1.0];
+}
+
+- (void)dismissSelf
+{
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) updateViewAndState{
