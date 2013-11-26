@@ -348,7 +348,6 @@ static SipStackUtils * sipStackUtilsInstance;
 			if(session){
 				// Dismiss previous and display(present) the new one
 				// animation must be NO because we are calling dismiss then present
-                
 				[self displayCall:session];
                 NSString *remotePartyUri = [session getRemotePartyUri];
                 self.remoteParty = [self getRemoteParty:remotePartyUri];

@@ -160,8 +160,9 @@
 
 - (void)cancel
 {
-    [self cancelFromRemote];
     [[SipStackUtils sharedInstance].messageService sendMessage:kVideoCancel toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+    [self addHistory];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)cancelFromRemote
@@ -175,6 +176,11 @@
     else{
         [self dismissViewControllerAnimated:YES completion:nil];
     }
+    [self addHistory];
+}
+
+- (void)addHistory
+{
     // add to history
     if ([_vedioThumbs count] == 0) {
         [_vedioThumbs addObject:[self smallScreenshot]];

@@ -57,11 +57,15 @@
     [MobClick beginEvent:@"watchVideo"];
     
     NSError *setCategoryError = nil;
-    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error: &setCategoryError];
-    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
     if (setCategoryError){
         NSLog(@"error");
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -75,6 +79,7 @@
 {
     [super viewDidDisappear:animated];
     [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
 }
 
 - (BOOL)prefersStatusBarHidden
