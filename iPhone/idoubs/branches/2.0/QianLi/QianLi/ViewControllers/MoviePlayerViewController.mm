@@ -126,7 +126,7 @@
         [cancelButton setTitle:NSLocalizedString(@"Quit", nil) forState:UIControlStateNormal];
         [cancelButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
-        cancelButton.frame = CGRectMake(10, CGRectGetHeight(view.frame)/2-15, 50, 30);
+        cancelButton.frame = CGRectMake(0, 5, 90, 55);
         [view addSubview:cancelButton];
         
         UIButton *forwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
