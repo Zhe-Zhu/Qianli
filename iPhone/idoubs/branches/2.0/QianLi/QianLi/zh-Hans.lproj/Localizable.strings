@@ -13,7 +13,7 @@
 "PUSHACTIONKEY" = "接听";
 "APPOINTMENT" ="有空的话给我回个电话吧? - %@";
 "APPOINTMENTACTIONKEY" = "好的";
-"MISSEDCALL" = "您有一个来自[%@]的未接来电,时间是";
+"MISSEDCALL" = "您有一个来自[%@]的未接来电";
 "missedcallactionkey" = "查看细节";
 
 // AppDelegate.mm
