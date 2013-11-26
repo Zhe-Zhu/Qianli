@@ -24,7 +24,6 @@
 
 @interface QianLiAudioCallViewController ()
 {
-    QBAnimationSequence *callingIndicatorSequence;
     UIImageView *callingIndicator; // calling等待指示器
     UIImageView *networkIndicator;
     UIImageView *bulletinBoard;
@@ -212,12 +211,12 @@
 {
     // 进入In Call 模式
     [self retrieveBulletinBoard];
-    [callingIndicatorSequence stop];
     // 加入缓慢消失的动画效果
     [callingIndicator setAlpha:0.3f];
     [UIView animateWithDuration:0.5f animations:^{
         [callingIndicator setAlpha:0.0f];
     }completion:^(BOOL finished){
+        [callingIndicator.layer removeAllAnimations];
         [callingIndicator removeFromSuperview];
     }];
     // 头像缓慢变亮
@@ -409,20 +408,17 @@
     // 加入指示器
     [callingIndicator removeFromSuperview];
     callingIndicator = [[UIImageView alloc] initWithFrame:CGRectMake(160 - 10, 13, 25, 25)];
-    callingIndicator.image = [UIImage imageNamed:@"callingIndicator.png"];
+    callingIndicator.image = [UIImage imageNamed:@"callingIndicatorSpin.png"];
     [self.navigationController.navigationBar addSubview:callingIndicator];
+ 
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 /* full rotation*/ * 1 * 1 ];
+    rotationAnimation.duration = 1;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = MAXFLOAT;
     
-    QBAnimationItem *callingIndicatorLight = [QBAnimationItem itemWithDuration:2.0 delay:0 options:UIViewAnimationCurveLinear animations:^{
-        callingIndicator.alpha = 1.0f;
-    }];
-    QBAnimationItem *callingIndicatorDark = [QBAnimationItem itemWithDuration:0.8 delay:0 options:UIViewAnimationCurveEaseOut animations:^{
-        callingIndicator.alpha = 0.2f;
-    }];
-    QBAnimationGroup *callingIndicatorGroupLight = [QBAnimationGroup groupWithItem:callingIndicatorLight];
-    QBAnimationGroup *callingIndicatorGroupDark = [QBAnimationGroup groupWithItem:callingIndicatorDark];
-    callingIndicatorSequence = [[QBAnimationSequence alloc] initWithAnimationGroups:@[callingIndicatorGroupLight, callingIndicatorGroupDark] repeat:YES];
-    [callingIndicatorSequence start];
-    // TODO 记得停止
+    [callingIndicator.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 }
 
 // 开始响铃
@@ -533,7 +529,6 @@
 {
     [[SipStackUtils sharedInstance].audioService hangUpCall];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
-    [callingIndicatorSequence stop];
     [timer invalidate]; // 停止计时并从Runloop中释放
     
     _didEndCallBySelf = YES;

@@ -163,6 +163,7 @@
 		CE1E8D28184384C800A956A2 /* micOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8D23184384C800A956A2 /* micOn@2x.png */; };
 		CE1E8D2A184384C800A956A2 /* speakerOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8D25184384C800A956A2 /* speakerOff@2x.png */; };
 		CE1E8D2B184384C800A956A2 /* speakerOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8D26184384C800A956A2 /* speakerOn@2x.png */; };
+		CE1E8D4A184462D900A956A2 /* callingIndicatorSpin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8D49184462D900A956A2 /* callingIndicatorSpin@2x.png */; };
 		CE22107117E17DA300DE9F77 /* arrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE22107017E17DA300DE9F77 /* arrowRight@2x.png */; };
 		CE345F6517CB13FF009D52D4 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = CE345F4217CB13FF009D52D4 /* add.png */; };
 		CE345F6617CB13FF009D52D4 /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE345F4317CB13FF009D52D4 /* add@2x.png */; };
@@ -652,6 +653,7 @@
 		CE1E8D23184384C800A956A2 /* micOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "micOn@2x.png"; sourceTree = "<group>"; };
 		CE1E8D25184384C800A956A2 /* speakerOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOff@2x.png"; sourceTree = "<group>"; };
 		CE1E8D26184384C800A956A2 /* speakerOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOn@2x.png"; sourceTree = "<group>"; };
+		CE1E8D49184462D900A956A2 /* callingIndicatorSpin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callingIndicatorSpin@2x.png"; sourceTree = "<group>"; };
 		CE22107017E17DA300DE9F77 /* arrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowRight@2x.png"; sourceTree = "<group>"; };
 		CE345F4217CB13FF009D52D4 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
 		CE345F4317CB13FF009D52D4 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
@@ -1165,6 +1167,7 @@
 		505A077617B09FB40053E1B7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CE1E8D49184462D900A956A2 /* callingIndicatorSpin@2x.png */,
 				CE1E8D22184384C800A956A2 /* micOff@2x.png */,
 				CE1E8D23184384C800A956A2 /* micOn@2x.png */,
 				CE1E8D25184384C800A956A2 /* speakerOff@2x.png */,
@@ -1713,6 +1716,7 @@
 				CE8A390E17F981CA002F651A /* helpImage3@2x.png in Resources */,
 				CE4E88FB17DDCE070012D34E /* photoCoverIphone5@2x.png in Resources */,
 				CE8A38EE17F95635002F651A /* helpImage1@2x.png in Resources */,
+				CE1E8D4A184462D900A956A2 /* callingIndicatorSpin@2x.png in Resources */,
 				CE5F66B117E94A100098E161 /* doodleEraser@2x.png in Resources */,
 				CE345F6517CB13FF009D52D4 /* add.png in Resources */,
 				CE5F66AD17E945C40098E161 /* doodleWidth@2x.png in Resources */,
