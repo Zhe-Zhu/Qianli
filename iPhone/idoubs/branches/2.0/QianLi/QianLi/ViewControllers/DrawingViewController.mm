@@ -110,10 +110,10 @@
 - (IBAction)draw:(id)sender {
     _isDrawing = !_isDrawing;
     if (_isDrawing) {
-        [sender setImage:[UIImage imageNamed:@"doodleEraser.png"] forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:@"doodleDraw.png"] forState:UIControlStateNormal];
     }
     else{
-        [sender setImage:[UIImage imageNamed:@"doodleDraw.png"] forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:@"doodleEraser.png"] forState:UIControlStateNormal];
     }
     [_drawingView changePaintingMode];
 }
