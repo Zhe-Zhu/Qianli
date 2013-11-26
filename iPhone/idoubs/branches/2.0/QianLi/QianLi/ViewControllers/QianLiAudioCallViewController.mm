@@ -1081,6 +1081,9 @@
         [_imageDispVC scrollTO:_imageDispVC.totalNumber * PageWidth];
     }
     else if ([message isEqualToString:kImageDispCancel]){
+        if (_selectPhotoViewController) {
+            [_selectPhotoViewController dismissViewControllerAnimated:YES completion:nil];
+        }
         [_imageDispVC cancelFromRemoteyParty];
     }
     else if ([message isEqualToString:kCancelAddImage]){
