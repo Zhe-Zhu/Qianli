@@ -146,3 +146,7 @@
 
 //Local notification
 "IncomingCallWithOutName" = "you have a call now, tap to answer";
+"micOn" = "MIC ON";
+"micOff" = "MIC OFF";
+"speakerOff" = "Speaker OFF";
+"speakerOn" = "Speaker ON";

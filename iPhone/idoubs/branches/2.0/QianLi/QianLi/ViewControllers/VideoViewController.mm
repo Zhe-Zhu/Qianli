@@ -160,21 +160,30 @@
 
 - (void)cancel
 {
-    [self cancelFromRemote];
     [[SipStackUtils sharedInstance].messageService sendMessage:kVideoCancel toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+    [self addHistory];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)cancelFromRemote
 {
+    [self addHistory];
     if (_moviePlayer) {
-        [_moviePlayer cancelMoviePlayer];
-        [_moviePlayer dismissViewControllerAnimated:YES completion:^{
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }];
+        [_moviePlayer dismissViewControllerAnimated:NO completion:nil];
+        [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:2.0];
     }
     else{
         [self dismissViewControllerAnimated:YES completion:nil];
     }
+}
+
+- (void)dismissSelf
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)addHistory
+{
     // add to history
     if ([_vedioThumbs count] == 0) {
         [_vedioThumbs addObject:[self smallScreenshot]];
@@ -196,7 +205,7 @@
 {
     if (_moviePlayer) {
         [_moviePlayer cancelMoviePlayer];
-        [_moviePlayer dismissViewControllerAnimated:YES completion:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

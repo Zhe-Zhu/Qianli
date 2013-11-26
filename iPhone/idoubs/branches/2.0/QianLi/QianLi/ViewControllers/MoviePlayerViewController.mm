@@ -57,11 +57,15 @@
     [MobClick beginEvent:@"watchVideo"];
     
     NSError *setCategoryError = nil;
-    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error: &setCategoryError];
-    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
     if (setCategoryError){
         NSLog(@"error");
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -74,7 +78,9 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionMixWithOthers error: NULL];
+     [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -126,7 +132,7 @@
         [cancelButton setTitle:NSLocalizedString(@"Quit", nil) forState:UIControlStateNormal];
         [cancelButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
-        cancelButton.frame = CGRectMake(10, CGRectGetHeight(view.frame)/2-15, 50, 30);
+        cancelButton.frame = CGRectMake(0, 5, 90, 55);
         [view addSubview:cancelButton];
         
         UIButton *forwardButton = [UIButton buttonWithType:UIButtonTypeCustom];

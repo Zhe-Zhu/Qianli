@@ -918,22 +918,6 @@
     }
 }
 
-// Add section
-- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
-{
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        return 0;
-    } else {
-        if (title == UITableViewIndexSearch) {
-            [tableView scrollRectToVisible:self.searchDisplayController.searchBar.frame animated:NO];
-            return -1;
-            // TODO: -1对么?
-        } else {
-            return [[UILocalizedIndexedCollation currentCollation] sectionForSectionIndexTitleAtIndex:index-1];
-        }
-    }
-}
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
 	if (tableView == self.searchDisplayController.searchResultsTableView) {
@@ -1190,7 +1174,7 @@
     }
     
     if (!_noContactBody) {
-        UILabel *noContactBody = [[UILabel alloc] initWithFrame:CGRectMake(160-100, 290, 200, 80)];
+        UILabel *noContactBody = [[UILabel alloc] initWithFrame:CGRectMake(160-140, 290, 280, 80)];
         noContactBody.textAlignment = NSTextAlignmentCenter;
         noContactBody.text = NSLocalizedString(@"noContactBody", nil);
         noContactBody.textColor = [UIColor colorWithRed:196/255.0 green:196/255.0 blue:196/255.0 alpha:1.0f];

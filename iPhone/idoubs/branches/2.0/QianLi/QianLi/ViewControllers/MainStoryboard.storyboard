@@ -1045,7 +1045,7 @@
                         <viewControllerLayoutGuide type="top" id="hbf-tN-i1g"/>
                         <viewControllerLayoutGuide type="bottom" id="IFR-67-ogL"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ur9-te-2sS" customClass="HandDrawingView">
+                    <view key="view" contentMode="scaleToFill" id="ur9-te-2sS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -1078,7 +1078,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="72" id="yAF-js-CNu"/>
                                 </constraints>
-                                <state key="normal" image="doodleEraser.png">
+                                <state key="normal" image="doodleDraw.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1097,6 +1097,9 @@
                             <constraint firstItem="dhq-fg-yNc" firstAttribute="leading" secondItem="4Sy-OI-SYJ" secondAttribute="trailing" constant="31" id="uWf-ln-AsP"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="ereaser" destination="YaO-9Q-sPB" id="WEE-OS-ZpY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MQ0-4m-rZ3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1607,10 +1610,16 @@
         <image name="browserForward.png" width="35" height="35"/>
         <image name="browserHistory.png" width="35" height="35"/>
         <image name="buttonContinueBackground.png" width="280" height="44"/>
+        <image name="buttonContinueBackground.png" width="280" height="44"/>
+        <image name="buttonContinueBackground.png" width="280" height="44"/>
         <image name="captchaCover.png" width="40" height="40"/>
-        <image name="doodleEraser.png" width="30" height="30"/>
+        <image name="captchaCover.png" width="40" height="40"/>
+        <image name="captchaCover.png" width="40" height="40"/>
+        <image name="captchaCover.png" width="40" height="40"/>
+        <image name="doodleDraw.png" width="30" height="30"/>
         <image name="doodlePalette.png" width="30" height="30"/>
         <image name="doodleWidth.png" width="30" height="30"/>
+        <image name="edit.png" width="27" height="26"/>
         <image name="edit.png" width="27" height="26"/>
         <image name="icon.png" width="140" height="140"/>
         <image name="profileButtonCancel.png" width="40" height="40"/>

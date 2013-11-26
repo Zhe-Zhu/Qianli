@@ -15,6 +15,7 @@
 }
 
 @property(nonatomic) double starTime;
+@property (weak, nonatomic) IBOutlet UIButton *ereaser;
 
 - (IBAction)changeWidth:(id)sender;
 - (IBAction)draw:(id)sender;
@@ -36,7 +37,12 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    _drawingView = (HandDrawingView *) self.view;
+    //_drawingView = (HandDrawingView *) self.view;
+    HandDrawingView *view = [[HandDrawingView alloc] initWithFrame:self.view.frame];
+    _drawingView = view;
+    [self.view addSubview:view];
+    [self.view sendSubviewToBack:view];
+    
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     [cancelButton setImage:[UIImage imageNamed:@"arrowLeft.png"]];
     self.navigationItem.leftBarButtonItem = cancelButton;
@@ -110,10 +116,10 @@
 - (IBAction)draw:(id)sender {
     _isDrawing = !_isDrawing;
     if (_isDrawing) {
-        [sender setImage:[UIImage imageNamed:@"doodleEraser.png"] forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:@"doodleDraw.png"] forState:UIControlStateNormal];
     }
     else{
-        [sender setImage:[UIImage imageNamed:@"doodleDraw.png"] forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:@"doodleEraser.png"] forState:UIControlStateNormal];
     }
     [_drawingView changePaintingMode];
 }

@@ -20,10 +20,10 @@
 #import "WebBrowser.h"
 #import "MobClick.h"
 #import "Utils.h"
+#import "SVStatusHUD.h"
 
 @interface QianLiAudioCallViewController ()
 {
-    QBAnimationSequence *callingIndicatorSequence;
     UIImageView *callingIndicator; // calling等待指示器
     UIImageView *networkIndicator;
     UIImageView *bulletinBoard;
@@ -64,7 +64,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *bigProfileImage;
 @property (weak, nonatomic) IBOutlet UIImageView *blurImage;
 
-@property bool isMicroPhoneOn;
+@property bool isNoMicroPhoneOn;
 @property bool isSpeakerOn;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (strong, nonatomic) UILabel *calling;
@@ -82,7 +82,7 @@
 
 @implementation QianLiAudioCallViewController
 
-#define inactiveButtonTintColor [UIColor colorWithRed:70/255.0 green:70/255.0 blue:70/255.0 alpha:1.0f]
+#define inactiveButtonTintColor [UIColor colorWithRed:110/255.0 green:110/255.0 blue:110/255.0 alpha:1.0f]
 #define activeButtonTintColor [UIColor colorWithRed:94/255.0 green:201/255.0 blue:217/255.0 alpha:1.0f]
 
 @synthesize imageDispVC = _imageDispVC;
@@ -211,12 +211,12 @@
 {
     // 进入In Call 模式
     [self retrieveBulletinBoard];
-    [callingIndicatorSequence stop];
     // 加入缓慢消失的动画效果
     [callingIndicator setAlpha:0.3f];
     [UIView animateWithDuration:0.5f animations:^{
         [callingIndicator setAlpha:0.0f];
     }completion:^(BOOL finished){
+        [callingIndicator.layer removeAllAnimations];
         [callingIndicator removeFromSuperview];
     }];
     // 头像缓慢变亮
@@ -277,7 +277,7 @@
 - (void)presentAllCallingIcons
 {
     [_buttonMicroPhone setImage:[UIImage imageNamed:@"microPhone.png"]];
-    [_buttonMicroPhone setTintColor:[UIColor colorWithRed:70/255.0 green:70/255.0 blue:70/255.0 alpha:1.0f]];
+    [_buttonMicroPhone setTintColor:inactiveButtonTintColor];
     if (!IS_OS_7_OR_LATER) {
         [_buttonMicroPhone setBackButtonBackgroundImage:[UIImage imageNamed:@"microPhone.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
         _buttonMicroPhone.title = Nil;
@@ -285,11 +285,11 @@
 
     [_buttonMicroPhone setTarget:self];
     [_buttonMicroPhone setAction:@selector(pressButtonMicroPhone)];
-    _isMicroPhoneOn = NO;
-    [[SipStackUtils sharedInstance].audioService configureMute:_isMicroPhoneOn];
+    _isNoMicroPhoneOn = NO;
+    [[SipStackUtils sharedInstance].audioService configureMute:_isNoMicroPhoneOn];
     
     [_buttonSpeaker setImage:[UIImage imageNamed:@"speaker.png"]];
-    [_buttonSpeaker setTintColor:[UIColor colorWithRed:70/255.0 green:70/255.0 blue:70/255.0 alpha:1.0f]];
+    [_buttonSpeaker setTintColor:inactiveButtonTintColor];
     if (!IS_OS_7_OR_LATER) {
         [_buttonSpeaker setBackButtonBackgroundImage:[UIImage imageNamed:@"speaker.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
         _buttonSpeaker.title = Nil;
@@ -297,7 +297,6 @@
     [_buttonSpeaker setTarget:self];
     [_buttonSpeaker setAction:@selector(pressButtonSpeaker)];
     _isSpeakerOn = NO;
-    //[[SipStackUtils sharedInstance].audioService configureSpeakerEnabled:_isSpeakerOn];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
     
     [_buttonAdd setImage:[UIImage imageNamed:@"add.png"]];
@@ -408,20 +407,17 @@
     // 加入指示器
     [callingIndicator removeFromSuperview];
     callingIndicator = [[UIImageView alloc] initWithFrame:CGRectMake(160 - 10, 13, 25, 25)];
-    callingIndicator.image = [UIImage imageNamed:@"callingIndicator.png"];
+    callingIndicator.image = [UIImage imageNamed:@"callingIndicatorSpin.png"];
     [self.navigationController.navigationBar addSubview:callingIndicator];
+ 
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 /* full rotation*/ * 1 * 1 ];
+    rotationAnimation.duration = 1;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = MAXFLOAT;
     
-    QBAnimationItem *callingIndicatorLight = [QBAnimationItem itemWithDuration:2.0 delay:0 options:UIViewAnimationCurveLinear animations:^{
-        callingIndicator.alpha = 1.0f;
-    }];
-    QBAnimationItem *callingIndicatorDark = [QBAnimationItem itemWithDuration:0.8 delay:0 options:UIViewAnimationCurveEaseOut animations:^{
-        callingIndicator.alpha = 0.2f;
-    }];
-    QBAnimationGroup *callingIndicatorGroupLight = [QBAnimationGroup groupWithItem:callingIndicatorLight];
-    QBAnimationGroup *callingIndicatorGroupDark = [QBAnimationGroup groupWithItem:callingIndicatorDark];
-    callingIndicatorSequence = [[QBAnimationSequence alloc] initWithAnimationGroups:@[callingIndicatorGroupLight, callingIndicatorGroupDark] repeat:YES];
-    [callingIndicatorSequence start];
-    // TODO 记得停止
+    [callingIndicator.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 }
 
 // 开始响铃
@@ -463,16 +459,18 @@
 
 - (void)pressButtonMicroPhone
 {
-    if (_isMicroPhoneOn) {
+    if (_isNoMicroPhoneOn) {
         // deactivate this button
         [_buttonMicroPhone setTintColor:inactiveButtonTintColor];
-
+        // show the UIActivityView
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"micOn.png"] status:NSLocalizedString(@"micOn", nil)];
     }
     else {
         [_buttonMicroPhone setTintColor:activeButtonTintColor];
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"micOff.png"] status:NSLocalizedString(@"micOff", nil)];
     }
-    _isMicroPhoneOn = !_isMicroPhoneOn;
-    [[SipStackUtils sharedInstance].audioService configureMute:_isMicroPhoneOn];
+    _isNoMicroPhoneOn = !_isNoMicroPhoneOn;
+    [[SipStackUtils sharedInstance].audioService configureMute:_isNoMicroPhoneOn];
 }
 
 - (void)pressButtonSpeaker
@@ -480,11 +478,12 @@
     if (_isSpeakerOn) {
         // deactivate this button
         [_buttonSpeaker setTintColor:inactiveButtonTintColor];
-        
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOff.png"] status:NSLocalizedString(@"speakerOff", nil)];
     }
     else {
         // activate this button
         [_buttonSpeaker setTintColor:activeButtonTintColor];
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
     }
     // record current button state
     _isSpeakerOn = !_isSpeakerOn;
@@ -529,7 +528,6 @@
 {
     [[SipStackUtils sharedInstance].audioService hangUpCall];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
-    [callingIndicatorSequence stop];
     [timer invalidate]; // 停止计时并从Runloop中释放
     
     _didEndCallBySelf = YES;
@@ -551,13 +549,8 @@
         [menuBar dismiss];
         menuBar=nil;
     }
-    
     // starts timer suicide
-    [NSTimer scheduledTimerWithTimeInterval: 0.5
-                                     target: self
-                                   selector: @selector(timerSuicideTick)
-                                   userInfo: nil
-                                    repeats: NO];
+    [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:0.5];
 }
 
 # pragma mark Receieve a Call View Methods
@@ -903,11 +896,7 @@
 			// releases session
 			// starts timer suicide
             //[[SipStackUtils sharedInstance].audioService releaseAudioSession];
-			[NSTimer scheduledTimerWithTimeInterval: 0.5
-                                             target: self
-                                           selector: @selector(timerSuicideTick)
-                                           userInfo: nil
-                                            repeats: NO];
+            [self timerSuicideTick];
 			break;
 		}
 	}
@@ -923,7 +912,7 @@
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
   
     //LLGG
-   [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissAllViewController];
    //[self changeViewAppearanceToInCall];
     
     if (!_didEndCallBySelf) {
@@ -944,9 +933,29 @@
     }
 }
 
-- (void)hasCall
+- (void)dismissAllViewController
 {
-    //add some code
+    if (_vedioVC) {
+        [_vedioVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_imageDispVC) {
+        [_imageDispVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_browser) {
+        [_browser dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_shoppingVC) {
+        [_shoppingVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_drawingVC) {
+        [_drawingVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:1.0];
+}
+
+- (void)dismissSelf
+{
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) updateViewAndState{
@@ -970,7 +979,6 @@
 			{
                 [[SipStackUtils sharedInstance].soundService stopRingBackTone];
                 [[SipStackUtils sharedInstance].soundService stopRingTone];
-                [self hasCall];
                 [self changeViewAppearanceToInCall];
 				break;
 			}
@@ -1083,6 +1091,9 @@
         [_imageDispVC scrollTO:_imageDispVC.totalNumber * PageWidth];
     }
     else if ([message isEqualToString:kImageDispCancel]){
+        if (_selectPhotoViewController) {
+            [_selectPhotoViewController dismissViewControllerAnimated:YES completion:nil];
+        }
         [_imageDispVC cancelFromRemoteyParty];
     }
     else if ([message isEqualToString:kCancelAddImage]){
