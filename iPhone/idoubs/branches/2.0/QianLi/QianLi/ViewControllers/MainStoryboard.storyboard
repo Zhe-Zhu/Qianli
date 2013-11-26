@@ -1078,7 +1078,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="72" id="yAF-js-CNu"/>
                                 </constraints>
-                                <state key="normal" image="doodleEraser.png">
+                                <state key="normal" image="doodleDraw.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1608,7 +1608,7 @@
         <image name="browserHistory.png" width="35" height="35"/>
         <image name="buttonContinueBackground.png" width="280" height="44"/>
         <image name="captchaCover.png" width="40" height="40"/>
-        <image name="doodleEraser.png" width="30" height="30"/>
+        <image name="doodleDraw.png" width="30" height="30"/>
         <image name="doodlePalette.png" width="30" height="30"/>
         <image name="doodleWidth.png" width="30" height="30"/>
         <image name="edit.png" width="27" height="26"/>
