@@ -921,7 +921,8 @@
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
   
     //LLGG
-   [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissAllViewController];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
    //[self changeViewAppearanceToInCall];
     
     if (!_didEndCallBySelf) {
@@ -942,9 +943,23 @@
     }
 }
 
-- (void)hasCall
+- (void)dismissAllViewController
 {
-    //add some code
+    if (_vedioVC) {
+        [_vedioVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_imageDispVC) {
+        [_imageDispVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_browser) {
+        [_browser dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_shoppingVC) {
+        [_shoppingVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_drawingVC) {
+        [_drawingVC dismissViewControllerAnimated:NO completion:nil];
+    }
 }
 
 -(void) updateViewAndState{
@@ -968,7 +983,6 @@
 			{
                 [[SipStackUtils sharedInstance].soundService stopRingBackTone];
                 [[SipStackUtils sharedInstance].soundService stopRingTone];
-                [self hasCall];
                 [self changeViewAppearanceToInCall];
 				break;
 			}
