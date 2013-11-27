@@ -130,7 +130,8 @@
     firstTouch = YES;
     
     //
-    _pointsMessage = [NSString stringWithFormat:@"%f:%f",p.x,p.y];
+    CGSize winSize = self.frame.size;
+    _pointsMessage = [NSString stringWithFormat:@"%f:%f", p.x /winSize.width, p.y / winSize.height];
     drawPointsNumber = 1;
 }
 
@@ -154,12 +155,13 @@
     }
     
     // Prepare the drawing points
+    CGSize winSize = self.bounds.size;
     if (drawPointsNumber < MaxDrawPoints) {
         if ([_pointsMessage isEqualToString:@""]) {
-            _pointsMessage = [NSString stringWithFormat:@"%f:%f", point.x, point.y];
+            _pointsMessage = [NSString stringWithFormat:@"%f:%f", point.x / winSize.width, point.y / winSize.height];
         }
         else{
-            _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f", _pointsMessage, point.x, point.y];
+            _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f", _pointsMessage, point.x / winSize.width, point.y / winSize.height];
         }
         drawPointsNumber ++;
     }
@@ -171,7 +173,7 @@
             [self sendDoodleMessage:@"ERASE"];
         }
         drawPointsNumber = 3;
-        _pointsMessage = [NSString stringWithFormat:@"%f:%f:%f:%f:%f:%f", thirdLastPoint.x, thirdLastPoint.y, previousPoint.x, previousPoint.y, point.x, point.y];
+        _pointsMessage = [NSString stringWithFormat:@"%f:%f:%f:%f:%f:%f", thirdLastPoint.x / winSize.width, thirdLastPoint.y / winSize.height, previousPoint.x / winSize.width, previousPoint.y / winSize.height, point.x / winSize.width, point.y / winSize.height];
     }
     
     thirdLastPoint = previousPoint;
@@ -195,7 +197,8 @@
     UITouch *touch = [touches anyObject];
     CGPoint pos = [touch locationInView:self];
     if (drawPointsNumber < MaxDrawPoints) {
-        _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f",_pointsMessage,pos.x,pos.y];
+        CGSize winSize = self.bounds.size;
+        _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f",_pointsMessage, pos.x / winSize.width, pos.y / winSize.height];
     }
     
     [self sendDoodleMessage:@"DRAW"];

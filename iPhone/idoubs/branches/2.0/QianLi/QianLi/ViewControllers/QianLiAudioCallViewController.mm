@@ -1159,10 +1159,11 @@ void propListener(	void *                  inClientData,
        // [self showImageVC];
         NSArray *coord = [[words objectAtIndex:2] componentsSeparatedByString:@":"];
         NSMutableArray *points = [NSMutableArray array];
+        CGSize winSize = _imageDispVC.doodleView.frame.size;
         for (int i = 0; i < [coord count] / 2; ++i) {
             CGPoint p;
-            p.x = [[coord objectAtIndex:i * 2] floatValue];
-            p.y = [[coord objectAtIndex:i * 2 + 1] floatValue];
+            p.x = [[coord objectAtIndex:i * 2] floatValue] * winSize.width;
+            p.y = [[coord objectAtIndex:i * 2 + 1] floatValue] * winSize.height;
             NSValue *pValue = [NSValue valueWithCGPoint:p];
             [points addObject:pValue];
         }
@@ -1282,12 +1283,13 @@ void propListener(	void *                  inClientData,
     
     else if ([message isEqualToString:kDrawingPoints]){
         //[self showDrawingVC];
+        CGSize winSize = _drawingVC.drawingView.bounds.size;
         NSArray *coord = [[words objectAtIndex:2] componentsSeparatedByString:@":"];
         NSMutableArray *points = [NSMutableArray array];
         for (int i = 0; i < [coord count] / 2; ++i) {
             CGPoint p;
-            p.x = [[coord objectAtIndex:i * 2] floatValue];
-            p.y = [[coord objectAtIndex:i * 2 + 1] floatValue];
+            p.x = [[coord objectAtIndex:i * 2] floatValue] * winSize.width;
+            p.y = [[coord objectAtIndex:i * 2 + 1] floatValue] * winSize.height;
             NSValue *pValue = [NSValue valueWithCGPoint:p];
             [points addObject:pValue];
         }
