@@ -787,17 +787,24 @@
         contactItem.tel =  (NSString *)[object valueForKey:@"number"];
         [qianliContacts addObject:contactItem];
     }
-    
-    [_contacts removeAllObjects];
+    if (_contacts == nil){
+        _contacts = [NSMutableArray array];
+    }
+    else{
+        [_contacts removeAllObjects];
+    }
     [self sortQianLiContacts:qianliContacts SortedContacts:_contacts];
 }
 
 - (void)restoreContacts
 {
-    [self getAllQianLiFriends];
     if (_inviteController) {
         [_inviteController getAddressBookPermission];
     }
+    else{
+        [self getAllQianLiFriends];
+    }
+    [_friendsTableView reloadData];
 }
 
 - (void)clearContacts
@@ -861,7 +868,6 @@
 	} else {
         return [_contacts count];
     }
-    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -1203,6 +1209,5 @@
     [_noContactBody removeFromSuperview];
     [_noContactBody2 removeFromSuperview];
 }
-
 
 @end
