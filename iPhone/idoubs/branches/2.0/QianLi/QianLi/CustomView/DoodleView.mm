@@ -91,8 +91,8 @@
             [_remotePath stroke];
         }
         else{
-            CGContextRef context = UIGraphicsGetCurrentContext();
-            CGContextClearRect(context, rect);
+//            CGContextRef context = UIGraphicsGetCurrentContext();
+//            CGContextClearRect(context, rect);
         }
     }
     else{
@@ -294,12 +294,24 @@
         [self writeToImageWithPath:_remotePath Color:_strokeColor];
     }
     else{
-        for (int i = 0; i < [array count]; ++i) {
-            fromRemoteParty = YES;
-           CGPoint p = [[array objectAtIndex:i] CGPointValue];
-           [self setNeedsDisplayInRect:CGRectMake(p.x - 6, p.y - 6, 12, 12)];
+        CGSize imageSize = self.bounds.size;
+        if (NULL != UIGraphicsBeginImageContextWithOptions){
+            UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         }
-        _pathFormedImage = [self screenshot];
+        else{
+            UIGraphicsBeginImageContext(imageSize);
+        }
+        
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [[self layer] renderInContext:context];
+        fromRemoteParty = YES;
+        for (int i = 0; i < [array count]; ++i) {
+           CGPoint p = [[array objectAtIndex:i] CGPointValue];
+           CGContextClearRect(context, CGRectMake(p.x - 6, p.y - 6, 12, 12));
+        }
+        _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        [self setNeedsDisplay];
     }
 }
 
@@ -358,6 +370,7 @@
     isClearAll = YES;
     [self setNeedsDisplayInRect:self.frame];
     [self initPathImage];
+    [self setNeedsDisplay];
 }
 
 - (void)initPathImage
@@ -367,7 +380,6 @@
     [self drawImage];
     _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-
 }
 
 - (UIImage*)screenshot
@@ -383,7 +395,6 @@
         UIGraphicsBeginImageContext(imageSize);
     }
     
-//    [_image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
     CGSize newImageSize = [self adjustImageFrame:_image.size];
     [_image drawInRect:CGRectMake((320-newImageSize.width)/2, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
     
