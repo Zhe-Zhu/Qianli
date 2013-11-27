@@ -7,6 +7,8 @@
 //
 
 #import "AboutQianLiViewController.h"
+#import "Global.h"
+#import "Utils.h"
 
 @interface AboutQianLiViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *labelVersion;
@@ -32,6 +34,9 @@
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
     _labelVersion.text = NSLocalizedString(@"version", nil);
     _labelVersionNumber.text = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    if (!IS_OS_7_OR_LATER) {
+        [Utils changeNavigationBarButtonLookingForiOS6];
+    }
 }
 
 - (void)didReceiveMemoryWarning

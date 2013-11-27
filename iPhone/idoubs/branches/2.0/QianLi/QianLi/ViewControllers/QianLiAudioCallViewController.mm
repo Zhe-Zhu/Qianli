@@ -602,6 +602,7 @@
     }
     calling.textAlignment = NSTextAlignmentCenter;
     calling.textColor = [UIColor colorWithRed:165/255.0 green:165/255.0 blue:162/255.0 alpha:1.0f];
+    calling.backgroundColor = [UIColor clearColor];
     
     // bulletin board和toolbar之间的分割线
     [lineView removeFromSuperview];
