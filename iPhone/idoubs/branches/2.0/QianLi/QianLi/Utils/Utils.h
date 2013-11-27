@@ -27,4 +27,7 @@
 + (NSString *)stringbyRmovingSpaceFromString:(NSString *)string;
 
 +(void)updateMainHistNameForRemoteParty:(NSString *)remote;
+
++(void)changeNavigationBarButtonLookingForiOS6;
+
 @end

@@ -164,7 +164,7 @@
                     name = remoteParty;
                 }
 //                NSString *contentStr = [NSString stringWithFormat:@"Appointment from %@", name];
-                NSString *contentStr = NSLocalizedString(@"historyDetailAppointment", nil);
+                NSString *contentStr = NSLocalizedString(@"appointmentNoName", nil);
                 NSArray *array = @[remoteParty, contentStr, [NSNumber numberWithDouble:startingTime], @"Appointment"];
                 [self performSelectorOnMainThread:@selector(writeHistory:) withObject:array waitUntilDone:YES];
             }
