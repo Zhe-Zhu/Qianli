@@ -373,7 +373,7 @@ static SipStackUtils * sipStackUtilsInstance;
                         else{
                             //go to server to get name;
                             [UserDataTransUtils getUserData:[[SipStackUtils sharedInstance] getRemotePartyNumber] Completion:^(NSString *name, NSString *avatarURL) {
-                                [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] Content:[NSString stringWithFormat:@"Missed call from %@", name] Time:[[NSDate date] timeIntervalSince1970] Type:@"MissedCall"];
+                                [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] Content:NSLocalizedString(@"historyDetailMissedCall", nil) Time:[[NSDate date] timeIntervalSince1970] Type:@"MissedCall"];
                             }];
                         }
                         [Utils updateMainHistNameForRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];

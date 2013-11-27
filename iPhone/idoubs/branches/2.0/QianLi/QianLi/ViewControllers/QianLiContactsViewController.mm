@@ -565,7 +565,6 @@
             
             for (int j = 0; j < [arr count]; ++j) {
                 QianLiAddressBookItem *contact = (QianLiAddressBookItem *) [arr objectAtIndex:j];
-                
                 for (int k = 0; k < [contact.tel count]; ++k) {
                     NSString *numStr = (NSString *) [contact.tel objectAtIndex:k];
                     if ([numStr isEqualToString: (NSString *)[numbers objectAtIndex:r]]){
@@ -1204,6 +1203,7 @@
 
 - (void)removeNoContacts
 {
+    _noContactImageView.image = nil;
     [_noContactImageView removeFromSuperview];
     [_noContactTitle removeFromSuperview];
     [_noContactBody removeFromSuperview];
