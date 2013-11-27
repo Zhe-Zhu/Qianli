@@ -20,6 +20,7 @@
     BOOL isDrawing;
     BOOL fromRemoteParty;
     BOOL remoteDrawing;
+    BOOL isClearAll;
     NSInteger drawPointsNumber;
     
     CGPoint previousPoint;
@@ -28,9 +29,13 @@
 
 @property(strong, nonatomic) UIColor *strokeColor;
 @property(strong, nonatomic) NSString *pointsMessage;
+@property(strong, nonatomic) UIImage *pathFormedImage;
+
 @end
 
 @implementation HandDrawingView
+
+@synthesize pathFormedImage = _pathFormedImage;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -49,6 +54,7 @@
         firstTime = YES;
         isDrawing = YES;
         fromRemoteParty = NO;
+        isClearAll = NO;
         _pathPoints = [[NSMutableArray alloc] initWithCapacity:2];
         _strokeColor = [UIColor blackColor];
         self.backgroundColor = [UIColor clearColor];
@@ -80,6 +86,12 @@
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
+    if (isClearAll) {
+        isClearAll = NO;
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextClearRect(context, rect);
+        return;
+    }
     [_pathFormedImage drawInRect:rect];
     [_strokeColor setStroke];
     
@@ -262,10 +274,19 @@
         for (int i = 0; i < [array count]; ++i) {
             fromRemoteParty = YES;
             CGPoint p = [[array objectAtIndex:i] CGPointValue];
+           // NSValue *rect = [NSValue valueWithCGRect:CGRectMake(p.x - 6, p.y - 6, 12, 12)];
+            //[self performSelector:@selector(clearInRect:) withObject:rect afterDelay:0.001 * i];
             [self setNeedsDisplayInRect:CGRectMake(p.x - 6, p.y - 6, 12, 12)];
         }
         _pathFormedImage = [self screenshot];
     }
+}
+
+- (void)clearInRect:(NSValue *)rect
+{
+    CGRect rct = [rect CGRectValue];
+    fromRemoteParty = YES;
+    [self setNeedsDisplayInRect:rct];
 }
 
 - (NSMutableArray *)calculateSmoothLinePoints:(NSMutableArray *)points
@@ -281,7 +302,7 @@
             CGPoint midPoint2 = CGPointMake((prev1.x + cur.x) / 2.0, (prev1.y + cur.y) / 2.0);
             int segmentDistance = 2;
             float distance = sqrtf((midPoint1.x - midPoint2.x) * (midPoint1.x - midPoint2.x) + (midPoint1.y - midPoint2.y) * (midPoint1.y - midPoint2.y));
-            int numberOfSegments = MIN(16, MAX(floorf(distance / segmentDistance), 2));
+            int numberOfSegments = MIN(4, MAX(floorf(distance / segmentDistance), 2));
             
             float t = 0.0f;
             float step = 1.0f / numberOfSegments;
@@ -304,6 +325,31 @@
     } else {
         return nil;
     }
+}
+
+- (void)clearAll
+{
+    NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+    [[SipStackUtils sharedInstance].messageService sendMessage:kClearAllHandWriting toRemoteParty:remotePartyNumber];
+    [self clearAllFromRemote];
+}
+
+- (void)clearAllFromRemote
+{
+    isClearAll = YES;
+    [self setNeedsDisplayInRect:self.frame];
+    [self initPathImage];
+}
+
+- (void)initPathImage
+{
+    CGSize size= self.bounds.size;
+    UIGraphicsBeginImageContextWithOptions(size, YES, 1.0);
+    UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, size.width, size.height)];
+    [[UIColor whiteColor] setFill];
+    [rectpath fill];
+    _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
 }
 
 - (void)changePaintingMode
@@ -332,10 +378,7 @@
     // Retrieve the screenshot image
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
     return image;
 }
-
 
 @end
