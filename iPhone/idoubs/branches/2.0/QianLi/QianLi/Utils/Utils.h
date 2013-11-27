@@ -27,4 +27,5 @@
 + (NSString *)stringbyRmovingSpaceFromString:(NSString *)string;
 
 +(void)updateMainHistNameForRemoteParty:(NSString *)remote;
++ (BOOL)isHeadsetPluggedIn;
 @end
