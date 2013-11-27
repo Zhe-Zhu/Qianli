@@ -42,7 +42,6 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         // Initialization code
-        // Initialization code
         [self setMultipleTouchEnabled:NO];
         _path = [UIBezierPath bezierPath];
         _remotePath = [UIBezierPath bezierPath];
@@ -101,8 +100,8 @@
             [_remotePath stroke];
         }
         else{
-            CGContextRef context = UIGraphicsGetCurrentContext();
-            CGContextClearRect(context, rect);
+//            CGContextRef context = UIGraphicsGetCurrentContext();
+//            CGContextClearRect(context, rect);
         }
     }
     else{
@@ -233,7 +232,7 @@
 - (void)writeToImageWithPath:(UIBezierPath*)path Color:(UIColor *)color
 {
     CGSize size= self.bounds.size;
-    UIGraphicsBeginImageContextWithOptions(size, YES, 1.0);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     if (firstTime) {
         UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, size.width, size.height)];
         [[UIColor whiteColor] setFill];
@@ -271,22 +270,29 @@
         [self writeToImageWithPath:_remotePath Color:_strokeColor];
     }
     else{
-        for (int i = 0; i < [array count]; ++i) {
-            fromRemoteParty = YES;
-            CGPoint p = [[array objectAtIndex:i] CGPointValue];
-           // NSValue *rect = [NSValue valueWithCGRect:CGRectMake(p.x - 6, p.y - 6, 12, 12)];
-            //[self performSelector:@selector(clearInRect:) withObject:rect afterDelay:0.001 * i];
-            [self setNeedsDisplayInRect:CGRectMake(p.x - 6, p.y - 6, 12, 12)];
+        CGSize imageSize = self.bounds.size;
+        if (NULL != UIGraphicsBeginImageContextWithOptions){
+            UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         }
-        _pathFormedImage = [self screenshot];
-    }
-}
+        else{
+            UIGraphicsBeginImageContext(imageSize);
+        }
+        UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
+        [[UIColor whiteColor] setFill];
+        [rectpath fill];
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [[self layer] renderInContext:context];
 
-- (void)clearInRect:(NSValue *)rect
-{
-    CGRect rct = [rect CGRectValue];
-    fromRemoteParty = YES;
-    [self setNeedsDisplayInRect:rct];
+        for (int i = 0; i < [array count]; ++i) {
+            CGPoint p = [[array objectAtIndex:i] CGPointValue];
+            CGContextClearRect(context, CGRectMake(p.x - 6, p.y - 6, 12, 12));
+        }
+        //_pathFormedImage = [self screenshot];
+        _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        fromRemoteParty = YES;
+        [self setNeedsDisplay];
+    }
 }
 
 - (NSMutableArray *)calculateSmoothLinePoints:(NSMutableArray *)points
@@ -344,7 +350,7 @@
 - (void)initPathImage
 {
     CGSize size= self.bounds.size;
-    UIGraphicsBeginImageContextWithOptions(size, YES, 1.0);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, size.width, size.height)];
     [[UIColor whiteColor] setFill];
     [rectpath fill];
@@ -364,7 +370,7 @@
     // On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
     CGSize imageSize = self.bounds.size;
     if (NULL != UIGraphicsBeginImageContextWithOptions){
-        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 1.0);
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     }
     else{
         UIGraphicsBeginImageContext(imageSize);
