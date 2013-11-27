@@ -55,7 +55,6 @@
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     }
     [MobClick beginEvent:@"watchVideo"];
-    
     NSError *setCategoryError = nil;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
     if (setCategoryError){
@@ -78,9 +77,10 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionMixWithOthers error: NULL];
-     [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
-    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
+    [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+    if (![Utils isHeadsetPluggedIn]) {
+        [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
+    }
 }
 
 - (BOOL)prefersStatusBarHidden

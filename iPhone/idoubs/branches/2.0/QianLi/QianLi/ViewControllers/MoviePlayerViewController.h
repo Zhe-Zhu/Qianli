@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Global.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "Utils.h"
 
 @interface MoviePlayerViewController : UIViewController <UIGestureRecognizerDelegate>
 

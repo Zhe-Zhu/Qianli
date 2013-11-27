@@ -201,4 +201,33 @@
     }
 }
 
++ (BOOL)isHeadsetPluggedIn
+{
+    UInt32 routeSize = sizeof (CFStringRef);
+    CFStringRef route;
+    
+    OSStatus error = AudioSessionGetProperty (kAudioSessionProperty_AudioRoute, &routeSize, &route);
+    
+    /* Known values of route:
+     * "Headset"
+     * "Headphone"
+     * "Speaker"
+     * "SpeakerAndMicrophone"
+     * "HeadphonesAndMicrophone"
+     * "HeadsetInOut"
+     * "ReceiverAndMicrophone"
+     * "Lineout"
+     */
+    
+    if (!error && (route != NULL)) {
+        NSString* routeStr = (__bridge NSString*)route;
+        NSRange headphoneRange = [routeStr rangeOfString : @"Head"];
+        if (headphoneRange.location != NSNotFound){
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 @end

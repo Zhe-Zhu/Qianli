@@ -475,6 +475,9 @@
 
 - (void)pressButtonSpeaker
 {
+    if ([Utils isHeadsetPluggedIn]) {
+        return;
+    }
     if (_isSpeakerOn) {
         // deactivate this button
         [_buttonSpeaker setTintColor:inactiveButtonTintColor];
@@ -684,6 +687,9 @@
 
 - (void)openSpeaker
 {
+    if ([Utils isHeadsetPluggedIn]) {
+        return;
+    }
     if (_isSpeakerOn) {
         return;
     }
