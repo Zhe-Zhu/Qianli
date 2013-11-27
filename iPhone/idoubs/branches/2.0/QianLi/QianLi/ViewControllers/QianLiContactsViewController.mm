@@ -295,7 +295,10 @@
         //Save thumbnail image - performance decreasing
         UIImage *personImage = nil;
 
-        // 如果person = nil 这里会崩溃
+        if (person == nil) {
+            continue;
+        }
+        
         if (person != nil && ABPersonHasImageData(person)) {
             if ( &ABPersonCopyImageDataWithFormat != nil ) {
                 // iOS >= 4.1
