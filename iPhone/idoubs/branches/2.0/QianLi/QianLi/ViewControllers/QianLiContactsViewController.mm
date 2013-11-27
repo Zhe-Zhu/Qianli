@@ -294,6 +294,8 @@
         
         //Save thumbnail image - performance decreasing
         UIImage *personImage = nil;
+
+        // 如果person = nil 这里会崩溃
         if (person != nil && ABPersonHasImageData(person)) {
             if ( &ABPersonCopyImageDataWithFormat != nil ) {
                 // iOS >= 4.1
@@ -318,7 +320,7 @@
         if ((__bridge id)abFullName != nil) {
             nameString = (__bridge NSString *)abFullName;
         } else {
-            if (lastNameString != nil)
+            if (lastNameString != nil && nameString != nil)
             {
                 nameString = [NSString stringWithFormat:@"%@ %@", nameString, lastNameString];
             }
@@ -361,10 +363,6 @@
                         
                         NSString* strippedNumber = [words componentsJoinedByString:@""];
                         if ([strippedNumber length] < 3 ) {
-                            continue;
-                        }
-                        
-                        if ([strippedNumber length] < 3) {
                             continue;
                         }
                         if (![[strippedNumber substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"+"]) {
