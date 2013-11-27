@@ -174,6 +174,8 @@
         [_toolbar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forToolbarPosition:UIBarPositionBottom barMetrics:UIBarMetricsDefault];
         _buttonAdd.tintColor = [UIColor blackColor];
     }
+    
+    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge void *)self);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -204,6 +206,26 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge void *)self);
+}
+
+void propListener(	void *                  inClientData,
+                  AudioSessionPropertyID	inID,
+                  UInt32                  inDataSize,
+                  const void *            inData)
+{
+    QianLiAudioCallViewController *audioVC = (__bridge QianLiAudioCallViewController *)inClientData;
+    if (inID == kAudioSessionProperty_AudioRouteChange)
+	{
+		if (![Utils isHeadsetPluggedIn]) {
+            if (audioVC.presentedViewController) {
+                [audioVC openSpeaker];
+            }
+        }
+        else{
+            [audioVC shutUpSpeaker];
+        }
+	}
 }
 
 // 当拨打别人或被拨打接通电话后调用, 将界面的外观转换到In Call界面
@@ -698,6 +720,16 @@
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
 }
 
+- (void)shutUpSpeaker
+{
+    if (!_isSpeakerOn) {
+        return;
+    }
+    _isSpeakerOn = NO;
+    [_buttonSpeaker setTintColor:inactiveButtonTintColor];
+    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
+}
+
 #pragma mark touch Menu Bar Item
 - (void)selectPhoto
 {
@@ -941,6 +973,7 @@
 
 - (void)dismissAllViewController
 {
+    [menuBar dismiss];
     if (_vedioVC) {
         [_vedioVC dismissViewControllerAnimated:NO completion:nil];
     }
