@@ -21,6 +21,7 @@
     BOOL _isDrawing;
     BOOL fromRemoteParty;
     BOOL remoteDrawing;
+    BOOL isClearAll;
     NSInteger numberOfPoints;
     
     CGPoint previousPoint;
@@ -53,6 +54,7 @@
         firstTime = YES;
         _isDrawing = YES;
         fromRemoteParty = NO;
+        isClearAll = NO;
         _pathPoints = [[NSMutableArray alloc] initWithCapacity:2];
         self.backgroundColor = nil;
         self.layer.opaque = NO;
@@ -66,6 +68,13 @@
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
+    if (isClearAll) {
+        isClearAll = NO;
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextClearRect(context, rect);
+        return;
+    }
+    
     if (firstDrawInRect) {
         [self writeToImageWithPath:_path Color:_strokeColor];
         firstDrawInRect = NO;
@@ -198,12 +207,6 @@
         CGPoint p = [[points objectAtIndex:i] CGPointValue];
         [_path addLineToPoint:p];
     }
-//    if (firstTouch) {
-//        [_path addLineToPoint:pos];
-//    }
-//    else{
-//        
-//    }
     [self writeToImageWithPath:_path Color:_strokeColor];
     [_path removeAllPoints];
     [_pathPoints removeAllObjects];
@@ -227,9 +230,6 @@
     CGSize size= self.bounds.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     if (firstTime) {
-        //UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, size.width, size.height)];
-        //[[UIColor blackColor] setFill];
-        //[rectpath fill];
         [self drawImage];
         firstTime = NO;
     }
@@ -316,7 +316,7 @@
             CGPoint midPoint2 = CGPointMake((prev1.x + cur.x) / 2.0, (prev1.y + cur.y) / 2.0);
             int segmentDistance = 2;
             float distance = sqrtf((midPoint1.x - midPoint2.x) * (midPoint1.x - midPoint2.x) + (midPoint1.y - midPoint2.y) * (midPoint1.y - midPoint2.y));
-            int numberOfSegments = MIN(16, MAX(floorf(distance / segmentDistance), 2));
+            int numberOfSegments = MIN(4, MAX(floorf(distance / segmentDistance), 2));
             
             float t = 0.0f;
             float step = 1.0f / numberOfSegments;
@@ -344,6 +344,30 @@
 - (void)changePaintingMode
 {
     _isDrawing = !_isDrawing;
+}
+
+- (void)clearAll
+{
+    NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+    [[SipStackUtils sharedInstance].messageService sendMessage:kClearAllDoodle toRemoteParty:remotePartyNumber];
+    [self clearAllFromRemote];
+}
+
+- (void)clearAllFromRemote
+{
+    isClearAll = YES;
+    [self setNeedsDisplayInRect:self.frame];
+    [self initPathImage];
+}
+
+- (void)initPathImage
+{
+    CGSize size= self.bounds.size;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [self drawImage];
+    _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
 }
 
 - (UIImage*)screenshot

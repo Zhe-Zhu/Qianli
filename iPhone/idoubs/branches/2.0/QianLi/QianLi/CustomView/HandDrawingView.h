@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "Global.h"
 
@@ -13,6 +14,7 @@
 
 -(void)changePaintingMode;
 - (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing;
-
+- (void)clearAll;
+- (void)clearAllFromRemote;
 
 @end

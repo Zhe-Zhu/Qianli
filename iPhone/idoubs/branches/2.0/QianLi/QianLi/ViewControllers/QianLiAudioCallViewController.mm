@@ -1167,6 +1167,9 @@ void propListener(	void *                  inClientData,
         }
         [_imageDispVC.doodleView drawingOnImageWithPoints:points Drawing:[[words objectAtIndex:1] isEqualToString:@"DRAW"]];
     }
+    else if ([message isEqualToString:kClearAllDoodle]){
+        [_imageDispVC.doodleView clearAllFromRemote];
+    }
     else if ([message isEqualToString:kDoodleCancel]){
 //        [self showImageVC];
         if (_imageDispVC) {
@@ -1270,6 +1273,10 @@ void propListener(	void *                  inClientData,
         // add to main story
         [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] Content:[NSString stringWithFormat:NSLocalizedString(@"handWriting", nil), [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]]] Time:[[NSDate date] timeIntervalSince1970] Type:@"IncomingHandDrawing"];
          [Utils updateMainHistNameForRemoteParty: [[SipStackUtils sharedInstance] getRemotePartyNumber]];
+    }
+    
+    else if ([message isEqualToString:kClearAllHandWriting]){
+        [_drawingVC.drawingView clearAllFromRemote];
     }
     
     else if ([message isEqualToString:kDrawingPoints]){

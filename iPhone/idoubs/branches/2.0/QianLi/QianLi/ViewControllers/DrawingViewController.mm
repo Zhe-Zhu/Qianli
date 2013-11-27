@@ -16,10 +16,12 @@
 
 @property(nonatomic) double starTime;
 @property (weak, nonatomic) IBOutlet UIButton *ereaser;
+@property (weak, nonatomic) IBOutlet UIButton *clearAll;
 
 - (IBAction)changeWidth:(id)sender;
 - (IBAction)draw:(id)sender;
-- (IBAction)changColor:(id)sender;
+- (IBAction)clear:(id)sender;
+
 @end
 
 @implementation DrawingViewController
@@ -122,6 +124,11 @@
         [sender setImage:[UIImage imageNamed:@"doodleEraser.png"] forState:UIControlStateNormal];
     }
     [_drawingView changePaintingMode];
+}
+
+- (IBAction)clear:(id)sender
+{
+    [_drawingView clearAll];
 }
 
 - (IBAction)changColor:(id)sender {

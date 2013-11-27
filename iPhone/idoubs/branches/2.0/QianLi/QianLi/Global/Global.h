@@ -111,6 +111,8 @@ nil]
 #define kSynReceived @"SYNRECEIVED"
 #define kBrowserSyn @"BROWSERSYN"
 #define kCancelBrowser @"CANCELBROWSER"
+#define kClearAllHandWriting @"CLEARHANDWRITING"
+#define kClearAllDoodle @"CLEARDOODLE"
 
 #define kProfileSize  320
 #define avatarDiameter 30

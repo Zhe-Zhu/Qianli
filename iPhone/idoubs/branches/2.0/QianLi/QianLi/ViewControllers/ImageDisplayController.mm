@@ -530,6 +530,12 @@
     [_doodleToolBar addSubview:saveButton];
     saveButton.frame = CGRectMake(20, 1, 44, 42);
     [saveButton setTitle:NSLocalizedString(@"save", nil) forState:UIControlStateNormal];
+    
+    UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
+    [_doodleToolBar addSubview:clearButton];
+    clearButton.frame = CGRectMake(138, 1, 44, 42);
+    [clearButton setTitle:NSLocalizedString(@"Clear", nil) forState:UIControlStateNormal];
 
     UIButton *erase = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [erase addTarget:self action:@selector(erase:) forControlEvents:UIControlEventTouchUpInside];
@@ -547,6 +553,11 @@
     else{
         [sender setTitle:NSLocalizedString(@"pen", nil) forState:UIControlStateNormal];
     }
+}
+
+- (void)clear
+{
+    [_doodleView clearAll];
 }
 
 - (void)savePhoto
