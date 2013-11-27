@@ -29,5 +29,5 @@
 +(void)updateMainHistNameForRemoteParty:(NSString *)remote;
 
 +(void)changeNavigationBarButtonLookingForiOS6;
-
++ (BOOL)isHeadsetPluggedIn;
 @end
