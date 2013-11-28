@@ -558,12 +558,12 @@ void propListener(	void *                  inClientData,
     _didEndCallBySelf = YES;
     if (_viewState == InCall) {
         _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-        [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+        [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
     }
     else if (_viewState == Calling){
         _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-        _activeEvent.status = HistoryEventStatus_OutgoingCancelled;
-        [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+        _activeEvent.status = kHistoryEventStatus_OutgoingCancelled;
+        [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
     }
     
     // TODO: 寻求更健壮的方案
@@ -669,10 +669,10 @@ void propListener(	void *                  inClientData,
     
     _didEndCallBySelf = YES;
     _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-    if (_activeEvent.status == HistoryEventStatus_Incoming) {
-        _activeEvent.status = HistoryEventStatus_IncomingRejected;
+    if ([_activeEvent.status isEqualToString: kHistoryEventStatus_Incoming]) {
+        _activeEvent.status = kHistoryEventStatus_IncomingRejected;
     }
-    [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+    [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
 }
 
 // 按下接听按钮
@@ -957,17 +957,17 @@ void propListener(	void *                  inClientData,
     if (!_didEndCallBySelf) {
         if (_viewState == InCall) {
             _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-            [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+            [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
         }
         else if (_viewState == Calling){
-            _activeEvent.status = HistoryEventStatus_OutgoingRejected;
+            _activeEvent.status = kHistoryEventStatus_OutgoingRejected;
             _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-            [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+            [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
         }
         else if (_viewState == ReceivingCall){
-            _activeEvent.status = HistoryEventStatus_IncomingCancelled;
+            _activeEvent.status = kHistoryEventStatus_IncomingCancelled;
             _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-            [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+            [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
         }
     }
 }

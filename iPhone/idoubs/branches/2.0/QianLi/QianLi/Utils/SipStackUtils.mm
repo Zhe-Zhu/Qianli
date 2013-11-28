@@ -82,7 +82,7 @@ static SipStackUtils * sipStackUtilsInstance;
         _audioService = [[AudioService alloc] init];
         _soundService = [[SoundService alloc] init];
         _messageService = [[MessageService alloc] init];
-        _historyService = [[HistoryService alloc] init];
+        //_historyService = [[HistoryService alloc] init];
         // add observers
         
         // when network condition changed, post the notification
@@ -378,8 +378,8 @@ static SipStackUtils * sipStackUtilsInstance;
                         }
                         [Utils updateMainHistNameForRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
                         
-                        audioVC.activeEvent.status = HistoryEventStatus_Missed;
-                        [[SipStackUtils sharedInstance].historyService addEvent:audioVC.activeEvent];
+                        audioVC.activeEvent.status = kHistoryEventStatus_Missed;
+                        [[DetailHistoryAccessor sharedInstance] addHistEntry:audioVC.activeEvent];
                         NSInteger badge = [UIApplication sharedApplication].applicationIconBadgeNumber;
                         [UIApplication sharedApplication].applicationIconBadgeNumber = 1 + badge;
                         QianLiAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;

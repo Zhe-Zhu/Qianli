@@ -147,4 +147,19 @@ nil]
 
 #define MaxDrawPoints 120
 
+// history
+#define kHistoryEventStatus_Appointment @"HistoryEventStatus_Appointment"
+#define kHistoryEventStatus_Outgoing @"HistoryEventStatus_Outgoing"
+#define kHistoryEventStatus_OutgoingCancelled @"HistoryEventStatus_OutgoingCancelled"
+#define kHistoryEventStatus_Incoming @"HistoryEventStatus_Incoming"
+#define kHistoryEventStatus_IncomingRejected @"HistoryEventStatus_IncomingRejected"
+#define kHistoryEventStatus_OutgoingRejected @"HistoryEventStatus_OutgoingRejected"
+#define kHistoryEventStatus_IncomingCancelled @"HistoryEventStatus_IncomingCancelled"
+#define kHistoryEventStatus_Missed @"HistoryEventStatus_Missed"
+
+#define kMediaType_None @"kMediaType_None"
+#define kMediaType_Audio @"MediaType_Audio"
+#define kMediaType_Video @"MediaType_Video"
+#define kMediaType_Image @"MediaType_Image"
+
 #endif

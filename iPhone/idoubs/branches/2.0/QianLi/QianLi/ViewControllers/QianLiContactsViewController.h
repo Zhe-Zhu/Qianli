@@ -26,6 +26,7 @@
 #import "APNsTransUtils.h"
 #import "UserDataAccessor.h"
 #import "Global.h"
+#import "DetailHistEvent.h"
 
 //this class is for managing QianLi contacts, each time the view is active  (on top of the view stack).
 //the app creates a secondary thread and sends a contact updating request to the server in the thread,

@@ -224,9 +224,14 @@
     [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:entry.remoteParty];
     
     // Add to history record TODO: modify the media_type of the event
-    NgnHistoryAVCallEvent *event = [[NgnHistoryAVCallEvent alloc] init:NO withRemoteParty:entry.remoteParty];
-    event.status = HistoryEventStatus_Appointment;
-    [[SipStackUtils sharedInstance].historyService addEvent:event];
+    DetailHistEvent *event = [[DetailHistEvent alloc] init];
+    event.remoteParty = entry.remoteParty;
+    event.status = kHistoryEventStatus_Appointment;
+    event.type = kMediaType_Audio;
+    event.start = [[NSDate date] timeIntervalSince1970];
+    event.end = event.start;
+    [[DetailHistoryAccessor sharedInstance] addHistEntry:event];
+    
     [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:entry.remoteParty Content:NSLocalizedString(@"historyAppointment", nil) Time:[[NSDate date] timeIntervalSince1970] Type:@"MakeAppointment"];
     [Utils updateMainHistNameForRemoteParty:entry.remoteParty];
     
@@ -297,14 +302,14 @@
         [[PictureManager sharedInstance] setImageSession:imageSessionID];
         
         // Add to history record
-        NgnHistoryAVCallEvent *event = [[NgnHistoryAVCallEvent alloc] init:NO withRemoteParty:remotePartyPhoneNumber];
-        audioCallViewController.activeEvent = event;
+        DetailHistEvent *event = [[DetailHistEvent alloc] init];
+        event.remoteParty = remotePartyPhoneNumber;
+        event.status = kHistoryEventStatus_Outgoing;
+        event.type = kMediaType_Audio;
         event.start = [[NSDate date] timeIntervalSince1970];
-        event.status = HistoryEventStatus_Outgoing;
-        //[[SipStackUtils sharedInstance].historyService addEvent:event];
+        audioCallViewController.activeEvent = event;
         
         // Add to main recent
-//        [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:remotePartyPhoneNumber Content:[NSString stringWithFormat:@"Called %@",[[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:remotePartyPhoneNumber]] Time:[[NSDate date] timeIntervalSince1970] Type:@"OutGoindCall"];
         [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:remotePartyPhoneNumber Content:NSLocalizedString(@"historyCall", nil) Time:[[NSDate date] timeIntervalSince1970] Type:@"OutGoindCall"];
         [Utils updateMainHistNameForRemoteParty:remotePartyPhoneNumber];
     }

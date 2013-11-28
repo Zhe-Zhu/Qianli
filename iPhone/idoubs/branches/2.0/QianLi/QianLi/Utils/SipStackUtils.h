@@ -15,6 +15,7 @@
 #import "SoundService.h"
 #import "MessageService.h"
 #import "HistoryService.h"
+#import "DetailHistoryAccessor.h"
 
 // this class is warpper of the IOS-NGN-Stack for the convenience of changing sip framework in future.
 //******* structure of this class **********/
@@ -37,7 +38,7 @@
 @property(nonatomic, readonly, strong) AudioService * audioService;
 @property(nonatomic, readonly, strong) SoundService * soundService;
 @property(nonatomic, readonly, strong) MessageService * messageService;
-@property(nonatomic, readonly, strong) HistoryService * historyService;
+//@property(nonatomic, readonly, strong) HistoryService * historyService;
 // currently active audio session id.
 @property(nonatomic, assign) long sessionID;
 

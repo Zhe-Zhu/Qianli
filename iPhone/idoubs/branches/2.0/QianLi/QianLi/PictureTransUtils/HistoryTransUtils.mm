@@ -128,15 +128,18 @@
             // 1 missed call
             if ([type isEqualToString:@"1"]) {
                 number ++;
-                NgnHistoryAVCallEvent *event = [[NgnHistoryAVCallEvent alloc] init:NO withRemoteParty:remoteParty];
-                event.status = HistoryEventStatus_Missed;
+                
+                DetailHistEvent *event = [[DetailHistEvent alloc] init];
+                event.status = kHistoryEventStatus_Missed;
+                event.type = kMediaType_Audio;
+                event.remoteParty = remoteParty;
                 
                 NSArray *dateArray = [dateStr componentsSeparatedByString:@"."];
                 NSDate *date = [self getDateFromRFC3339DateTimeString:[NSString stringWithFormat:@"%@%@",[dateArray objectAtIndex:0], @"Z"]];
                 double startingTime = [date timeIntervalSince1970];
                 event.start = startingTime;
                 event.end = startingTime;
-                [[SipStackUtils sharedInstance].historyService performSelectorOnMainThread:@selector(addEvent:) withObject:event waitUntilDone:YES];
+                [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:YES];
                 
                 NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:remoteParty];
                 if (name == nil) {
@@ -149,15 +152,17 @@
             // 2 appointment
             else if ([type isEqualToString:@"0"]){
                 number ++;
-                NgnHistoryAVCallEvent *event = [[NgnHistoryAVCallEvent alloc] init:NO withRemoteParty:remoteParty];
-                event.status = HistoryEventStatus_Appointment;
+                DetailHistEvent *event = [[DetailHistEvent alloc] init];
+                event.type = kMediaType_Audio;
+                event.remoteParty = remoteParty;
+                event.status = kHistoryEventStatus_Appointment;
                 
                 NSArray *dateArray = [dateStr componentsSeparatedByString:@"."];
                 NSDate *date = [self getDateFromRFC3339DateTimeString:[NSString stringWithFormat:@"%@%@",[dateArray objectAtIndex:0], @"Z"]];
                 double startingTime = [date timeIntervalSince1970];
                 event.start = startingTime;
                 event.end = startingTime;
-                [[SipStackUtils sharedInstance].historyService performSelectorOnMainThread:@selector(addEvent:) withObject:event waitUntilDone:YES];
+                [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:YES];
                 
                 NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:remoteParty];
                 if (name == nil) {

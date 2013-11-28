@@ -13,6 +13,7 @@
 #import "QianLiTableMenuBar.h"
 #import "MainHistoryDataAccessor.h"
 #import "Utils.h"
+#import "DetailHistEvent.h"
 
 // this class displays the history events associated with a history call.
 
