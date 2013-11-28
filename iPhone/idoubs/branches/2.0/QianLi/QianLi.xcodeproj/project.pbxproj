@@ -101,8 +101,6 @@
 		5078C97B18337AB500568BDD /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D57182C8AF8001536CB /* libMobClickLibrary.a */; };
 		507B180618115DF300DE6D88 /* WebHistoryDataAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B180518115DF300DE6D88 /* WebHistoryDataAccessor.m */; };
 		507B182218116ADA00DE6D88 /* WebHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B182118116ADA00DE6D88 /* WebHistoryCell.m */; };
-		509474E317DDDC1C006A1612 /* NgnDataBase.db in Resources */ = {isa = PBXBuildFile; fileRef = 509474E117DDDC1B006A1612 /* NgnDataBase.db */; };
-		509474E417DDDC1C006A1612 /* NgnDataBase.sql in Resources */ = {isa = PBXBuildFile; fileRef = 509474E217DDDC1B006A1612 /* NgnDataBase.sql */; };
 		5096C7BC180C456600931C69 /* CameraViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5096C7BB180C456600931C69 /* CameraViewController.mm */; };
 		5096C7BF180C457E00931C69 /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5096C7BE180C457E00931C69 /* OverlayView.m */; };
 		5096C7C2180C475A00931C69 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5096C7C0180C475A00931C69 /* CoreFoundation.framework */; };
@@ -1630,8 +1628,6 @@
 				CE1E8CF51843377A00A956A2 /* barButtonBack@2x.png in Resources */,
 				CEBAFC43182200540021764A /* cameraTakePhoto4@2x.png in Resources */,
 				CE1E8CF81843377A00A956A2 /* barButtonDisabled@2x.png in Resources */,
-				509474E317DDDC1C006A1612 /* NgnDataBase.db in Resources */,
-				509474E417DDDC1C006A1612 /* NgnDataBase.sql in Resources */,
 				CE1E8D031843377A00A956A2 /* trash@2x.png in Resources */,
 				CE8027A517DF0D0600E84BC9 /* settingSMS@2x.png in Resources */,
 				503DCDDE18068CAB00514A33 /* ringbacktone.wav in Resources */,
