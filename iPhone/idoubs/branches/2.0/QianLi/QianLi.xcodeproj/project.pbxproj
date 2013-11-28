@@ -101,8 +101,7 @@
 		5078C97B18337AB500568BDD /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D57182C8AF8001536CB /* libMobClickLibrary.a */; };
 		507B180618115DF300DE6D88 /* WebHistoryDataAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B180518115DF300DE6D88 /* WebHistoryDataAccessor.m */; };
 		507B182218116ADA00DE6D88 /* WebHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B182118116ADA00DE6D88 /* WebHistoryCell.m */; };
-		509474E317DDDC1C006A1612 /* NgnDataBase.db in Resources */ = {isa = PBXBuildFile; fileRef = 509474E117DDDC1B006A1612 /* NgnDataBase.db */; };
-		509474E417DDDC1C006A1612 /* NgnDataBase.sql in Resources */ = {isa = PBXBuildFile; fileRef = 509474E217DDDC1B006A1612 /* NgnDataBase.sql */; };
+		508FB36A1846DB05002559CF /* DetailHistoryAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FB3691846DB05002559CF /* DetailHistoryAccessor.m */; };
 		5096C7BC180C456600931C69 /* CameraViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5096C7BB180C456600931C69 /* CameraViewController.mm */; };
 		5096C7BF180C457E00931C69 /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5096C7BE180C457E00931C69 /* OverlayView.m */; };
 		5096C7C2180C475A00931C69 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5096C7C0180C475A00931C69 /* CoreFoundation.framework */; };
@@ -114,6 +113,7 @@
 		509D547D17E82BC3005D8477 /* HandDrawingView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 509D547C17E82BC3005D8477 /* HandDrawingView.mm */; };
 		509D54C117E854FC005D8477 /* WebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 509D54C017E854FC005D8477 /* WebViewController.mm */; };
 		509E1D8A180E9197002097D4 /* HistoryTransUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 509E1D89180E9197002097D4 /* HistoryTransUtils.mm */; };
+		509EAC791846E51900CB6DB3 /* DetailHistEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 509EAC781846E51900CB6DB3 /* DetailHistEvent.m */; };
 		509F269517E6BE3600BB5EE5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509F269417E6BE3600BB5EE5 /* MediaPlayer.framework */; };
 		50A0E10818101C1100FE0573 /* WebBrowser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50A0E10718101C1100FE0573 /* WebBrowser.mm */; };
 		50B1D63617CB2E5500DC67E7 /* ImagePickerViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B1D63517CB2E5500DC67E7 /* ImagePickerViewController.mm */; };
@@ -566,6 +566,8 @@
 		507B180518115DF300DE6D88 /* WebHistoryDataAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebHistoryDataAccessor.m; sourceTree = "<group>"; };
 		507B182018116ADA00DE6D88 /* WebHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebHistoryCell.h; sourceTree = "<group>"; };
 		507B182118116ADA00DE6D88 /* WebHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebHistoryCell.m; sourceTree = "<group>"; };
+		508FB3681846DB05002559CF /* DetailHistoryAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailHistoryAccessor.h; sourceTree = "<group>"; };
+		508FB3691846DB05002559CF /* DetailHistoryAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailHistoryAccessor.m; sourceTree = "<group>"; };
 		509407DF17BB84980036F130 /* QianLi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = QianLi.entitlements; sourceTree = "<group>"; };
 		509474E117DDDC1B006A1612 /* NgnDataBase.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = NgnDataBase.db; path = "../../common-ngn-stack/storage/NgnDataBase.db"; sourceTree = "<group>"; };
 		509474E217DDDC1B006A1612 /* NgnDataBase.sql */ = {isa = PBXFileReference; lastKnownFileType = text; name = NgnDataBase.sql; path = "../../common-ngn-stack/storage/NgnDataBase.sql"; sourceTree = "<group>"; };
@@ -589,6 +591,8 @@
 		509D54C017E854FC005D8477 /* WebViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebViewController.mm; sourceTree = "<group>"; };
 		509E1D88180E9197002097D4 /* HistoryTransUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTransUtils.h; sourceTree = "<group>"; };
 		509E1D89180E9197002097D4 /* HistoryTransUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HistoryTransUtils.mm; sourceTree = "<group>"; };
+		509EAC771846E51900CB6DB3 /* DetailHistEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailHistEvent.h; sourceTree = "<group>"; };
+		509EAC781846E51900CB6DB3 /* DetailHistEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailHistEvent.m; sourceTree = "<group>"; };
 		509F269417E6BE3600BB5EE5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		50A0E10618101C1100FE0573 /* WebBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebBrowser.h; sourceTree = "<group>"; };
 		50A0E10718101C1100FE0573 /* WebBrowser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebBrowser.mm; sourceTree = "<group>"; };
@@ -1160,6 +1164,8 @@
 				50D8DFC517C4B7BA006234A3 /* MainHistoryEntry.m */,
 				501A74B217F6CE5800015C65 /* QianLiContactsItem.h */,
 				501A74B317F6CE5800015C65 /* QianLiContactsItem.m */,
+				509EAC771846E51900CB6DB3 /* DetailHistEvent.h */,
+				509EAC781846E51900CB6DB3 /* DetailHistEvent.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1353,6 +1359,8 @@
 				50CEC3C417EEE34200BBE3BA /* QianLiContactsAccessor.m */,
 				507B180418115DF300DE6D88 /* WebHistoryDataAccessor.h */,
 				507B180518115DF300DE6D88 /* WebHistoryDataAccessor.m */,
+				508FB3681846DB05002559CF /* DetailHistoryAccessor.h */,
+				508FB3691846DB05002559CF /* DetailHistoryAccessor.m */,
 			);
 			path = "Database Accessor";
 			sourceTree = "<group>";
@@ -1630,8 +1638,6 @@
 				CE1E8CF51843377A00A956A2 /* barButtonBack@2x.png in Resources */,
 				CEBAFC43182200540021764A /* cameraTakePhoto4@2x.png in Resources */,
 				CE1E8CF81843377A00A956A2 /* barButtonDisabled@2x.png in Resources */,
-				509474E317DDDC1C006A1612 /* NgnDataBase.db in Resources */,
-				509474E417DDDC1C006A1612 /* NgnDataBase.sql in Resources */,
 				CE1E8D031843377A00A956A2 /* trash@2x.png in Resources */,
 				CE8027A517DF0D0600E84BC9 /* settingSMS@2x.png in Resources */,
 				503DCDDE18068CAB00514A33 /* ringbacktone.wav in Resources */,
@@ -1838,6 +1844,7 @@
 				500C2AFE17D0ADDF004391AF /* DoodleBackView.m in Sources */,
 				50630D2F17E02292004C12BB /* SSKeychain.m in Sources */,
 				509B368017D8728E00AA872D /* UserDataAccessor.m in Sources */,
+				508FB36A1846DB05002559CF /* DetailHistoryAccessor.m in Sources */,
 				5011E79717CC4FA4000B7803 /* ImageDisplayController.mm in Sources */,
 				509D546117E823C9005D8477 /* DrawingViewController.mm in Sources */,
 				502AA60017C721F400FA2F27 /* AudioService.mm in Sources */,
@@ -1860,6 +1867,7 @@
 				502AA60817C721F400FA2F27 /* SoundService.mm in Sources */,
 				502AA60917C721F400FA2F27 /* Utils.mm in Sources */,
 				507B180618115DF300DE6D88 /* WebHistoryDataAccessor.m in Sources */,
+				509EAC791846E51900CB6DB3 /* DetailHistEvent.m in Sources */,
 				CE5DE8DE17CB12AD00EAA400 /* QBAnimationSequence.m in Sources */,
 				509D54C117E854FC005D8477 /* WebViewController.mm in Sources */,
 				50C9C5A117F02FC30017B550 /* MoviePlayerViewController.mm in Sources */,

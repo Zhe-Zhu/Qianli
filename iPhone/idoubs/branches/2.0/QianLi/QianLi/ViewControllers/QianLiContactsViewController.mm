@@ -615,7 +615,7 @@
         }
     }
     
-    [self showOrHideNoContacts];
+    [self performSelectorOnMainThread:@selector(showOrHideNoContacts) withObject:nil waitUntilDone:NO];
     [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [self updateQianLiContacts:items];
 }
@@ -1138,8 +1138,10 @@
         [[PictureManager sharedInstance] setImageSession:imageSessionID];
         
         // Add to history record
-        NgnHistoryAVCallEvent *event = [[NgnHistoryAVCallEvent alloc] init:NO withRemoteParty:_remotePartyPhoneNumber];
-        event.status = HistoryEventStatus_Outgoing;
+        DetailHistEvent *event = [[DetailHistEvent alloc] init];
+        event.remoteParty = _remotePartyPhoneNumber;
+        event.type = kMediaType_Audio;
+        event.status = kHistoryEventStatus_Outgoing;
         event.start = [[NSDate date] timeIntervalSince1970];
         audioCallViewController.activeEvent = event;
         

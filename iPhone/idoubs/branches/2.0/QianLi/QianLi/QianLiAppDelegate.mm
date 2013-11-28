@@ -360,8 +360,10 @@ const float kColorB = 60/100.0;
         [self.tabController presentViewController:audioCallNavigationController animated:YES completion:nil];
         
         // Add to history record
-        NgnHistoryAVCallEvent *event = [[NgnHistoryAVCallEvent alloc] init:NO withRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
-        event.status = HistoryEventStatus_Incoming;
+        DetailHistEvent *event = [[DetailHistEvent alloc] init];
+        event.remoteParty = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+        event.type = kMediaType_Audio;
+        event.status = kHistoryEventStatus_Incoming;
         event.start = [[NSDate date] timeIntervalSince1970];
         _audioCallViewController.activeEvent = event;
         

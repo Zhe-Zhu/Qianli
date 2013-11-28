@@ -251,16 +251,30 @@
     
     // add to history
     NSData *imageData = [NSKeyedArchiver archivedDataWithRootObject:_synImages];
-    NgnHistoryImageEvent *imageEvent = [NgnHistoryEvent createImageEventWithStatus:HistoryEventStatus_Incoming andRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] andContent:imageData];
+    DetailHistEvent *imageEvent = [[DetailHistEvent alloc] init];
+    imageEvent.remoteParty = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+    imageEvent.content = imageData;
+    imageEvent.type = kMediaType_Image;
     imageEvent.start = _beginTime;
     imageEvent.end = [[NSDate date] timeIntervalSince1970];
     if (_inComing) {
-        imageEvent.status = HistoryEventStatus_Incoming;
+        imageEvent.status = kHistoryEventStatus_Incoming;
     }
     else{
-        imageEvent.status = HistoryEventStatus_Outgoing;
+        imageEvent.status = kHistoryEventStatus_Outgoing;
     }
-    [[SipStackUtils sharedInstance].historyService addEvent:(NgnHistoryEvent *)imageEvent];
+    [[DetailHistoryAccessor sharedInstance] addHistEntry:imageEvent];
+    
+//    NgnHistoryImageEvent *imageEvent = [NgnHistoryEvent createImageEventWithStatus:HistoryEventStatus_Incoming andRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] andContent:imageData];
+//    imageEvent.start = _beginTime;
+//    imageEvent.end = [[NSDate date] timeIntervalSince1970];
+//    if (_inComing) {
+//        imageEvent.status = HistoryEventStatus_Incoming;
+//    }
+//    else{
+//        imageEvent.status = HistoryEventStatus_Outgoing;
+//    }
+//    [[SipStackUtils sharedInstance].historyService addEvent:(NgnHistoryEvent *)imageEvent];
 }
 
 - (void)quit
