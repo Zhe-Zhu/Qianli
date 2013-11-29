@@ -160,3 +160,5 @@
 "speakerOff" = "扬声器关闭";
 "speakerOn" = "扬声器开启";
 "appointmentNoName" = "有空的话给我回个电话吧?";
+"hudEarphone" = "耳机插入中";
+"cancelDoodle" = "取消涂鸦";

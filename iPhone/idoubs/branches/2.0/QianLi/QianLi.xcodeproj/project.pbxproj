@@ -243,6 +243,8 @@
 		CE6D2A5B18067EEF00AF6289 /* crossForSync@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6D2A5A18067EEF00AF6289 /* crossForSync@2x.png */; };
 		CE6D2A5E18068CDB00AF6289 /* BigPhotoEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6D2A5D18068CDB00AF6289 /* BigPhotoEditViewController.m */; };
 		CE6D2A6018069B9B00AF6289 /* bigPhotoCoverIphone5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6D2A5F18069B9B00AF6289 /* bigPhotoCoverIphone5@2x.png */; };
+		CE758B5B1848370500541FA0 /* doodleClear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE758B5A1848370500541FA0 /* doodleClear@2x.png */; };
+		CE758B5D18483EAF00541FA0 /* hudEarphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE758B5C18483EAF00541FA0 /* hudEarphone@2x.png */; };
 		CE7CE9F617CF339B0042F057 /* requestLoading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE7CE9F517CF339B0042F057 /* requestLoading@2x.png */; };
 		CE7CEA1117CF4B870042F057 /* requestOK@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE7CEA1017CF4B870042F057 /* requestOK@2x.png */; };
 		CE7CEA1417CF52E20042F057 /* requestTalkGrey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE7CEA1217CF52E20042F057 /* requestTalkGrey@2x.png */; };
@@ -752,6 +754,8 @@
 		CE6D2A5C18068CDB00AF6289 /* BigPhotoEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigPhotoEditViewController.h; sourceTree = "<group>"; };
 		CE6D2A5D18068CDB00AF6289 /* BigPhotoEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigPhotoEditViewController.m; sourceTree = "<group>"; };
 		CE6D2A5F18069B9B00AF6289 /* bigPhotoCoverIphone5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bigPhotoCoverIphone5@2x.png"; sourceTree = "<group>"; };
+		CE758B5A1848370500541FA0 /* doodleClear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "doodleClear@2x.png"; sourceTree = "<group>"; };
+		CE758B5C18483EAF00541FA0 /* hudEarphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hudEarphone@2x.png"; sourceTree = "<group>"; };
 		CE7CE9F517CF339B0042F057 /* requestLoading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "requestLoading@2x.png"; sourceTree = "<group>"; };
 		CE7CEA1017CF4B870042F057 /* requestOK@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "requestOK@2x.png"; sourceTree = "<group>"; };
 		CE7CEA1217CF52E20042F057 /* requestTalkGrey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "requestTalkGrey@2x.png"; sourceTree = "<group>"; };
@@ -1173,6 +1177,8 @@
 		505A077617B09FB40053E1B7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CE758B5C18483EAF00541FA0 /* hudEarphone@2x.png */,
+				CE758B5A1848370500541FA0 /* doodleClear@2x.png */,
 				CE1E8D49184462D900A956A2 /* callingIndicatorSpin@2x.png */,
 				CE1E8D22184384C800A956A2 /* micOff@2x.png */,
 				CE1E8D23184384C800A956A2 /* micOn@2x.png */,
@@ -1641,6 +1647,7 @@
 				CE1E8D031843377A00A956A2 /* trash@2x.png in Resources */,
 				CE8027A517DF0D0600E84BC9 /* settingSMS@2x.png in Resources */,
 				503DCDDE18068CAB00514A33 /* ringbacktone.wav in Resources */,
+				CE758B5D18483EAF00541FA0 /* hudEarphone@2x.png in Resources */,
 				CEB99B5E18210199000551E1 /* icon57.png in Resources */,
 				CE345F7117CB13FF009D52D4 /* emptyShadowImage@2x.png in Resources */,
 				CE5ECA081805350000BDE0B0 /* videoBackward@2x.png in Resources */,
@@ -1706,6 +1713,7 @@
 				CE345F7717CB13FF009D52D4 /* inviteFriend@2x.png in Resources */,
 				CE4E88F517DDAD330012D34E /* more@2x.png in Resources */,
 				CEB99B7D18210CE1000551E1 /* cameraFlashOn@2x.png in Resources */,
+				CE758B5B1848370500541FA0 /* doodleClear@2x.png in Resources */,
 				CE345F6A17CB13FF009D52D4 /* callingIndicator.png in Resources */,
 				CE5ECA041805303400BDE0B0 /* videoPlay@2x.png in Resources */,
 				CE1E8CF31843377A00A956A2 /* appointment@2x.png in Resources */,

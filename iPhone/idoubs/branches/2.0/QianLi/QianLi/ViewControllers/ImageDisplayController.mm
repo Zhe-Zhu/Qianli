@@ -48,7 +48,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+//    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", Nil) style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
     self.navigationItem.leftBarButtonItem = cancelButton;
     
 //    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, PageWidth, 377)];
@@ -89,7 +90,8 @@
     
     _indicator = [[UILabel alloc] initWithFrame:CGRectMake(160-50, 1, 100, _toolBar.frame.size.height)];
     _indicator.textAlignment = NSTextAlignmentCenter;
-    _indicator.font = [UIFont fontWithName:@"AvenirNext-Bold" size:16];
+    _indicator.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
+    _indicator.textColor = [UIColor colorWithWhite:0.32 alpha:1.0];
     _indicator.backgroundColor = [UIColor clearColor];
     [_toolBar addSubview:_indicator];
     
@@ -384,6 +386,7 @@
     if (_doodleView) {
         [self cancelDoodleFromRemoteyParty];
         [[SipStackUtils sharedInstance].messageService sendMessage:kDoodleCancel toRemoteParty:remotePartyNumber];
+        [self.navigationItem.leftBarButtonItem setTitle:NSLocalizedString(@"Cancel", nil)];
     }
     else{
         [self cancelFromRemoteyParty];
@@ -545,6 +548,8 @@
     [_doodleToolBar addSubview:erase];
     erase.frame = CGRectMake(234, 1, 66, 42);
     [erase setTitle:NSLocalizedString(@"eraser", nil) forState:UIControlStateNormal];
+    
+    [self.navigationItem.leftBarButtonItem setTitle:NSLocalizedString(@"cancelDoodle", nil)];
 }
 
 - (void)erase:(id)sender

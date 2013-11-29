@@ -260,7 +260,7 @@ void propListener(	void *                  inClientData,
 - (void)addTimeLabel
 {
     [timeLabel removeFromSuperview];
-    timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(160-49, 12, 100, 30)];
+    timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(160-50, 7, 100, 30)];
     if (IS_OS_7_OR_LATER) {
         timeLabel.font = [[UIFont preferredFontForTextStyle:@"UIFontTextStyleBody"] fontWithSize:18.0f];
     }
@@ -498,6 +498,7 @@ void propListener(	void *                  inClientData,
 - (void)pressButtonSpeaker
 {
     if ([Utils isHeadsetPluggedIn]) {
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"hudEarphone.png"] status:NSLocalizedString(@"hudEarphone", nil)];
         return;
     }
     if (_isSpeakerOn) {
@@ -718,6 +719,7 @@ void propListener(	void *                  inClientData,
     }
     _isSpeakerOn = YES;
     [_buttonSpeaker setTintColor:activeButtonTintColor];
+    [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
 }
 
