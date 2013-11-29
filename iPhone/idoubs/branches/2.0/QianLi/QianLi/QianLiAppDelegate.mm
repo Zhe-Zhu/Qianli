@@ -164,10 +164,7 @@ const float kColorB = 60/100.0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveIncomingCallNotif:) name:kReceiveIncomingCallNotifName object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStackEvent:) name:kNgnStackEventArgs_Name object:nil];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    // TODO: For debug
-    //[userDefaults setBool:YES forKey:@"SignedUp"];
-//    [UserDataAccessor setUserRemoteParty:@"008618682120348"];
-//    [UserDataAccessor setUserRemoteParty:@"008613410962486"];
+    
     if ([userDefaults boolForKey:@"SignedUp"]) {
         self.window.rootViewController = _tabController;
         [[SipStackUtils sharedInstance] start];
@@ -192,11 +189,6 @@ const float kColorB = 60/100.0;
     }
     
 //    NSDictionary *remoteNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-//    if (remoteNotification) {
-//        //
-//    }
-    
-    
     // 初始化UmengSDK
     [MobClick startWithAppkey:kUmengSDKKey];
     [UMFeedback checkWithAppkey:kUmengSDKKey];

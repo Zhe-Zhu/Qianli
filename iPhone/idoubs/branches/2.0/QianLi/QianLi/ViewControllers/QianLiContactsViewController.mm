@@ -16,6 +16,7 @@
     NSMutableArray *_updateArray; // 需要去update信息的号码
     BOOL searchDisplayIsOn; // 标识是否点击search
     BOOL didLoadFromStarting;
+    double startingTime;
 }
 @property (nonatomic, weak) IBOutlet UITableView *friendsTableView;
 
@@ -91,8 +92,9 @@
     [super viewWillAppear:animated];
     if (!_contacts) {
         _contacts = [[NSMutableArray alloc] init];
-        _filteredListContent = [[NSMutableArray alloc] initWithCapacity:1];
-        _allContacts = [[NSMutableArray alloc] init];
+    }
+    if (!_allContacts) {
+         _allContacts = [[NSMutableArray alloc] init];
     }
     didLoadFromStarting = YES;
     [self getAllQianLiFriends];
@@ -131,7 +133,9 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    _allContacts = nil;
+    if(!_secondThread){
+        _allContacts = nil;
+    }
     _filteredListContent = nil;
 }
 
@@ -144,9 +148,13 @@
             NSThread * thread = [[NSThread alloc] initWithTarget:self selector:@selector(updateContactsFromServer) object:nil];
             _secondThread = thread;
             [_secondThread start];
+            startingTime = [[NSDate date] timeIntervalSince1970];
         }
         else{
-            NSLog(@"not finished");
+            double currentTime = [[NSDate date] timeIntervalSince1970];
+            if ((currentTime - startingTime) > 600) {
+                [_secondThread cancel];
+            }
         }
     }
 }
@@ -254,7 +262,7 @@
         }
         else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
             // The user has previously given access, add the contact
-            [self loadAddressBook: addressBookRef];
+            [weakSelf loadAddressBook: addressBookRef];
             if (addressBookRef) {
                 CFRelease(addressBookRef);
             }
@@ -332,9 +340,6 @@
         if (nameString != nil) {
             addressBook.name = nameString;
         }
-        else{
-            continue;
-        }
         addressBook.rowSelected = NO;
         
         ABPropertyID multiProperties[] = {
@@ -368,6 +373,10 @@
                         if ([strippedNumber length] < 3 ) {
                             continue;
                         }
+                        if (addressBook.name == nil) {
+                            addressBook.name = strippedNumber;
+                        }
+                        
                         if (![[strippedNumber substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"+"]) {
                             if (![[strippedNumber substringWithRange:NSMakeRange(0, 2)] isEqualToString:@"00"]) {
                                 if (_countryCode == nil) {
@@ -407,7 +416,12 @@
     }
     CFRelease(allPeople);
     // Sort data
-    [_allContacts removeAllObjects];
+    if (_allContacts == nil) {
+        _allContacts = [NSMutableArray arrayWithCapacity:1];
+    }
+    else{
+        [_allContacts removeAllObjects];
+    }
     [self sortContacts:addressBookTemp SortedContacts:_allContacts];
 }
 
@@ -845,7 +859,6 @@
         _finished = NO;
         [self sendContactsToServer];
     }
-
 }
 
 - (IBAction)inviteFriends:(id)sender
