@@ -157,7 +157,7 @@
         }
         else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
             // The user has previously given access, add the contact
-            [self loadAddressBook: addressBookRef];
+            [weakSelf loadAddressBook: addressBookRef];
             if (addressBookRef) {
                 CFRelease(addressBookRef);
             }
