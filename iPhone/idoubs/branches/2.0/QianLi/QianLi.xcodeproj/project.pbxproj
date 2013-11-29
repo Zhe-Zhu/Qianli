@@ -571,8 +571,6 @@
 		508FB3681846DB05002559CF /* DetailHistoryAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailHistoryAccessor.h; sourceTree = "<group>"; };
 		508FB3691846DB05002559CF /* DetailHistoryAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailHistoryAccessor.m; sourceTree = "<group>"; };
 		509407DF17BB84980036F130 /* QianLi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = QianLi.entitlements; sourceTree = "<group>"; };
-		509474E117DDDC1B006A1612 /* NgnDataBase.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = NgnDataBase.db; path = "../../common-ngn-stack/storage/NgnDataBase.db"; sourceTree = "<group>"; };
-		509474E217DDDC1B006A1612 /* NgnDataBase.sql */ = {isa = PBXFileReference; lastKnownFileType = text; name = NgnDataBase.sql; path = "../../common-ngn-stack/storage/NgnDataBase.sql"; sourceTree = "<group>"; };
 		5096C7BA180C456600931C69 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		5096C7BB180C456600931C69 /* CameraViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CameraViewController.mm; sourceTree = "<group>"; };
 		5096C7BD180C457E00931C69 /* OverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayView.h; sourceTree = "<group>"; };
@@ -941,8 +939,6 @@
 				2F81374217AFB54500DB23F2 /* QianLiAppDelegate.mm */,
 				2F81374A17AFB54500DB23F2 /* QianLi.xcdatamodeld */,
 				509407DF17BB84980036F130 /* QianLi.entitlements */,
-				509474E117DDDC1B006A1612 /* NgnDataBase.db */,
-				509474E217DDDC1B006A1612 /* NgnDataBase.sql */,
 				2F81373917AFB54500DB23F2 /* Supporting Files */,
 			);
 			path = QianLi;
