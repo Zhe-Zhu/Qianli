@@ -498,6 +498,7 @@ void propListener(	void *                  inClientData,
 - (void)pressButtonSpeaker
 {
     if ([Utils isHeadsetPluggedIn]) {
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"hudEarphone.png"] status:NSLocalizedString(@"hudEarphone", nil)];
         return;
     }
     if (_isSpeakerOn) {
