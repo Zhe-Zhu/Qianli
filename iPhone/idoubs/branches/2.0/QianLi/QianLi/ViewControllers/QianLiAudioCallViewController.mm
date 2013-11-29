@@ -260,7 +260,7 @@ void propListener(	void *                  inClientData,
 - (void)addTimeLabel
 {
     [timeLabel removeFromSuperview];
-    timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(160-49, 12, 100, 30)];
+    timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(160-50, 7, 100, 30)];
     if (IS_OS_7_OR_LATER) {
         timeLabel.font = [[UIFont preferredFontForTextStyle:@"UIFontTextStyleBody"] fontWithSize:18.0f];
     }
