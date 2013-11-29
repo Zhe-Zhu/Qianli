@@ -718,6 +718,7 @@ void propListener(	void *                  inClientData,
     }
     _isSpeakerOn = YES;
     [_buttonSpeaker setTintColor:activeButtonTintColor];
+    [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
 }
 
