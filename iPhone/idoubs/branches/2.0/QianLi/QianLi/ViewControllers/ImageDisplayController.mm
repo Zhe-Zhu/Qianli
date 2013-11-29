@@ -90,7 +90,8 @@
     
     _indicator = [[UILabel alloc] initWithFrame:CGRectMake(160-50, 1, 100, _toolBar.frame.size.height)];
     _indicator.textAlignment = NSTextAlignmentCenter;
-    _indicator.font = [UIFont fontWithName:@"AvenirNext-Bold" size:16];
+    _indicator.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
+    _indicator.textColor = [UIColor colorWithWhite:0.32 alpha:1.0];
     _indicator.backgroundColor = [UIColor clearColor];
     [_toolBar addSubview:_indicator];
     
