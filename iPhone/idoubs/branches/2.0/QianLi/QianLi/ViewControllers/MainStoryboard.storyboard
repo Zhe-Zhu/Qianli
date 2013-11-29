@@ -1055,7 +1055,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="74" id="gb9-bJ-t1P"/>
                                 </constraints>
-                                <state key="normal" image="doodlePalette.png">
+                                <state key="normal" image="doodleClear.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1612,10 +1612,16 @@
         <image name="browserForward.png" width="35" height="35"/>
         <image name="browserHistory.png" width="35" height="35"/>
         <image name="buttonContinueBackground.png" width="280" height="44"/>
+        <image name="buttonContinueBackground.png" width="280" height="44"/>
+        <image name="buttonContinueBackground.png" width="280" height="44"/>
         <image name="captchaCover.png" width="40" height="40"/>
+        <image name="captchaCover.png" width="40" height="40"/>
+        <image name="captchaCover.png" width="40" height="40"/>
+        <image name="captchaCover.png" width="40" height="40"/>
+        <image name="doodleClear.png" width="30" height="30"/>
         <image name="doodleDraw.png" width="30" height="30"/>
-        <image name="doodlePalette.png" width="30" height="30"/>
         <image name="doodleWidth.png" width="30" height="30"/>
+        <image name="edit.png" width="27" height="26"/>
         <image name="edit.png" width="27" height="26"/>
         <image name="icon.png" width="140" height="140"/>
         <image name="profileButtonCancel.png" width="40" height="40"/>
