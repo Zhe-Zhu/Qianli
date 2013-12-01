@@ -411,7 +411,9 @@
             CFRelease(valuesRef);
         }
         
-        [addressBookTemp addObject:addressBook];
+        if (addressBook.name) {
+            [addressBookTemp addObject:addressBook];
+        }
         if (abFullName) CFRelease(abFullName);
     }
     CFRelease(allPeople);
