@@ -11,19 +11,19 @@
 
 @interface HistoryService : NSObject
 
--(BOOL) load;
--(BOOL) loadWithRemoteParty:(NSString *)remoteParty WithEntriesLength:(int)length;
--(BOOL) isLoading;
--(BOOL) addEvent: (NgnHistoryEvent*) event;
--(BOOL) updateEvent: (NgnHistoryEvent*) event;
--(BOOL) deleteEvent: (NgnHistoryEvent*) event;
--(BOOL) deleteEventAtIndex: (int) location;
--(BOOL) deleteEventWithId: (long long) eventId;
--(BOOL) deleteEvents: (NgnMediaType_t) mediaType;
--(BOOL) deleteEvents: (NgnMediaType_t) mediaType withRemoteParty: (NSString*)remoteParty;
--(BOOL) deleteEventsArray: (NSArray*) events;
--(BOOL) clear;
--(NgnHistoryEventDictionary*) events;
-- (void)deleteAllObjects;
+//-(BOOL) load;
+//-(BOOL) loadWithRemoteParty:(NSString *)remoteParty WithEntriesLength:(int)length;
+//-(BOOL) isLoading;
+//-(BOOL) addEvent: (NgnHistoryEvent*) event;
+//-(BOOL) updateEvent: (NgnHistoryEvent*) event;
+//-(BOOL) deleteEvent: (NgnHistoryEvent*) event;
+//-(BOOL) deleteEventAtIndex: (int) location;
+//-(BOOL) deleteEventWithId: (long long) eventId;
+//-(BOOL) deleteEvents: (NgnMediaType_t) mediaType;
+//-(BOOL) deleteEvents: (NgnMediaType_t) mediaType withRemoteParty: (NSString*)remoteParty;
+//-(BOOL) deleteEventsArray: (NSArray*) events;
+//-(BOOL) clear;
+//-(NgnHistoryEventDictionary*) events;
+//- (void)deleteAllObjects;
 
 @end

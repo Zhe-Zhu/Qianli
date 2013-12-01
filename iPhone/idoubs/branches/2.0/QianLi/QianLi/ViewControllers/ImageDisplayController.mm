@@ -48,7 +48,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+//    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", Nil) style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
     self.navigationItem.leftBarButtonItem = cancelButton;
     
 //    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, PageWidth, 377)];
@@ -89,7 +90,8 @@
     
     _indicator = [[UILabel alloc] initWithFrame:CGRectMake(160-50, 1, 100, _toolBar.frame.size.height)];
     _indicator.textAlignment = NSTextAlignmentCenter;
-    _indicator.font = [UIFont fontWithName:@"AvenirNext-Bold" size:16];
+    _indicator.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
+    _indicator.textColor = [UIColor colorWithWhite:0.32 alpha:1.0];
     _indicator.backgroundColor = [UIColor clearColor];
     [_toolBar addSubview:_indicator];
     
@@ -384,6 +386,7 @@
     if (_doodleView) {
         [self cancelDoodleFromRemoteyParty];
         [[SipStackUtils sharedInstance].messageService sendMessage:kDoodleCancel toRemoteParty:remotePartyNumber];
+        [self.navigationItem.leftBarButtonItem setTitle:NSLocalizedString(@"Cancel", nil)];
     }
     else{
         [self cancelFromRemoteyParty];
@@ -413,16 +416,19 @@
         [array addObject:[image imageByResizing:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
     NSData *imageData = [NSKeyedArchiver archivedDataWithRootObject:array];
-    NgnHistoryImageEvent *imageEvent = [NgnHistoryEvent createImageEventWithStatus:HistoryEventStatus_Incoming andRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] andContent:imageData];
+    DetailHistEvent *imageEvent = [[DetailHistEvent alloc] init];
+    imageEvent.remoteParty = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+    imageEvent.type = kMediaType_Image;
+    imageEvent.content = imageData;
     imageEvent.start = _starTime;
     imageEvent.end = [[NSDate date] timeIntervalSince1970];
     if (_isIncoming) {
-        imageEvent.status = HistoryEventStatus_Incoming;
+        imageEvent.status = kHistoryEventStatus_Incoming;
     }
     else{
-        imageEvent.status = HistoryEventStatus_Outgoing;
+        imageEvent.status = kHistoryEventStatus_Outgoing;
     }
-    [[SipStackUtils sharedInstance].historyService addEvent:(NgnHistoryEvent *)imageEvent];
+    [[DetailHistoryAccessor sharedInstance] addHistEntry:imageEvent];
 }
 
 - (void)cancelDoodleFromRemoteyParty
@@ -530,12 +536,20 @@
     [_doodleToolBar addSubview:saveButton];
     saveButton.frame = CGRectMake(20, 1, 44, 42);
     [saveButton setTitle:NSLocalizedString(@"save", nil) forState:UIControlStateNormal];
+    
+    UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
+    [_doodleToolBar addSubview:clearButton];
+    clearButton.frame = CGRectMake(138, 1, 44, 42);
+    [clearButton setTitle:NSLocalizedString(@"Clear", nil) forState:UIControlStateNormal];
 
     UIButton *erase = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [erase addTarget:self action:@selector(erase:) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:erase];
     erase.frame = CGRectMake(234, 1, 66, 42);
     [erase setTitle:NSLocalizedString(@"eraser", nil) forState:UIControlStateNormal];
+    
+    [self.navigationItem.leftBarButtonItem setTitle:NSLocalizedString(@"cancelDoodle", nil)];
 }
 
 - (void)erase:(id)sender
@@ -547,6 +561,11 @@
     else{
         [sender setTitle:NSLocalizedString(@"pen", nil) forState:UIControlStateNormal];
     }
+}
+
+- (void)clear
+{
+    [_doodleView clearAll];
 }
 
 - (void)savePhoto

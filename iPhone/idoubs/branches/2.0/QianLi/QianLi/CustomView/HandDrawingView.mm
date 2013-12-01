@@ -20,6 +20,7 @@
     BOOL isDrawing;
     BOOL fromRemoteParty;
     BOOL remoteDrawing;
+    BOOL isClearAll;
     NSInteger drawPointsNumber;
     
     CGPoint previousPoint;
@@ -28,15 +29,18 @@
 
 @property(strong, nonatomic) UIColor *strokeColor;
 @property(strong, nonatomic) NSString *pointsMessage;
+@property(strong, nonatomic) UIImage *pathFormedImage;
+
 @end
 
 @implementation HandDrawingView
+
+@synthesize pathFormedImage = _pathFormedImage;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        // Initialization code
         // Initialization code
         [self setMultipleTouchEnabled:NO];
         _path = [UIBezierPath bezierPath];
@@ -49,6 +53,7 @@
         firstTime = YES;
         isDrawing = YES;
         fromRemoteParty = NO;
+        isClearAll = NO;
         _pathPoints = [[NSMutableArray alloc] initWithCapacity:2];
         _strokeColor = [UIColor blackColor];
         self.backgroundColor = [UIColor clearColor];
@@ -80,6 +85,12 @@
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
+    if (isClearAll) {
+        isClearAll = NO;
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextClearRect(context, rect);
+        return;
+    }
     [_pathFormedImage drawInRect:rect];
     [_strokeColor setStroke];
     
@@ -89,8 +100,8 @@
             [_remotePath stroke];
         }
         else{
-            CGContextRef context = UIGraphicsGetCurrentContext();
-            CGContextClearRect(context, rect);
+//            CGContextRef context = UIGraphicsGetCurrentContext();
+//            CGContextClearRect(context, rect);
         }
     }
     else{
@@ -119,7 +130,8 @@
     firstTouch = YES;
     
     //
-    _pointsMessage = [NSString stringWithFormat:@"%f:%f",p.x,p.y];
+    CGSize winSize = self.frame.size;
+    _pointsMessage = [NSString stringWithFormat:@"%f:%f", p.x /winSize.width, p.y / winSize.height];
     drawPointsNumber = 1;
 }
 
@@ -143,12 +155,13 @@
     }
     
     // Prepare the drawing points
+    CGSize winSize = self.bounds.size;
     if (drawPointsNumber < MaxDrawPoints) {
         if ([_pointsMessage isEqualToString:@""]) {
-            _pointsMessage = [NSString stringWithFormat:@"%f:%f", point.x, point.y];
+            _pointsMessage = [NSString stringWithFormat:@"%f:%f", point.x / winSize.width, point.y / winSize.height];
         }
         else{
-            _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f", _pointsMessage, point.x, point.y];
+            _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f", _pointsMessage, point.x / winSize.width, point.y / winSize.height];
         }
         drawPointsNumber ++;
     }
@@ -160,7 +173,7 @@
             [self sendDoodleMessage:@"ERASE"];
         }
         drawPointsNumber = 3;
-        _pointsMessage = [NSString stringWithFormat:@"%f:%f:%f:%f:%f:%f", thirdLastPoint.x, thirdLastPoint.y, previousPoint.x, previousPoint.y, point.x, point.y];
+        _pointsMessage = [NSString stringWithFormat:@"%f:%f:%f:%f:%f:%f", thirdLastPoint.x / winSize.width, thirdLastPoint.y / winSize.height, previousPoint.x / winSize.width, previousPoint.y / winSize.height, point.x / winSize.width, point.y / winSize.height];
     }
     
     thirdLastPoint = previousPoint;
@@ -184,7 +197,8 @@
     UITouch *touch = [touches anyObject];
     CGPoint pos = [touch locationInView:self];
     if (drawPointsNumber < MaxDrawPoints) {
-        _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f",_pointsMessage,pos.x,pos.y];
+        CGSize winSize = self.bounds.size;
+        _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f",_pointsMessage, pos.x / winSize.width, pos.y / winSize.height];
     }
     
     [self sendDoodleMessage:@"DRAW"];
@@ -221,7 +235,7 @@
 - (void)writeToImageWithPath:(UIBezierPath*)path Color:(UIColor *)color
 {
     CGSize size= self.bounds.size;
-    UIGraphicsBeginImageContextWithOptions(size, YES, 1.0);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     if (firstTime) {
         UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, size.width, size.height)];
         [[UIColor whiteColor] setFill];
@@ -259,12 +273,28 @@
         [self writeToImageWithPath:_remotePath Color:_strokeColor];
     }
     else{
-        for (int i = 0; i < [array count]; ++i) {
-            fromRemoteParty = YES;
-            CGPoint p = [[array objectAtIndex:i] CGPointValue];
-            [self setNeedsDisplayInRect:CGRectMake(p.x - 6, p.y - 6, 12, 12)];
+        CGSize imageSize = self.bounds.size;
+        if (NULL != UIGraphicsBeginImageContextWithOptions){
+            UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         }
-        _pathFormedImage = [self screenshot];
+        else{
+            UIGraphicsBeginImageContext(imageSize);
+        }
+        UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
+        [[UIColor whiteColor] setFill];
+        [rectpath fill];
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [[self layer] renderInContext:context];
+
+        for (int i = 0; i < [array count]; ++i) {
+            CGPoint p = [[array objectAtIndex:i] CGPointValue];
+            CGContextClearRect(context, CGRectMake(p.x - 6, p.y - 6, 12, 12));
+        }
+        //_pathFormedImage = [self screenshot];
+        _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        fromRemoteParty = YES;
+        [self setNeedsDisplay];
     }
 }
 
@@ -281,7 +311,7 @@
             CGPoint midPoint2 = CGPointMake((prev1.x + cur.x) / 2.0, (prev1.y + cur.y) / 2.0);
             int segmentDistance = 2;
             float distance = sqrtf((midPoint1.x - midPoint2.x) * (midPoint1.x - midPoint2.x) + (midPoint1.y - midPoint2.y) * (midPoint1.y - midPoint2.y));
-            int numberOfSegments = MIN(16, MAX(floorf(distance / segmentDistance), 2));
+            int numberOfSegments = MIN(4, MAX(floorf(distance / segmentDistance), 2));
             
             float t = 0.0f;
             float step = 1.0f / numberOfSegments;
@@ -306,6 +336,31 @@
     }
 }
 
+- (void)clearAll
+{
+    NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+    [[SipStackUtils sharedInstance].messageService sendMessage:kClearAllHandWriting toRemoteParty:remotePartyNumber];
+    [self clearAllFromRemote];
+}
+
+- (void)clearAllFromRemote
+{
+    isClearAll = YES;
+    [self setNeedsDisplayInRect:self.frame];
+    [self initPathImage];
+}
+
+- (void)initPathImage
+{
+    CGSize size= self.bounds.size;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, size.width, size.height)];
+    [[UIColor whiteColor] setFill];
+    [rectpath fill];
+    _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+}
+
 - (void)changePaintingMode
 {
     isDrawing = !isDrawing;
@@ -318,7 +373,7 @@
     // On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
     CGSize imageSize = self.bounds.size;
     if (NULL != UIGraphicsBeginImageContextWithOptions){
-        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 1.0);
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     }
     else{
         UIGraphicsBeginImageContext(imageSize);
@@ -332,10 +387,7 @@
     // Retrieve the screenshot image
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
     return image;
 }
-
 
 @end

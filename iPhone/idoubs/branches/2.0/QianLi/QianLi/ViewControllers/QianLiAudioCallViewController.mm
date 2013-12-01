@@ -174,6 +174,8 @@
         [_toolbar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forToolbarPosition:UIBarPositionBottom barMetrics:UIBarMetricsDefault];
         _buttonAdd.tintColor = [UIColor blackColor];
     }
+    
+    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge void *)self);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -204,6 +206,26 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge void *)self);
+}
+
+void propListener(	void *                  inClientData,
+                  AudioSessionPropertyID	inID,
+                  UInt32                  inDataSize,
+                  const void *            inData)
+{
+    QianLiAudioCallViewController *audioVC = (__bridge QianLiAudioCallViewController *)inClientData;
+    if (inID == kAudioSessionProperty_AudioRouteChange)
+	{
+		if (![Utils isHeadsetPluggedIn]) {
+            if (audioVC.presentedViewController) {
+                [audioVC openSpeaker];
+            }
+        }
+        else{
+            [audioVC shutUpSpeaker];
+        }
+	}
 }
 
 // 当拨打别人或被拨打接通电话后调用, 将界面的外观转换到In Call界面
@@ -238,7 +260,7 @@
 - (void)addTimeLabel
 {
     [timeLabel removeFromSuperview];
-    timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(160-49, 12, 100, 30)];
+    timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(160-50, 7, 100, 30)];
     if (IS_OS_7_OR_LATER) {
         timeLabel.font = [[UIFont preferredFontForTextStyle:@"UIFontTextStyleBody"] fontWithSize:18.0f];
     }
@@ -475,6 +497,10 @@
 
 - (void)pressButtonSpeaker
 {
+    if ([Utils isHeadsetPluggedIn]) {
+        [SVStatusHUD showWithImage:[UIImage imageNamed:@"hudEarphone.png"] status:NSLocalizedString(@"hudEarphone", nil)];
+        return;
+    }
     if (_isSpeakerOn) {
         // deactivate this button
         [_buttonSpeaker setTintColor:inactiveButtonTintColor];
@@ -533,12 +559,12 @@
     _didEndCallBySelf = YES;
     if (_viewState == InCall) {
         _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-        [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+        [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
     }
     else if (_viewState == Calling){
         _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-        _activeEvent.status = HistoryEventStatus_OutgoingCancelled;
-        [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+        _activeEvent.status = kHistoryEventStatus_OutgoingCancelled;
+        [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
     }
     
     // TODO: 寻求更健壮的方案
@@ -602,6 +628,7 @@
     }
     calling.textAlignment = NSTextAlignmentCenter;
     calling.textColor = [UIColor colorWithRed:165/255.0 green:165/255.0 blue:162/255.0 alpha:1.0f];
+    calling.backgroundColor = [UIColor clearColor];
     
     // bulletin board和toolbar之间的分割线
     [lineView removeFromSuperview];
@@ -643,10 +670,10 @@
     
     _didEndCallBySelf = YES;
     _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-    if (_activeEvent.status == HistoryEventStatus_Incoming) {
-        _activeEvent.status = HistoryEventStatus_IncomingRejected;
+    if ([_activeEvent.status isEqualToString: kHistoryEventStatus_Incoming]) {
+        _activeEvent.status = kHistoryEventStatus_IncomingRejected;
     }
-    [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+    [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
 }
 
 // 按下接听按钮
@@ -684,11 +711,25 @@
 
 - (void)openSpeaker
 {
+    if ([Utils isHeadsetPluggedIn]) {
+        return;
+    }
     if (_isSpeakerOn) {
         return;
     }
     _isSpeakerOn = YES;
     [_buttonSpeaker setTintColor:activeButtonTintColor];
+    [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
+    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
+}
+
+- (void)shutUpSpeaker
+{
+    if (!_isSpeakerOn) {
+        return;
+    }
+    _isSpeakerOn = NO;
+    [_buttonSpeaker setTintColor:inactiveButtonTintColor];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
 }
 
@@ -918,23 +959,24 @@
     if (!_didEndCallBySelf) {
         if (_viewState == InCall) {
             _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-            [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+            [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
         }
         else if (_viewState == Calling){
-            _activeEvent.status = HistoryEventStatus_OutgoingRejected;
+            _activeEvent.status = kHistoryEventStatus_OutgoingRejected;
             _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-            [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+            [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
         }
         else if (_viewState == ReceivingCall){
-            _activeEvent.status = HistoryEventStatus_IncomingCancelled;
+            _activeEvent.status = kHistoryEventStatus_IncomingCancelled;
             _activeEvent.end = [[NSDate date] timeIntervalSince1970];
-            [[SipStackUtils sharedInstance].historyService addEvent:_activeEvent];
+            [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
         }
     }
 }
 
 - (void)dismissAllViewController
 {
+    [menuBar dismiss];
     if (_vedioVC) {
         [_vedioVC dismissViewControllerAnimated:NO completion:nil];
     }
@@ -1119,14 +1161,18 @@
        // [self showImageVC];
         NSArray *coord = [[words objectAtIndex:2] componentsSeparatedByString:@":"];
         NSMutableArray *points = [NSMutableArray array];
+        CGSize winSize = _imageDispVC.doodleView.frame.size;
         for (int i = 0; i < [coord count] / 2; ++i) {
             CGPoint p;
-            p.x = [[coord objectAtIndex:i * 2] floatValue];
-            p.y = [[coord objectAtIndex:i * 2 + 1] floatValue];
+            p.x = [[coord objectAtIndex:i * 2] floatValue] * winSize.width;
+            p.y = [[coord objectAtIndex:i * 2 + 1] floatValue] * winSize.height;
             NSValue *pValue = [NSValue valueWithCGPoint:p];
             [points addObject:pValue];
         }
         [_imageDispVC.doodleView drawingOnImageWithPoints:points Drawing:[[words objectAtIndex:1] isEqualToString:@"DRAW"]];
+    }
+    else if ([message isEqualToString:kClearAllDoodle]){
+        [_imageDispVC.doodleView clearAllFromRemote];
     }
     else if ([message isEqualToString:kDoodleCancel]){
 //        [self showImageVC];
@@ -1233,14 +1279,19 @@
          [Utils updateMainHistNameForRemoteParty: [[SipStackUtils sharedInstance] getRemotePartyNumber]];
     }
     
+    else if ([message isEqualToString:kClearAllHandWriting]){
+        [_drawingVC.drawingView clearAllFromRemote];
+    }
+    
     else if ([message isEqualToString:kDrawingPoints]){
         //[self showDrawingVC];
+        CGSize winSize = _drawingVC.drawingView.bounds.size;
         NSArray *coord = [[words objectAtIndex:2] componentsSeparatedByString:@":"];
         NSMutableArray *points = [NSMutableArray array];
         for (int i = 0; i < [coord count] / 2; ++i) {
             CGPoint p;
-            p.x = [[coord objectAtIndex:i * 2] floatValue];
-            p.y = [[coord objectAtIndex:i * 2 + 1] floatValue];
+            p.x = [[coord objectAtIndex:i * 2] floatValue] * winSize.width;
+            p.y = [[coord objectAtIndex:i * 2 + 1] floatValue] * winSize.height;
             NSValue *pValue = [NSValue valueWithCGPoint:p];
             [points addObject:pValue];
         }

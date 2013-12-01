@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "UserDataAccessor.h"
+#import "DetailHistEvent.h"
+#import "DetailHistoryAccessor.h"
 
 @interface HistoryTransUtils : NSObject<NSURLConnectionDelegate>
 

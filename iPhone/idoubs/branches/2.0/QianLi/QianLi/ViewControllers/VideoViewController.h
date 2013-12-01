@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MoviePlayerViewController.h"
 #import "Global.h"
-
+#import "DetailHistoryAccessor.h"
+#import "DetailHistEvent.h"
 
 @interface VideoViewController : UIViewController 
 

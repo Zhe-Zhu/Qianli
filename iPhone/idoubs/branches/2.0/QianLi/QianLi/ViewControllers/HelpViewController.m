@@ -7,6 +7,7 @@
 //
 
 #import "HelpViewController.h"
+#import "Global.h"
 
 #define  pageWidth 320
 
@@ -42,7 +43,13 @@
     }
     
     self.scrollView = [[UIScrollView alloc]init];
-    self.scrollView.frame = CGRectMake(0, 0, screenWidth, screenHeight - 117/2.0);
+    if (IS_OS_7_OR_LATER) {
+        self.scrollView.frame = CGRectMake(0, 0, screenWidth, screenHeight - 117/2.0);
+    }
+    else {
+        self.scrollView.frame = CGRectMake(0, 0, screenWidth, screenHeight - 117/2.0 -44);
+    }
+    
     self.scrollView.pagingEnabled = YES;
     self.scrollView.contentSize = CGSizeMake(pageWidth * 4, CGRectGetHeight(self.scrollView.frame));
     self.scrollView.showsHorizontalScrollIndicator = NO;
@@ -75,6 +82,7 @@
     startLabel.textAlignment = NSTextAlignmentCenter;
     startLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:14.0f];
     startLabel.textColor = [UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0];
+    startLabel.backgroundColor = [UIColor clearColor];
     [self.startButton addSubview:startLabel];
     
     UILabel *startLabelShadow = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, startButtonWidth, startButtonHeight)];
@@ -82,6 +90,7 @@
     startLabelShadow.textAlignment = NSTextAlignmentCenter;
     startLabelShadow.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:14.0f];
     startLabelShadow.textColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.4];
+    startLabelShadow.backgroundColor = [UIColor clearColor];
     [self.startButton insertSubview:startLabelShadow belowSubview:startLabel];
     
     // 加入分割scrollview和底层view的分割线

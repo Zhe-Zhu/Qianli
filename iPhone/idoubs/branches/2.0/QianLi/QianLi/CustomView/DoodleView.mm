@@ -21,6 +21,7 @@
     BOOL _isDrawing;
     BOOL fromRemoteParty;
     BOOL remoteDrawing;
+    BOOL isClearAll;
     NSInteger numberOfPoints;
     
     CGPoint previousPoint;
@@ -53,6 +54,7 @@
         firstTime = YES;
         _isDrawing = YES;
         fromRemoteParty = NO;
+        isClearAll = NO;
         _pathPoints = [[NSMutableArray alloc] initWithCapacity:2];
         self.backgroundColor = nil;
         self.layer.opaque = NO;
@@ -66,6 +68,13 @@
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
+    if (isClearAll) {
+        isClearAll = NO;
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextClearRect(context, rect);
+        return;
+    }
+    
     if (firstDrawInRect) {
         [self writeToImageWithPath:_path Color:_strokeColor];
         firstDrawInRect = NO;
@@ -82,8 +91,8 @@
             [_remotePath stroke];
         }
         else{
-            CGContextRef context = UIGraphicsGetCurrentContext();
-            CGContextClearRect(context, rect);
+//            CGContextRef context = UIGraphicsGetCurrentContext();
+//            CGContextClearRect(context, rect);
         }
     }
     else{
@@ -117,7 +126,8 @@
     firstTouch = YES;
     
     //
-    _pointsMessage = [NSString stringWithFormat:@"%f:%f",p.x,p.y];
+    CGSize winSize = self.frame.size;
+    _pointsMessage = [NSString stringWithFormat:@"%f:%f", p.x / winSize.width, p.y / winSize.height];
     numberOfPoints = 1;
 }
 
@@ -141,12 +151,13 @@
     }
     
     // Prepare the drawing points
+    CGSize winSize = self.frame.size;
     if (numberOfPoints < MaxDrawPoints) {
         if ([_pointsMessage isEqualToString:@""]) {
-            _pointsMessage = [NSString stringWithFormat:@"%f:%f",point.x,point.y];
+            _pointsMessage = [NSString stringWithFormat:@"%f:%f",point.x / winSize.width, point.y / winSize.height];
         }
         else{
-            _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f",_pointsMessage,point.x,point.y];
+            _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f",_pointsMessage, point.x / winSize.width, point.y / winSize.height];
         }
         numberOfPoints ++;
     }
@@ -158,7 +169,7 @@
             [self sendDoodleMessage:@"ERASE"];
         }
         numberOfPoints = 3;
-        _pointsMessage = [NSString stringWithFormat:@"%f:%f:%f:%f:%f:%f", thirdLastPoint.x, thirdLastPoint.y, previousPoint.x, previousPoint.y, point.x, point.y];
+        _pointsMessage = [NSString stringWithFormat:@"%f:%f:%f:%f:%f:%f", thirdLastPoint.x / winSize.width, thirdLastPoint.y / winSize.height, previousPoint.x / winSize.width, previousPoint.y / winSize.height, point.x / winSize.width, point.y / winSize.height];
     }
     
     thirdLastPoint = previousPoint;
@@ -187,7 +198,8 @@
     UITouch *touch = [touches anyObject];
     CGPoint pos = [touch locationInView:self];
     if (numberOfPoints < MaxDrawPoints) {
-        _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f",_pointsMessage,pos.x,pos.y];
+        CGSize winSize = self.frame.size;
+        _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f",_pointsMessage, pos.x / winSize.width, pos.y / winSize.height];
     }
     
     [self sendDoodleMessage:@"DRAW"];
@@ -198,12 +210,6 @@
         CGPoint p = [[points objectAtIndex:i] CGPointValue];
         [_path addLineToPoint:p];
     }
-//    if (firstTouch) {
-//        [_path addLineToPoint:pos];
-//    }
-//    else{
-//        
-//    }
     [self writeToImageWithPath:_path Color:_strokeColor];
     [_path removeAllPoints];
     [_pathPoints removeAllObjects];
@@ -227,9 +233,6 @@
     CGSize size= self.bounds.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     if (firstTime) {
-        //UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, size.width, size.height)];
-        //[[UIColor blackColor] setFill];
-        //[rectpath fill];
         [self drawImage];
         firstTime = NO;
     }
@@ -294,12 +297,24 @@
         [self writeToImageWithPath:_remotePath Color:_strokeColor];
     }
     else{
-        for (int i = 0; i < [array count]; ++i) {
-            fromRemoteParty = YES;
-           CGPoint p = [[array objectAtIndex:i] CGPointValue];
-           [self setNeedsDisplayInRect:CGRectMake(p.x - 6, p.y - 6, 12, 12)];
+        CGSize imageSize = self.bounds.size;
+        if (NULL != UIGraphicsBeginImageContextWithOptions){
+            UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         }
-        _pathFormedImage = [self screenshot];
+        else{
+            UIGraphicsBeginImageContext(imageSize);
+        }
+        
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [[self layer] renderInContext:context];
+        fromRemoteParty = YES;
+        for (int i = 0; i < [array count]; ++i) {
+           CGPoint p = [[array objectAtIndex:i] CGPointValue];
+           CGContextClearRect(context, CGRectMake(p.x - 6, p.y - 6, 12, 12));
+        }
+        _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        [self setNeedsDisplay];
     }
 }
 
@@ -316,7 +331,7 @@
             CGPoint midPoint2 = CGPointMake((prev1.x + cur.x) / 2.0, (prev1.y + cur.y) / 2.0);
             int segmentDistance = 2;
             float distance = sqrtf((midPoint1.x - midPoint2.x) * (midPoint1.x - midPoint2.x) + (midPoint1.y - midPoint2.y) * (midPoint1.y - midPoint2.y));
-            int numberOfSegments = MIN(16, MAX(floorf(distance / segmentDistance), 2));
+            int numberOfSegments = MIN(4, MAX(floorf(distance / segmentDistance), 2));
             
             float t = 0.0f;
             float step = 1.0f / numberOfSegments;
@@ -346,6 +361,30 @@
     _isDrawing = !_isDrawing;
 }
 
+- (void)clearAll
+{
+    NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+    [[SipStackUtils sharedInstance].messageService sendMessage:kClearAllDoodle toRemoteParty:remotePartyNumber];
+    [self clearAllFromRemote];
+}
+
+- (void)clearAllFromRemote
+{
+    isClearAll = YES;
+    [self setNeedsDisplayInRect:self.frame];
+    [self initPathImage];
+    [self setNeedsDisplay];
+}
+
+- (void)initPathImage
+{
+    CGSize size= self.bounds.size;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [self drawImage];
+    _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+}
+
 - (UIImage*)screenshot
 {
     // Create a graphics context with the target size
@@ -359,7 +398,6 @@
         UIGraphicsBeginImageContext(imageSize);
     }
     
-//    [_image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
     CGSize newImageSize = [self adjustImageFrame:_image.size];
     [_image drawInRect:CGRectMake((320-newImageSize.width)/2, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
     

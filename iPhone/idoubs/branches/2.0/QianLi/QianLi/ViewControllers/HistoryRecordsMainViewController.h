@@ -17,6 +17,8 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "QianLiContactsAccessor.h"
 #import "HistoryTransUtils.h"
+#import "DetailHistEvent.h"
+#import "DetailHistoryAccessor.h"
 
 // this class displays the history calls in a table view.
 

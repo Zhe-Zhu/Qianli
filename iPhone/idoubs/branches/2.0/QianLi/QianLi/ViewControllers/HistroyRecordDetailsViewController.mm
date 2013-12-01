@@ -110,15 +110,25 @@
         [_chatRecords removeAllObjects];
     }
     
-    [[SipStackUtils sharedInstance].historyService loadWithRemoteParty:_remotePartyPhoneNumber WithEntriesLength:loadTimes * 12];
-    // Sort the entries in history array
-    NSSortDescriptor *sortDescriptor;
-    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start" ascending:NO];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    NSMutableArray *sortedArray;
-    sortedArray = [NSMutableArray arrayWithArray:[[NSMutableArray arrayWithArray:[[[SipStackUtils sharedInstance].historyService events] allValues]] sortedArrayUsingDescriptors:sortDescriptors]];
-    _chatRecords = sortedArray;
-
+//    [[SipStackUtils sharedInstance].historyService loadWithRemoteParty:_remotePartyPhoneNumber WithEntriesLength:loadTimes * 12];
+//    // Sort the entries in history array
+//    NSSortDescriptor *sortDescriptor;
+//    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start" ascending:NO];
+//    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+//    NSMutableArray *sortedArray;
+//    sortedArray = [NSMutableArray arrayWithArray:[[NSMutableArray arrayWithArray:[[[SipStackUtils sharedInstance].historyService events] allValues]] sortedArrayUsingDescriptors:sortDescriptors]];
+    _chatRecords = [NSMutableArray array];
+    NSArray *array = [[DetailHistoryAccessor sharedInstance] getDetailHistForRemoteParty:_remotePartyPhoneNumber withNumber:loadTimes * 12];
+    for (NSManagedObject *object in array) {
+        DetailHistEvent *detailHist = [[DetailHistEvent alloc] init];
+        detailHist.content = [object valueForKey:@"content"];
+        detailHist.status = [object valueForKey:@"status"];
+        detailHist.start = [[object valueForKey:@"start"] doubleValue];
+        detailHist.end = [[object valueForKey:@"end"] doubleValue];
+        detailHist.type = [object valueForKey:@"type"];
+        detailHist.remoteParty = [object valueForKey:@"remoteParty"];
+        [_chatRecords addObject:detailHist];
+    }
 }
 
 - (void)clearDetailHistory
@@ -168,11 +178,11 @@
 		historyCell = [[HistoryDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
 
-    NgnHistoryEvent *history = (NgnHistoryEvent *)[_chatRecords objectAtIndex:indexPath.row];
+    DetailHistEvent *history = (DetailHistEvent *)[_chatRecords objectAtIndex:indexPath.row];
     NSInteger recordType = 1;
-    if (history.status == HistoryEventStatus_Outgoing) {
+    if ([history.status isEqualToString: kHistoryEventStatus_Outgoing]) {
         recordType = 1;
-        if (history.mediaType == MediaType_Audio) {
+        if ([history.type isEqualToString: kMediaType_Audio]) {
             double duration = history.end - history.start;
             int minutes = floor(duration / 60);
             int seconds = floor(duration - minutes * 60);
@@ -186,21 +196,21 @@
             [historyCell setCallRecord:recordType timeLabel:[Utils readableTimeFromSecondsSince1970LikeWeixin:history.start] footnote: str];
         }
     }
-    else if (history.status == HistoryEventStatus_OutgoingCancelled){
+    else if ([history.status isEqualToString:kHistoryEventStatus_OutgoingCancelled]){
         recordType = 1;
-        if (history.mediaType == MediaType_Audio) {
+        if ([history.type isEqualToString: kMediaType_Audio]) {
             [historyCell setCallRecord:recordType timeLabel:[Utils readableTimeFromSecondsSince1970LikeWeixin:history.start] footnote: NSLocalizedString(@"historyDetailCancel", nil)];
         }
     }
-    else if (history.status == HistoryEventStatus_OutgoingRejected){
+    else if ([history.status isEqualToString:kHistoryEventStatus_OutgoingRejected]){
         recordType = 1;
-        if (history.mediaType == MediaType_Audio) {
+        if ([history.type isEqualToString: kMediaType_Audio]) {
             [historyCell setCallRecord:recordType timeLabel:[Utils readableTimeFromSecondsSince1970LikeWeixin:history.start] footnote: NSLocalizedString(@"historyDetailReject", nil)];
         }
     }
-    else if (history.status == HistoryEventStatus_Incoming){
+    else if ([history.status isEqualToString: kHistoryEventStatus_Incoming]){
         recordType = 2;
-        if (history.mediaType == MediaType_Audio) {
+        if ([history.type isEqualToString: kMediaType_Audio]) {
             double duration = history.end - history.start;
             int minutes = floor(duration / 60);
             int seconds = floor(duration - minutes * 60);
@@ -214,30 +224,30 @@
             [historyCell setCallRecord:recordType timeLabel:[Utils readableTimeFromSecondsSince1970LikeWeixin:history.start] footnote: str];
         }
     }
-    else if (history.status == HistoryEventStatus_IncomingCancelled){
+    else if ([history.status isEqualToString: kHistoryEventStatus_IncomingCancelled]){
         recordType = 2;
-        if (history.mediaType == MediaType_Audio) {
+        if ([history.type isEqualToString: kMediaType_Audio]) {
             [historyCell setCallRecord:recordType timeLabel:[Utils readableTimeFromSecondsSince1970LikeWeixin:history.start] footnote: NSLocalizedString(@"historyDetailCancel", nil)];
         }
     }
-    else if (history.status == HistoryEventStatus_IncomingRejected){
+    else if ([history.status isEqualToString: kHistoryEventStatus_IncomingRejected]){
         recordType = 2;
-        if (history.mediaType == MediaType_Audio) {
+        if ([history.type isEqualToString: kMediaType_Audio]) {
             [historyCell setCallRecord:recordType timeLabel:[Utils readableTimeFromSecondsSince1970LikeWeixin:history.start] footnote: NSLocalizedString(@"historyDetailReject", nil)];
         }
     }
-    else if (history.status == HistoryEventStatus_Missed){
+    else if ([history.status isEqualToString: kHistoryEventStatus_Missed]){
         // add missed call history
         recordType = 3;
         [historyCell setCallRecord:recordType timeLabel:[Utils readableTimeFromSecondsSince1970LikeWeixin:history.start] footnote: NSLocalizedString(@"historyDetailMissedCall", nil)];
     }
-    else if (history.status == HistoryEventStatus_Appointment){
+    else if ([history.status isEqualToString: kHistoryEventStatus_Appointment]){
         recordType = 4;
         [historyCell setCallRecord:recordType timeLabel:[Utils readableTimeFromSecondsSince1970LikeWeixin:history.start] footnote: NSLocalizedString(@"historyDetailAppointment", nil)];
     }
     
     
-    if (history.mediaType == MediaType_Image){
+    if ([history.type isEqualToString: kMediaType_Image]){
         NgnHistoryImageEvent *event = (NgnHistoryImageEvent *)history;
         NSArray *imageArray = [NSKeyedUnarchiver unarchiveObjectWithData:event.content];
         double duration = history.end - history.start;
@@ -318,11 +328,12 @@
         [[PictureManager sharedInstance] setImageSession:imageSessionID];
         
         // Add to history record
-        NgnHistoryAVCallEvent *event = [[NgnHistoryAVCallEvent alloc] init:NO withRemoteParty:_remotePartyPhoneNumber];
+        DetailHistEvent *event = [[DetailHistEvent alloc] init];
         audioCallViewController.activeEvent = event;
-        event.status = HistoryEventStatus_Outgoing;
+        event.status = kHistoryEventStatus_Outgoing;
         event.start = [[NSDate date] timeIntervalSince1970];
-        //[[SipStackUtils sharedInstance].historyService addEvent:event];
+        event.type = kMediaType_Audio;
+        event.remoteParty = _remotePartyPhoneNumber;
         
         // Add to main recent
         NSString *partner = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:_remotePartyPhoneNumber];
@@ -348,9 +359,13 @@
     [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:_remotePartyPhoneNumber];
     
     // Add to history record TODO: modify the media_type of the event
-    NgnHistoryAVCallEvent *event = [[NgnHistoryAVCallEvent alloc] init:NO withRemoteParty:_remotePartyPhoneNumber];
-    event.status = HistoryEventStatus_Appointment;
-    [[SipStackUtils sharedInstance].historyService addEvent:event];
+    DetailHistEvent *event = [[DetailHistEvent alloc] init];
+    event.remoteParty = _remotePartyPhoneNumber;
+    event.type = kMediaType_Audio;
+    event.status = kHistoryEventStatus_Appointment;
+    event.start = [[NSDate date] timeIntervalSince1970];
+    event.end = event.start;
+    [[DetailHistoryAccessor sharedInstance] addHistEntry:event];
     
     [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:_remotePartyPhoneNumber Content:NSLocalizedString(@"historyAppointment", nil) Time:[[NSDate date] timeIntervalSince1970] Type:@"MakeAppointment"];
     //    [self displayHistory];
@@ -374,9 +389,7 @@
 - (void)clearAll
 {
     loadTimes = 1;
-    [[SipStackUtils sharedInstance].historyService deleteEvents:MediaType_SMS withRemoteParty:_remotePartyPhoneNumber];
-    [[SipStackUtils sharedInstance].historyService deleteEvents:MediaType_Image withRemoteParty:_remotePartyPhoneNumber];
-    [[SipStackUtils sharedInstance].historyService deleteEvents:MediaType_Audio withRemoteParty:_remotePartyPhoneNumber];
+    [[DetailHistoryAccessor sharedInstance] deleteHistoryForRemoteParty:_remotePartyPhoneNumber];
     [[MainHistoryDataAccessor sharedInstance] deleteObjectForRemoteParty:_remotePartyPhoneNumber];
     [self displayHistoryWithEntryNumber];
     [self dismissMenuBar];

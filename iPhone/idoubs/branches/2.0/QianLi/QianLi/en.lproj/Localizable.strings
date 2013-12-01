@@ -65,7 +65,7 @@
 "callingVideo" = "Video";
 "callingShopping" = "Shopping";
 "callingBrowser" = "Browser";
-"callingComingCallText" = "want to talk";
+"callingComingCallText" = "wants to talk";
 "watchVideo" = "watch video";
 "handWriting" = "hand writing";
 "webBrowsing" = "browse website";
@@ -150,3 +150,6 @@
 "micOff" = "MIC OFF";
 "speakerOff" = "Speaker OFF";
 "speakerOn" = "Speaker ON";
+"appointmentNoName" = "Call me maybe?";
+"hudEarphone" = "Earphone Plugged";
+"cancelDoodle" = "Cancel doodle";

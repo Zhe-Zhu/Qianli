@@ -164,10 +164,7 @@ const float kColorB = 60/100.0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveIncomingCallNotif:) name:kReceiveIncomingCallNotifName object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStackEvent:) name:kNgnStackEventArgs_Name object:nil];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    // TODO: For debug
-    //[userDefaults setBool:YES forKey:@"SignedUp"];
-//    [UserDataAccessor setUserRemoteParty:@"008618682120348"];
-//    [UserDataAccessor setUserRemoteParty:@"008613410962486"];
+    
     if ([userDefaults boolForKey:@"SignedUp"]) {
         self.window.rootViewController = _tabController;
         [[SipStackUtils sharedInstance] start];
@@ -192,11 +189,6 @@ const float kColorB = 60/100.0;
     }
     
 //    NSDictionary *remoteNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-//    if (remoteNotification) {
-//        //
-//    }
-    
-    
     // 初始化UmengSDK
     [MobClick startWithAppkey:kUmengSDKKey];
     [UMFeedback checkWithAppkey:kUmengSDKKey];
@@ -360,8 +352,10 @@ const float kColorB = 60/100.0;
         [self.tabController presentViewController:audioCallNavigationController animated:YES completion:nil];
         
         // Add to history record
-        NgnHistoryAVCallEvent *event = [[NgnHistoryAVCallEvent alloc] init:NO withRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
-        event.status = HistoryEventStatus_Incoming;
+        DetailHistEvent *event = [[DetailHistEvent alloc] init];
+        event.remoteParty = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+        event.type = kMediaType_Audio;
+        event.status = kHistoryEventStatus_Incoming;
         event.start = [[NSDate date] timeIntervalSince1970];
         _audioCallViewController.activeEvent = event;
         
@@ -425,12 +419,15 @@ const float kColorB = 60/100.0;
     if (_persistentStoreCoordinator != nil) {
         return _persistentStoreCoordinator;
     }
-    
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
+
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"QianLi.sqlite"];
-    
     NSError *error = nil;
+    
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
         /*
          Replace this implementation with code to handle the error appropriately.
          

@@ -97,7 +97,7 @@
 	// Order is important
 	bSuccess &= [self.configurationService start];
 	bSuccess &= [self.networkService start];
-	bSuccess &= [self.storageService start];
+	//bSuccess &= [self.storageService start];
 	//bSuccess &= [self.contactService start];
 	bSuccess &= [self.sipService start];	
 	bSuccess &= [self.httpClientService start];
@@ -123,7 +123,7 @@
 	//bSuccess &= [self.historyService stop];
 	bSuccess &= [self.soundService stop];
 	bSuccess &= [self.networkService stop];
-	bSuccess &= [self.storageService stop];
+	//bSuccess &= [self.storageService stop];
 	
 	mStarted = FALSE;
 	return bSuccess;

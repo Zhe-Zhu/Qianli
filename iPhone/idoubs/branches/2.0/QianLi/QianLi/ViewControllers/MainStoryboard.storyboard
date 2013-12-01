@@ -436,18 +436,18 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="uaQ-ez-WWf">
-                                <rect key="frame" x="125" y="38" width="70" height="70"/>
+                                <rect key="frame" x="125" y="117" width="70" height="70"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Version" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pBp-Mh-qqv">
-                                <rect key="frame" x="105" y="143" width="60" height="21"/>
+                                <rect key="frame" x="85" y="222" width="80" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" red="0.5490196078431373" green="0.5490196078431373" blue="0.5490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1.0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V4c-U4-YJy">
-                                <rect key="frame" x="170" y="143" width="24" height="21"/>
+                                <rect key="frame" x="170" y="222" width="40" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" red="0.5490196078431373" green="0.5490196078431373" blue="0.5490196078431373" alpha="1" colorSpace="calibratedRGB"/>
@@ -740,7 +740,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="中国 (+86)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uYZ-cD-rdd">
-                                <rect key="frame" x="33" y="39" width="111" height="21"/>
+                                <rect key="frame" x="33" y="39" width="129" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
                                 <color key="textColor" red="0.3411764706" green="0.72156862749999995" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
@@ -1049,17 +1049,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Sy-OI-SYJ">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Sy-OI-SYJ">
                                 <rect key="frame" x="16" y="430" width="74" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="74" id="gb9-bJ-t1P"/>
                                 </constraints>
-                                <state key="normal" image="doodlePalette.png">
+                                <state key="normal" image="doodleClear.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="changColor:" destination="l6K-ri-YmP" eventType="touchUpInside" id="d5i-yU-V4j"/>
+                                    <action selector="clear:" destination="l6K-ri-YmP" eventType="touchUpInside" id="zVS-fR-g5d"/>
                                 </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dhq-fg-yNc">
@@ -1098,6 +1099,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="clearAll" destination="4Sy-OI-SYJ" id="AWJ-dC-He2"/>
                         <outlet property="ereaser" destination="YaO-9Q-sPB" id="WEE-OS-ZpY"/>
                     </connections>
                 </viewController>
@@ -1610,16 +1612,10 @@
         <image name="browserForward.png" width="35" height="35"/>
         <image name="browserHistory.png" width="35" height="35"/>
         <image name="buttonContinueBackground.png" width="280" height="44"/>
-        <image name="buttonContinueBackground.png" width="280" height="44"/>
-        <image name="buttonContinueBackground.png" width="280" height="44"/>
         <image name="captchaCover.png" width="40" height="40"/>
-        <image name="captchaCover.png" width="40" height="40"/>
-        <image name="captchaCover.png" width="40" height="40"/>
-        <image name="captchaCover.png" width="40" height="40"/>
+        <image name="doodleClear.png" width="30" height="30"/>
         <image name="doodleDraw.png" width="30" height="30"/>
-        <image name="doodlePalette.png" width="30" height="30"/>
         <image name="doodleWidth.png" width="30" height="30"/>
-        <image name="edit.png" width="27" height="26"/>
         <image name="edit.png" width="27" height="26"/>
         <image name="icon.png" width="140" height="140"/>
         <image name="profileButtonCancel.png" width="40" height="40"/>

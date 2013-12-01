@@ -201,4 +201,75 @@
     }
 }
 
++(void)changeNavigationBarButtonLookingForiOS6
+{
+    UIImage *backButton = [[UIImage imageNamed:@"barButtonBack.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 5)];
+    UIImage *barButton = [[UIImage imageNamed:@"barButton.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+    
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]
+     setBackButtonBackgroundImage:backButton
+     forState:UIControlStateNormal
+     barMetrics:UIBarMetricsDefault];
+    
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]
+     setBackgroundImage:barButton
+     forState:UIControlStateNormal
+     barMetrics:UIBarMetricsDefault];
+    
+    UIImage *backButtonPressed = [[UIImage imageNamed:@"barButtonBackPressed.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 5)];
+    UIImage *barButtonPressed = [[UIImage imageNamed:@"barButtonPressed.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+    
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]
+     setBackButtonBackgroundImage:backButtonPressed
+     forState:UIControlStateHighlighted
+     barMetrics:UIBarMetricsDefault];
+    
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]
+     setBackgroundImage:barButtonPressed
+     forState:UIControlStateHighlighted
+     barMetrics:UIBarMetricsDefault];
+    
+    UIImage *backButtonDisabled = [[UIImage imageNamed:@"barButtonBackDisabled.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 5)];
+    UIImage *barButtonDisabled = [[UIImage imageNamed:@"barButtonDisabled.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+    
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]
+     setBackButtonBackgroundImage:backButtonDisabled
+     forState:UIControlStateDisabled
+     barMetrics:UIBarMetricsDefault];
+    
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]
+     setBackgroundImage:barButtonDisabled
+     forState:UIControlStateDisabled
+     barMetrics:UIBarMetricsDefault];
+}
+    
++ (BOOL)isHeadsetPluggedIn
+{
+    UInt32 routeSize = sizeof (CFStringRef);
+    CFStringRef route;
+    
+    OSStatus error = AudioSessionGetProperty (kAudioSessionProperty_AudioRoute, &routeSize, &route);
+    
+    /* Known values of route:
+     * "Headset"
+     * "Headphone"
+     * "Speaker"
+     * "SpeakerAndMicrophone"
+     * "HeadphonesAndMicrophone"
+     * "HeadsetInOut"
+     * "ReceiverAndMicrophone"
+     * "Lineout"
+     */
+    
+    if (!error && (route != NULL)) {
+        NSString* routeStr = (__bridge NSString*)route;
+        NSRange headphoneRange = [routeStr rangeOfString : @"Head"];
+        if (headphoneRange.location != NSNotFound){
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 @end

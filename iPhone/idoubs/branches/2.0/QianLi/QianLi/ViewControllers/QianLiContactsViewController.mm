@@ -16,6 +16,7 @@
     NSMutableArray *_updateArray; // 需要去update信息的号码
     BOOL searchDisplayIsOn; // 标识是否点击search
     BOOL didLoadFromStarting;
+    double startingTime;
 }
 @property (nonatomic, weak) IBOutlet UITableView *friendsTableView;
 
@@ -91,8 +92,9 @@
     [super viewWillAppear:animated];
     if (!_contacts) {
         _contacts = [[NSMutableArray alloc] init];
-        _filteredListContent = [[NSMutableArray alloc] initWithCapacity:1];
-        _allContacts = [[NSMutableArray alloc] init];
+    }
+    if (!_allContacts) {
+         _allContacts = [[NSMutableArray alloc] init];
     }
     didLoadFromStarting = YES;
     [self getAllQianLiFriends];
@@ -131,7 +133,9 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    _allContacts = nil;
+    if(!_secondThread){
+        _allContacts = nil;
+    }
     _filteredListContent = nil;
 }
 
@@ -144,9 +148,13 @@
             NSThread * thread = [[NSThread alloc] initWithTarget:self selector:@selector(updateContactsFromServer) object:nil];
             _secondThread = thread;
             [_secondThread start];
+            startingTime = [[NSDate date] timeIntervalSince1970];
         }
         else{
-            NSLog(@"not finished");
+            double currentTime = [[NSDate date] timeIntervalSince1970];
+            if ((currentTime - startingTime) > 600) {
+                [_secondThread cancel];
+            }
         }
     }
 }
@@ -254,7 +262,7 @@
         }
         else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
             // The user has previously given access, add the contact
-            [self loadAddressBook: addressBookRef];
+            [weakSelf loadAddressBook: addressBookRef];
             if (addressBookRef) {
                 CFRelease(addressBookRef);
             }
@@ -294,6 +302,11 @@
         
         //Save thumbnail image - performance decreasing
         UIImage *personImage = nil;
+
+        if (person == nil) {
+            continue;
+        }
+        
         if (person != nil && ABPersonHasImageData(person)) {
             if ( &ABPersonCopyImageDataWithFormat != nil ) {
                 // iOS >= 4.1
@@ -318,7 +331,7 @@
         if ((__bridge id)abFullName != nil) {
             nameString = (__bridge NSString *)abFullName;
         } else {
-            if (lastNameString != nil)
+            if (lastNameString != nil && nameString != nil)
             {
                 nameString = [NSString stringWithFormat:@"%@ %@", nameString, lastNameString];
             }
@@ -326,9 +339,6 @@
         
         if (nameString != nil) {
             addressBook.name = nameString;
-        }
-        else{
-            continue;
         }
         addressBook.rowSelected = NO;
         
@@ -363,10 +373,10 @@
                         if ([strippedNumber length] < 3 ) {
                             continue;
                         }
-                        
-                        if ([strippedNumber length] < 3) {
-                            continue;
+                        if (addressBook.name == nil) {
+                            addressBook.name = strippedNumber;
                         }
+                        
                         if (![[strippedNumber substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"+"]) {
                             if (![[strippedNumber substringWithRange:NSMakeRange(0, 2)] isEqualToString:@"00"]) {
                                 if (_countryCode == nil) {
@@ -406,7 +416,12 @@
     }
     CFRelease(allPeople);
     // Sort data
-    [_allContacts removeAllObjects];
+    if (_allContacts == nil) {
+        _allContacts = [NSMutableArray arrayWithCapacity:1];
+    }
+    else{
+        [_allContacts removeAllObjects];
+    }
     [self sortContacts:addressBookTemp SortedContacts:_allContacts];
 }
 
@@ -565,7 +580,6 @@
             
             for (int j = 0; j < [arr count]; ++j) {
                 QianLiAddressBookItem *contact = (QianLiAddressBookItem *) [arr objectAtIndex:j];
-                
                 for (int k = 0; k < [contact.tel count]; ++k) {
                     NSString *numStr = (NSString *) [contact.tel objectAtIndex:k];
                     if ([numStr isEqualToString: (NSString *)[numbers objectAtIndex:r]]){
@@ -615,7 +629,7 @@
         }
     }
     
-    [self showOrHideNoContacts];
+    [self performSelectorOnMainThread:@selector(showOrHideNoContacts) withObject:nil waitUntilDone:NO];
     [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [self updateQianLiContacts:items];
 }
@@ -787,17 +801,24 @@
         contactItem.tel =  (NSString *)[object valueForKey:@"number"];
         [qianliContacts addObject:contactItem];
     }
-    
-    [_contacts removeAllObjects];
+    if (_contacts == nil){
+        _contacts = [NSMutableArray array];
+    }
+    else{
+        [_contacts removeAllObjects];
+    }
     [self sortQianLiContacts:qianliContacts SortedContacts:_contacts];
 }
 
 - (void)restoreContacts
 {
-    [self getAllQianLiFriends];
     if (_inviteController) {
         [_inviteController getAddressBookPermission];
     }
+    else{
+        [self getAllQianLiFriends];
+    }
+    [_friendsTableView reloadData];
 }
 
 - (void)clearContacts
@@ -838,7 +859,6 @@
         _finished = NO;
         [self sendContactsToServer];
     }
-
 }
 
 - (IBAction)inviteFriends:(id)sender
@@ -861,7 +881,6 @@
 	} else {
         return [_contacts count];
     }
-    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -1132,8 +1151,10 @@
         [[PictureManager sharedInstance] setImageSession:imageSessionID];
         
         // Add to history record
-        NgnHistoryAVCallEvent *event = [[NgnHistoryAVCallEvent alloc] init:NO withRemoteParty:_remotePartyPhoneNumber];
-        event.status = HistoryEventStatus_Outgoing;
+        DetailHistEvent *event = [[DetailHistEvent alloc] init];
+        event.remoteParty = _remotePartyPhoneNumber;
+        event.type = kMediaType_Audio;
+        event.status = kHistoryEventStatus_Outgoing;
         event.start = [[NSDate date] timeIntervalSince1970];
         audioCallViewController.activeEvent = event;
         
@@ -1198,11 +1219,11 @@
 
 - (void)removeNoContacts
 {
+    _noContactImageView.image = nil;
     [_noContactImageView removeFromSuperview];
     [_noContactTitle removeFromSuperview];
     [_noContactBody removeFromSuperview];
     [_noContactBody2 removeFromSuperview];
 }
-
 
 @end

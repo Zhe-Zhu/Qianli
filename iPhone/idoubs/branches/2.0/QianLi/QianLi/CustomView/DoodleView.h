@@ -23,5 +23,7 @@
 -(void)changePaintingMode;
 - (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing;
 - (UIImage*)screenshot;
+- (void)clearAll;
+- (void)clearAllFromRemote;
 
 @end

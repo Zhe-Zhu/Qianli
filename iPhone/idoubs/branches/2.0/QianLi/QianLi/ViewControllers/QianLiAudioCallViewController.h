@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import "QianLiUIMenuBar.h"
 #import "QianLiUIMenuBarItem.h"
 #import "AssetGroupPickerController.h"
@@ -18,6 +20,8 @@
 #import "UINavigationControllerPortraitViewController.h"
 #import "QianLiContactsAccessor.h"
 #import "CameraViewController.h"
+#import "DetailHistEvent.h"
+#import "DetailHistoryAccessor.h"
 
 // this class implements the audio call view.
 // it has three states: Calling, ReceivingCall, InCall. different states have different UIs.
@@ -41,6 +45,6 @@ typedef enum
 // the head portrait of the remote one
 @property(nonatomic, strong) UIImage * remoteHeadPortrait;
 
-@property(nonatomic, strong) NgnHistoryAVCallEvent *activeEvent;
+@property(nonatomic, strong) DetailHistEvent *activeEvent;
 
 @end
