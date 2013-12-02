@@ -246,6 +246,9 @@
         CFErrorRef error = NULL;
         ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, &error);
         if (error) {
+            if (addressBookRef != NULL) {
+                CFRelease(addressBookRef);
+            }
             return;
         }
         QianLiContactsViewController * __weak weakSelf = self;  // avoid capturing self in the block
@@ -254,7 +257,7 @@
                 // First time access has been granted, add the contact
                 if (granted) {
                     [weakSelf loadAddressBook: addressBookRef];
-                    if (addressBookRef) {
+                    if (addressBookRef != NULL) {
                         CFRelease(addressBookRef);
                     }
                 }
@@ -263,25 +266,22 @@
         else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
             // The user has previously given access, add the contact
             [weakSelf loadAddressBook: addressBookRef];
-            if (addressBookRef) {
+            if (addressBookRef != NULL) {
                 CFRelease(addressBookRef);
             }
         }
         else {
             // The user has previously denied access
             // Send an alert telling user to change privacy setting in settings app
+            if (addressBookRef != NULL) {
+                CFRelease(addressBookRef);
+            }
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"contactAlertTitle", nil) message:NSLocalizedString(@"contactAlertBody", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"iknow", nil) otherButtonTitles:nil];
             [alertView show];
         }
     }
-    else{ // if not in iOS 6
-        // just get the contacts directly
-        NSLog(@"ios5");
-        ABAddressBookRef addressBookRef = ABAddressBookCreate();
-        [self loadAddressBook: addressBookRef];
-        if(addressBookRef){
-            CFRelease(addressBookRef);
-        }
+    else{
+        // if not in iOS 6
     }
 }
 
@@ -296,9 +296,9 @@
     {
         QianLiAddressBookItem *addressBook = [[QianLiAddressBookItem alloc] init];
         ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
-        NSString *nameString = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        NSString *lastNameString = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-        CFStringRef abFullName = ABRecordCopyCompositeName(person);
+        NSString *nameString = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
+        NSString *lastNameString = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+        NSString *abFullName = (__bridge_transfer NSString *)ABRecordCopyCompositeName(person);
         
         //Save thumbnail image - performance decreasing
         UIImage *personImage = nil;
@@ -311,16 +311,10 @@
             if ( &ABPersonCopyImageDataWithFormat != nil ) {
                 // iOS >= 4.1
                 CFDataRef contactThumbnailData = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
-                personImage = [UIImage imageWithData:(__bridge NSData*)contactThumbnailData];
-                CFRelease(contactThumbnailData);
-                CFDataRef contactImageData = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatOriginalSize);
-                CFRelease(contactImageData);
-                
-            } else {
-                // iOS < 4.1
-                CFDataRef contactImageData = ABPersonCopyImageData(person);
-                personImage = [UIImage imageWithData:(__bridge NSData*)contactImageData];
-                CFRelease(contactImageData);
+                if (contactThumbnailData != NULL) {
+                    personImage = [UIImage imageWithData:(__bridge NSData*)contactThumbnailData];
+                    CFRelease(contactThumbnailData);
+                }
             }
         }
         else{
@@ -328,15 +322,15 @@
         }
         [addressBook setThumbnail: personImage];
         
-        if ((__bridge id)abFullName != nil) {
-            nameString = (__bridge NSString *)abFullName;
-        } else {
+        if (abFullName != nil) {
+            nameString = abFullName;
+        }
+        else {
             if (lastNameString != nil && nameString != nil)
             {
                 nameString = [NSString stringWithFormat:@"%@ %@", nameString, lastNameString];
             }
         }
-        
         if (nameString != nil) {
             addressBook.name = nameString;
         }
@@ -351,18 +345,13 @@
             ABPropertyID property = multiProperties[j];
             ABMultiValueRef valuesRef = ABRecordCopyValue(person, property);
             NSInteger valuesCount = 0;
-            if (valuesRef != nil) {
+            if (valuesRef != NULL) {
                 valuesCount = ABMultiValueGetCount(valuesRef);
-            }
-            
-            if (valuesCount == 0) {
-                CFRelease(valuesRef);
-                continue;
             }
             
             NSMutableArray *telephone = [NSMutableArray array];
             for (NSInteger k = 0; k < valuesCount; k++) {
-                NSString *value = (__bridge NSString*)ABMultiValueCopyValueAtIndex(valuesRef, k);
+                NSString *value = (__bridge_transfer NSString*)ABMultiValueCopyValueAtIndex(valuesRef, k);
                 switch (j) {
                     case 0: {// Phone number
                         NSString *numStr = value;
@@ -408,13 +397,17 @@
                     }
                 }
             }
-            CFRelease(valuesRef);
+            if (valuesRef != NULL) {
+                CFRelease(valuesRef);
+            }
         }
-        
-        [addressBookTemp addObject:addressBook];
-        if (abFullName) CFRelease(abFullName);
+        if (addressBook.name) {
+            [addressBookTemp addObject:addressBook];
+        }
     }
-    CFRelease(allPeople);
+    if (allPeople != NULL) {
+        CFRelease(allPeople);
+    }
     // Sort data
     if (_allContacts == nil) {
         _allContacts = [NSMutableArray arrayWithCapacity:1];

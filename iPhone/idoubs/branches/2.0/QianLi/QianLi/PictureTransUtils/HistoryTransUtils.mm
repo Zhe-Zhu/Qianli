@@ -115,13 +115,19 @@
             for (int i = 0; i < [subArray count]; ++i) {
                 NSString *strItem = [subArray objectAtIndex:i];
                 if ([strItem isEqualToString:@"calling_number"]) {
-                    remoteParty = [subArray objectAtIndex:i + 2];
+                    if ([subArray count] > (i + 2)) {
+                        remoteParty = [subArray objectAtIndex:i + 2];
+                    }
                 }
                 if ([strItem isEqualToString:@"calling_type"]) {
-                    type = [subArray objectAtIndex:i + 2];
+                    if ([subArray count] > (i + 2)) {
+                        type = [subArray objectAtIndex:i + 2];
+                    }
                 }
                 if ([strItem isEqualToString:@"calling_date"]) {
-                    dateStr = [subArray objectAtIndex:i + 2];
+                    if ([subArray count] > (i + 2)) {
+                        dateStr = [subArray objectAtIndex:i + 2];
+                    }
                 }
                 hasEntry = YES;
             }
@@ -141,10 +147,6 @@
                 event.end = startingTime;
                 [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:YES];
                 
-                NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:remoteParty];
-                if (name == nil) {
-                    name = remoteParty;
-                }
                 NSString *contentStr = NSLocalizedString(@"historyDetailMissedCall", nil);
                 NSArray *array = @[remoteParty, contentStr, [NSNumber numberWithDouble:startingTime], @"MissedCall"];
                 [self performSelectorOnMainThread:@selector(writeHistory:) withObject:array waitUntilDone:YES];
@@ -163,11 +165,6 @@
                 event.start = startingTime;
                 event.end = startingTime;
                 [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:YES];
-                
-                NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:remoteParty];
-                if (name == nil) {
-                    name = remoteParty;
-                }
 //                NSString *contentStr = [NSString stringWithFormat:@"Appointment from %@", name];
                 NSString *contentStr = NSLocalizedString(@"appointmentNoName", nil);
                 NSArray *array = @[remoteParty, contentStr, [NSNumber numberWithDouble:startingTime], @"Appointment"];
@@ -215,9 +212,11 @@
     NSString *type = [array objectAtIndex:3];
     if ([type isEqualToString:@"MissedCall"]) {
         [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:remoteParty Content:contentStr Time:startingTime Type:@"MissedCall"];
+        [Utils updateMainHistNameForRemoteParty:remoteParty];
     }
     else{
         [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:remoteParty Content:contentStr Time:startingTime Type:kMainHistAppMark];
+        [Utils updateMainHistNameForRemoteParty:remoteParty];
     }
 }
 

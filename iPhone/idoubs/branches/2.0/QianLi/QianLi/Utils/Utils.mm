@@ -148,7 +148,9 @@
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
     CFRelease(theUUID);
-    return (__bridge NSString *)string ;
+    NSString *str = (__bridge NSString *)string;
+    CFRelease(string);
+    return  str;
 }
 
 + (NSString *)getDeviceUDID
