@@ -401,12 +401,12 @@
                 CFRelease(valuesRef);
             }
         }
+    if (allPeople != NULL) {
+        CFRelease(allPeople);
+    }
         if (addressBook.name) {
             [addressBookTemp addObject:addressBook];
         }
-    }
-    if (allPeople != NULL) {
-        CFRelease(allPeople);
     }
     // Sort data
     if (_allContacts == nil) {
