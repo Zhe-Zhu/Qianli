@@ -11,6 +11,7 @@
 #import "QianLiContactsAccessor.h"
 #import "MobClick.h"
 #import "APNsTransUtils.h"
+#import "SipCallManager.h"
 
 @interface HistroyRecordDetailsViewController ()
 {
@@ -319,6 +320,7 @@
     audioCallViewController.ViewState = Calling;
     audioCallViewController.remotePartyNumber = remoteUri;
     [self presentViewController:audioCallNavigationController animated:YES completion:nil];
+    [SipCallManager SharedInstance].audioVC = audioCallViewController;
     
     long sID;
     if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteUri andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])

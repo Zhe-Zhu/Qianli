@@ -12,6 +12,7 @@
 #import "UserDataAccessor.h"
 #import "MobClick.h"
 #import "UserDataTransUtils.h"
+#import "SipCallManager.h"
 
 #define CellHeight 80
 
@@ -293,6 +294,7 @@
     audioCallViewController.ViewState = Calling;
     audioCallViewController.remotePartyNumber = remoteUri;
     [self presentViewController:audioCallNavigationController animated:YES completion:nil];
+    [SipCallManager SharedInstance].audioVC = audioCallViewController;
     
     long sID;
     if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteUri andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])

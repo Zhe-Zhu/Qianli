@@ -7,6 +7,7 @@
 //
 
 #import "QianLiContactsViewController.h"
+#import "SipCallManager.h"
 
 @interface QianLiContactsViewController()
 {
@@ -1134,7 +1135,7 @@
     audioCallViewController.remotePartyNumber = remoteUri;
     audioCallViewController.ViewState = Calling;
     [self presentViewController:audioCallNavigationController animated:YES completion:nil];
-    
+    [SipCallManager SharedInstance].audioVC = audioCallViewController;
     
     long sID;
     if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteUri andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])
