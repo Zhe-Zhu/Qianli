@@ -178,12 +178,6 @@
     }
     else{ // if not in iOS 6
         // just get the contacts directly
-        NSLog(@"ios5");
-        ABAddressBookRef addressBookRef = ABAddressBookCreate();
-        [self loadAddressBook: addressBookRef];
-        if(addressBookRef)
-        {CFRelease(addressBookRef);
-        }
     }
 }
 
