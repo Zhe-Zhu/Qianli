@@ -143,6 +143,12 @@
         // Request authorization to Address Book
         CFErrorRef error = NULL;
         ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, &error);
+        if (error) {
+            if (addressBookRef) {
+                CFRelease(addressBookRef);
+            }
+            return;
+        }
         InviteFriendsViewController * __weak weakSelf = self;  // avoid capturing self in the block
         if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
             ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
@@ -165,7 +171,9 @@
         else {
             // The user has previously denied access
             // Send an alert telling user to change privacy setting in settings app
-            NSLog(@"access denied!");
+            if (addressBookRef) {
+                CFRelease(addressBookRef);
+            }
         }
     }
     else{ // if not in iOS 6
@@ -196,9 +204,9 @@
     {
         QianLiAddressBookItem *addressBook = [[QianLiAddressBookItem alloc] init];
         ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
-        NSString *nameString = (__bridge NSString *) ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        NSString *lastNameString = (__bridge NSString *) ABRecordCopyValue(person, kABPersonLastNameProperty);
-        CFStringRef abFullName = ABRecordCopyCompositeName(person);
+        NSString *nameString = (__bridge_transfer NSString *) ABRecordCopyValue(person, kABPersonFirstNameProperty);
+        NSString *lastNameString = (__bridge_transfer  NSString *) ABRecordCopyValue(person, kABPersonLastNameProperty);
+        NSString *abFullName = (__bridge_transfer  NSString *)ABRecordCopyCompositeName(person);
         
         
         //Save thumbnail image - performance decreasing
@@ -207,23 +215,18 @@
             if ( &ABPersonCopyImageDataWithFormat != nil ) {
                 // iOS >= 4.1
                 CFDataRef contactThumbnailData = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
-                personImage = [UIImage imageWithData:(__bridge NSData*)contactThumbnailData];
-                CFRelease(contactThumbnailData);
-                CFDataRef contactImageData = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatOriginalSize);
-                CFRelease(contactImageData);
-                
-            } else {
-                // iOS < 4.1
-                CFDataRef contactImageData = ABPersonCopyImageData(person);
-                personImage = [UIImage imageWithData:(__bridge NSData*)contactImageData];
-                CFRelease(contactImageData);
+                if (contactThumbnailData != NULL) {
+                    personImage = [UIImage imageWithData:(__bridge NSData*)contactThumbnailData];
+                    CFRelease(contactThumbnailData);
+                }
             }
         }
         [addressBook setThumbnail: personImage];
         
-        if ((__bridge id)abFullName != nil) {
-            nameString = (__bridge NSString *)abFullName;
-        } else {
+        if (abFullName != nil) {
+            nameString = abFullName;
+        }
+        else {
             if (lastNameString != nil)
             {
                 nameString = [NSString stringWithFormat:@"%@ %@", nameString, lastNameString];
@@ -248,14 +251,9 @@
             ABMultiValueRef valuesRef = ABRecordCopyValue(person, property);
             NSInteger valuesCount = 0;
             if (valuesRef != nil) valuesCount = ABMultiValueGetCount(valuesRef);
-            
-            if (valuesCount == 0) {
-                CFRelease(valuesRef);
-                continue;
-            }
-            
+        
             for (NSInteger k = 0; k < valuesCount; k++) {
-                NSString *value = (__bridge NSString*)ABMultiValueCopyValueAtIndex(valuesRef, k);
+                NSString *value = (__bridge_transfer NSString*)ABMultiValueCopyValueAtIndex(valuesRef, k);
                 switch (j) {
                     case 0: {// Phone number
                         //addressBook.tel = (__bridge NSString*)value;
@@ -268,14 +266,16 @@
                     }
                 }
             }
-            CFRelease(valuesRef);
+            if (valuesRef != NULL) {
+                CFRelease(valuesRef);
+            }
         }
         
         [addressBookTemp addObject:addressBook];
-        if (abFullName) CFRelease(abFullName);
     }
-    
-    CFRelease(allPeople);
+    if (allPeople != NULL) {
+        CFRelease(allPeople);
+    }
     
     // Sort data
     UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
