@@ -127,7 +127,7 @@
 		50D8DFC317C4ABF6006234A3 /* MainHistoryDataAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 50D8DFC217C4ABF6006234A3 /* MainHistoryDataAccessor.m */; };
 		50D8DFC617C4B7BA006234A3 /* MainHistoryEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 50D8DFC517C4B7BA006234A3 /* MainHistoryEntry.m */; };
 		50DB1CD1184C647300ED63F6 /* SipCallManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50DB1CD0184C647300ED63F6 /* SipCallManager.mm */; };
-		50F0E32517B292E6007DA5FA /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F0E32417B292E6007DA5FA /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		50F0E32517B292E6007DA5FA /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F0E32417B292E6007DA5FA /* Reachability.m */; };
 		CE09D1891831C9540070CDE2 /* MenuBarItemBrowser@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE09D1841831C9540070CDE2 /* MenuBarItemBrowser@2x.png */; };
 		CE09D18A1831C9540070CDE2 /* MenuBarItemCamera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE09D1851831C9540070CDE2 /* MenuBarItemCamera@2x.png */; };
 		CE09D18B1831C9540070CDE2 /* MenuBarItemDoodle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE09D1861831C9540070CDE2 /* MenuBarItemDoodle@2x.png */; };

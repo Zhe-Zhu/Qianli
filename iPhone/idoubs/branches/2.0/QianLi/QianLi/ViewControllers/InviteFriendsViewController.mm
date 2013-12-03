@@ -200,8 +200,10 @@
         ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
         NSString *nameString = (__bridge_transfer NSString *) ABRecordCopyValue(person, kABPersonFirstNameProperty);
         NSString *lastNameString = (__bridge_transfer  NSString *) ABRecordCopyValue(person, kABPersonLastNameProperty);
-        NSString *abFullName = (__bridge_transfer  NSString *)ABRecordCopyCompositeName(person);
-        
+        NSString *abFullName = nil;
+        if (ABRecordGetRecordType(person) != kABSourceType) {
+            abFullName = (__bridge_transfer NSString *)ABRecordCopyCompositeName(person);
+        }
         
         //Save thumbnail image - performance decreasing
         UIImage *personImage = nil;
@@ -265,7 +267,9 @@
             }
         }
         
-        [addressBookTemp addObject:addressBook];
+        if (addressBook.name) {
+            [addressBookTemp addObject:addressBook];
+        }
     }
     if (allPeople != NULL) {
         CFRelease(allPeople);
