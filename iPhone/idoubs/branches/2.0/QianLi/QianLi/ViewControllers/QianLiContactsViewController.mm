@@ -291,25 +291,40 @@
     // Create addressbook data model
     NSMutableArray *addressBookTemp = [NSMutableArray array];
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBooks);
-    CFIndex nPeople = ABAddressBookGetPersonCount(addressBooks);
     
-    for (NSInteger i = 0; i < nPeople; i++)
+    for (NSInteger i = 0; i < CFArrayGetCount(allPeople); i++)
     {
         QianLiAddressBookItem *addressBook = [[QianLiAddressBookItem alloc] init];
         ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
-        NSString *nameString = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        NSString *lastNameString = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-        NSString *abFullName = (__bridge_transfer NSString *)ABRecordCopyCompositeName(person);
-        
-        //Save thumbnail image - performance decreasing
-        UIImage *personImage = nil;
-
         if (person == nil) {
             continue;
         }
+        NSString *qianliName = @"";
+        NSString *nameString = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
+        NSString *lastNameString = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+        NSString *abFullName = nil;
+        if (ABRecordGetRecordType(person) != kABSourceType) {
+            abFullName = (__bridge_transfer NSString *)ABRecordCopyCompositeName(person);
+        }
         
-        if (person != nil && ABPersonHasImageData(person)) {
-            if ( &ABPersonCopyImageDataWithFormat != nil ) {
+        if (abFullName) {
+            qianliName = abFullName;
+        }
+        else{
+            if (nameString) {
+                qianliName = [NSString stringWithFormat:@"%@%@", qianliName, nameString];
+            }
+            if (lastNameString) {
+                qianliName = [NSString stringWithFormat:@"%@ %@", qianliName, lastNameString];
+            }
+        }
+        if (![qianliName isEqualToString:@""]) {
+            addressBook.name = qianliName;
+        }
+        //Save thumbnail image - performance decreasing
+        UIImage *personImage = nil;
+        if (ABPersonHasImageData(person)) {
+            if (ABPersonCopyImageDataWithFormat != NULL) {
                 // iOS >= 4.1
                 CFDataRef contactThumbnailData = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
                 if (contactThumbnailData != NULL) {
@@ -322,19 +337,6 @@
             personImage = [UIImage imageNamed:@"blank.png"];
         }
         [addressBook setThumbnail: personImage];
-        
-        if (abFullName != nil) {
-            nameString = abFullName;
-        }
-        else {
-            if (lastNameString != nil && nameString != nil)
-            {
-                nameString = [NSString stringWithFormat:@"%@ %@", nameString, lastNameString];
-            }
-        }
-        if (nameString != nil) {
-            addressBook.name = nameString;
-        }
         addressBook.rowSelected = NO;
         
         ABPropertyID multiProperties[] = {
@@ -387,7 +389,6 @@
                         if (![strippedNumber isEqualToString:[UserDataAccessor getUserRemoteParty]]) {
                             [telephone addObject:strippedNumber];
                         }
-                        //NSLog(@"got numbers:%@",strippedNumber);
                         addressBook.tel = telephone;
                         break;
                     }
