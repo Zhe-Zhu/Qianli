@@ -19,6 +19,7 @@
 #import "QianLiAudioCallViewController.h"
 #import "UserDataTransUtils.h"
 #import "Utils.h"
+#import "SipCallManager.h"
 
 // global instance
 static SipStackUtils * sipStackUtilsInstance;
@@ -313,6 +314,15 @@ static SipStackUtils * sipStackUtilsInstance;
 			if (incomingSession && [UIApplication sharedApplication].applicationState ==  UIApplicationStateBackground) {
                 // when app is in background, post a local notification to inform user.
                 NSString *remotePartyUri = [incomingSession getRemotePartyUri];
+                if ([SipCallManager SharedInstance].audioVC) {
+                    if (![[SipCallManager SharedInstance].audioVC.remotePartyNumber isEqualToString:[self getRemoteParty:remotePartyUri]]) {
+                        //
+                        return;
+                    }
+                    else{
+                        
+                    }
+                }
                 self.remoteParty = [self getRemoteParty:remotePartyUri];
                 UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
                 NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
@@ -336,6 +346,15 @@ static SipStackUtils * sipStackUtilsInstance;
 			else if(incomingSession){
                 // when app is in forground, present the audioCallViewController.
                 NSString *remotePartyUri = [incomingSession getRemotePartyUri];
+                if ([SipCallManager SharedInstance].audioVC) {
+                    if (![[SipCallManager SharedInstance].audioVC.remotePartyNumber isEqualToString:[self getRemoteParty:remotePartyUri]]) {
+                        //
+                        return;
+                    }
+                    else{
+                        
+                    }
+                }
                 self.remoteParty = [self getRemoteParty:remotePartyUri];
 				[self receiveIncomingCall:incomingSession];
 			}

@@ -7,6 +7,7 @@
 //
 
 #import "QianLiContactsViewController.h"
+#import "SipCallManager.h"
 
 @interface QianLiContactsViewController()
 {
@@ -246,6 +247,9 @@
         CFErrorRef error = NULL;
         ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, &error);
         if (error) {
+            if (addressBookRef != NULL) {
+                CFRelease(addressBookRef);
+            }
             return;
         }
         QianLiContactsViewController * __weak weakSelf = self;  // avoid capturing self in the block
@@ -254,7 +258,7 @@
                 // First time access has been granted, add the contact
                 if (granted) {
                     [weakSelf loadAddressBook: addressBookRef];
-                    if (addressBookRef) {
+                    if (addressBookRef != NULL) {
                         CFRelease(addressBookRef);
                     }
                 }
@@ -263,25 +267,22 @@
         else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
             // The user has previously given access, add the contact
             [weakSelf loadAddressBook: addressBookRef];
-            if (addressBookRef) {
+            if (addressBookRef != NULL) {
                 CFRelease(addressBookRef);
             }
         }
         else {
             // The user has previously denied access
             // Send an alert telling user to change privacy setting in settings app
+            if (addressBookRef != NULL) {
+                CFRelease(addressBookRef);
+            }
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"contactAlertTitle", nil) message:NSLocalizedString(@"contactAlertBody", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"iknow", nil) otherButtonTitles:nil];
             [alertView show];
         }
     }
-    else{ // if not in iOS 6
-        // just get the contacts directly
-        NSLog(@"ios5");
-        ABAddressBookRef addressBookRef = ABAddressBookCreate();
-        [self loadAddressBook: addressBookRef];
-        if(addressBookRef){
-            CFRelease(addressBookRef);
-        }
+    else{
+        // if not in iOS 6
     }
 }
 
@@ -290,56 +291,52 @@
     // Create addressbook data model
     NSMutableArray *addressBookTemp = [NSMutableArray array];
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBooks);
-    CFIndex nPeople = ABAddressBookGetPersonCount(addressBooks);
     
-    for (NSInteger i = 0; i < nPeople; i++)
+    for (NSInteger i = 0; i < CFArrayGetCount(allPeople); i++)
     {
         QianLiAddressBookItem *addressBook = [[QianLiAddressBookItem alloc] init];
         ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
-        NSString *nameString = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        NSString *lastNameString = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-        CFStringRef abFullName = ABRecordCopyCompositeName(person);
-        
-        //Save thumbnail image - performance decreasing
-        UIImage *personImage = nil;
-
         if (person == nil) {
             continue;
         }
+        NSString *qianliName = @"";
+        NSString *nameString = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
+        NSString *lastNameString = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+        NSString *abFullName = nil;
+        if (ABRecordGetRecordType(person) != kABSourceType) {
+            abFullName = (__bridge_transfer NSString *)ABRecordCopyCompositeName(person);
+        }
         
-        if (person != nil && ABPersonHasImageData(person)) {
-            if ( &ABPersonCopyImageDataWithFormat != nil ) {
+        if (abFullName) {
+            qianliName = abFullName;
+        }
+        else{
+            if (nameString) {
+                qianliName = [NSString stringWithFormat:@"%@%@", qianliName, nameString];
+            }
+            if (lastNameString) {
+                qianliName = [NSString stringWithFormat:@"%@ %@", qianliName, lastNameString];
+            }
+        }
+        if (![qianliName isEqualToString:@""]) {
+            addressBook.name = qianliName;
+        }
+        //Save thumbnail image - performance decreasing
+        UIImage *personImage = nil;
+        if (ABPersonHasImageData(person)) {
+            if (ABPersonCopyImageDataWithFormat != NULL) {
                 // iOS >= 4.1
                 CFDataRef contactThumbnailData = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
-                personImage = [UIImage imageWithData:(__bridge NSData*)contactThumbnailData];
-                CFRelease(contactThumbnailData);
-                CFDataRef contactImageData = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatOriginalSize);
-                CFRelease(contactImageData);
-                
-            } else {
-                // iOS < 4.1
-                CFDataRef contactImageData = ABPersonCopyImageData(person);
-                personImage = [UIImage imageWithData:(__bridge NSData*)contactImageData];
-                CFRelease(contactImageData);
+                if (contactThumbnailData != NULL) {
+                    personImage = [UIImage imageWithData:(__bridge NSData*)contactThumbnailData];
+                    CFRelease(contactThumbnailData);
+                }
             }
         }
         else{
             personImage = [UIImage imageNamed:@"blank.png"];
         }
         [addressBook setThumbnail: personImage];
-        
-        if ((__bridge id)abFullName != nil) {
-            nameString = (__bridge NSString *)abFullName;
-        } else {
-            if (lastNameString != nil && nameString != nil)
-            {
-                nameString = [NSString stringWithFormat:@"%@ %@", nameString, lastNameString];
-            }
-        }
-        
-        if (nameString != nil) {
-            addressBook.name = nameString;
-        }
         addressBook.rowSelected = NO;
         
         ABPropertyID multiProperties[] = {
@@ -351,18 +348,13 @@
             ABPropertyID property = multiProperties[j];
             ABMultiValueRef valuesRef = ABRecordCopyValue(person, property);
             NSInteger valuesCount = 0;
-            if (valuesRef != nil) {
+            if (valuesRef != NULL) {
                 valuesCount = ABMultiValueGetCount(valuesRef);
-            }
-            
-            if (valuesCount == 0) {
-                CFRelease(valuesRef);
-                continue;
             }
             
             NSMutableArray *telephone = [NSMutableArray array];
             for (NSInteger k = 0; k < valuesCount; k++) {
-                NSString *value = (__bridge NSString*)ABMultiValueCopyValueAtIndex(valuesRef, k);
+                NSString *value = (__bridge_transfer NSString*)ABMultiValueCopyValueAtIndex(valuesRef, k);
                 switch (j) {
                     case 0: {// Phone number
                         NSString *numStr = value;
@@ -397,7 +389,6 @@
                         if (![strippedNumber isEqualToString:[UserDataAccessor getUserRemoteParty]]) {
                             [telephone addObject:strippedNumber];
                         }
-                        //NSLog(@"got numbers:%@",strippedNumber);
                         addressBook.tel = telephone;
                         break;
                     }
@@ -408,15 +399,17 @@
                     }
                 }
             }
-            CFRelease(valuesRef);
+            if (valuesRef != NULL) {
+                CFRelease(valuesRef);
+            }
         }
-        
         if (addressBook.name) {
             [addressBookTemp addObject:addressBook];
         }
-        if (abFullName) CFRelease(abFullName);
     }
-    CFRelease(allPeople);
+    if (allPeople != NULL) {
+        CFRelease(allPeople);
+    }
     // Sort data
     if (_allContacts == nil) {
         _allContacts = [NSMutableArray arrayWithCapacity:1];
@@ -1143,7 +1136,7 @@
     audioCallViewController.remotePartyNumber = remoteUri;
     audioCallViewController.ViewState = Calling;
     [self presentViewController:audioCallNavigationController animated:YES completion:nil];
-    
+    [SipCallManager SharedInstance].audioVC = audioCallViewController;
     
     long sID;
     if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteUri andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])

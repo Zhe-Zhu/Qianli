@@ -126,7 +126,8 @@
 		50D0CA8A180298A600D246FD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50D0CA8C180298A600D246FD /* Localizable.strings */; };
 		50D8DFC317C4ABF6006234A3 /* MainHistoryDataAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 50D8DFC217C4ABF6006234A3 /* MainHistoryDataAccessor.m */; };
 		50D8DFC617C4B7BA006234A3 /* MainHistoryEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 50D8DFC517C4B7BA006234A3 /* MainHistoryEntry.m */; };
-		50F0E32517B292E6007DA5FA /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F0E32417B292E6007DA5FA /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		50DB1CD1184C647300ED63F6 /* SipCallManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50DB1CD0184C647300ED63F6 /* SipCallManager.mm */; };
+		50F0E32517B292E6007DA5FA /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F0E32417B292E6007DA5FA /* Reachability.m */; };
 		CE09D1891831C9540070CDE2 /* MenuBarItemBrowser@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE09D1841831C9540070CDE2 /* MenuBarItemBrowser@2x.png */; };
 		CE09D18A1831C9540070CDE2 /* MenuBarItemCamera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE09D1851831C9540070CDE2 /* MenuBarItemCamera@2x.png */; };
 		CE09D18B1831C9540070CDE2 /* MenuBarItemDoodle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE09D1861831C9540070CDE2 /* MenuBarItemDoodle@2x.png */; };
@@ -616,6 +617,8 @@
 		50D8DFC217C4ABF6006234A3 /* MainHistoryDataAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainHistoryDataAccessor.m; sourceTree = "<group>"; };
 		50D8DFC417C4B7BA006234A3 /* MainHistoryEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainHistoryEntry.h; sourceTree = "<group>"; };
 		50D8DFC517C4B7BA006234A3 /* MainHistoryEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainHistoryEntry.m; sourceTree = "<group>"; };
+		50DB1CCF184C647300ED63F6 /* SipCallManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SipCallManager.h; sourceTree = "<group>"; };
+		50DB1CD0184C647300ED63F6 /* SipCallManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SipCallManager.mm; sourceTree = "<group>"; };
 		50F0E32317B292E6007DA5FA /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		50F0E32417B292E6007DA5FA /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		CE09D1841831C9540070CDE2 /* MenuBarItemBrowser@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MenuBarItemBrowser@2x.png"; sourceTree = "<group>"; };
@@ -1149,6 +1152,8 @@
 				5050904617BDC93A0035A8AE /* Utils.mm */,
 				5050903317BDC93A0035A8AE /* AudioService.h */,
 				5050903417BDC93A0035A8AE /* AudioService.mm */,
+				50DB1CCF184C647300ED63F6 /* SipCallManager.h */,
+				50DB1CD0184C647300ED63F6 /* SipCallManager.mm */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1881,6 +1886,7 @@
 				CEBE577417D72B6C002FD561 /* SignUpEditProfileViewController.m in Sources */,
 				CE5DE8DC17CB12AD00EAA400 /* QBAnimationGroup.m in Sources */,
 				500C2B0317D0ADE0004391AF /* QianLiUIMenuBarItem.m in Sources */,
+				50DB1CD1184C647300ED63F6 /* SipCallManager.mm in Sources */,
 				50A0E10818101C1100FE0573 /* WebBrowser.mm in Sources */,
 				CE5DE8DD17CB12AD00EAA400 /* QBAnimationItem.m in Sources */,
 				2F81373F17AFB54500DB23F2 /* main.mm in Sources */,

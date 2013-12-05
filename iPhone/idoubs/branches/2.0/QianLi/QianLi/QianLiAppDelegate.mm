@@ -20,6 +20,7 @@
 #import "HistoryTransUtils.h"
 #import "MobClick.h"
 #import "UMFeedback.h"
+#import "SipCallManager.h"
 
 @interface QianLiAppDelegate (){
     UITabBarController *_tabController;
@@ -350,7 +351,7 @@ const float kColorB = 60/100.0;
         }
         
         [self.tabController presentViewController:audioCallNavigationController animated:YES completion:nil];
-        
+        [SipCallManager SharedInstance].audioVC = _audioCallViewController;
         // Add to history record
         DetailHistEvent *event = [[DetailHistEvent alloc] init];
         event.remoteParty = [[SipStackUtils sharedInstance] getRemotePartyNumber];
