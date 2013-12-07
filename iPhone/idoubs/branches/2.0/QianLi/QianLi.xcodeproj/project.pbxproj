@@ -1457,11 +1457,6 @@
 				CLASSPREFIX = QianLi;
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Ash Studio";
-				TargetAttributes = {
-					2F81372B17AFB54500DB23F2 = {
-						DevelopmentTeam = 87N4K2M736;
-					};
-				};
 			};
 			buildConfigurationList = 2F81372617AFB54500DB23F2 /* Build configuration list for PBXProject "QianLi" */;
 			compatibilityVersion = "Xcode 3.2";
