@@ -13,19 +13,13 @@
 {
     NSMutableArray *_contacts; // 已有联系人中注册了千里的号码
     NSMutableArray *_allContacts; // 所有联系人的号码
-    NSMutableArray *_filteredListContent; // 存储search中的临时号码
     NSMutableArray *_updateArray; // 需要去update信息的号码
-    BOOL searchDisplayIsOn; // 标识是否点击search
     BOOL didLoadFromStarting;
     double startingTime;
 }
 @property (nonatomic, weak) IBOutlet UITableView *friendsTableView;
 
-@property (nonatomic, strong) UISearchDisplayController *searchController;
-@property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UIButton *buttonInviteFriends;
-
-@property (nonatomic, copy) NSString *savedSearchTerm;
 @property (nonatomic, strong) NSDictionary *countryCode;
 @property (nonatomic, strong) NSString *countryName; // 读运营商所提供的国家名字
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
@@ -35,7 +29,6 @@
 @property (nonatomic, weak) UILabel *noContactBody;
 @property (nonatomic, weak) UILabel *noContactBody2;
 
-@property (nonatomic) BOOL searchWasActive;
 @property (nonatomic) BOOL finished; // 是否成功从服务器拿取数据
 @property (nonatomic, weak) InviteFriendsViewController *inviteController;
 @property (nonatomic, weak) NSThread *secondThread;
@@ -127,7 +120,6 @@
     [super viewDidDisappear:animated];
     // Add additional code
     _countryName = nil;
-    _filteredListContent = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -137,7 +129,6 @@
     if(!_secondThread){
         _allContacts = nil;
     }
-    _filteredListContent = nil;
 }
 
 - (void)begionToUpdateContact
@@ -431,7 +422,7 @@
     
     NSInteger highSection = [[theCollation sectionTitles] count];
     NSMutableArray *sectionArrays = [NSMutableArray arrayWithCapacity:highSection];
-    for (int i = 0; i <= highSection; i++) {
+    for (int i = 0; i < highSection; i++) {
         NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity: 1];
         [sectionArrays addObject:sectionArray];
     }
@@ -458,7 +449,7 @@
     
     NSInteger highSection = [[theCollation sectionTitles] count];
     NSMutableArray *sectionArrays = [NSMutableArray arrayWithCapacity:highSection];
-    for (int i = 0; i <= highSection; i++) {
+    for (int i = 0; i < highSection; i++) {
         NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity: 1];
         [sectionArrays addObject:sectionArray];
     }
@@ -820,7 +811,6 @@
 {
     [_allContacts removeAllObjects];
     [_contacts removeAllObjects];
-    [_filteredListContent removeAllObjects];
     if (_inviteController) {
         [_inviteController clearAddressItems];
     }
@@ -861,7 +851,7 @@
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     _inviteController = [storyBoard instantiateViewControllerWithIdentifier:@"InviteController"];
     _inviteController.title = @"Invite";
-    _inviteController.contacts = _allContacts;
+    _inviteController.contacts = [_allContacts mutableCopy];
     _inviteController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:_inviteController animated:YES];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
@@ -880,11 +870,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        return [_filteredListContent count];
-    } else {
-        return [[_contacts objectAtIndex:section] count];
-    }
+    return [[_contacts objectAtIndex:section] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -899,13 +885,7 @@
     }
     
     QianLiAddressBookItem *contact = nil;
-	if (tableView == self.searchDisplayController.searchResultsTableView) {
-        contact = (QianLiAddressBookItem *)[_filteredListContent objectAtIndex:indexPath.row];
-    }
-	else{
-        contact = (QianLiAddressBookItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    }
-    
+    contact = (QianLiAddressBookItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     [contactCell setContactProfile: contact NeedIcon:YES];
     
     // Set seperator line
@@ -922,72 +902,37 @@
     return NO;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_contacts removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-    }
-}
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	if (tableView == self.searchDisplayController.searchResultsTableView) {
-        return nil;
-    } else {
-        return [[_contacts objectAtIndex:section] count] ? [[[UILocalizedIndexedCollation currentCollation] sectionTitles] objectAtIndex:section] : nil;
-    }
+	return [[_contacts objectAtIndex:section] count] ? [[[UILocalizedIndexedCollation currentCollation] sectionTitles] objectAtIndex:section] : nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        return 0;
     return [[_contacts objectAtIndex:section] count] ? tableView.sectionHeaderHeight : 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if (tableView == self.searchDisplayController.searchResultsTableView) {
-		[self tableView:self.searchDisplayController.searchResultsTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
-		[self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:YES];
-	}
-	else {
-        // Call someone
-        QianLiContactsItem *item = (QianLiContactsItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-        NSString *remoteParty = item.tel;
-        [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
-        [self callWithRemoteParty:remoteParty];
-		[self.friendsTableView deselectRowAtIndexPath:indexPath animated:YES];
-	}
+	// Call someone
+    QianLiContactsItem *item = (QianLiContactsItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    NSString *remoteParty = item.tel;
+    [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
+    [self callWithRemoteParty:remoteParty];
+    [self.friendsTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
 	QianLiAddressBookItem *addressBook = nil;
+    addressBook = (QianLiAddressBookItem*)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
-	if (tableView == self.searchDisplayController.searchResultsTableView){
-		addressBook = (QianLiAddressBookItem*)[_filteredListContent objectAtIndex:indexPath.row];
-        BOOL checked = !addressBook.rowSelected;
-        addressBook.rowSelected = checked;
-        
-        UITableViewCell *cell =[self.searchDisplayController.searchResultsTableView cellForRowAtIndexPath:indexPath];
-        UIButton *button = (UIButton *)cell.accessoryView;
-        [button setSelected:checked];
-    }
-	else if (tableView == self.friendsTableView ){
-        addressBook = (QianLiAddressBookItem*)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-        
-        BOOL checked = !addressBook.rowSelected;
-        addressBook.rowSelected = checked;
-        
-        UITableViewCell *cell =[self.friendsTableView cellForRowAtIndexPath:indexPath];
-        UIButton *button = (UIButton *)cell.accessoryView;
-        [button setSelected:checked];
-    }
-    [self.searchDisplayController.searchResultsTableView reloadData];
+    BOOL checked = !addressBook.rowSelected;
+    addressBook.rowSelected = checked;
+    
+    UITableViewCell *cell =[self.friendsTableView cellForRowAtIndexPath:indexPath];
+    UIButton *button = (UIButton *)cell.accessoryView;
+    [button setSelected:checked];
 }
 
 -(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1012,158 +957,9 @@
     return last;
 }
 
-//#pragma mark -
-//#pragma mark UISearchBarDelegate
-//
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
-{
-	[self.searchDisplayController.searchBar setShowsCancelButton:NO];
-    _searchBar.showsCancelButton = YES;
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-	[self.searchDisplayController setActive:NO animated:YES];
-	[self.friendsTableView reloadData];
-    [_searchBar resignFirstResponder];
-    [_friendsTableView.tableHeaderView resignFirstResponder];
-    _searchBar.showsCancelButton = NO;
-    _searchBar.text = Nil;
-}
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    // TODO: Search功能还未实现
-	[self.searchDisplayController setActive:NO animated:YES];
-	[self.friendsTableView reloadData];
-}
-
-#pragma mark -
-#pragma mark ContentFiltering
-
-- (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
-{
-	[_filteredListContent removeAllObjects];
-    for (NSArray *section in _contacts) {
-        for (QianLiAddressBookItem *addressBook in section)
-        {
-            NSComparisonResult result = [addressBook.name compare:searchText options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch) range:NSMakeRange(0, [searchText length])];
-            if (result == NSOrderedSame)
-            {
-                [_filteredListContent addObject:addressBook];
-            }
-        }
-    }
-}
-
-#pragma mark -
-#pragma mark UISearchDisplayControllerDelegate
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-{
-    [self filterContentForSearchText:searchString scope:
-	 [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
-    
-    return YES;
-}
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
-{
-    [self filterContentForSearchText:[self.searchDisplayController.searchBar text] scope:
-	 [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:searchOption]];
-    
-    return YES;
-}
-
-- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
-{
-    searchDisplayIsOn = NO;
-    [self.friendsTableView reloadData];
-}
-
-- (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
-{
-    searchDisplayIsOn = YES;
-}
-
-- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
-{
-    [_searchBar removeFromSuperview];
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    _searchBar = searchBar;
-    _searchBar.delegate = self;
-    _searchBar.showsCancelButton = YES;
-    
-    UISearchDisplayController *searchDisController = [[UISearchDisplayController alloc]
-                                                      initWithSearchBar:_searchBar contentsController:self];
-    _searchController = searchDisController;
-    _searchController.delegate = self;
-    _searchController.searchResultsDataSource = self;
-    _searchController.searchResultsDelegate = self;
-    
-    if (self.savedSearchTerm)
-	{
-        [self.searchController setActive:self.searchWasActive];
-        [self.searchController.searchBar setText:_savedSearchTerm];
-        
-        self.savedSearchTerm = nil;
-    }
-	
-	self.searchDisplayController.searchResultsTableView.scrollEnabled = YES;
-	self.searchDisplayController.searchBar.showsCancelButton = NO;
-    searchDisplayIsOn = NO;
-}
-
 - (IBAction)callWithRemoteParty:(NSString *)_remotePartyPhoneNumber
 {
-    if ([_remotePartyPhoneNumber isEqualToString:[UserDataAccessor getUserRemoteParty]]) {
-        return;
-    }
-    
-    if (![Utils checkInternetAndDispWarning:YES]) {
-        return;
-    }
-    
-    ConnectionState_t registrationState = [[NgnEngine sharedInstance].sipService getRegistrationState];
-    if (registrationState != CONN_STATE_CONNECTED) {
-        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-    }
-    
-    NSString *remoteUri  = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
-    QianLiAudioCallViewController *audioCallViewController = (QianLiAudioCallViewController *)audioCallNavigationController.topViewController;
-    audioCallViewController.remotePartyNumber = remoteUri;
-    audioCallViewController.ViewState = Calling;
-    [self presentViewController:audioCallNavigationController animated:YES completion:nil];
-    [SipCallManager SharedInstance].audioVC = audioCallViewController;
-    
-    long sID;
-    if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteUri andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])
-    {
-        audioCallViewController.audioSessionID = sID;
-        NSString *imageSessionID = [NSString stringWithFormat:@"%@%@",[UserDataAccessor getUserRemoteParty],remoteUri];
-        [[PictureManager sharedInstance] setImageSession:imageSessionID];
-        
-        // Add to history record
-        DetailHistEvent *event = [[DetailHistEvent alloc] init];
-        event.remoteParty = _remotePartyPhoneNumber;
-        event.type = kMediaType_Audio;
-        event.status = kHistoryEventStatus_Outgoing;
-        event.start = [[NSDate date] timeIntervalSince1970];
-        audioCallViewController.activeEvent = event;
-        
-        // Add to main recent
-        NSString *partner = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:_remotePartyPhoneNumber];
-        if (partner == nil) {
-            partner = _remotePartyPhoneNumber;
-        }
-        [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:_remotePartyPhoneNumber Content:NSLocalizedString(@"historyCall", nil) Time:[[NSDate date] timeIntervalSince1970] Type:@"OutGoindCall"];
-         [Utils updateMainHistNameForRemoteParty:_remotePartyPhoneNumber];
-    }
-    else{
-
-    }
+    [[SipCallManager SharedInstance] makeQianliCallToRemote:_remotePartyPhoneNumber];
 }
 
 # pragma mark noContacts
