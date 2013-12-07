@@ -113,6 +113,8 @@ nil]
 #define kCancelBrowser @"CANCELBROWSER"
 #define kClearAllHandWriting @"CLEARHANDWRITING"
 #define kClearAllDoodle @"CLEARDOODLE"
+#define kHangUpcall @"hangUpCall"
+
 
 #define kProfileSize  320
 #define avatarDiameter 30

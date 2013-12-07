@@ -273,51 +273,7 @@
 // TODO: 考虑把call作为全局函数, 目前太多相同的地方了
 - (void)call:(NSString *)remotePartyPhoneNumber
 {
-    if ([remotePartyPhoneNumber isEqualToString:[UserDataAccessor getUserRemoteParty]]) {
-        return;
-    }
-    
-    if (![Utils checkInternetAndDispWarning:YES]) {
-        return;
-    }
-    
-    ConnectionState_t registrationState = [[NgnEngine sharedInstance].sipService getRegistrationState];
-    if (registrationState != CONN_STATE_CONNECTED) {
-        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-    }
-    
-    [[SipStackUtils sharedInstance] setRemotePartyNumber:remotePartyPhoneNumber];
-    NSString *remoteUri  = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
-    QianLiAudioCallViewController *audioCallViewController = (QianLiAudioCallViewController *)audioCallNavigationController.topViewController;
-    audioCallViewController.ViewState = Calling;
-    audioCallViewController.remotePartyNumber = remoteUri;
-    [self presentViewController:audioCallNavigationController animated:YES completion:nil];
-    [SipCallManager SharedInstance].audioVC = audioCallViewController;
-    
-    long sID;
-    if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteUri andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])
-    {
-        audioCallViewController.audioSessionID = sID;
-        NSString *imageSessionID = [NSString stringWithFormat:@"%@%@",[UserDataAccessor getUserRemoteParty],remoteUri];
-        [[PictureManager sharedInstance] setImageSession:imageSessionID];
-        
-        // Add to history record
-        DetailHistEvent *event = [[DetailHistEvent alloc] init];
-        event.remoteParty = remotePartyPhoneNumber;
-        event.status = kHistoryEventStatus_Outgoing;
-        event.type = kMediaType_Audio;
-        event.start = [[NSDate date] timeIntervalSince1970];
-        audioCallViewController.activeEvent = event;
-        
-        // Add to main recent
-        [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:remotePartyPhoneNumber Content:NSLocalizedString(@"historyCall", nil) Time:[[NSDate date] timeIntervalSince1970] Type:@"OutGoindCall"];
-        [Utils updateMainHistNameForRemoteParty:remotePartyPhoneNumber];
-    }
-    else{
-    }
-    
+    [[SipCallManager SharedInstance] makeQianliCallToRemote:remotePartyPhoneNumber];
     [MobClick event:@"makeCall" label:@"swipe"];
 }
 

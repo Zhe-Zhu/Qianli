@@ -8,10 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "QianLiAudioCallViewController.h"
+#import "QianLiAppDelegate.h"
 
 @interface SipCallManager : NSObject
 
 @property(nonatomic, weak) QianLiAudioCallViewController *audioVC;
 
 +(SipCallManager *)SharedInstance;
+- (void)makeQianliCallToRemote:(NSString *)remoteParty;
+
 @end

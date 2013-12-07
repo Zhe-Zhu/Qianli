@@ -21,6 +21,7 @@
 #import "MobClick.h"
 #import "Utils.h"
 #import "SVStatusHUD.h"
+#import "SipCallManager.h"
 
 @interface QianLiAudioCallViewController ()
 {
@@ -74,7 +75,8 @@
 @property(nonatomic, weak) DrawingViewController *drawingVC;
 @property(nonatomic, weak) WebViewController *shoppingVC;
 @property(nonatomic, weak) WebBrowser *browser;
-@property(nonatomic, strong) UINavigationControllerPortraitViewController *selectPhotoViewController;
+@property(nonatomic, weak) UINavigationControllerPortraitViewController *selectPhotoViewController;
+@property(nonatomic, weak) CameraViewController *cameraVC;
 
 @property(nonatomic) BOOL didEndCallBySelf;
 
@@ -195,6 +197,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+    [[SipStackUtils sharedInstance].soundService stopRingTone];
 }
 
 - (void)didReceiveMemoryWarning
@@ -760,6 +764,7 @@ void propListener(	void *                  inClientData,
 - (void)selectCamera
 {
     CameraViewController *cameraCV = [[CameraViewController alloc] init];
+    _cameraVC = cameraCV;
     cameraCV.delegate = self;
     UINavigationControllerPortraitViewController *navigationVC = [[UINavigationControllerPortraitViewController alloc] init];
     navigationVC.viewControllers = @[cameraCV];
@@ -977,27 +982,35 @@ void propListener(	void *                  inClientData,
 - (void)dismissAllViewController
 {
     [menuBar dismiss];
-    if (_vedioVC) {
+    if (_vedioVC.presentingViewController) {
         [_vedioVC dismissViewControllerAnimated:NO completion:nil];
     }
-    if (_imageDispVC) {
+    if (_imageDispVC.presentingViewController) {
         [_imageDispVC dismissViewControllerAnimated:NO completion:nil];
     }
-    if (_browser) {
+    if (_browser.presentingViewController) {
         [_browser dismissViewControllerAnimated:NO completion:nil];
     }
-    if (_shoppingVC) {
+    if (_shoppingVC.presentingViewController) {
         [_shoppingVC dismissViewControllerAnimated:NO completion:nil];
     }
-    if (_drawingVC) {
+    if (_drawingVC.presentingViewController) {
         [_drawingVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_cameraVC.presentingViewController) {
+        [_cameraVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_selectPhotoViewController.presentingViewController) {
+        [_selectPhotoViewController dismissViewControllerAnimated:NO completion:nil];
     }
     [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:1.0];
 }
 
 - (void)dismissSelf
 {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        [SipCallManager SharedInstance].audioVC = nil;
+    }];
 }
 
 -(void) updateViewAndState{
@@ -1376,6 +1389,32 @@ void propListener(	void *                  inClientData,
     else if ([message isEqualToString:kLongPressIndicator]){
         CGPoint location = CGPointMake([[words objectAtIndex:1] floatValue],[[words objectAtIndex:2] floatValue]);
         [_imageDispVC showLongPressIndicator:location];
+    }
+    else if ([message isEqualToString:kHangUpcall]){
+        [self hangUpCallFromRemoteParty];
+    }
+}
+
+- (void)hangUpCallFromRemoteParty
+{
+    [[SipStackUtils sharedInstance].audioService hangUpCall];
+    [self dismissAllViewController];
+    [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
+    [timer invalidate]; // 停止计时并从Runloop中释放
+    
+    _didEndCallBySelf = YES;
+    if (_viewState == InCall) {
+        _activeEvent.end = [[NSDate date] timeIntervalSince1970];
+        [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
+    }
+    else if (_viewState == Calling){
+        _activeEvent.end = [[NSDate date] timeIntervalSince1970];
+        _activeEvent.status = kHistoryEventStatus_OutgoingCancelled;
+        [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
+    }
+    if (menuBar) {
+        [menuBar dismiss];
+        menuBar=nil;
     }
 }
 

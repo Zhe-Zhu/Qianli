@@ -41,7 +41,6 @@
     [self.navigationItem setRightBarButtonItem:sendInvitation];
     _sendIvitation = sendInvitation;
     [self.navigationItem setTitle:NSLocalizedString(@"inviteFriend", nil)];
-   // [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
 
     //[_searchBar removeFromSuperview];
     _tableView.tableHeaderView = _searchBar;
@@ -50,7 +49,6 @@
 	{
         [self.searchDisplayController setActive:self.searchWasActive];
         [self.searchDisplayController.searchBar setText:_savedSearchTerm];
-        
         self.savedSearchTerm = nil;
     }
 	
@@ -58,9 +56,6 @@
 	self.searchDisplayController.searchBar.showsCancelButton = NO;
     searchDisplayIsOn = NO;
     
-    if ((!_contacts) | ([_contacts count] == 0)) {
-        [self getAddressBookPermission];
-    }
     //[self performSelectorInBackground:@selector(getAddressBookPermission) withObject:nil];
     
     _tableView.sectionIndexColor = [UIColor colorWithRed:94/255.0 green:201/255.0 blue:217/255.0 alpha:1.0f];
@@ -120,13 +115,18 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if ((!_contacts) | ([_contacts count] == 0)) {
+        [self getAddressBookPermission];
+    }
+    else{
+        [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    }
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    _contacts = nil;
 }
 
 - (void)clearAddressItems
@@ -191,13 +191,13 @@
     NSMutableArray *addressBookTemp = [NSMutableArray array];
     
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBooks);
-    CFIndex nPeople = ABAddressBookGetPersonCount(addressBooks);
-    
-    
-    for (NSInteger i = 0; i < nPeople; i++)
+    for (NSInteger i = 0; i < CFArrayGetCount(allPeople); i++)
     {
         QianLiAddressBookItem *addressBook = [[QianLiAddressBookItem alloc] init];
         ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
+        if (person == nil) {
+            continue;
+        }
         NSString *nameString = (__bridge_transfer NSString *) ABRecordCopyValue(person, kABPersonFirstNameProperty);
         NSString *lastNameString = (__bridge_transfer  NSString *) ABRecordCopyValue(person, kABPersonLastNameProperty);
         NSString *abFullName = nil;
@@ -207,7 +207,7 @@
         
         //Save thumbnail image - performance decreasing
         UIImage *personImage = nil;
-        if (person != nil && ABPersonHasImageData(person)) {
+        if (ABPersonHasImageData(person)) {
             if ( &ABPersonCopyImageDataWithFormat != nil ) {
                 // iOS >= 4.1
                 CFDataRef contactThumbnailData = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
@@ -285,19 +285,18 @@
     
     NSInteger highSection = [[theCollation sectionTitles] count];
     NSMutableArray *sectionArrays = [NSMutableArray arrayWithCapacity:highSection];
-    for (int i = 0; i <= highSection; i++) {
+    for (int i = 0; i < highSection; i++) {
         NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity: 1];
         [sectionArrays addObject:sectionArray];
     }
-    
     for (QianLiAddressBookItem *addressBook in addressBookTemp) {
         [(NSMutableArray *)[sectionArrays objectAtIndex:addressBook.sectionNumber] addObject:addressBook];
     }
-    
     for (NSMutableArray *sectionArray in sectionArrays) {
         NSArray *sortedSection = [theCollation sortedArrayFromArray:sectionArray collationStringSelector:@selector(name)];
         [_contacts addObject:sortedSection];
     }
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 #pragma mark - Table View
@@ -308,7 +307,6 @@
 	} else {
         return [_contacts count];
     }
-    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -323,9 +321,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"ContactTableViewCell";
-    
 	ContactTableViewCell *contactCell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	
 	if (contactCell == nil) {
 		contactCell = [[ContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 		contactCell.frame = CGRectMake(0.0, 0.0, 320.0, 44);
@@ -336,18 +332,17 @@
         contact = (QianLiAddressBookItem *)[_filteredListContent objectAtIndex:indexPath.row];
     }
 	else{
-        contact = (QianLiAddressBookItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        if ((indexPath.section < [_contacts count]) && (indexPath.row < [(NSMutableArray *)[_contacts objectAtIndex:indexPath.section] count])) {
+            contact = (QianLiAddressBookItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        }
     }
     
     if (!contact.thumbnail) {
         contact.thumbnail = [UIImage imageNamed:@"blank.png"];
     }
     [contactCell setContactProfile: contact NeedIcon:NO];
-    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	[button setFrame:CGRectMake(30.0, 0.0, 29, 29)];
-    //	[button setBackgroundImage:[UIImage imageNamed:@"uncheckBox.png"] forState:UIControlStateNormal];
-    //    [button setBackgroundImage:[UIImage imageNamed:@"checkBox.png"] forState:UIControlStateSelected];
 	[button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
     [button setSelected:contact.rowSelected];
     
@@ -367,16 +362,6 @@
 {
     // Return NO if you do not want the specified item to be editable.
     return NO;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_contacts removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-    }
 }
 
 // Add vertical index for fast location
@@ -477,8 +462,6 @@
                 [cell.checkBox setHidden:YES];
             }];
         }
-        
-        
     }
     [self.searchDisplayController.searchResultsTableView reloadData];
 }
