@@ -146,8 +146,18 @@ static SipStackUtils * sipStackUtilsInstance;
 				else {
                     // "on3G and use3G" or on WiFi
 					// stop stack => clean up all dialogs
+                    BOOL willSendMessage = NO;
+                    NSString *str;
+                    if ([SipCallManager SharedInstance].audioVC) {
+                        willSendMessage = YES;
+                        str = [SipCallManager SharedInstance].audioVC.remotePartyNumber;
+                    }
 					[[NgnEngine sharedInstance].sipService stopStackSynchronously];
 					[[NgnEngine sharedInstance].sipService registerIdentity];
+                    
+                    if (willSendMessage) {
+                        [[SipStackUtils sharedInstance].messageService sendMessage:kHangUpcall toRemoteParty:str];
+                    }
 				}
                 
                 // download history
@@ -158,7 +168,7 @@ static SipStackUtils * sipStackUtilsInstance;
             else{
                 // the network becomes unreachable.
                 if([NgnEngine sharedInstance].sipService.registered){
-                    [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+                    [[NgnEngine sharedInstance].sipService stopStackAsynchronously];
                 }
             }
 			break;
@@ -320,7 +330,7 @@ static SipStackUtils * sipStackUtilsInstance;
                         return;
                     }
                     else{
-                        
+                        return;
                     }
                 }
                 self.remoteParty = [self getRemoteParty:remotePartyUri];
@@ -352,7 +362,7 @@ static SipStackUtils * sipStackUtilsInstance;
                         return;
                     }
                     else{
-                        
+                        return;
                     }
                 }
                 self.remoteParty = [self getRemoteParty:remotePartyUri];

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		184EB7781851C91C00D70240 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D57182C8AF8001536CB /* libMobClickLibrary.a */; };
+		184EB7791851C91C00D70240 /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D76182C9E15001536CB /* libUMFeedback.a */; };
 		2F81373117AFB54500DB23F2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F81373017AFB54500DB23F2 /* UIKit.framework */; };
 		2F81373317AFB54500DB23F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F81373217AFB54500DB23F2 /* Foundation.framework */; };
 		2F81373517AFB54500DB23F2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F81373417AFB54500DB23F2 /* CoreGraphics.framework */; };
@@ -97,8 +99,6 @@
 		505A07AC17B0B82A0053E1B7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 505A07AB17B0B82A0053E1B7 /* SystemConfiguration.framework */; };
 		50630D2F17E02292004C12BB /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 50630D2E17E02292004C12BB /* SSKeychain.m */; };
 		5071E8CD17F72EFF009BED0D /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5071E8CC17F72EFF009BED0D /* HelpViewController.m */; };
-		5078C95E183378BA00568BDD /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D76182C9E15001536CB /* libUMFeedback.a */; };
-		5078C97B18337AB500568BDD /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D57182C8AF8001536CB /* libMobClickLibrary.a */; };
 		507B180618115DF300DE6D88 /* WebHistoryDataAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B180518115DF300DE6D88 /* WebHistoryDataAccessor.m */; };
 		507B182218116ADA00DE6D88 /* WebHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 507B182118116ADA00DE6D88 /* WebHistoryCell.m */; };
 		508FB36A1846DB05002559CF /* DetailHistoryAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FB3691846DB05002559CF /* DetailHistoryAccessor.m */; };
@@ -815,9 +815,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				184EB7781851C91C00D70240 /* libMobClickLibrary.a in Frameworks */,
+				184EB7791851C91C00D70240 /* libUMFeedback.a in Frameworks */,
 				CE1E8CAE1842F61D00A956A2 /* libPods.a in Frameworks */,
-				5078C97B18337AB500568BDD /* libMobClickLibrary.a in Frameworks */,
-				5078C95E183378BA00568BDD /* libUMFeedback.a in Frameworks */,
 				CE5D0D74182C8B38001536CB /* libz.dylib in Frameworks */,
 				5096C7C2180C475A00931C69 /* CoreFoundation.framework in Frameworks */,
 				5096C7C3180C475A00931C69 /* CoreImage.framework in Frameworks */,
@@ -984,9 +984,9 @@
 				50B1D63417CB2E5500DC67E7 /* ImagePickerViewController.h */,
 				50B1D63517CB2E5500DC67E7 /* ImagePickerViewController.mm */,
 				50B1D63917CB34E000DC67E7 /* AssetGroupPickerController.h */,
+				50B1D63A17CB34E000DC67E7 /* AssetGroupPickerController.mm */,
 				CE1E8CC91843374700A956A2 /* AboutQianLiViewController.h */,
 				CE1E8CCA1843374700A956A2 /* AboutQianLiViewController.m */,
-				50B1D63A17CB34E000DC67E7 /* AssetGroupPickerController.mm */,
 				CE345FA117CB14FA009D52D4 /* SettingViewController.h */,
 				CE345FA217CB14FA009D52D4 /* SettingViewController.mm */,
 				CE8027AA17DF102200E84BC9 /* SettingProfileViewController.h */,
@@ -2014,8 +2014,8 @@
 			baseConfigurationReference = DE0DB9F8308441E09E15B242 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: zhe zhu (2R9T57S85A)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhe zhu (2R9T57S85A)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_LIBS = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/i386;
 				"DOUBANGO_LIBS[arch=armv7]" = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/armv7;
@@ -2058,6 +2058,7 @@
 					$DOUBANGO_LIBS,
 					"/Users/user/Documents/Workspace/Objective-C/QianLiWithVoiceModuleForUse/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK",
 					/Users/albert/Desktop/lutanSVN/QianLiWithVoiceModule/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK,
+					"/Users/Apple/Desktop/Qianli-github/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK",
 				);
 				NGN_STACK_HOME = ..;
 				ONLY_ACTIVE_ARCH = NO;
@@ -2097,8 +2098,8 @@
 			baseConfigurationReference = DE0DB9F8308441E09E15B242 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: zhe zhu (2R9T57S85A)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhe zhu (2R9T57S85A)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_LIBS = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/i386;
 				"DOUBANGO_LIBS[arch=armv7]" = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/armv7;
@@ -2141,6 +2142,7 @@
 					$DOUBANGO_LIBS,
 					"/Users/user/Documents/Workspace/Objective-C/QianLiWithVoiceModuleForUse/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK",
 					/Users/albert/Desktop/lutanSVN/QianLiWithVoiceModule/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK,
+					"/Users/Apple/Desktop/Qianli-github/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK",
 				);
 				NGN_STACK_HOME = ..;
 				ONLY_ACTIVE_ARCH = NO;

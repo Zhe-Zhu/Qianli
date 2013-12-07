@@ -50,7 +50,6 @@
 	{
         [self.searchDisplayController setActive:self.searchWasActive];
         [self.searchDisplayController.searchBar setText:_savedSearchTerm];
-        
         self.savedSearchTerm = nil;
     }
 	
@@ -126,7 +125,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    _contacts = nil;
 }
 
 - (void)clearAddressItems
@@ -191,10 +189,7 @@
     NSMutableArray *addressBookTemp = [NSMutableArray array];
     
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBooks);
-    CFIndex nPeople = ABAddressBookGetPersonCount(addressBooks);
-    
-    
-    for (NSInteger i = 0; i < nPeople; i++)
+    for (NSInteger i = 0; i < CFArrayGetCount(allPeople); i++)
     {
         QianLiAddressBookItem *addressBook = [[QianLiAddressBookItem alloc] init];
         ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
@@ -285,7 +280,7 @@
     
     NSInteger highSection = [[theCollation sectionTitles] count];
     NSMutableArray *sectionArrays = [NSMutableArray arrayWithCapacity:highSection];
-    for (int i = 0; i <= highSection; i++) {
+    for (int i = 0; i < highSection; i++) {
         NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity: 1];
         [sectionArrays addObject:sectionArray];
     }
@@ -308,7 +303,6 @@
 	} else {
         return [_contacts count];
     }
-    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -346,8 +340,6 @@
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	[button setFrame:CGRectMake(30.0, 0.0, 29, 29)];
-    //	[button setBackgroundImage:[UIImage imageNamed:@"uncheckBox.png"] forState:UIControlStateNormal];
-    //    [button setBackgroundImage:[UIImage imageNamed:@"checkBox.png"] forState:UIControlStateSelected];
 	[button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
     [button setSelected:contact.rowSelected];
     
@@ -367,16 +359,6 @@
 {
     // Return NO if you do not want the specified item to be editable.
     return NO;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_contacts removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-    }
 }
 
 // Add vertical index for fast location
@@ -477,8 +459,6 @@
                 [cell.checkBox setHidden:YES];
             }];
         }
-        
-        
     }
     [self.searchDisplayController.searchResultsTableView reloadData];
 }
