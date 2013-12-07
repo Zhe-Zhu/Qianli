@@ -42,12 +42,8 @@
 //    self.navigationItem.rightBarButtonItem = cancelButton;
     self.navigationItem.leftBarButtonItem = cancelButton;
     isFirstLoad = YES;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
     
+    // Load asset
     if (!_assetsLibrary) {
         _assetsLibrary = [[ALAssetsLibrary alloc] init];
     }
@@ -58,14 +54,16 @@
     }
     
     ALAssetsLibraryGroupsEnumerationResultsBlock listGroupBlock = ^(ALAssetsGroup *group, BOOL *stop) {
-        
         if (group) {
-            [_groups addObject:group];
+            if ([[group valueForProperty:ALAssetsGroupPropertyType] integerValue]!=32) {
+                // 不加入照片流的图片
+                // TODO 考虑如何加入照片流的图片
+                [_groups addObject:group];
+            }
         } else {
             // 把groups的顺序反转, 更方便用户查看
             NSEnumerator *enumerator = [_groups reverseObjectEnumerator];
             _groups = [[NSMutableArray alloc] initWithArray:[enumerator allObjects]];
-            
             [self.assetGroupTableview performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
         }
     };
@@ -75,7 +73,11 @@
     
     NSUInteger groupTypes = ALAssetsGroupAll;
     [_assetsLibrary enumerateGroupsWithTypes:groupTypes usingBlock:listGroupBlock failureBlock:failureBlock];
+}
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
     NSIndexPath *selectdPath = [_assetGroupTableview indexPathForSelectedRow];
     [_assetGroupTableview deselectRowAtIndexPath:selectdPath animated:YES];
@@ -98,7 +100,6 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [_groups removeAllObjects];
 }
 
 - (void)didReceiveMemoryWarning
