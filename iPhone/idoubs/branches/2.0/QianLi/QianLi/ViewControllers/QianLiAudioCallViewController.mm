@@ -936,12 +936,16 @@ void propListener(	void *                  inClientData,
 			break;
 		}
 		case INVITE_EVENT_TERMWAIT:
+            [SipStackUtils sharedInstance].audioService.audioSession = nil;
+//            if (_viewState == Calling) {
+//                [[SipStackUtils sharedInstance].audioService releaseAudioSession];
+//            }
         case INVITE_EVENT_TERMINATED:
 		{
 			// updates view and state
 			// releases session
 			// starts timer suicide
-            //[[SipStackUtils sharedInstance].audioService releaseAudioSession];
+            [SipStackUtils sharedInstance].audioService.audioSession = nil;
             [self timerSuicideTick];
 			break;
 		}
@@ -1035,6 +1039,9 @@ void propListener(	void *                  inClientData,
                 [[SipStackUtils sharedInstance].soundService stopRingBackTone];
                 [[SipStackUtils sharedInstance].soundService stopRingTone];
                 [self changeViewAppearanceToInCall];
+                if (_isSpeakerOn) {
+                    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
+                }
 				break;
 			}
 			case INVITE_STATE_TERMINATED:

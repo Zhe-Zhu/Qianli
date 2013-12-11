@@ -34,7 +34,7 @@
     [self.nameTextField becomeFirstResponder];
     self.nameTextField.delegate = self;
     NSString *name = [UserDataAccessor getUserName];
-    if (name) {
+    if (!name) {
         self.nameTextField.placeholder = NSLocalizedString(@"inputName", nil);
     }
     else{

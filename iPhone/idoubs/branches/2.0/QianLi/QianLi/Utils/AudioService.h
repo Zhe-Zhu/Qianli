@@ -10,10 +10,12 @@
 #import "iOSNgnStack.h"
 
 // this class is the warpper of NgnAVSession of IOS-NGN-Stack
-@interface AudioService : NSObject
+@interface AudioService : NSObject{
+}
 
 // currently on going audio session id
 @property(nonatomic, assign)long sessionID;
+@property(nonatomic, strong)NgnAVSession * audioSession;
 
 // make a audio call
 - (BOOL)makeAudioCallWithRemoteParty: (NSString*) remoteUri andSipStack: (NgnSipStack*) sipStack sessionid:(long *)sessionID;

@@ -175,7 +175,7 @@ const float kColorB = 60/100.0;
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         // Register remote notification
         UIApplication *app = [UIApplication sharedApplication];
-        [app registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+        [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
     }
     else{
         if ([userDefaults boolForKey:@"noHelp"]) {
@@ -211,7 +211,7 @@ const float kColorB = 60/100.0;
     [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
     // Register remote notification
     UIApplication *app = [UIApplication sharedApplication];
-    [app registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+    [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
 }
 
 - (void)configureSip

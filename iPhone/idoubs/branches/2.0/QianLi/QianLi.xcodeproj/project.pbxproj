@@ -1457,6 +1457,11 @@
 				CLASSPREFIX = QianLi;
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Ash Studio";
+				TargetAttributes = {
+					2F81372B17AFB54500DB23F2 = {
+						DevelopmentTeam = 87N4K2M736;
+					};
+				};
 			};
 			buildConfigurationList = 2F81372617AFB54500DB23F2 /* Build configuration list for PBXProject "QianLi" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1975,7 +1980,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "6BE1F9A5-7DD7-4A1F-9182-A91A341C3596";
+				PROVISIONING_PROFILE = "61F770EF-1ECE-49B2-8C7A-C2C7349CFCB4";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1998,7 +2003,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "6BE1F9A5-7DD7-4A1F-9182-A91A341C3596";
+				PROVISIONING_PROFILE = "61F770EF-1ECE-49B2-8C7A-C2C7349CFCB4";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2009,8 +2014,8 @@
 			baseConfigurationReference = DE0DB9F8308441E09E15B242 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: zhe zhu (2R9T57S85A)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhe zhu (2R9T57S85A)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_LIBS = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/i386;
 				"DOUBANGO_LIBS[arch=armv7]" = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/armv7;
@@ -2082,7 +2087,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6BE1F9A5-7DD7-4A1F-9182-A91A341C3596";
+				PROVISIONING_PROFILE = "";
 				VALID_ARCHS = "arm64 armv7";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2093,8 +2098,8 @@
 			baseConfigurationReference = DE0DB9F8308441E09E15B242 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: zhe zhu (2R9T57S85A)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhe zhu (2R9T57S85A)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_LIBS = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/i386;
 				"DOUBANGO_LIBS[arch=armv7]" = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/armv7;
@@ -2166,7 +2171,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6BE1F9A5-7DD7-4A1F-9182-A91A341C3596";
+				PROVISIONING_PROFILE = "";
 				VALID_ARCHS = "arm64 armv7";
 				WRAPPER_EXTENSION = app;
 			};

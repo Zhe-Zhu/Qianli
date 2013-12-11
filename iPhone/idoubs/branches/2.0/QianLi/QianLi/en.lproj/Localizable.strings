@@ -140,6 +140,7 @@
 "friday" = "Friday";
 "saturday" = "Saturday";
 "sunday" = "Sunday";
+"PM" = "PM";
 
 "version" = "Version";
 "labelAbout" = "About Qianli";
@@ -153,3 +154,6 @@
 "appointmentNoName" = "Call me maybe?";
 "hudEarphone" = "Earphone Plugged";
 "cancelDoodle" = "Cancel doodle";
+
+"Notice" = "notice";
+"TerminateCall" = "The call is terminated due to no internet access anymore. Try again when internet access is available again!";

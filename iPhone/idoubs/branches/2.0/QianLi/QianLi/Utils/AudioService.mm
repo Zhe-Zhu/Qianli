@@ -14,11 +14,9 @@
 {
  @private
     long _sessionID;
-	NgnAVSession* _audioSession;
-    
+    NgnAVSession* _audioSession;
 }
 
-@property(nonatomic, strong)NgnAVSession * audioSession;
 @end
 
 @implementation AudioService
@@ -68,15 +66,13 @@
 {
     _sessionID = sessionID;
     _audioSession = nil;
-    _audioSession = [NgnAVSession getSessionWithId: sessionID];
+    self.audioSession = [NgnAVSession getSessionWithId: sessionID];
 }
 
 
 - (BOOL)doesExistOnGoingAudioSession
 {
-
     return (_audioSession != nil);
-    
 }
 
 - (BOOL)hasActiveSession
@@ -91,7 +87,6 @@
 
 - (InviteState_t)getAudioSessionState
 {
-    
 	if(_audioSession != nil)
     {
         return _audioSession.state;
@@ -119,10 +114,14 @@
 
 - (void)releaseAudioSession
 {
-	if(_audioSession != nil)
-    {
-        NgnAVSession * aSession = _audioSession;
-        [NgnAVSession releaseSession: &aSession];
+//	if(self.audioSession != nil)
+//    {
+//        NgnAVSession * aSession = self.audioSession;
+//        [NgnAVSession releaseSession: &aSession];
+//    }
+    NgnAVSession * aSession = [NgnAVSession getSessionWithId: _sessionID];
+    if (aSession) {
+        [NgnAVSession releaseSession:&aSession];
     }
 }
 

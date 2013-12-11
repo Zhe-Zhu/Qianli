@@ -152,12 +152,14 @@ static SipStackUtils * sipStackUtilsInstance;
                         willSendMessage = YES;
                         str = [SipCallManager SharedInstance].audioVC.remotePartyNumber;
                     }
+                    
 					[[NgnEngine sharedInstance].sipService stopStackSynchronously];
 					[[NgnEngine sharedInstance].sipService registerIdentity];
-                    
                     if (willSendMessage) {
                         [[SipStackUtils sharedInstance].messageService sendMessage:kHangUpcall toRemoteParty:str];
                     }
+                    
+                    //TODO: add uialertview
 				}
                 
                 // download history
@@ -168,7 +170,11 @@ static SipStackUtils * sipStackUtilsInstance;
             else{
                 // the network becomes unreachable.
                 if([NgnEngine sharedInstance].sipService.registered){
-                    [[NgnEngine sharedInstance].sipService stopStackAsynchronously];
+                    [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+                }
+                if ([SipCallManager SharedInstance].audioVC) {
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notice", nil) message:NSLocalizedString(@"TerminateCall", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"iknow", nil) otherButtonTitles: nil];
+                    [alertView show];
                 }
             }
 			break;

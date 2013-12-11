@@ -437,6 +437,7 @@
     [_doodlebackView removeFromSuperview];
     [_doodleView removeFromSuperview];
     [_doodleToolBar removeFromSuperview];
+    [self.navigationItem.leftBarButtonItem setTitle:NSLocalizedString(@"Cancel", nil)];
 }
 
 - (IBAction)addMoreImage:(id)sender
