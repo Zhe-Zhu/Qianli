@@ -148,6 +148,7 @@
 "friday" = "星期五";
 "saturday" = "星期六";
 "sunday" = "星期天";
+"PM" = "下午";
 
 "version" = "版本";
 "labelAbout" = "关于千里";
@@ -162,3 +163,6 @@
 "appointmentNoName" = "有空的话给我回个电话吧?";
 "hudEarphone" = "耳机插入中";
 "cancelDoodle" = "取消涂鸦";
+
+"Notice" = "通知";
+"TerminateCall" = "你的网络连接断开了，导致千里挂断了电话，请连接网络后在拨打千里电话！";
