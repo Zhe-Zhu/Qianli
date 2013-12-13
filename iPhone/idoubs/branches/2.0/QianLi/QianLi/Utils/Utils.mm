@@ -93,11 +93,12 @@
     // 计算今天凌晨时间,判断发送时间是否在今天之内
     NSDate *todayDawnTime = [dateFormatter dateFromString:timeString];
     NSTimeInterval passTime = [referenceDate timeIntervalSinceDate:todayDawnTime];
-    if (passTime>=0 && passTime < 60*60*24) {
+    if (passTime>=0 && passTime < 60 * 60 * 24) {
         // 在今天之内
         NSDateFormatter *todayFormatter = [[NSDateFormatter alloc] init];
         [todayFormatter setDateFormat:@"aah:mm"];
-        timeString = [todayFormatter stringFromDate:referenceDate];
+        NSString *str = [todayFormatter stringFromDate:referenceDate];
+        timeString = [str stringByReplacingOccurrencesOfString:@"PM" withString:NSLocalizedString(@"PM", nil)];
     }
     else if (passTime < 0 && passTime >= -60*60*24) {
         timeString = NSLocalizedString(@"yesterday", nil);

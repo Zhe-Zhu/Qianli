@@ -501,10 +501,10 @@
 			default:
 				return nil;
 		}
-		NgnAVSession* avSession = [[[NgnAVSession alloc] internalInit: sipStack 
+		NgnAVSession* avSession = [[NgnAVSession alloc] internalInit: sipStack
 													   andCallSession: session 
 													   andMediaType: media 
-													   andState: INVITE_STATE_INCOMING] autorelease];
+													   andState: INVITE_STATE_INCOMING];
 		if(avSession){
 			if (sipMessage){
 				char* _fHeaderValue = const_cast<SipMessage*>(sipMessage)->getSipHeaderValue("f");
@@ -512,6 +512,7 @@
 				TSK_FREE(_fHeaderValue);
 			}
 			[kSessions setObject: avSession forKey:[avSession getIdAsNumber]];
+            [avSession release];
 			return avSession;
 		}
 	}
@@ -521,10 +522,11 @@
 +(NgnAVSession*) createOutgoingSessionWithSipStack: (NgnSipStack*) sipStack andMediaType: (NgnMediaType_t) media{
 	NgnAVSession* avSession;
 	@synchronized (kSessions){
-		avSession = [[[NgnAVSession alloc] internalInit:sipStack andCallSession:tsk_null andMediaType:media andState:INVITE_STATE_INPROGRESS] autorelease];
+		avSession = [[NgnAVSession alloc] internalInit:sipStack andCallSession:tsk_null andMediaType:media andState:INVITE_STATE_INPROGRESS];
 		if(avSession){
 			[kSessions setObject:avSession forKey:[avSession getIdAsNumber]];
 		}
+        [avSession release];
 	}
 	return avSession;
 }

@@ -78,7 +78,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     NSIndexPath *selectdPath = [_assetGroupTableview indexPathForSelectedRow];
     [_assetGroupTableview deselectRowAtIndexPath:selectdPath animated:YES];
 }
