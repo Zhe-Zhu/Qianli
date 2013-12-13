@@ -141,6 +141,7 @@
 "saturday" = "Saturday";
 "sunday" = "Sunday";
 "PM" = "PM";
+"AM" = "AM";
 
 "version" = "Version";
 "labelAbout" = "About Qianli";
