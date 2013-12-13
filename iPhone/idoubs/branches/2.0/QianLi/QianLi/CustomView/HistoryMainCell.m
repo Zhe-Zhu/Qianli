@@ -367,12 +367,19 @@
         [UIView animateWithDuration:self.animationDuration animations:^{
             [self.phoneIconImageView setFrame:CGRectMake(CGRectGetMaxX(self.frame)+10, CGRectGetMinY(self.phoneIconImageView.frame), CGRectGetWidth(self.phoneIconImageView.frame), CGRectGetHeight(self.phoneIconImageView.frame))];
             [self.phoneText setFrame:CGRectMake(CGRectGetMaxX(self.contentView.frame)+45, CGRectGetMinY(self.phoneText.frame), CGRectGetWidth(self.phoneText.frame), CGRectGetHeight(self.phoneText.frame))];
-        }];
-        if (point.x < -kTriggerLength) {
-            if ([self.historyMainCelldelegate respondsToSelector:@selector(makeACall:)]) {
-                [self.historyMainCelldelegate makeACall:self];
+        } completion:^(BOOL finished) {
+            if (point.x < -kTriggerLength) {
+                if ([self.historyMainCelldelegate respondsToSelector:@selector(makeACall:)]) {
+                    [self.historyMainCelldelegate makeACall:self];
+                }
             }
-        }
+        }];
+        
+//        if (point.x < -kTriggerLength) {
+//            if ([self.historyMainCelldelegate respondsToSelector:@selector(makeACall:)]) {
+//                [self.historyMainCelldelegate makeACall:self];
+//            }
+//        }
     }
     // 调用取消该预约的函数
     if (self.isRequested == YES) {
