@@ -352,7 +352,7 @@
         [contactCell.checkBox setHidden:NO];
         contactCell.checkBox.frame = CGRectMake(275.5-25/2.0, 22.4-25/2.0, 25, 25);
     } else {
-    [contactCell.checkBox setHidden:YES];
+        [contactCell.checkBox setHidden:YES];
     }
     
 	return contactCell;

@@ -11,6 +11,7 @@
 #import "UserDataAccessor.h"
 #import "SettingChangeNameViewController.h"
 #import "BigPhotoEditViewController.h"
+#import "QianLiImagePickerViewController.h"
 
 @interface SettingProfileViewController : UITableViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, EditProfileDelegate, SettingChangeNameDelegate, PhotoEditProfileDelegate>
 

@@ -19,7 +19,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellAvatar;
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellBigPhoto;
-@property (weak, nonatomic) UIImagePickerController *imagePicker;
+@property (weak, nonatomic) QianLiImagePickerViewController *imagePicker;
 @property (weak, nonatomic) IBOutlet UILabel *labelAvatar;
 @property (weak, nonatomic) IBOutlet UILabel *labelBigPhoto;
 @property (weak, nonatomic) IBOutlet UILabel *labelName;
@@ -203,16 +203,16 @@
 - (void)openPhotoSourceWithIndex:(NSInteger)indicator
 {
     if (indicator == 0) {
-        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == NO){
+        if ([QianLiImagePickerViewController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == NO){
             return;
         }
         
-        UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
+        QianLiImagePickerViewController *mediaUI = [[QianLiImagePickerViewController alloc] init];
         mediaUI.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         _imagePicker = mediaUI;
         // Displays saved pictures and movies, if both are available, from the
         // Camera Roll album.  UIImagePickerControllerSourceTypeSavedPhotosAlbum
-        mediaUI.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        mediaUI.mediaTypes = [QianLiImagePickerViewController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
         
         // Hides the controls for moving & scaling pictures, or for
         // trimming movies. To instead show the controls, use YES.
@@ -221,16 +221,16 @@
         [self presentViewController: mediaUI animated: YES completion:nil];
     }
     else if (indicator == 1){
-        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO){
+        if ([QianLiImagePickerViewController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO){
             return;
         }
         
-        UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
+        QianLiImagePickerViewController *mediaUI = [[QianLiImagePickerViewController alloc] init];
         mediaUI.sourceType = UIImagePickerControllerSourceTypeCamera;
         _imagePicker = mediaUI;
         // Displays saved pictures and movies, if both are available, from the
         // Camera Roll album.
-        mediaUI.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType: UIImagePickerControllerSourceTypeCamera];
+        mediaUI.mediaTypes = [QianLiImagePickerViewController availableMediaTypesForSourceType: UIImagePickerControllerSourceTypeCamera];
         
         // Hides the controls for moving & scaling pictures, or for
         // trimming movies. To instead show the controls, use YES.
