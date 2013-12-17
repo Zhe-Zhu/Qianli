@@ -97,91 +97,73 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    str = [str stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"[]"]];
-    NSArray *itemArray = [str componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"{}"]];
-    NSMutableArray *mutableItems = [NSMutableArray arrayWithArray:itemArray];
-    if ([mutableItems count] == 0) {
+    NSError *error;
+    NSArray *JsonArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    
+    if ([JsonArray count] == 0) {
         _didFinishUpdateHist = YES;
         return;
     }
-    NSInteger number = 0;
-    BOOL hasEntry = NO;
+    if (error) {
+        _didFinishUpdateHist = YES;
+        return;
+    }
     
-    for (NSString *string in mutableItems) {
-        if (![string isEqualToString:@""] && ![string isEqualToString:@","]) {
-            NSArray *subArray = [string componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
-            NSString *remoteParty, *type, *dateStr;
-            for (int i = 0; i < [subArray count]; ++i) {
-                NSString *strItem = [subArray objectAtIndex:i];
-                if ([strItem isEqualToString:@"calling_number"]) {
-                    if ([subArray count] > (i + 2)) {
-                        remoteParty = [subArray objectAtIndex:i + 2];
-                    }
-                }
-                if ([strItem isEqualToString:@"calling_type"]) {
-                    if ([subArray count] > (i + 2)) {
-                        type = [subArray objectAtIndex:i + 2];
-                    }
-                }
-                if ([strItem isEqualToString:@"calling_date"]) {
-                    if ([subArray count] > (i + 2)) {
-                        dateStr = [subArray objectAtIndex:i + 2];
-                    }
-                }
-                hasEntry = YES;
-            }
-            // 1 missed call
-            if ([type isEqualToString:@"1"]) {
-                number ++;
-                
-                DetailHistEvent *event = [[DetailHistEvent alloc] init];
-                event.status = kHistoryEventStatus_Missed;
-                event.type = kMediaType_Audio;
-                event.remoteParty = remoteParty;
-                
-                NSArray *dateArray = [dateStr componentsSeparatedByString:@"."];
-                NSDate *date = [self getDateFromRFC3339DateTimeString:[NSString stringWithFormat:@"%@%@",[dateArray objectAtIndex:0], @"Z"]];
-                double startingTime = [date timeIntervalSince1970];
-                event.start = startingTime;
-                event.end = startingTime;
-                [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:YES];
-                
-                NSString *contentStr = NSLocalizedString(@"historyDetailMissedCall", nil);
-                NSArray *array = @[remoteParty, contentStr, [NSNumber numberWithDouble:startingTime], @"MissedCall"];
-                [self performSelectorOnMainThread:@selector(writeHistory:) withObject:array waitUntilDone:YES];
-            }
-            // 2 appointment
-            else if ([type isEqualToString:@"0"]){
-                number ++;
-                DetailHistEvent *event = [[DetailHistEvent alloc] init];
-                event.type = kMediaType_Audio;
-                event.remoteParty = remoteParty;
-                event.status = kHistoryEventStatus_Appointment;
-                
-                NSArray *dateArray = [dateStr componentsSeparatedByString:@"."];
-                NSDate *date = [self getDateFromRFC3339DateTimeString:[NSString stringWithFormat:@"%@%@",[dateArray objectAtIndex:0], @"Z"]];
-                double startingTime = [date timeIntervalSince1970];
-                event.start = startingTime;
-                event.end = startingTime;
-                [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:YES];
-//                NSString *contentStr = [NSString stringWithFormat:@"Appointment from %@", name];
-                NSString *contentStr = NSLocalizedString(@"appointmentNoName", nil);
-                NSArray *array = @[remoteParty, contentStr, [NSNumber numberWithDouble:startingTime], @"Appointment"];
-                [self performSelectorOnMainThread:@selector(writeHistory:) withObject:array waitUntilDone:YES];
-            }
+    NSInteger number = 0;
+    for (NSDictionary *dict in JsonArray) {
+        NSString *remoteParty, *type, *dateStr;
+        remoteParty = [dict objectForKey:@"calling_number"];
+        type = [dict objectForKey:@"calling_type"];
+        dateStr = [dict objectForKey:@"calling_date"];
+
+        // 1 missed call
+        if ([type isEqualToString:@"1"]) {
+            number ++;
+            
+            DetailHistEvent *event = [[DetailHistEvent alloc] init];
+            event.status = kHistoryEventStatus_Missed;
+            event.type = kMediaType_Audio;
+            event.remoteParty = remoteParty;
+            
+            NSArray *dateArray = [dateStr componentsSeparatedByString:@"."];
+            NSDate *date = [self getDateFromRFC3339DateTimeString:[NSString stringWithFormat:@"%@%@",[dateArray objectAtIndex:0], @"Z"]];
+            double startingTime = [date timeIntervalSince1970];
+            event.start = startingTime;
+            event.end = startingTime;
+            [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:YES];
+            
+            NSString *contentStr = NSLocalizedString(@"historyDetailMissedCall", nil);
+            NSArray *array = @[remoteParty, contentStr, [NSNumber numberWithDouble:startingTime], @"MissedCall"];
+            [self performSelectorOnMainThread:@selector(writeHistory:) withObject:array waitUntilDone:YES];
+        }
+        // 2 appointment
+        else if ([type isEqualToString:@"0"]){
+            number ++;
+            DetailHistEvent *event = [[DetailHistEvent alloc] init];
+            event.type = kMediaType_Audio;
+            event.remoteParty = remoteParty;
+            event.status = kHistoryEventStatus_Appointment;
+            
+            NSArray *dateArray = [dateStr componentsSeparatedByString:@"."];
+            NSDate *date = [self getDateFromRFC3339DateTimeString:[NSString stringWithFormat:@"%@%@",[dateArray objectAtIndex:0], @"Z"]];
+            double startingTime = [date timeIntervalSince1970];
+            event.start = startingTime;
+            event.end = startingTime;
+            [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:YES];
+            //                NSString *contentStr = [NSString stringWithFormat:@"Appointment from %@", name];
+            NSString *contentStr = NSLocalizedString(@"appointmentNoName", nil);
+            NSArray *array = @[remoteParty, contentStr, [NSNumber numberWithDouble:startingTime], @"Appointment"];
+            [self performSelectorOnMainThread:@selector(writeHistory:) withObject:array waitUntilDone:YES];
         }
     }
     _didFinishUpdateHist = YES;
-    if (hasEntry) {
-        if (_willVibrate) {
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-        }
-        NSNotification *notif = [NSNotification notificationWithName:kHistoryChangedNotification object:nil];
-        [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notif waitUntilDone:NO];
-        QianLiAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-        [appDelegate setTabItemBadge:number + [appDelegate getTabItemBadge]];
+    if (_willVibrate) {
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
+    NSNotification *notif = [NSNotification notificationWithName:kHistoryChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notif waitUntilDone:NO];
+    QianLiAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate setTabItemBadge:number + [appDelegate getTabItemBadge]];
 }
 
 - (NSDate *)getDateFromRFC3339DateTimeString:(NSString *)rfc3339DateTimeString

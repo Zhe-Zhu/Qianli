@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1830D5FC185B15CE009E5D19 /* QianLiImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830D5FB185B15CE009E5D19 /* QianLiImagePickerViewController.m */; };
 		184EB7781851C91C00D70240 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D57182C8AF8001536CB /* libMobClickLibrary.a */; };
 		184EB7791851C91C00D70240 /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D76182C9E15001536CB /* libUMFeedback.a */; };
 		2F81373117AFB54500DB23F2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F81373017AFB54500DB23F2 /* UIKit.framework */; };
@@ -447,6 +448,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1830D5FA185B15CE009E5D19 /* QianLiImagePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QianLiImagePickerViewController.h; sourceTree = "<group>"; };
+		1830D5FB185B15CE009E5D19 /* QianLiImagePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QianLiImagePickerViewController.m; sourceTree = "<group>"; };
 		2F81372C17AFB54500DB23F2 /* QianLi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QianLi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F81373017AFB54500DB23F2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2F81373217AFB54500DB23F2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1020,6 +1023,8 @@
 				5071E8CC17F72EFF009BED0D /* HelpViewController.m */,
 				CE3A1C3117FD1A1B00051970 /* SettingChangeNameViewController.h */,
 				CE3A1C3217FD1A1B00051970 /* SettingChangeNameViewController.m */,
+				1830D5FA185B15CE009E5D19 /* QianLiImagePickerViewController.h */,
+				1830D5FB185B15CE009E5D19 /* QianLiImagePickerViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1879,6 +1884,7 @@
 				509EAC791846E51900CB6DB3 /* DetailHistEvent.m in Sources */,
 				CE5DE8DE17CB12AD00EAA400 /* QBAnimationSequence.m in Sources */,
 				509D54C117E854FC005D8477 /* WebViewController.mm in Sources */,
+				1830D5FC185B15CE009E5D19 /* QianLiImagePickerViewController.m in Sources */,
 				50C9C5A117F02FC30017B550 /* MoviePlayerViewController.mm in Sources */,
 				500C2B0017D0ADE0004391AF /* HistoryDetailCell.m in Sources */,
 				500C2B0117D0ADE0004391AF /* HistoryMainCell.m in Sources */,

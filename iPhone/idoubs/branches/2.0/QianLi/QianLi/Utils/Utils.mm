@@ -99,6 +99,7 @@
         [todayFormatter setDateFormat:@"aah:mm"];
         NSString *str = [todayFormatter stringFromDate:referenceDate];
         timeString = [str stringByReplacingOccurrencesOfString:@"PM" withString:NSLocalizedString(@"PM", nil)];
+        timeString = [timeString stringByReplacingOccurrencesOfString:@"AM" withString:NSLocalizedString(@"AM", nil)];
     }
     else if (passTime < 0 && passTime >= -60*60*24) {
         timeString = NSLocalizedString(@"yesterday", nil);

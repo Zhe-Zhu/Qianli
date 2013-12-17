@@ -149,6 +149,7 @@
 "saturday" = "星期六";
 "sunday" = "星期天";
 "PM" = "下午";
+"AM" = "上午";
 
 "version" = "版本";
 "labelAbout" = "关于千里";
