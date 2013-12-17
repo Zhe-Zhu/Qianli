@@ -17,6 +17,7 @@
 @property(nonatomic) double starTime;
 @property (weak, nonatomic) IBOutlet UIButton *ereaser;
 @property (weak, nonatomic) IBOutlet UIButton *clearAll;
+@property (nonatomic, strong) NSMutableArray *drawings;
 
 - (IBAction)changeWidth:(id)sender;
 - (IBAction)draw:(id)sender;
@@ -110,12 +111,15 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    _drawings = nil;
 }
 
-- (IBAction)changeWidth:(id)sender {
+- (IBAction)changeWidth:(id)sender
+{
 }
 
-- (IBAction)draw:(id)sender {
+- (IBAction)draw:(id)sender
+{
     _isDrawing = !_isDrawing;
     if (_isDrawing) {
         [sender setImage:[UIImage imageNamed:@"doodleDraw.png"] forState:UIControlStateNormal];
@@ -131,7 +135,8 @@
     [_drawingView clearAll];
 }
 
-- (IBAction)changColor:(id)sender {
+- (IBAction)changColor:(id)sender
+{
 }
 
 - (void)cancel
@@ -143,6 +148,15 @@
 - (void)cancelFromRemoteParty
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark -- getter--
+- (NSMutableArray *)drawings
+{
+    if (_drawings == nil) {
+        _drawings = [[NSMutableArray alloc] init];
+    }
+    return _drawings;
 }
 
 @end

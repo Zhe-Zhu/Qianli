@@ -108,6 +108,7 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    [_vedioThumbs removeAllObjects];
 }
 
 #pragma mark  -- UIWebViewDelegate --
@@ -186,7 +187,7 @@
 {
     // add to history
     if ([_vedioThumbs count] == 0) {
-        [_vedioThumbs addObject:[self smallScreenshot]];
+        [_vedioThumbs addObject:[Utils screenshot:self.view toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
     NSData *imageData = [NSKeyedArchiver archivedDataWithRootObject:_vedioThumbs];
     DetailHistEvent *imageEvent = [[DetailHistEvent alloc] init];
@@ -239,33 +240,12 @@
 - (void)getHistoryImage
 {
     if ([_vedioThumbs count] < 6) {
-        [_vedioThumbs addObject:[self smallScreenshot]];
+        [_vedioThumbs addObject:[Utils screenshot:self.view toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
     else{
         [_vedioThumbs removeObjectAtIndex:0];
-        [_vedioThumbs addObject:[self smallScreenshot]];
+        [_vedioThumbs addObject:[Utils screenshot:self.view toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
-}
-
-- (UIImage*)smallScreenshot
-{
-    // Create a graphics context with the target size
-    CGSize imageSize = self.view.bounds.size;
-    if (NULL != UIGraphicsBeginImageContextWithOptions){
-        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-    }
-    else{
-        UIGraphicsBeginImageContext(imageSize);
-    }
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [[self.view layer] renderInContext:context];
-    
-    // Retrieve the screenshot image
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    UIImage *samllImage = [image imageByResizing:CGSizeMake(HistoryImageSize, HistoryImageSize)];
-    
-    return samllImage;
 }
 
 @end

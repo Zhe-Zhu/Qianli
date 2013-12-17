@@ -22,7 +22,7 @@
     BOOL fromRemoteParty;
     BOOL remoteDrawing;
     BOOL isClearAll;
-    NSInteger numberOfPoints;
+    NSInteger numberOfPoints; //to record how many points we have got and needed to send to our partner
     
     CGPoint previousPoint;
     CGPoint thirdLastPoint;
@@ -91,8 +91,6 @@
             [_remotePath stroke];
         }
         else{
-//            CGContextRef context = UIGraphicsGetCurrentContext();
-//            CGContextClearRect(context, rect);
         }
     }
     else{
@@ -108,7 +106,7 @@
 
 -(void)handleTap:(UITapGestureRecognizer *)tap
 {
-    [_delegate didTipOnView];
+    [_delegate didTapOnView];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -218,13 +216,14 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [super touchesCancelled:touches withEvent:event];
     [self touchesEnded:touches withEvent:event];
 }
 
 - (void)sendDoodleMessage:(NSString *)drawing{
     //Send message to remotrparty
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@",kDoodleImagePoints,kSeparator,drawing,kSeparator,_pointsMessage];
+    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@", kDoodleImagePoints, kSeparator, drawing, kSeparator, _pointsMessage];
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
 }
 
@@ -281,7 +280,6 @@
     [_remotePath removeAllPoints];
     NSArray *array = [self calculateSmoothLinePoints:points];
     if (drawing) {
-        //NSArray *array = [self calculateSmoothLinePoints:points];
         for (int i = 0; i < [array count]; ++i) {
             if (i == 0) {
                 CGPoint p = [[array objectAtIndex:i] CGPointValue];
@@ -298,12 +296,7 @@
     }
     else{
         CGSize imageSize = self.bounds.size;
-        if (NULL != UIGraphicsBeginImageContextWithOptions){
-            UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-        }
-        else{
-            UIGraphicsBeginImageContext(imageSize);
-        }
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         
         CGContextRef context = UIGraphicsGetCurrentContext();
         [[self layer] renderInContext:context];
@@ -388,15 +381,8 @@
 - (UIImage*)screenshot
 {
     // Create a graphics context with the target size
-    // On iOS 4 and later, use UIGraphicsBeginImageContextWithOptions to take the scale into consideration
-    // On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
     CGSize imageSize = self.bounds.size;
-    if (NULL != UIGraphicsBeginImageContextWithOptions){
-        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-    }
-    else{
-        UIGraphicsBeginImageContext(imageSize);
-    }
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     
     CGSize newImageSize = [self adjustImageFrame:_image.size];
     [_image drawInRect:CGRectMake((320-newImageSize.width)/2, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];

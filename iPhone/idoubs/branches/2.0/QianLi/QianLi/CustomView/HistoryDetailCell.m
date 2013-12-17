@@ -93,6 +93,7 @@
 
 - (void)layoutSubviews
 {
+    [super layoutSubviews];
     // 加入分割线
     [_lineView removeFromSuperview];
     UIImageView *line = [[UIImageView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.bounds)-1, [[UIScreen mainScreen] currentMode].size.width, 1)];

@@ -406,6 +406,9 @@
         [_addMoreImagesController dismissViewControllerAnimated:YES completion:nil];
     }
     [self.navigationController popViewControllerAnimated:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden: NO];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
     [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
         NSLog(@"end session");
     }];
@@ -438,6 +441,8 @@
     [_doodleView removeFromSuperview];
     [_doodleToolBar removeFromSuperview];
     [self.navigationItem.leftBarButtonItem setTitle:NSLocalizedString(@"Cancel", nil)];
+    [[UIApplication sharedApplication] setStatusBarHidden: NO];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (IBAction)addMoreImage:(id)sender
@@ -464,7 +469,6 @@
     AssetGroupPickerController *assetVC = [storyboard instantiateViewControllerWithIdentifier:@"AssetGroupPickerVC"];
     assetVC.delegate = self;
     
-    //[[SipStackUtils sharedInstance].messageService sendMessage:kAddNewImage  toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
     UINavigationController *navigationVC = [[UINavigationController alloc] init];
     navigationVC.viewControllers = @[assetVC];
     _addMoreImagesController = navigationVC;
@@ -479,12 +483,14 @@
     navigationVC.viewControllers = @[cameraCV];
     _addMoreImagesController = navigationVC;
     [self presentViewController:navigationVC animated:YES completion:nil];
-    
-//    [[SipStackUtils sharedInstance].messageService sendMessage:kAddNewImage  toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
-}
+ }
 
-- (void)doodleWithImageIndex:(NSInteger)index
+- (void)doodleWithImageAtIndex:(NSInteger)index
 {
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    _imageScrollView.backgroundColor = [UIColor whiteColor];
+    
     int ind = [_indexs indexOfObject:[NSString stringWithFormat:@"%d",index]];
     if (ind == NSNotFound) {
         return;
@@ -575,7 +581,7 @@
     UIImageWriteToSavedPhotosAlbum(image, NULL, NULL, NULL);
 }
 
-- (void)didTipOnView
+- (void)didTapOnView
 {
     [self hideDoodleTools];
 }

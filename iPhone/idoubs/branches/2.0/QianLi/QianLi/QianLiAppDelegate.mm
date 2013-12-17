@@ -274,7 +274,7 @@ const float kColorB = 60/100.0;
 	}
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults boolForKey:@"SignedUp"]) {
-        [self displayPushNotificationWarning];
+        [self displayNoPushNotificationWarning];
     }
 }
 
@@ -327,16 +327,17 @@ const float kColorB = 60/100.0;
     // handle a incoming call
 	if([notifKey isEqualToString:kNotifKey_IncomingCall])
     {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-        UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
-        _audioCallViewController = (QianLiAudioCallViewController *)audioCallNavigationController.topViewController;
-        _audioCallViewController.ViewState = ReceivingCall;
-        
         NSNumber* sessionId = [info objectForKey:kNotifIncomingCall_SessionId];
         if ([[SipStackUtils sharedInstance].audioService hasSessionWithId:[sessionId longValue]]) {
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
+            _audioCallViewController = (QianLiAudioCallViewController *)audioCallNavigationController.topViewController;
+            _audioCallViewController.ViewState = ReceivingCall;
             _audioCallViewController.audioSessionID = [sessionId longValue];
             [SipStackUtils sharedInstance].sessionID = [sessionId longValue];
             _audioCallViewController.remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+            [self.tabController presentViewController:audioCallNavigationController animated:YES completion:nil];
+            [SipCallManager SharedInstance].audioVC = _audioCallViewController;
             
             NSString *imageSessionID = [NSString stringWithFormat:@"%@%@",[[SipStackUtils sharedInstance] getRemotePartyNumber], [UserDataAccessor getUserRemoteParty]];
             [[PictureManager sharedInstance] setImageSession:imageSessionID];
@@ -348,21 +349,16 @@ const float kColorB = 60/100.0;
             }
             [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] Content:NSLocalizedString(@"historyReceivedCall", nil) Time:[[NSDate date] timeIntervalSince1970] Type:@"InComingCall"];
             [Utils updateMainHistNameForRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+            
+            // Add to history record
+            DetailHistEvent *event = [[DetailHistEvent alloc] init];
+            event.remoteParty = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+            event.type = kMediaType_Audio;
+            event.status = kHistoryEventStatus_Incoming;
+            event.start = [[NSDate date] timeIntervalSince1970];
+            _audioCallViewController.activeEvent = event;
         }
-        
-        [self.tabController presentViewController:audioCallNavigationController animated:YES completion:nil];
-        [SipCallManager SharedInstance].audioVC = _audioCallViewController;
-        // Add to history record
-        DetailHistEvent *event = [[DetailHistEvent alloc] init];
-        event.remoteParty = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-        event.type = kMediaType_Audio;
-        event.status = kHistoryEventStatus_Incoming;
-        event.start = [[NSDate date] timeIntervalSince1970];
-        _audioCallViewController.activeEvent = event;
-        
-        //play music
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-            [[SipStackUtils sharedInstance].soundService playRingTone];
+        else{
         }
     }
 }
@@ -585,7 +581,7 @@ const float kColorB = 60/100.0;
     return  [histItem.badgeValue integerValue];
 }
 
-- (void)displayPushNotificationWarning
+- (void)displayNoPushNotificationWarning
 {
     if ([UIApplication sharedApplication].enabledRemoteNotificationTypes == UIRemoteNotificationTypeNone) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"alertNotificationTitle", nil) message:NSLocalizedString(@"alertNotificationBody", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"alertNotificationButton", nil) otherButtonTitles:nil];

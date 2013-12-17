@@ -14,26 +14,16 @@
 
 @implementation Utils
 
-+ (void)networkAlert:(NSString*)message{
-	if([UIApplication sharedApplication].applicationState == UIApplicationStateActive){
-//		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"QianLi"
-//														message:message
-//													   delegate:nil
-//											  cancelButtonTitle:NSLocalizedString(@"AlertMsgButtonOkText", nil)
-//											  otherButtonTitles: nil];
-//		[alert show];
-	}
-}
-
-+ (void)newMessageAlert:(NSString*)message{
-	if([UIApplication sharedApplication].applicationState == UIApplicationStateActive){
-//		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"QianLi"
-//														message:message
-//													   delegate:self
-//											  cancelButtonTitle:NSLocalizedString(@"AlertMsgButtonCancelText", nil)
-//											  otherButtonTitles:NSLocalizedString(@"AlertMsgButtonOkText", nil), nil];
-//		[alert show];
-	}
++ (void)displayErrorOnMainQueue:(NSError *)error withMessage:(NSString *)message
+{
+	dispatch_async(dispatch_get_main_queue(), ^(void) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ (%d)", message, (int)[error code]]
+        														message:[error localizedDescription]
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Dismiss"
+                                                      otherButtonTitles:nil];
+           [alertView show];
+	});
 }
 
 // 内容友好的时间显示方式
@@ -274,6 +264,24 @@
     }
     
     return NO;
+}
+
++ (UIImage*)screenshot:(UIView *)view toSize:(CGSize)size
+{
+    // Create a graphics context with the target size
+    CGSize imageSize = view.bounds.size;
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [[view layer] renderInContext:context];
+    
+    // Retrieve the screenshot image
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    if (size.width != imageSize.width || size.height != imageSize.height) {
+        UIImage *samllImage = [image imageByResizing:size];
+        return samllImage;
+    }
+    return image;
 }
 
 @end

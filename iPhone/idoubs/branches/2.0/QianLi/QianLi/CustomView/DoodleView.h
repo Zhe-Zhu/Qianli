@@ -11,7 +11,7 @@
 
 @protocol DoodleTapDelegate <NSObject>
 
--(void)didTipOnView;
+-(void)didTapOnView;
 
 @end
 

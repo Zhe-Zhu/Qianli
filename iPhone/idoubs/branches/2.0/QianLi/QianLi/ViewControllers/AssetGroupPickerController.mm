@@ -39,7 +39,6 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-//    self.navigationItem.rightBarButtonItem = cancelButton;
     self.navigationItem.leftBarButtonItem = cancelButton;
     isFirstLoad = YES;
     
@@ -55,7 +54,7 @@
     
     ALAssetsLibraryGroupsEnumerationResultsBlock listGroupBlock = ^(ALAssetsGroup *group, BOOL *stop) {
         if (group) {
-            if ([[group valueForProperty:ALAssetsGroupPropertyType] integerValue]!=32) {
+            if ([[group valueForProperty:ALAssetsGroupPropertyType] integerValue] != ALAssetsGroupPhotoStream) {
                 // 不加入照片流的图片
                 // TODO 考虑如何加入照片流的图片
                 [_groups addObject:group];
@@ -68,7 +67,7 @@
         }
     };
     ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error) {
-        NSLog(@"failed to load groups");
+        NSLog(@"object %@ failed to load assets groups", self);
     };
     
     NSUInteger groupTypes = ALAssetsGroupAll;
@@ -85,7 +84,6 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
     if ([_groups count] >= 1 && isFirstLoad) {
         isFirstLoad = NO;
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -110,7 +108,7 @@
 - (void)cancel
 {
     [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
-        NSLog(@"end session");
+        NSLog(@"image session ends now in %@ by pressing cancel button", self);
     }];
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
     [[SipStackUtils sharedInstance].messageService sendMessage:kCancelAddImage toRemoteParty:remotePartyNumber];
@@ -132,7 +130,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"AssetCell";
-    
 	AssetGroupCell *assetCell = (AssetGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (assetCell == nil) {
 		assetCell = [[AssetGroupCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -142,7 +139,7 @@
     CGImageRef posterImageRef = [groupForCell posterImage];
     UIImage *posterImage = [UIImage imageWithCGImage:posterImageRef];
     NSString *name = [groupForCell valueForProperty:ALAssetsGroupPropertyName];
-    NSString *number = [NSString stringWithFormat:@"%d",groupForCell.numberOfAssets];
+    NSString *number = [NSString stringWithFormat:@"%d", groupForCell.numberOfAssets];
     assetCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     [assetCell setCellWithImage:posterImage Name:name Number:number];

@@ -64,7 +64,8 @@
     }
 }
 
--(UIViewController *) childViewControllerForStatusBarHidden {
+-(UIViewController *) childViewControllerForStatusBarHidden
+{
     return nil;
 }
 

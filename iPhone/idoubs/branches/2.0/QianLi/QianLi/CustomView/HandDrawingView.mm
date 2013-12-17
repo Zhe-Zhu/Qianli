@@ -100,8 +100,6 @@
             [_remotePath stroke];
         }
         else{
-//            CGContextRef context = UIGraphicsGetCurrentContext();
-//            CGContextClearRect(context, rect);
         }
     }
     else{
@@ -222,6 +220,7 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [super touchesCancelled:touches withEvent:event];
     [self touchesEnded:touches withEvent:event];
 }
 
@@ -274,12 +273,7 @@
     }
     else{
         CGSize imageSize = self.bounds.size;
-        if (NULL != UIGraphicsBeginImageContextWithOptions){
-            UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-        }
-        else{
-            UIGraphicsBeginImageContext(imageSize);
-        }
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
         [[UIColor whiteColor] setFill];
         [rectpath fill];
@@ -290,7 +284,6 @@
             CGPoint p = [[array objectAtIndex:i] CGPointValue];
             CGContextClearRect(context, CGRectMake(p.x - 6, p.y - 6, 12, 12));
         }
-        //_pathFormedImage = [self screenshot];
         _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         fromRemoteParty = YES;
@@ -369,15 +362,8 @@
 - (UIImage*)screenshot
 {
     // Create a graphics context with the target size
-    // On iOS 4 and later, use UIGraphicsBeginImageContextWithOptions to take the scale into consideration
-    // On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
     CGSize imageSize = self.bounds.size;
-    if (NULL != UIGraphicsBeginImageContextWithOptions){
-        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-    }
-    else{
-        UIGraphicsBeginImageContext(imageSize);
-    }
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
     [[UIColor whiteColor] setFill];
     [rectpath fill];

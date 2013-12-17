@@ -114,7 +114,6 @@
     else{
         [self addEventWithRemoteParty:entry.remoteParty start:entry.start end:entry.start status:entry.status type:entry.type content:entry.content];
     }
-    
 }
 
 - (void)deleteHistoryForRemoteParty:(NSString *)remoteParty

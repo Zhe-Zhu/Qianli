@@ -114,11 +114,6 @@
 
 - (void)releaseAudioSession
 {
-//	if(self.audioSession != nil)
-//    {
-//        NgnAVSession * aSession = self.audioSession;
-//        [NgnAVSession releaseSession: &aSession];
-//    }
     NgnAVSession * aSession = [NgnAVSession getSessionWithId: _sessionID];
     if (aSession) {
         [NgnAVSession releaseSession:&aSession];

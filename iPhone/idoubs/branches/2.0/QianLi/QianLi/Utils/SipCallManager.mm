@@ -38,20 +38,18 @@
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
     }
     
-    [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
-    QianLiAudioCallViewController *audioCallViewController = (QianLiAudioCallViewController *)audioCallNavigationController.topViewController;
-    audioCallViewController.remotePartyNumber = remoteParty;
-    audioCallViewController.ViewState = Calling;
-    QianLiAppDelegate *app = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    [app.tabController presentViewController:audioCallNavigationController animated:YES completion:nil];
-    [SipCallManager SharedInstance].audioVC = audioCallViewController;
-    
     long sID;
     if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteParty andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])
     {
+        [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
+        QianLiAudioCallViewController *audioCallViewController = (QianLiAudioCallViewController *)audioCallNavigationController.topViewController;
+        audioCallViewController.remotePartyNumber = remoteParty;
+        audioCallViewController.ViewState = Calling;
+        QianLiAppDelegate *app = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;
+        [app.tabController presentViewController:audioCallNavigationController animated:YES completion:nil];
+        [SipCallManager SharedInstance].audioVC = audioCallViewController;
         audioCallViewController.audioSessionID = sID;
         NSString *imageSessionID = [NSString stringWithFormat:@"%@%@",[UserDataAccessor getUserRemoteParty], remoteParty];
         [[PictureManager sharedInstance] setImageSession:imageSessionID];
