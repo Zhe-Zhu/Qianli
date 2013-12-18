@@ -16,7 +16,7 @@
 {
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     NSError *error;
-    [audioSession setCategory:AVAudioSessionCategorySoloAmbient withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&error];
+    [audioSession setCategory:AVAudioSessionCategoryAmbient withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&error];
     [audioSession setMode:AVAudioSessionModeVoiceChat error:&error];
     [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
     [audioSession setActive:YES error:&error];
@@ -41,7 +41,7 @@
 {
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     NSError *error;
-    [audioSession setCategory:AVAudioSessionCategorySoloAmbient withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&error];
+    [audioSession setCategory:AVAudioSessionCategoryAmbient withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&error];
     if (error) {
         return NO;
     }

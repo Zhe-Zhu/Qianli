@@ -163,19 +163,15 @@ const float kColorB = 60/100.0;
     [self.window makeKeyAndVisible];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveIncomingCallNotif:) name:kReceiveIncomingCallNotifName object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStackEvent:) name:kNgnStackEventArgs_Name object:nil];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     if ([userDefaults boolForKey:@"SignedUp"]) {
         self.window.rootViewController = _tabController;
         [[SipStackUtils sharedInstance] start];
-        [self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
-        [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         // Register remote notification
-        UIApplication *app = [UIApplication sharedApplication];
-        [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+        [self registerAPNS];
     }
     else{
         if ([userDefaults boolForKey:@"noHelp"]) {
@@ -207,18 +203,15 @@ const float kColorB = 60/100.0;
     [[SipStackUtils sharedInstance] start];
     [self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
     [[SipStackUtils sharedInstance].soundService configureAudioSession];
-    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
     [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
     // Register remote notification
-    UIApplication *app = [UIApplication sharedApplication];
-    [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+    [self registerAPNS];
 }
 
-- (void)configureSip
+- (void)registerAPNS
 {
-    // Set media parameters if you want
-	MediaSessionMgr::defaultsSetAudioGain(0, 0);
-	// Set some codec priorities
+    UIApplication *app = [UIApplication sharedApplication];
+    [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -546,20 +539,6 @@ const float kColorB = 60/100.0;
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     //add code
-}
-
--(void) onStackEvent:(NSNotification*)notification {
-	NgnStackEventArgs * eargs = [notification object];
-	switch (eargs.eventType) {
-		case STACK_STATE_STARTING:
-		{
-			// this is the only place where we can be sure that the audio system is up
-			[[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
-			break;
-		}
-		default:
-			break;
-	}
 }
 
 - (id)getAppDelegateAudioVC

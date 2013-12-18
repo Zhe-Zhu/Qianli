@@ -97,11 +97,8 @@
 	// Order is important
 	bSuccess &= [self.configurationService start];
 	bSuccess &= [self.networkService start];
-	//bSuccess &= [self.storageService start];
-	//bSuccess &= [self.contactService start];
-	bSuccess &= [self.sipService start];	
+	bSuccess &= [self.sipService start];
 	bSuccess &= [self.httpClientService start];
-	//bSuccess &= [self.historyService start]; //LG
 	bSuccess &= [self.soundService start];
 	
 	mStarted = TRUE;
