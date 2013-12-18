@@ -876,11 +876,13 @@ void propListener(	void *                  inClientData,
     }
     
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleTimer:) userInfo:imageArray repeats:YES];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    _imageDispVC = [storyboard instantiateViewControllerWithIdentifier:@"ImageDisplayVC"];
-    _imageDispVC.isIncoming = NO;
-    [self.navigationController pushViewController:_imageDispVC animated:YES];
+    if (_imageDispVC == nil) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        _imageDispVC = [storyboard instantiateViewControllerWithIdentifier:@"ImageDisplayVC"];
+        [self.navigationController pushViewController:_imageDispVC animated:YES];
+    }
     
+    _imageDispVC.isIncoming = NO;
     NSMutableArray *array = [NSMutableArray arrayWithArray:imageArray];
     _imageDispVC.images = array;
     
@@ -964,6 +966,46 @@ void propListener(	void *                  inClientData,
 	}
 }
 
+-(void) updateViewAndState
+{
+	if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
+		switch ([[SipStackUtils sharedInstance].audioService getAudioSessionState]) {
+			case INVITE_STATE_INPROGRESS:
+			{
+                break;
+			}
+			case INVITE_STATE_INCOMING:
+			{
+				break;
+			}
+			case INVITE_STATE_REMOTE_RINGING:
+			{
+                _calling.text = NSLocalizedString(@"callingRingingText", nil);
+				break;
+			}
+			case INVITE_STATE_INCALL:
+			{
+                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+                [[SipStackUtils sharedInstance].soundService stopRingTone];
+                [self changeViewAppearanceToInCall];
+                if (_isSpeakerOn) {
+                    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
+                }
+				break;
+			}
+			case INVITE_STATE_TERMINATED:
+			case INVITE_STATE_TERMINATING:
+			{
+                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+                [[SipStackUtils sharedInstance].soundService stopRingTone];
+				break;
+			}
+			default:
+				break;
+		}
+    }
+}
+
 - (void)timerSuicideTick
 {
     if (didEndCall) {
@@ -1027,45 +1069,6 @@ void propListener(	void *                  inClientData,
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         [SipCallManager SharedInstance].audioVC = nil;
     }];
-}
-
--(void) updateViewAndState{
-	if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
-		switch ([[SipStackUtils sharedInstance].audioService getAudioSessionState]) {
-			case INVITE_STATE_INPROGRESS:
-			{
-                break;
-			}
-			case INVITE_STATE_INCOMING:
-			{
-				break;
-			}
-			case INVITE_STATE_REMOTE_RINGING:
-			{
-                _calling.text = NSLocalizedString(@"callingRingingText", nil);
-				break;
-			}
-			case INVITE_STATE_INCALL:
-			{
-                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
-                [[SipStackUtils sharedInstance].soundService stopRingTone];
-                [self changeViewAppearanceToInCall];
-                if (_isSpeakerOn) {
-                    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
-                }
-				break;
-			}
-			case INVITE_STATE_TERMINATED:
-			case INVITE_STATE_TERMINATING:
-			{
-                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
-                [[SipStackUtils sharedInstance].soundService stopRingTone];
-				break;
-			}
-			default:
-				break;
-		}
-    }
 }
 
 - (void)showImageVC

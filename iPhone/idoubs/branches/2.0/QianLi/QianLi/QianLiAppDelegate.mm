@@ -264,6 +264,8 @@ const float kColorB = 60/100.0;
     ConnectionState_t registrationState = [[NgnEngine sharedInstance].sipService getRegistrationState];
     switch (registrationState) {
 		case CONN_STATE_CONNECTING:
+        case CONN_STATE_CONNECTED:
+            break;
 		case CONN_STATE_TERMINATING:
 			[[SipStackUtils sharedInstance] unRegisterIdentity];
             [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
@@ -515,9 +517,10 @@ const float kColorB = 60/100.0;
     NSDictionary *aps = [userInfo objectForKey:@"aps"];
     NSDictionary *dic = [aps objectForKey:@"alert"];
     NSString *type = [dic objectForKey:@"loc-key"];
-    if ([type isEqualToString:@"PUSHCALLING"]) {
-        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-        handler(UIBackgroundFetchResultNewData);
+    if (application.applicationState == UIApplicationStateActive) {
+        if ([type isEqualToString:@"PUSHCALLING"]) {
+            [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+        }
     }
     
     if ([type isEqualToString:@"MISSEDCALL"]) {
