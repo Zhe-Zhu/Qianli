@@ -52,7 +52,7 @@
 {
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     NSError *error;
-    [audioSession setCategory:AVAudioSessionCategorySoloAmbient withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&error];
+    [audioSession setCategory:AVAudioSessionCategorySoloAmbient error:&error];
     if (error) {
         return NO;
     }
