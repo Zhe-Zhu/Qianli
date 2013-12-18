@@ -23,6 +23,21 @@
 #import "SVStatusHUD.h"
 #import "SipCallManager.h"
 
+@interface QianLiAudioCallViewController (MusicApp)
+
+- (void)resumeMusicAppIfNeeded;
+@end
+
+@implementation QianLiAudioCallViewController (MusicApp)
+
+- (void)resumeMusicAppIfNeeded{
+    if (musicAppState == MPMusicPlaybackStatePlaying) {
+        [[MPMusicPlayerController iPodMusicPlayer] play];
+    }
+}
+
+@end
+
 @interface QianLiAudioCallViewController ()
 {
     UIImageView *callingIndicator; // calling等待指示器
@@ -54,7 +69,6 @@
     BOOL didEndCall;
     BOOL shouldPlayRingTone;
     BOOL shouldPlayMusic;
-    
     double videoBeginTime;
 }
 
@@ -107,6 +121,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    musicAppState = [MPMusicPlayerController iPodMusicPlayer].playbackState;
     // Check the UI state
     switch (_viewState) {
         case Calling: {
@@ -1069,6 +1084,7 @@ void propListener(	void *                  inClientData,
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         [SipCallManager SharedInstance].audioVC = nil;
     }];
+    [self resumeMusicAppIfNeeded];
 }
 
 - (void)showImageVC
@@ -1438,6 +1454,7 @@ void propListener(	void *                  inClientData,
         [menuBar dismiss];
         menuBar=nil;
     }
+    [self resumeMusicAppIfNeeded];
 }
 
 @end
