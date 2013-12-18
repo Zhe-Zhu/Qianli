@@ -48,6 +48,17 @@
     return YES;
 }
 
+- (BOOL)enableInComingCallSound
+{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *error;
+    [audioSession setCategory:AVAudioSessionCategorySoloAmbient withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&error];
+    if (error) {
+        return NO;
+    }
+    return YES;
+}
+
 - (BOOL)configureSpeakerEnabled:(BOOL)speakerEnabled
 {
     

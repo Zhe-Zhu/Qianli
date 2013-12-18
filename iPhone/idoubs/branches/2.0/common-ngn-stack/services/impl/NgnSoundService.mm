@@ -163,9 +163,11 @@
 
 -(BOOL) playRingTone{
 #if TARGET_OS_IPHONE
-	if(!playerRingTone){
-		playerRingTone = [[NgnSoundService initPlayerWithPath:@"ringtone.mp3"] retain];
-	}
+	if (playerRingTone) {
+        [playerRingTone release];
+        playerRingTone = nil;
+    }
+    playerRingTone = [[NgnSoundService initPlayerWithPath:@"ringtone.mp3"] retain];
 	if(playerRingTone){
 		playerRingTone.numberOfLoops = -1;
 		[playerRingTone play];
@@ -188,6 +190,8 @@
 #if TARGET_OS_IPHONE
 	if(playerRingTone && playerRingTone.playing){
 		[playerRingTone stop];
+        [playerRingTone release];
+        playerRingTone = nil;
 	}
 #elif TARGET_OS_MAC
 	if(soundRingTone && [soundRingTone isPlaying]){
@@ -199,9 +203,12 @@
 
 -(BOOL) playRingBackTone{
 #if TARGET_OS_IPHONE
-	if(!playerRingBackTone){
-		playerRingBackTone = [[NgnSoundService initPlayerWithPath:@"ringbacktone.wav"] retain];
-	}
+	if (playerRingBackTone) {
+        [playerRingBackTone release];
+        playerRingBackTone = nil;
+    }
+    
+    playerRingBackTone = [[NgnSoundService initPlayerWithPath:@"ringbacktone.wav"] retain];
 	if(playerRingBackTone){
 		playerRingBackTone.numberOfLoops = -1;
 		[playerRingBackTone play];
@@ -224,6 +231,8 @@
 #if TARGET_OS_IPHONE
 	if(playerRingBackTone && playerRingBackTone.playing){
 		[playerRingBackTone stop];
+        [playerRingBackTone release];
+        playerRingBackTone = nil;
 	}
 #elif TARGET_OS_MAC
 	if(soundRingBackTone && [soundRingBackTone isPlaying]){

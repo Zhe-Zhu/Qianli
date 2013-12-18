@@ -30,7 +30,8 @@
 
 @implementation QianLiAudioCallViewController (MusicApp)
 
-- (void)resumeMusicAppIfNeeded{
+- (void)resumeMusicAppIfNeeded
+{
     if (musicAppState == MPMusicPlaybackStatePlaying) {
         [[MPMusicPlayerController iPodMusicPlayer] play];
     }
@@ -148,6 +149,7 @@
         case ReceivingCall: {
             // called
             // Load Caller's Profile Photo
+            [[SipStackUtils sharedInstance].soundService enableInComingCallSound];
             [self setBigDisplayImage];
             // Hide the navigation bar
             [self.navigationController.navigationBar setHidden:YES];
