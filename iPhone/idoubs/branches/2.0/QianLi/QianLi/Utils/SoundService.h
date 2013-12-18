@@ -16,6 +16,7 @@
 
 - (BOOL)enableBackgroundSound;
 - (BOOL)disableBackgroundSound;
+- (BOOL)enableInComingCallSound;
 
 - (BOOL)configureSpeakerEnabled:(BOOL)speakerEnabled;
 

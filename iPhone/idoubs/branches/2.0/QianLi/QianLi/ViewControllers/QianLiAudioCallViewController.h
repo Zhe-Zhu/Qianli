@@ -34,7 +34,9 @@ typedef enum
     InCall, //during a call
 }ViewState;
 
-@interface QianLiAudioCallViewController : UIViewController <QianLiUIMenuBarDelegate, SelectImageDelegate>
+@interface QianLiAudioCallViewController : UIViewController <QianLiUIMenuBarDelegate, SelectImageDelegate>{
+    MPMusicPlaybackState musicAppState;
+}
 
 // the state the audio call view.
 @property(nonatomic, assign)ViewState viewState;
