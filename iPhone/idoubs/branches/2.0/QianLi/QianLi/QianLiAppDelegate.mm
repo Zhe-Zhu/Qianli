@@ -513,12 +513,17 @@ const float kColorB = 60/100.0;
     if (application.applicationState == UIApplicationStateActive) {
         if ([type isEqualToString:@"PUSHCALLING"]) {
             [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+            handler(UIBackgroundFetchResultNoData);
+            return;
         }
     }
     
     if ([type isEqualToString:@"MISSEDCALL"]) {
         [[HistoryTransUtils sharedInstance] getHistoryInBackground:NO];
         handler(UIBackgroundFetchResultNewData);
+    }
+    else{
+        handler(UIBackgroundFetchResultNoData);
     }
 }
 
