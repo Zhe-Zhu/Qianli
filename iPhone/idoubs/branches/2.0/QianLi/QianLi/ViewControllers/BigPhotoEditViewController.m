@@ -141,7 +141,8 @@
     return YES;
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
     if (gestureRecognizer == _panGesture && otherGestureRecognizer == _pinGesture) {
         return YES;
     }
@@ -270,13 +271,7 @@
 {
     // Create a graphics context with the target size
     CGSize imageSize = self.view.bounds.size;
-    if (NULL != UIGraphicsBeginImageContextWithOptions){
-        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-    }
-    else{
-        UIGraphicsBeginImageContext(imageSize);
-    }
-    
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     [_rectImageViw removeFromSuperview];
     [_cancelButton removeFromSuperview];

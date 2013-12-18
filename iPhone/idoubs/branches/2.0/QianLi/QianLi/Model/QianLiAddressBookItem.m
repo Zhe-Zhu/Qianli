@@ -10,6 +10,6 @@
 
 @implementation QianLiAddressBookItem
 
-@synthesize name = _name, email = _email, tel = _tel, thumbnail = _thumbnail, sectionNumber = _sectionNumber, rowSelected = _rowSelected;
+@synthesize telAarry = _telAarry, rowSelected = _rowSelected;
 
 @end

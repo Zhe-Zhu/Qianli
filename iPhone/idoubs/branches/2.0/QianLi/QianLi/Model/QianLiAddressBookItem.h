@@ -7,22 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "QianLiContactsItem.h"
 
-@interface QianLiAddressBookItem : NSObject
-{
-    NSInteger _sectionNumber;
-    BOOL _rowSelected;
-    NSString *_name;
-    NSString *_email;
-    NSMutableArray *_tel;
-    UIImage *_thumbnail;
-}
+@interface QianLiAddressBookItem : QianLiContactsItem
 
-@property NSInteger sectionNumber;
 @property BOOL rowSelected;
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *email;
-@property (nonatomic, strong) NSMutableArray *tel;
-@property (nonatomic, strong) UIImage *thumbnail;
+@property (nonatomic, strong) NSMutableArray *telAarry;
 
 @end

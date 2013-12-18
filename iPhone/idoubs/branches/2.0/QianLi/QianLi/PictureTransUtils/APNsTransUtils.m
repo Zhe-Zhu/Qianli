@@ -59,15 +59,17 @@
     message.type = type;
     
     [manager postObject:message path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        //NSLog(@"success");
         if (success) {
             success(YES);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        
-        // If an error occured during downloading, we display this error to user using UIAlert and return nil.
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Post push notification Error" message:[NSString stringWithFormat:@"%@,%@",[error localizedDescription], path] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
+        [manager postObject:message path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            if (success) {
+                success(YES);
+            }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            
+        }];
     }];
 }
 

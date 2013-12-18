@@ -37,7 +37,7 @@
 
 -(void)handleTap:(UITapGestureRecognizer *)tap
 {
-    [_delegate didTipOnView];
+    [_delegate didTapOnView];
 }
 
 @end

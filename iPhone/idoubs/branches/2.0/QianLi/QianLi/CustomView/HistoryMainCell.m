@@ -559,7 +559,6 @@
             [_leftRightSequence start];
         }
     }
-
 }
 
 @end

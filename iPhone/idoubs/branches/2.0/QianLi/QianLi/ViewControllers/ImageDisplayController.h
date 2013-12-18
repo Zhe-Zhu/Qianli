@@ -25,7 +25,7 @@
 
 - (void)displayImages;
 - (void)scrollTO:(CGFloat)xoffset;
-- (void)doodleWithImageIndex:(NSInteger)index;
+- (void)doodleWithImageAtIndex:(NSInteger)index;
 - (void)cancelFromRemoteyParty;
 - (void)cancelDoodleFromRemoteyParty;
 - (void)displaySelectingState;

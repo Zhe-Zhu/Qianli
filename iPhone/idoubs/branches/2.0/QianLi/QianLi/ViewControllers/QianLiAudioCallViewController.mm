@@ -53,6 +53,7 @@
     BOOL beginDownload;
     BOOL didEndCall;
     BOOL shouldPlayRingTone;
+    BOOL shouldPlayMusic;
     
     double videoBeginTime;
 }
@@ -112,13 +113,7 @@
             // calling someone
             // Load someone's Profile Photo
             
-            [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
-            [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
-                UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
-                if (image) {
-                    [_bigProfileImage performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
-                }
-            }];
+            [self setBigDisplayImage];
             // Make the Photo dark
             _bigProfileImage.alpha = 0.4f;
             // Present all the icons
@@ -132,18 +127,13 @@
 //            [self addNetworkIndicator];
             [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
             shouldPlayRingTone = YES;
+            shouldPlayMusic = NO;
             break;
         }
         case ReceivingCall: {
             // called
             // Load Caller's Profile Photo
-            [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
-            [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
-                UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
-                if (image) {
-                    [_bigProfileImage performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
-                }
-            }];
+            [self setBigDisplayImage];
             // Hide the navigation bar
             [self.navigationController.navigationBar setHidden:YES];
             // Hide the toolbar
@@ -153,6 +143,7 @@
             // Raise the Caller bulletin board
             [self raiseCallerBulletinBoard];
             shouldPlayRingTone = NO;
+            shouldPlayMusic = YES;
             break;
         }
         default: {
@@ -183,6 +174,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if (_bigProfileImage.image == nil) {
+        [self setBigDisplayImage];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -191,6 +185,10 @@
     if (shouldPlayRingTone) {
         [[SipStackUtils sharedInstance].soundService playRingBackTone];
         shouldPlayRingTone = NO;
+    }
+    if (shouldPlayMusic) {
+        shouldPlayMusic = NO;
+        [[SipStackUtils sharedInstance].soundService playRingTone];
     }
 }
 
@@ -205,6 +203,7 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    _bigProfileImage.image = nil;
 }
 
 - (void)dealloc
@@ -230,6 +229,17 @@ void propListener(	void *                  inClientData,
             [audioVC shutUpSpeaker];
         }
 	}
+}
+
+- (void)setBigDisplayImage
+{
+    [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
+    [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
+        UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
+        if (image) {
+            [_bigProfileImage performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
+        }
+    }];
 }
 
 // 当拨打别人或被拨打接通电话后调用, 将界面的外观转换到In Call界面
@@ -686,20 +696,25 @@ void propListener(	void *                  inClientData,
     if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
         if (_viewState == ReceivingCall) {
             [[SipStackUtils sharedInstance].audioService acceptCall];
+            [pickupTheCall removeFromSuperview];
+            [rejectTheCall removeFromSuperview];
+            [self retrieveCallerBulletionBoard];
+            [_toolbar setHidden:NO];
+            [self.navigationController.navigationBar setHidden:NO];
+            [self presentAllCallingIcons];
+            // 因为目前无法检测网络状态,所以不加入此功能
+            //    [self addNetworkIndicator];
+            
+            [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+        }
+        else{
+            
         }
     }
-    
-    [pickupTheCall removeFromSuperview];
-    [rejectTheCall removeFromSuperview];
-    [self retrieveCallerBulletionBoard];
-    [_toolbar setHidden:NO];
-    [self.navigationController.navigationBar setHidden:NO];
-    [self presentAllCallingIcons];
-    // 因为目前无法检测网络状态,所以不加入此功能
-//    [self addNetworkIndicator];
-    [self changeViewAppearanceToInCall];
-    
-    [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+    else{
+       
+    }
+    [[SipStackUtils sharedInstance].soundService stopRingTone];
 }
 
 #pragma mark QianLiUIMenuBar delegate Method
@@ -861,11 +876,13 @@ void propListener(	void *                  inClientData,
     }
     
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleTimer:) userInfo:imageArray repeats:YES];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    _imageDispVC = [storyboard instantiateViewControllerWithIdentifier:@"ImageDisplayVC"];
-    _imageDispVC.isIncoming = NO;
-    [self.navigationController pushViewController:_imageDispVC animated:YES];
+    if (_imageDispVC == nil) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        _imageDispVC = [storyboard instantiateViewControllerWithIdentifier:@"ImageDisplayVC"];
+        [self.navigationController pushViewController:_imageDispVC animated:YES];
+    }
     
+    _imageDispVC.isIncoming = NO;
     NSMutableArray *array = [NSMutableArray arrayWithArray:imageArray];
     _imageDispVC.images = array;
     
@@ -937,9 +954,6 @@ void propListener(	void *                  inClientData,
 		}
 		case INVITE_EVENT_TERMWAIT:
             [SipStackUtils sharedInstance].audioService.audioSession = nil;
-//            if (_viewState == Calling) {
-//                [[SipStackUtils sharedInstance].audioService releaseAudioSession];
-//            }
         case INVITE_EVENT_TERMINATED:
 		{
 			// updates view and state
@@ -950,6 +964,46 @@ void propListener(	void *                  inClientData,
 			break;
 		}
 	}
+}
+
+-(void) updateViewAndState
+{
+	if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
+		switch ([[SipStackUtils sharedInstance].audioService getAudioSessionState]) {
+			case INVITE_STATE_INPROGRESS:
+			{
+                break;
+			}
+			case INVITE_STATE_INCOMING:
+			{
+				break;
+			}
+			case INVITE_STATE_REMOTE_RINGING:
+			{
+                _calling.text = NSLocalizedString(@"callingRingingText", nil);
+				break;
+			}
+			case INVITE_STATE_INCALL:
+			{
+                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+                [[SipStackUtils sharedInstance].soundService stopRingTone];
+                [self changeViewAppearanceToInCall];
+                if (_isSpeakerOn) {
+                    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
+                }
+				break;
+			}
+			case INVITE_STATE_TERMINATED:
+			case INVITE_STATE_TERMINATING:
+			{
+                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+                [[SipStackUtils sharedInstance].soundService stopRingTone];
+				break;
+			}
+			default:
+				break;
+		}
+    }
 }
 
 - (void)timerSuicideTick
@@ -1017,46 +1071,6 @@ void propListener(	void *                  inClientData,
     }];
 }
 
--(void) updateViewAndState{
-	if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
-		switch ([[SipStackUtils sharedInstance].audioService getAudioSessionState]) {
-			case INVITE_STATE_INPROGRESS:
-			{
-                break;
-			}
-			case INVITE_STATE_INCOMING:
-			{
-				break;
-			}
-			case INVITE_STATE_REMOTE_RINGING:
-			{
-				//self.labelStatus.text = @"Remote is ringing";
-                _calling.text = NSLocalizedString(@"callingRingingText", nil);
-				break;
-			}
-			case INVITE_STATE_INCALL:
-			{
-                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
-                [[SipStackUtils sharedInstance].soundService stopRingTone];
-                [self changeViewAppearanceToInCall];
-                if (_isSpeakerOn) {
-                    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
-                }
-				break;
-			}
-			case INVITE_STATE_TERMINATED:
-			case INVITE_STATE_TERMINATING:
-			{
-                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
-                [[SipStackUtils sharedInstance].soundService stopRingTone];
-				break;
-			}
-			default:
-				break;
-		}
-    }
-}
-
 - (void)showImageVC
 {
     [menuBar dismiss];
@@ -1107,6 +1121,7 @@ void propListener(	void *                  inClientData,
     [self openSpeaker];
 }
 
+#pragma mark -- handling receiving message method--
 - (void)receiveIncomingGettingImageMessage:(NSNotification *)notification
 {
     NSString *info = notification.object;
@@ -1175,7 +1190,7 @@ void propListener(	void *                  inClientData,
     }
     else if ([message isEqualToString:kDoodleImageIndex]){
        // [self showImageVC];
-        [_imageDispVC doodleWithImageIndex:[[words objectAtIndex:1] integerValue]];
+        [_imageDispVC doodleWithImageAtIndex:[[words objectAtIndex:1] integerValue]];
     }
     else if ([message isEqualToString:kDoodleImagePoints]){
        // [self showImageVC];

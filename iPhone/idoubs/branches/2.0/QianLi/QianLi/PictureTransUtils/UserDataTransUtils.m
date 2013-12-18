@@ -92,9 +92,7 @@
              success(info.update_time);
          }
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get Update Info Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//         [alertView show];
-         //success(-1);
+
      }];
 }
 
@@ -108,9 +106,7 @@
              success(YES);
          }
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Account Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//         [alertView show];
-         //success(NO);
+
      }];
 }
 
@@ -139,9 +135,7 @@
          }
          
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get user data Info Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//         [alertView show];
-         //success(-1);
+
      }];
 }
 
@@ -152,9 +146,6 @@
     // Downloading Image is a very basic operation, therefore, we just invoke the method provided by ios.
     NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&error];
     if (error) {
-        // If an error occured during downloading, we display this error to user using UIAlert and return nil.
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get user profile Error" message:[NSString stringWithFormat:@"%@,%@",[error localizedDescription], path] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
         return nil;
     }
     return [UIImage imageWithData:imageData];
@@ -182,8 +173,7 @@
             success(YES);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Put user image error %d", error.code] message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
+
     }];
 }
 
@@ -208,8 +198,6 @@
             success(YES);
         }
     } failure:^( RKObjectRequestOperation *operation , NSError *error){
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Put user image error %d", error.code] message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
     }];
     [manager enqueueObjectRequestOperation:operation];
 }
@@ -235,8 +223,7 @@
             success(YES);
         }
     } failure:^( RKObjectRequestOperation *operation , NSError *error){
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Put user big image error %d", error.code] message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
+
     }];
     [manager enqueueObjectRequestOperation:operation];
 }
@@ -260,9 +247,7 @@
              }
          }
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get user data Info Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//         [alertView show];
-         //success(-1);
+
      }];
 }
 
@@ -290,9 +275,6 @@
             success(YES);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"update user name error: %d", error.code] message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-
     }];
 }
 

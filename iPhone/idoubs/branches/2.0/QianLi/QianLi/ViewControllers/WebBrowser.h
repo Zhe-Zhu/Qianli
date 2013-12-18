@@ -10,6 +10,7 @@
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreData/CoreData.h>
+#import "Utils.h"
 
 @interface WebBrowser : UIViewController<UITextFieldDelegate, UIWebViewDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 

@@ -50,7 +50,7 @@
 //    contentSize = [number sizeWithFont:[UIFont fontWithName:@"Arial" size:17] constrainedToSize:constraintSize lineBreakMode: NSLineBreakByWordWrapping];
 //    frame = _numberLabel.frame;
     
-    _numberLabel.text = [NSString stringWithFormat:@"%@张照片", number];
+    _numberLabel.text = [NSString stringWithFormat:@"%@%@", number, NSLocalizedString(@"Photos", nil)];
 //    _numberLabel.textColor = [UIColor colorWithRed:130/255.0 green:130/255.0 blue:130/255.0 alpha:1.0];
     _numberLabel.textColor = [UIColor grayColor];
     if (IS_OS_7_OR_LATER) {
