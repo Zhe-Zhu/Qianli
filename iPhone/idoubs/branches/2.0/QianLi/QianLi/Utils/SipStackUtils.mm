@@ -174,7 +174,7 @@ static SipStackUtils * sipStackUtilsInstance;
                 }
                 if ([SipCallManager SharedInstance].audioVC) {
                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notice", nil) message:NSLocalizedString(@"TerminateCall", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"iknow", nil) otherButtonTitles: nil];
-                    [alertView show];
+                    [alertView performSelector:@selector(show) withObject:nil afterDelay:2.0];
                 }
             }
 			break;

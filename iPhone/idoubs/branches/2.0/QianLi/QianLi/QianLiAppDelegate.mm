@@ -154,7 +154,7 @@ const float kColorB = 60/100.0;
     }
     settingNavigationController.tabBarItem = settingIcon;
     
-    NSArray *controllers = @[histroyNaviCV, contactNavigationVC,settingNavigationController];
+    NSArray *controllers = @[histroyNaviCV, contactNavigationVC, settingNavigationController];
     _tabController.viewControllers = controllers;
     [_tabController.tabBar setTintColor:[UIColor colorWithRed:56/255.0 green:181/255.0 blue:199/255.0 alpha:1.0]];
     if ([_tabController.tabBar respondsToSelector:@selector(setTranslucent:)]) {
@@ -513,7 +513,7 @@ const float kColorB = 60/100.0;
     if (application.applicationState == UIApplicationStateActive) {
         if ([type isEqualToString:@"PUSHCALLING"]) {
             [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-            handler(UIBackgroundFetchResultNoData);
+            handler(UIBackgroundFetchResultNewData);
             return;
         }
     }
