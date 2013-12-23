@@ -270,6 +270,7 @@ const float kColorB = 60/100.0;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults boolForKey:@"SignedUp"]) {
         [self displayNoPushNotificationWarning];
+        [self displayNoRecordingWarning];
     }
 }
 
@@ -573,6 +574,18 @@ const float kColorB = 60/100.0;
     if ([UIApplication sharedApplication].enabledRemoteNotificationTypes == UIRemoteNotificationTypeNone) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"alertNotificationTitle", nil) message:NSLocalizedString(@"alertNotificationBody", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"alertNotificationButton", nil) otherButtonTitles:nil];
         [alertView show];
+    }
+}
+
+- (void)displayNoRecordingWarning
+{
+    if (IS_OS_7_OR_LATER) {
+        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+            if (!granted) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"alertRecordingTitle", nil) message:NSLocalizedString(@"alertRecordingBody", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"alertNotificationButton", nil) otherButtonTitles:nil];
+                [alertView show];
+            }
+        }];
     }
 }
 

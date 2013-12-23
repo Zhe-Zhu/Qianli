@@ -186,6 +186,7 @@
     }
     
     AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge void *)self);
+   // AudioSessionAddPropertyListener(kAudioSessionProperty_InterruptionType, interruptionListenerCallback, (__bridge void *)self);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -246,6 +247,17 @@ void propListener(	void *                  inClientData,
             [audioVC shutUpSpeaker];
         }
 	}
+}
+
+void interruptionListenerCallback (
+                                   void    *inUserData,
+                                   UInt32  interruptionState
+) {
+    if (interruptionState == kAudioSessionBeginInterruption) {
+    }
+    else if (interruptionState == kAudioSessionEndInterruption) {
+        
+    }
 }
 
 - (void)setBigDisplayImage
