@@ -347,6 +347,7 @@
     [[MainHistoryDataAccessor sharedInstance] deleteObjectForRemoteParty:_remotePartyPhoneNumber];
     [self displayHistoryWithEntryNumber];
     [self dismissMenuBar];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)buttonMorePressed
