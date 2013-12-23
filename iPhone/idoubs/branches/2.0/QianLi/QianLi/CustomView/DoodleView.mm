@@ -220,7 +220,8 @@
     [self touchesEnded:touches withEvent:event];
 }
 
-- (void)sendDoodleMessage:(NSString *)drawing{
+- (void)sendDoodleMessage:(NSString *)drawing
+{
     //Send message to remotrparty
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
     NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@", kDoodleImagePoints, kSeparator, drawing, kSeparator, _pointsMessage];
@@ -229,7 +230,7 @@
 
 - (void)writeToImageWithPath:(UIBezierPath*)path Color:(UIColor *)color
 {
-    CGSize size= self.bounds.size;
+    CGSize size = self.bounds.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     if (firstTime) {
         [self drawImage];
@@ -246,12 +247,11 @@
 
 - (void)drawImage
 {
-    if (_image == nil) {
+    if (_image == nil){
         return;
     }
-//    [_image drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     CGSize newImageSize = [self adjustImageFrame:_image.size];
-    [_image drawInRect:CGRectMake((self.frame.size.width-newImageSize.width)/2, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
+    [_image drawInRect:CGRectMake((self.frame.size.width - newImageSize.width) / 2.0, (self.frame.size.height - newImageSize.height) / 2.0, newImageSize.width, newImageSize.height)];
 }
 
 - (CGSize)adjustImageFrame:(CGSize)imageSize
@@ -264,11 +264,11 @@
     
     if ((imageSize.width / imageSize.height) <= (width / height)) {
         newImageSize.height = height;
-        newImageSize.width = imageSize.width * height / imageSize.height;
+        newImageSize.width = roundf(imageSize.width * height / imageSize.height);
     }
     else {
         newImageSize.width = width;
-        newImageSize.height = imageSize.height * width / imageSize.width;
+        newImageSize.height = roundf(imageSize.height * width / imageSize.width);
     }
     
     return newImageSize;
@@ -297,7 +297,6 @@
     else{
         CGSize imageSize = self.bounds.size;
         UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-        
         CGContextRef context = UIGraphicsGetCurrentContext();
         [[self layer] renderInContext:context];
         fromRemoteParty = YES;
@@ -307,7 +306,7 @@
         }
         _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        [self setNeedsDisplay];
+        [self setNeedsDisplayInRect:self.bounds];
     }
 }
 
@@ -371,7 +370,7 @@
 
 - (void)initPathImage
 {
-    CGSize size= self.bounds.size;
+    CGSize size = self.bounds.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     [self drawImage];
     _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
