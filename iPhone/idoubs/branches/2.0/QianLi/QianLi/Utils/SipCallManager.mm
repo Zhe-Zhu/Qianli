@@ -41,10 +41,12 @@
     long sID;
     if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteParty andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])
     {
+        //audioCallViewController
         [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
-        QianLiAudioCallViewController *audioCallViewController = (QianLiAudioCallViewController *)audioCallNavigationController.topViewController;
+        QianLiAudioCallViewController *audioCallViewController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallViewController"];
+        audioCallNavigationController.viewControllers = @[audioCallViewController];
         audioCallViewController.remotePartyNumber = remoteParty;
         audioCallViewController.ViewState = Calling;
         QianLiAppDelegate *app = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;

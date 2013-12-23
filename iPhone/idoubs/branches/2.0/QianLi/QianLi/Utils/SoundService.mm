@@ -7,12 +7,24 @@
 //
 
 #import "SoundService.h"
+#import "SipCallManager.h"
 
 @implementation SoundService
 
 #pragma mark -- utilies --
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (BOOL)configureAudioSession
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAudioInterruption:) name:AVAudioSessionInterruptionNotification object:nil];
+    return [self startAudioSession];
+}
+
+- (BOOL)startAudioSession
 {
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     NSError *error;
@@ -24,6 +36,17 @@
         return NO;
     }
     return YES;
+}
+
+- (void)handleAudioInterruption:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    if ([[userInfo objectForKey:AVAudioSessionInterruptionTypeKey] integerValue]== AVAudioSessionInterruptionTypeBegan) {
+        
+    }
+    else{
+        [self resumeCallAfterInterruption];
+    }
 }
 
 - (BOOL)enableBackgroundSound
@@ -57,6 +80,17 @@
         return NO;
     }
     return YES;
+}
+
+- (void)resumeCallAfterInterruption
+{
+    if ([SipCallManager SharedInstance].audioVC) {
+        [self startAudioSession];
+        [self enableBackgroundSound];
+    }
+    else{
+        [self startAudioSession];
+    }
 }
 
 - (BOOL)configureSpeakerEnabled:(BOOL)speakerEnabled
@@ -94,6 +128,5 @@
     [[NgnEngine sharedInstance].soundService playDtmf:tag];
     
 }
-
 
 @end

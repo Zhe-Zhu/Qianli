@@ -44,8 +44,6 @@ typedef enum
 @property(nonatomic, assign)long audioSessionID;
 // the phone number of the remote one.
 @property(nonatomic, strong)NSString * remotePartyNumber;
-// the head portrait of the remote one
-@property(nonatomic, strong) UIImage * remoteHeadPortrait;
 
 @property(nonatomic, strong) DetailHistEvent *activeEvent;
 

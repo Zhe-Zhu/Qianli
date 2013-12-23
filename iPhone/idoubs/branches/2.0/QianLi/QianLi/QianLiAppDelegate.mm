@@ -29,10 +29,10 @@
 }
 
 @property(nonatomic, strong) SignUpEditProfileViewController *signUpEditProfileViewController;
-@property(nonatomic, weak)QianLiContactsViewController *contactViewController;
-@property(nonatomic, weak)HistoryRecordsMainViewController *historyMainController;
-@property(nonatomic, weak)SettingViewController *settingViewController;
-@property(nonatomic, weak)QianLiAudioCallViewController *audioCallViewController;
+@property(nonatomic, weak) QianLiContactsViewController *contactViewController;
+@property(nonatomic, weak) HistoryRecordsMainViewController *historyMainController;
+@property(nonatomic, weak) SettingViewController *settingViewController;
+@property(nonatomic, weak) QianLiAudioCallViewController *audioCallViewController;
 
 @end
 
@@ -327,7 +327,7 @@ const float kColorB = 60/100.0;
         if ([[SipStackUtils sharedInstance].audioService hasSessionWithId:[sessionId longValue]]) {
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
             UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
-            _audioCallViewController = (QianLiAudioCallViewController *)audioCallNavigationController.topViewController;
+            _audioCallViewController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallViewController"];            audioCallNavigationController.viewControllers = @[_audioCallViewController];
             _audioCallViewController.ViewState = ReceivingCall;
             _audioCallViewController.audioSessionID = [sessionId longValue];
             [SipStackUtils sharedInstance].sessionID = [sessionId longValue];
