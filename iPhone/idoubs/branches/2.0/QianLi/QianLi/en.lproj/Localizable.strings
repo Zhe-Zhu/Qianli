@@ -159,3 +159,6 @@
 "Notice" = "notice";
 "TerminateCall" = "The call is terminated due to no internet access anymore. Try again when internet access is available again!";
 "Photos" = " Photos";
+
+"alertRecordingTitle" = "recording is not allowed";
+"alertRecordingBody" = "Qianli needs the permission of accessing microphone to establish a call, please grant permission in the Settings App!";

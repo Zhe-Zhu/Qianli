@@ -29,10 +29,10 @@
 }
 
 @property(nonatomic, strong) SignUpEditProfileViewController *signUpEditProfileViewController;
-@property(nonatomic, weak)QianLiContactsViewController *contactViewController;
-@property(nonatomic, weak)HistoryRecordsMainViewController *historyMainController;
-@property(nonatomic, weak)SettingViewController *settingViewController;
-@property(nonatomic, weak)QianLiAudioCallViewController *audioCallViewController;
+@property(nonatomic, weak) QianLiContactsViewController *contactViewController;
+@property(nonatomic, weak) HistoryRecordsMainViewController *historyMainController;
+@property(nonatomic, weak) SettingViewController *settingViewController;
+@property(nonatomic, weak) QianLiAudioCallViewController *audioCallViewController;
 
 @end
 
@@ -270,6 +270,7 @@ const float kColorB = 60/100.0;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults boolForKey:@"SignedUp"]) {
         [self displayNoPushNotificationWarning];
+        [self displayNoRecordingWarning];
     }
 }
 
@@ -326,7 +327,7 @@ const float kColorB = 60/100.0;
         if ([[SipStackUtils sharedInstance].audioService hasSessionWithId:[sessionId longValue]]) {
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
             UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
-            _audioCallViewController = (QianLiAudioCallViewController *)audioCallNavigationController.topViewController;
+            _audioCallViewController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallViewController"];            audioCallNavigationController.viewControllers = @[_audioCallViewController];
             _audioCallViewController.ViewState = ReceivingCall;
             _audioCallViewController.audioSessionID = [sessionId longValue];
             [SipStackUtils sharedInstance].sessionID = [sessionId longValue];
@@ -573,6 +574,18 @@ const float kColorB = 60/100.0;
     if ([UIApplication sharedApplication].enabledRemoteNotificationTypes == UIRemoteNotificationTypeNone) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"alertNotificationTitle", nil) message:NSLocalizedString(@"alertNotificationBody", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"alertNotificationButton", nil) otherButtonTitles:nil];
         [alertView show];
+    }
+}
+
+- (void)displayNoRecordingWarning
+{
+    if (IS_OS_7_OR_LATER) {
+        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+            if (!granted) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"alertRecordingTitle", nil) message:NSLocalizedString(@"alertRecordingBody", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"alertNotificationButton", nil) otherButtonTitles:nil];
+                [alertView show];
+            }
+        }];
     }
 }
 

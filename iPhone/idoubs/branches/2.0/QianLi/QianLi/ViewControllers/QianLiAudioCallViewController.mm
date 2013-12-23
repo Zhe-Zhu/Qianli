@@ -84,7 +84,7 @@
 @property bool isNoMicroPhoneOn;
 @property bool isSpeakerOn;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
-@property (strong, nonatomic) UILabel *calling;
+@property (weak, nonatomic) UILabel *calling;
 
 @property(nonatomic, weak) ImageDisplayController *imageDispVC;
 @property(nonatomic, weak) VideoViewController *vedioVC;
@@ -170,6 +170,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onInviteEvent:) name:kNgnInviteEventArgs_Name object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveIncomingGettingImageMessage:) name:@"receivedImageNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handelAudioRouteChange) name:AVAudioSessionRouteChangeNotification object:nil];
     getImageQueue = dispatch_queue_create("com.ashstudio.getImageQueue", NULL);
     imageSessionExists = NO;
     getIndexArray = NO;
@@ -184,8 +185,6 @@
         [_toolbar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forToolbarPosition:UIBarPositionBottom barMetrics:UIBarMetricsDefault];
         _buttonAdd.tintColor = [UIColor blackColor];
     }
-    
-    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge void *)self);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -220,41 +219,33 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    _bigProfileImage.image = nil;
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge void *)self);
 }
 
-void propListener(	void *                  inClientData,
-                  AudioSessionPropertyID	inID,
-                  UInt32                  inDataSize,
-                  const void *            inData)
+- (void)handelAudioRouteChange
 {
-    QianLiAudioCallViewController *audioVC = (__bridge QianLiAudioCallViewController *)inClientData;
-    if (inID == kAudioSessionProperty_AudioRouteChange)
-	{
-		if (![Utils isHeadsetPluggedIn]) {
-            if (audioVC.presentedViewController) {
-                [audioVC openSpeaker];
-            }
+    if (![Utils isHeadsetPluggedIn]) {
+        if (self.presentedViewController) {
+            [self openSpeaker];
         }
-        else{
-            [audioVC shutUpSpeaker];
-        }
-	}
+    }
+    else{
+        [self shutUpSpeaker];
+    }
 }
 
 - (void)setBigDisplayImage
 {
     [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
+    UIImageView *imageView = _bigProfileImage;
     [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
         UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
         if (image) {
-            [_bigProfileImage performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
+            [imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
         }
     }];
 }
@@ -265,16 +256,18 @@ void propListener(	void *                  inClientData,
     // 进入In Call 模式
     [self retrieveBulletinBoard];
     // 加入缓慢消失的动画效果
-    [callingIndicator setAlpha:0.3f];
+    UIImageView *indicator = callingIndicator;
+    [indicator setAlpha:0.3f];
     [UIView animateWithDuration:0.5f animations:^{
-        [callingIndicator setAlpha:0.0f];
+        [indicator setAlpha:0.0f];
     }completion:^(BOOL finished){
-        [callingIndicator.layer removeAllAnimations];
-        [callingIndicator removeFromSuperview];
+        [indicator.layer removeAllAnimations];
+        [indicator removeFromSuperview];
     }];
     // 头像缓慢变亮
+    UIImageView *imageView = _bigProfileImage;
     [UIView animateWithDuration:1.2f animations:^{
-        [_bigProfileImage setAlpha:1.0f];
+        [imageView setAlpha:1.0f];
     }];
 
     // Enable the Add button
@@ -311,8 +304,9 @@ void propListener(	void *                  inClientData,
 //    [runloop addTimer:timer forMode:UITrackingRunLoopMode];
     
     // 加入缓慢出现的动画效果
+    UILabel *label = timeLabel;
     [UIView animateWithDuration:1.2f animations:^{
-        [timeLabel setAlpha:1.0f];
+        [label setAlpha:1.0f];
     }];
 }
 
@@ -370,8 +364,6 @@ void propListener(	void *                  inClientData,
     }
     [_buttonEndCall setTarget:self];
     [_buttonEndCall setAction:@selector(pressButtonEndCall)];
-//    UIImageView *buttonEndCallBackground = [[UIImageView alloc] initWithFrame:CGRectMake(320-63, 0, 126, 88)];
-//    buttonEndCallBackground.backgroundColor = [UIColor colorWithRed:213/255.0 green:11/255.0 blue:11/255.0 alpha:1.0f];
     UIButton *buttonEndCallBackground = [[UIButton alloc] initWithFrame:CGRectMake(320-63, 0, 126, 44)];
     if (IS_OS_7_OR_LATER) {
         buttonEndCallBackground.backgroundColor = [UIColor colorWithRed:213/255.0 green:11/255.0 blue:11/255.0 alpha:1.0f];
@@ -429,11 +421,12 @@ void propListener(	void *                  inClientData,
     frame.size.height = 60.0f;
     frame.origin.y = frame.origin.y - frame.size.height;
     
+    UIImageView *imageView = bulletinBoard;
     [UIView animateWithDuration:0.5f animations:^{
-        bulletinBoard.frame = frame;
+        imageView.frame = frame;
     } completion:^(BOOL finished){
-        [bulletinBoard addSubview:herName];
-        [bulletinBoard addSubview:callingLabel];
+        [imageView addSubview:herName];
+        [imageView addSubview:callingLabel];
     }];
 }
 
@@ -447,10 +440,11 @@ void propListener(	void *                  inClientData,
     CGFloat height = frame.size.height;
     frame.size.height = 0.0f;
     frame.origin.y = frame.origin.y + height;
+    UIImageView *imageView = bulletinBoard;
     [UIView animateWithDuration:0.3f animations:^{
-        bulletinBoard.frame = frame;
+        imageView.frame = frame;
     } completion:^(BOOL finished){
-        [bulletinBoard removeFromSuperview];
+        [imageView removeFromSuperview];
     }];
 }
 
@@ -575,9 +569,11 @@ void propListener(	void *                  inClientData,
     CGRect moveToolBarFrame = _toolbar.frame;
     moveToolBarFrame.origin.y = moveToolBarFrame.origin.y - 230.0f;
     
+    UIView *view = _toolbar;
+    UIImageView *imageView = _blurImage;
     [UIView animateWithDuration:kSemiModalAnimationDuration animations:^{
-        _toolbar.frame = moveToolBarFrame;
-        _blurImage.alpha = 1.0f;
+        view.frame = moveToolBarFrame;
+        imageView.alpha = 1.0f;
     }];
 }
 
@@ -677,11 +673,12 @@ void propListener(	void *                  inClientData,
     frame.size.height = 60.0f;
     frame.origin.y = frame.origin.y - frame.size.height;
     
+    UIImageView *imageView = bulletinBoard;
     [UIView animateWithDuration:0.5f animations:^{
-        bulletinBoard.frame = frame;
+        imageView.frame = frame;
     } completion:^(BOOL finished){
-        [bulletinBoard addSubview:herName];
-        [bulletinBoard addSubview:calling];
+        [imageView addSubview:herName];
+        [imageView addSubview:calling];
     }];
 }
 
@@ -739,9 +736,11 @@ void propListener(	void *                  inClientData,
 {
     CGRect moveToolBarFrame = _toolbar.frame;
     moveToolBarFrame.origin.y = moveToolBarFrame.origin.y + 230.0f;
+    UIImageView *imageView = _blurImage;
+    UIView *view = _toolbar;
     [UIView animateWithDuration:kSemiModalAnimationDuration animations:^{
-        _toolbar.frame = moveToolBarFrame;
-        _blurImage.alpha = 0.0f;
+        view.frame = moveToolBarFrame;
+        imageView.alpha = 0.0f;
     }];
 }
 
@@ -1031,7 +1030,12 @@ void propListener(	void *                  inClientData,
     didEndCall = YES;
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
-  
+    [timer invalidate]; 
+    if (menuBar) {
+        [menuBar dismiss];
+        menuBar = nil;
+    }
+
     //LLGG
     [self dismissAllViewController];
    //[self changeViewAppearanceToInCall];
