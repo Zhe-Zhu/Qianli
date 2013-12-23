@@ -359,12 +359,6 @@
             return;
         }
     }
-//    // 加入遮盖原view的imageview
-//    UIImageView *cover = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    cover.backgroundColor = [UIColor blackColor];
-//    cover.alpha = 0;
-//    [self.view addSubview:cover];
-    
     [self showCover];
     
     CGSize size = CGSizeMake(self.view.bounds.size.width, 60);
