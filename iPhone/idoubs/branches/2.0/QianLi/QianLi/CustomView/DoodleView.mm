@@ -58,7 +58,6 @@
         _pathPoints = [[NSMutableArray alloc] initWithCapacity:2];
         self.backgroundColor = nil;
         self.layer.opaque = NO;
-        
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
         [self addGestureRecognizer: tapGesture];
     }
@@ -169,7 +168,6 @@
         numberOfPoints = 3;
         _pointsMessage = [NSString stringWithFormat:@"%f:%f:%f:%f:%f:%f", thirdLastPoint.x / winSize.width, thirdLastPoint.y / winSize.height, previousPoint.x / winSize.width, previousPoint.y / winSize.height, point.x / winSize.width, point.y / winSize.height];
     }
-    
     thirdLastPoint = previousPoint;
     previousPoint = point;
     
