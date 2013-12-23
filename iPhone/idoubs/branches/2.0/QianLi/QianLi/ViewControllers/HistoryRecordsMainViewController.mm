@@ -270,7 +270,6 @@
     }
 }
 
-// TODO: 考虑把call作为全局函数, 目前太多相同的地方了
 - (void)call:(NSString *)remotePartyPhoneNumber
 {
     [[SipCallManager SharedInstance] makeQianliCallToRemote:remotePartyPhoneNumber];

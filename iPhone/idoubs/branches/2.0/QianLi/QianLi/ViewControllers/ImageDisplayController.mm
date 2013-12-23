@@ -259,11 +259,11 @@
     
     if ((imageSize.width / imageSize.height) <= (width / height)) {
         newImageSize.height = height;
-        newImageSize.width = imageSize.width * height / imageSize.height;
+        newImageSize.width = roundf(imageSize.width * height / imageSize.height);
     }
     else {
         newImageSize.width = width;
-        newImageSize.height = imageSize.height * width / imageSize.width;
+        newImageSize.height = roundf(imageSize.height * width / imageSize.width);
     }
     
     return newImageSize;
@@ -515,8 +515,8 @@
     _toolBar.hidden = YES;
     UIImage *image = (UIImage *)[_images objectAtIndex:index];
     CGSize imageSize = [self adjustImageFrame:image.size];
-    CGRect scrollFrame = _imageScrollView.frame;
-    CGRect frame = CGRectMake((320-imageSize.width)/2, (scrollFrame.size.height-imageSize.height)/2, imageSize.width, imageSize.height);
+    CGRect scrollFrame = self.view.frame;//_imageScrollView.frame;
+    CGRect frame = CGRectMake((320 - imageSize.width) / 2.0, (scrollFrame.size.height-imageSize.height) / 2.0, imageSize.width, imageSize.height);
     DoodleView *view = [[DoodleView alloc] initWithFrame:frame];
     _doodleView = view;
     _doodleView.image = image;

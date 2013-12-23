@@ -11,8 +11,8 @@
 #import "UIImageExtras.h"
 #import "MobClick.h"
 
-@interface MoviePlayerViewController (){
-    
+@interface MoviePlayerViewController ()
+{
 }
 
 @property (weak, nonatomic) UIView *movieView;
@@ -21,7 +21,6 @@
 @property (nonatomic, weak) UIView *controls;
 @property (strong, nonatomic) NSTimer *hideControlsTimer;
 @property (strong, nonatomic) MPMoviePlayerController *moviePlayerController;
-
 @property (strong, nonatomic) UIButton *pauseButton;
 
 @end
@@ -300,7 +299,8 @@
 
 #pragma mark - gesture delegate
 // this allows you to dispatch touches
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
     return YES;
 }
 // this enables you to handle multiple recognizers on single view
