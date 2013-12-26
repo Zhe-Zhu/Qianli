@@ -167,7 +167,7 @@ const float kColorB = 60/100.0;
     
     if ([userDefaults boolForKey:@"SignedUp"]) {
         self.window.rootViewController = _tabController;
-        [[SipStackUtils sharedInstance] start];
+        [[SipStackUtils sharedInstance] start]; //kAudioSessionCategory_PlayAndRecord
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         // Register remote notification

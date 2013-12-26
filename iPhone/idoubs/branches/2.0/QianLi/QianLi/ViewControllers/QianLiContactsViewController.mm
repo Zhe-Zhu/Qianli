@@ -825,6 +825,7 @@
     _inviteController = [storyBoard instantiateViewControllerWithIdentifier:@"InviteController"];
     _inviteController.title = @"Invite";
     _inviteController.contacts = [_allContacts mutableCopy];
+    _allContacts = nil;
     _inviteController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:_inviteController animated:YES];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];

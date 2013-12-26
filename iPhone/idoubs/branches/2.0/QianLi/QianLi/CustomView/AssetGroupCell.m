@@ -56,9 +56,7 @@
     if (IS_OS_7_OR_LATER) {
         _numberLabel.textAlignment = NSTextAlignmentNatural;
     }
-//    _numberLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:14.0f];
-    //TODO: 本地化
-    
+//    _numberLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:14.0f];    
 //    _numberLabel.frame = CGRectMake(_nameLabel.frame.origin.x + 5 + _nameLabel.frame.size.width, frame.origin.y, contentSize.width, frame.size.height);
 }
 

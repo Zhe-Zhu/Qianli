@@ -280,11 +280,8 @@
             [UserDataAccessor setUserPhoneDispImage:profile];
             [_bigProfilePhoto performSelectorOnMainThread:@selector(setImage:) withObject:smallProfile waitUntilDone:NO];
         }];
-//        self.bigProfilePhoto.image = profile;
     }
     else {
-//        self.avatar.image = profile;
-//        UIImage *image = [profile imageByResizing:CGSizeMake(avatarDiameter * 2, avatarDiameter * 2)];
         UIImage *image = [self reSizeImage:profile toSize:CGSizeMake(88, 88)];
         [UserDataTransUtils patchUserProfile:image number:[UserDataAccessor getUserRemoteParty] Completion:^(BOOL success) {
             [UserDataAccessor setUserProfile:image];

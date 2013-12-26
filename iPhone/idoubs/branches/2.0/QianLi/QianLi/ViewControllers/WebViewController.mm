@@ -17,7 +17,7 @@
 @interface WebViewController ()
 
 @property (strong, nonatomic) NSString *request;
-@property (strong, nonatomic) NSTimer *stopSynTimer;
+@property (weak, nonatomic) NSTimer *stopSynTimer;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (weak, nonatomic) UIActionSheet *actionSheet;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
@@ -55,7 +55,6 @@
         [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_initialURL]]];
     }
     
-//    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.taobao.com/"]]];
     _webView.delegate = self;
     UIBarButtonItem *moreButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showMore)];
     _moreButton = moreButton;
@@ -207,7 +206,6 @@
         [_activityIndicator stopAnimating];
         [self.navigationItem setLeftBarButtonItem:_crossButton animated:YES];
         [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(backToNormalButton) userInfo:nil repeats:NO];
-    //    [self.navigationItem setLeftBarButtonItem:_normalSynButton animated:YES];
     }
 }
 

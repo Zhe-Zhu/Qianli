@@ -301,7 +301,6 @@
     NSRunLoop *runloop = [NSRunLoop currentRunLoop];
     timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateTimeLabel) userInfo:nil repeats:YES];
     [runloop addTimer:timer forMode:NSRunLoopCommonModes];
-//    [runloop addTimer:timer forMode:UITrackingRunLoopMode];
     
     // 加入缓慢出现的动画效果
     UILabel *label = timeLabel;
@@ -838,6 +837,7 @@
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     _drawingVC = [storyboard instantiateViewControllerWithIdentifier:@"DrawingViewController"];
+    _drawingVC.isIncoming = NO;
     [[SipStackUtils sharedInstance].messageService sendMessage:kHandDrawing toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
     
     UINavigationControllerPortraitViewController *navigationVC = [[UINavigationControllerPortraitViewController alloc] init];
@@ -1087,9 +1087,7 @@
 
 - (void)dismissSelf
 {
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        [SipCallManager SharedInstance].audioVC = nil;
-    }];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     [self resumeMusicAppIfNeeded];
 }
 
@@ -1113,6 +1111,7 @@
     if (!_drawingVC) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         _drawingVC = [storyboard instantiateViewControllerWithIdentifier:@"DrawingViewController"];
+        _drawingVC.isIncoming = YES;
         UINavigationControllerPortraitViewController *navigationVC = [[UINavigationControllerPortraitViewController alloc] init];
         navigationVC.viewControllers = @[_drawingVC];
         [self presentViewController:navigationVC animated:YES completion:nil];
@@ -1190,8 +1189,11 @@
         [_imageDispVC scrollTO:_imageDispVC.totalNumber * PageWidth];
     }
     else if ([message isEqualToString:kImageDispCancel]){
-        if (_selectPhotoViewController) {
+        if (_selectPhotoViewController.presentingViewController) {
             [_selectPhotoViewController dismissViewControllerAnimated:YES completion:nil];
+        }
+        if (_cameraVC.presentingViewController) {
+            [_cameraVC dismissViewControllerAnimated:YES completion:nil];
         }
         [_imageDispVC cancelFromRemoteyParty];
     }
@@ -1216,6 +1218,9 @@
     }
     else if ([message isEqualToString:kDoodleImagePoints]){
        // [self showImageVC];
+        if ([words count] != 5) {
+            return;
+        }
         NSArray *coord = [[words objectAtIndex:2] componentsSeparatedByString:@":"];
         NSMutableArray *points = [NSMutableArray array];
         CGSize winSize = _imageDispVC.doodleView.frame.size;
@@ -1226,7 +1231,21 @@
             NSValue *pValue = [NSValue valueWithCGPoint:p];
             [points addObject:pValue];
         }
-        [_imageDispVC.doodleView drawingOnImageWithPoints:points Drawing:[[words objectAtIndex:1] isEqualToString:@"DRAW"]];
+        UIColor *color;
+        switch ([[words objectAtIndex:3] integerValue]) {
+            case 1:
+                color = [UIColor redColor];
+                break;
+            case 2:
+                color = [UIColor greenColor];
+                break;
+            default:
+                color = [UIColor blackColor];
+                break;
+        }
+        CGFloat lineWidth = [[words objectAtIndex:4] floatValue];
+        
+        [_imageDispVC.doodleView drawingOnImageWithPoints:points Drawing:[[words objectAtIndex:1] isEqualToString:@"DRAW"] lineWidth:lineWidth strokeColor:color];
     }
     else if ([message isEqualToString:kClearAllDoodle]){
         [_imageDispVC.doodleView clearAllFromRemote];
@@ -1342,6 +1361,9 @@
     
     else if ([message isEqualToString:kDrawingPoints]){
         //[self showDrawingVC];
+        if ([words count] != 6) {
+            return;
+        }
         CGSize winSize = _drawingVC.drawingView.bounds.size;
         NSArray *coord = [[words objectAtIndex:2] componentsSeparatedByString:@":"];
         NSMutableArray *points = [NSMutableArray array];
@@ -1352,7 +1374,19 @@
             NSValue *pValue = [NSValue valueWithCGPoint:p];
             [points addObject:pValue];
         }
-        [_drawingVC.drawingView drawingOnImageWithPoints:points Drawing:[[words objectAtIndex:1] isEqualToString:@"DRAW"]];
+        CGFloat lineWidth = [[words objectAtIndex:4] floatValue];
+        BOOL touchEnd;
+        if ([[words objectAtIndex:5] integerValue] == 1) {
+            touchEnd = YES;
+        }
+        else
+        {
+            touchEnd = NO;
+        }
+        [_drawingVC.drawingView drawingOnImageWithPoints:points Drawing:[[words objectAtIndex:1] isEqualToString:@"DRAW"] lineWidth:lineWidth strokeColorIndex:[[words objectAtIndex:3] integerValue] touchEnd:touchEnd];
+    }
+    else if ([message isEqualToString:kHandDrawingRevoke]){
+        [_drawingVC.drawingView revokeFromRemoteParty];
     }
     else if ([message isEqualToString:kCancelDrawing]){
         [_drawingVC cancelFromRemoteParty];
