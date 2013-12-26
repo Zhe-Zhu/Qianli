@@ -22,13 +22,16 @@
     BOOL fromRemoteParty;
     BOOL remoteDrawing;
     BOOL isClearAll;
-    NSInteger numberOfPoints; //to record how many points we have got and needed to send to our partner
+    NSInteger numberOfPoints; 
     
     CGPoint previousPoint;
     CGPoint thirdLastPoint;
 }
 
+@property(assign, nonatomic) CGFloat lineWidth;
 @property(strong, nonatomic) UIColor *strokeColor;
+@property(assign, nonatomic) CGFloat remoteLineWidth;
+@property(strong, nonatomic) UIColor *remoteStrokeColor;
 @property(strong, nonatomic) NSString *pointsMessage;
 
 @end
@@ -45,8 +48,10 @@
         [self setMultipleTouchEnabled:YES];
         _path = [UIBezierPath bezierPath];
         _remotePath = [UIBezierPath bezierPath];
-        [_path setLineWidth:2.0];
-        [_remotePath setLineWidth:2.0];
+        _lineWidth = 2.0;
+        _remoteLineWidth = 2.0;
+        [_path setLineWidth:_lineWidth];
+        [_remotePath setLineWidth:_remoteLineWidth];
         _path.lineCapStyle = kCGLineCapRound;
         _remotePath.lineCapStyle = kCGLineCapRound;
         _strokeColor = [UIColor redColor];
@@ -82,11 +87,10 @@
     if (rect.size.width > 20) {
         [_pathFormedImage drawInRect:rect];
     }
-    [_strokeColor setStroke];
-    
     if (fromRemoteParty) {
         fromRemoteParty = NO;
         if (remoteDrawing) {
+            [_remoteStrokeColor setStroke];
             [_remotePath stroke];
         }
         else{
@@ -98,6 +102,7 @@
             CGContextClearRect(context, rect);
         }
         else{
+            [_strokeColor setStroke];
             [_path stroke];
         }
     }
@@ -220,9 +225,9 @@
 
 - (void)sendDoodleMessage:(NSString *)drawing
 {
-    //Send message to remotrparty
+    //Send message to remotrparty TODO://change line width
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@", kDoodleImagePoints, kSeparator, drawing, kSeparator, _pointsMessage];
+    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@%@%d%@%f", kDoodleImagePoints, kSeparator, drawing, kSeparator, _pointsMessage, kSeparator, 1, kSeparator, _lineWidth];
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
 }
 
@@ -272,12 +277,15 @@
     return newImageSize;
 }
 
-- (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing
+- (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing lineWidth:(CGFloat)width strokeColor:(UIColor *)color
 {
     remoteDrawing = drawing;
     [_remotePath removeAllPoints];
     NSArray *array = [self calculateSmoothLinePoints:points];
     if (drawing) {
+        [_remotePath setLineWidth:width];
+        _remoteLineWidth = width;
+        _remoteStrokeColor = color;
         for (int i = 0; i < [array count]; ++i) {
             if (i == 0) {
                 CGPoint p = [[array objectAtIndex:i] CGPointValue];
@@ -290,7 +298,7 @@
         }
         fromRemoteParty = YES;
         [self setNeedsDisplay];
-        [self writeToImageWithPath:_remotePath Color:_strokeColor];
+        [self writeToImageWithPath:_remotePath Color:color];
     }
     else{
         CGSize imageSize = self.bounds.size;
@@ -346,6 +354,15 @@
     }
 }
 
+- (void)changeLineWidthTo:(CGFloat)widht
+{
+}
+
+- (void)changeLineColor:(UIColor *)col0r
+{
+    
+}
+
 - (void)changePaintingMode
 {
     _isDrawing = !_isDrawing;
@@ -382,7 +399,7 @@
     UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     
     CGSize newImageSize = [self adjustImageFrame:_image.size];
-    [_image drawInRect:CGRectMake((320-newImageSize.width)/2, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
+    [_image drawInRect:CGRectMake((320 - newImageSize.width) / 2.0, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     [[self layer] renderInContext:context];

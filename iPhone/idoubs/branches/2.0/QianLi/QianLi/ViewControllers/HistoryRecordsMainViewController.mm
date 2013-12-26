@@ -224,7 +224,6 @@
     NSString *message = [NSString stringWithFormat:@"%@%@%@", kAppointment,kSeparator,[UserDataAccessor getUserRemoteParty]];
     [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:entry.remoteParty];
     
-    // Add to history record TODO: modify the media_type of the event
     DetailHistEvent *event = [[DetailHistEvent alloc] init];
     event.remoteParty = entry.remoteParty;
     event.status = kHistoryEventStatus_Appointment;

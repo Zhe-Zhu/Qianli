@@ -21,7 +21,7 @@
 @property(assign, nonatomic, readonly) BOOL isDrawing;
 @property(strong, nonatomic) UIImage *image;
 -(void)changePaintingMode;
-- (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing;
+- (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing lineWidth:(CGFloat)width strokeColor:(UIColor *)color;
 - (UIImage*)screenshot;
 - (void)clearAll;
 - (void)clearAllFromRemote;
