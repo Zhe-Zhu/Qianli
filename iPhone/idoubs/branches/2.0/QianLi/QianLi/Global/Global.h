@@ -145,6 +145,7 @@ nil]
 
 // Umeng SDK Key
 #define kUmengSDKKey @"527c513f56240b352905fbfb"
+#define kSingUpKey @"SignedUp"
 
 //notification
 #define kHistoryChangedNotification @"HistoryChanged"

@@ -165,7 +165,7 @@ const float kColorB = 60/100.0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveIncomingCallNotif:) name:kReceiveIncomingCallNotifName object:nil];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if ([userDefaults boolForKey:@"SignedUp"]) {
+    if ([userDefaults boolForKey:kSingUpKey]) {
         self.window.rootViewController = _tabController;
         [[SipStackUtils sharedInstance] start]; //kAudioSessionCategory_PlayAndRecord
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
@@ -268,7 +268,7 @@ const float kColorB = 60/100.0;
 			break;
 	}
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if ([userDefaults boolForKey:@"SignedUp"]) {
+    if ([userDefaults boolForKey:kSingUpKey]) {
         [self displayNoPushNotificationWarning];
         [self displayNoRecordingWarning];
     }
