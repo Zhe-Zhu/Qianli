@@ -179,28 +179,31 @@
             SignUpVerificationCodeViewController *verifyCV = [storyboard instantiateViewControllerWithIdentifier:@"SignUpVerificationCodeViewController"];
             verifyCV.number = number;
             verifyCV.readableNumber = [NSString stringWithFormat:@"%@ %@", [self stripCountryName], _phoneNumber.text];
-//            [self performSelectorOnMainThread:@selector(showVerifyingController:) withObject:verifyCV waitUntilDone:NO];
-            [self performSelector:@selector(showVerifyingController:) withObject:verifyCV afterDelay:1];
-//            [_indicator stopAnimating];
+            [self performSelectorOnMainThread:@selector(showVerifyingVC:) withObject:verifyCV waitUntilDone:NO];
         }
         else if (status == 2){
             [UserDataAccessor setUserRemoteParty:number];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setBool:YES forKey:@"SignedUp"];
+            [userDefaults setBool:YES forKey:kSingUpKey];
             [userDefaults synchronize];
             QianLiAppDelegate *qianliAppDelegate = (QianLiAppDelegate*)[UIApplication sharedApplication].delegate;
-            [qianliAppDelegate resetRootViewController];
+            [qianliAppDelegate performSelectorOnMainThread:@selector(resetRootViewController) withObject:nil waitUntilDone:YES];
         }
         else if (status < 0) {
             // Show the Alert View
             UIAlertView *registerError = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"registerErrorTitle", nil) message:NSLocalizedString(@"registerErrorMessage", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Confirm", nil) otherButtonTitles: nil];
-            [registerError show];
+            [registerError performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
             
             [_phoneNumber becomeFirstResponder];
             [_indicator stopAnimating];
             [self activateButtonContinue];
         }
     }];
+}
+
+- (void)showVerifyingVC:(SignUpVerificationCodeViewController *)verifyCV
+{
+    [self performSelector:@selector(showVerifyingController:) withObject:verifyCV afterDelay:1];
 }
 
 - (void)showVerifyingController:(SignUpVerificationCodeViewController *)verifyCV

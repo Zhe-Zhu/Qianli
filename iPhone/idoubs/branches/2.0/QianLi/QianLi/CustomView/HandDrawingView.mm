@@ -187,11 +187,11 @@
     }
     if (isDrawing) {
         [self sendDoodleMessage:@"DRAW" touchEnd:YES];
-        [self writeToImageWithPath:_path color:_strokeColor width:_lineWidth];
+        [self writeToImageWithPath:_path color:_strokeColor width:_lineWidth isDrawing:isDrawing];
     }
     else{
         [self sendDoodleMessage:@"ERASE" touchEnd:YES];
-        [self writeToImageWithPath:_path color:[UIColor whiteColor] width:_lineWidth + EraseExtra];
+        [self writeToImageWithPath:_path color:[UIColor whiteColor] width:_lineWidth + EraseExtra isDrawing:isDrawing];
     }
     [_path removeAllPoints];
     [_pathPoints removeAllObjects];
@@ -219,7 +219,7 @@
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
 }
 
-- (void)writeToImageWithPath:(UIBezierPath*)path color:(UIColor *)color width:(CGFloat)width
+- (void)writeToImageWithPath:(UIBezierPath*)path color:(UIColor *)color width:(CGFloat)width isDrawing:(BOOL)drawing
 {
     CGSize size= self.bounds.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
@@ -232,7 +232,7 @@
     else{
         [_pathFormedImage drawAtPoint:CGPointZero];
     }
-    if (isDrawing) {
+    if (drawing) {
         [path setLineWidth:width];
     }
     else{
@@ -276,10 +276,10 @@
         }
         if (drawing) {
             [self writeToImageWithPath:_remotePath color:
-             [self getColorWithIndex:index] width:_remoteLineWidth];
+             [self getColorWithIndex:index] width:_remoteLineWidth isDrawing:drawing];
         }
         else{
-            [self writeToImageWithPath:_remotePath color:[UIColor whiteColor] width:_remoteLineWidth];
+            [self writeToImageWithPath:_remotePath color:[UIColor whiteColor] width:_remoteLineWidth isDrawing:drawing];
         }
         [_remotePath removeAllPoints];
         remotePathHasPoints = NO;

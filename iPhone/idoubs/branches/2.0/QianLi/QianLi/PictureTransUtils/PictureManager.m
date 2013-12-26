@@ -27,6 +27,7 @@
 @property(nonatomic, strong) NSString *emailAddress;
 @property(nonatomic, strong) NSString *systemIndicator;
 @property(nonatomic, strong) NSString *avatarURL;
+@property(nonatomic, strong) NSString *bigAvatarURL;
 
 @end
 
@@ -110,7 +111,7 @@
 @end
 
 @implementation Account
-@synthesize udid, password, nickname, phoneNumber, emailAddress, systemIndicator, avatarURL;
+@synthesize udid, password, nickname, phoneNumber, emailAddress, systemIndicator, avatarURL, bigAvatarURL;
 @end
 
 @implementation APNStokenwrapping
@@ -406,7 +407,7 @@ static PictureManager *pictureManager;
     RKResponseDescriptor *registerResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:registerMapping method:RKRequestMethodPOST pathPattern:@"/users/register/" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     
     RKObjectMapping *registerRequestMapping = [RKObjectMapping requestMapping];
-    [registerRequestMapping addAttributeMappingsFromDictionary:@{@"udid": @"udid", @"password": @"password", @"nickname": @"name", @"phoneNumber": @"phone_number", @"emailAddress": @"email", @"systemIndicator": @"os_type", @"avatarURL": @"avatar"}];
+    [registerRequestMapping addAttributeMappingsFromDictionary:@{@"udid": @"udid", @"password": @"password", @"nickname": @"name", @"phoneNumber": @"phone_number", @"emailAddress": @"email", @"systemIndicator": @"os_type", @"avatarURL": @"avatar", @"bigAvatarURL": @"large_avatar"}];
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:registerRequestMapping objectClass:[Account class] rootKeyPath:nil method:RKRequestMethodPOST];
     [manager addResponseDescriptor:registerResponseDescriptor];
     [manager addRequestDescriptor:requestDescriptor];
@@ -419,6 +420,7 @@ static PictureManager *pictureManager;
     account.emailAddress = [Utils stringbyRmovingSpaceFromString:email];
     account.systemIndicator = [Utils stringbyRmovingSpaceFromString:os];
     account.avatarURL = nil;
+    account.bigAvatarURL = nil;
     account.password = [Utils stringbyRmovingSpaceFromString:password];
     // If the shared object manager is nil, we initialize a new one.
     if (avatar) {
@@ -431,8 +433,6 @@ static PictureManager *pictureManager;
         }];
         
         RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^( RKObjectRequestOperation *operation , RKMappingResult *mappingResult ){
-            //Account *tempAccount = (Account *)[mappingResult firstObject];
-            // The block parameter gives others an opportunity to take proper actions no matter the operation is successful or failed.
             RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
             if (success) {
                 success(regStatus.status);
@@ -447,9 +447,18 @@ static PictureManager *pictureManager;
         // If the user does not provide profile, then we just use all the information to register an account.
         [[RKObjectManager sharedManager] postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
-            success(regStatus.status);
+            if (success) {
+                success(regStatus.status);
+            }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            success(-1);
+            [[RKObjectManager sharedManager] postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
+                if (success) {
+                    success(regStatus.status);
+                }
+            } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                
+            }];
         }];
     }
 }
