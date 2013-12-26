@@ -579,6 +579,32 @@
 {
     UIImage *image = [_doodleView screenshot];
     UIImageWriteToSavedPhotosAlbum(image, NULL, NULL, NULL);
+    
+    UIView *flashView = [[UIView alloc] initWithFrame:_doodleView.frame];
+    flashView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:flashView];
+    [UIView animateWithDuration:0.2 animations:^{
+        flashView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        [flashView removeFromSuperview];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        imageView.frame = _doodleView.frame;
+        [self.view addSubview:imageView];
+        [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            CGAffineTransform scaleTransform = CGAffineTransformMakeScale(0.01, 0.01);
+            CGAffineTransform translation;
+            if (IS_IPHONE5) {
+                translation = CGAffineTransformMakeTranslation(- 126.0, 260.0);
+            }
+            else{
+                translation = CGAffineTransformMakeTranslation(- 126.0, 220.0);
+            }
+            imageView.transform = CGAffineTransformConcat(scaleTransform, translation);
+        } completion:^(BOOL finished) {
+            [imageView removeFromSuperview];
+        }];
+    }];
+
 }
 
 - (void)didTapOnView

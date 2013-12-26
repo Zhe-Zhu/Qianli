@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "HandDrawingView.h"
 
-@interface DrawingViewController : UIViewController
+@interface DrawingViewController : UIViewController<HandDrawingDelegate>
 
+@property (nonatomic, assign) BOOL isIncoming;;
 @property(weak, nonatomic) HandDrawingView *drawingView;
 - (void)cancelFromRemoteParty;
 

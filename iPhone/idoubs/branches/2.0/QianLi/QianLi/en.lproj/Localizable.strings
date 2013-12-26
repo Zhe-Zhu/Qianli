@@ -157,7 +157,7 @@
 "cancelDoodle" = "Cancel doodle";
 
 "Notice" = "notice";
-"TerminateCall" = "The call is terminated due to no internet access anymore. Try again when internet access is available again!";
+"TerminateCall" = "The call is terminated due to no internet access anymore. Try again when internet access is available!";
 "Photos" = " Photos";
 
 "alertRecordingTitle" = "recording is not allowed";
