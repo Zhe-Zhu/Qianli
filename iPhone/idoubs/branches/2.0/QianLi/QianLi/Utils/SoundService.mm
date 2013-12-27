@@ -42,11 +42,17 @@
 {
     NSDictionary *userInfo = notification.userInfo;
     if ([[userInfo objectForKey:AVAudioSessionInterruptionTypeKey] integerValue]== AVAudioSessionInterruptionTypeBegan) {
+        if ([SipCallManager SharedInstance].audioVC) {
+            [[SipStackUtils sharedInstance].audioService.audioSession holdCall];
+        }
         [[AVAudioSession sharedInstance] setActive:NO error:NULL];
     }
     else{
-        [[AVAudioSession sharedInstance] setActive:YES error:NULL];
-        //[self resumeCallAfterInterruption];
+        [self startAudioSession];
+        if ([SipCallManager SharedInstance].audioVC) {
+            [self enableBackgroundSound];
+            [[SipStackUtils sharedInstance].audioService.audioSession resumeCall];
+        }
     }
 }
 
@@ -81,18 +87,6 @@
         return NO;
     }
     return YES;
-}
-
-- (void)resumeCallAfterInterruption
-{
-    if ([SipCallManager SharedInstance].audioVC) {
-//        [self startAudioSession];
-//        [self enableBackgroundSound];
-        [[AVAudioSession sharedInstance] setActive:YES error:NULL];
-    }
-    else{
-        [self startAudioSession];
-    }
 }
 
 - (BOOL)configureSpeakerEnabled:(BOOL)speakerEnabled

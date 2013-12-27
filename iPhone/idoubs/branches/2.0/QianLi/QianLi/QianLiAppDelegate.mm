@@ -167,7 +167,7 @@ const float kColorB = 60/100.0;
     
     if ([userDefaults boolForKey:kSingUpKey]) {
         self.window.rootViewController = _tabController;
-        [[SipStackUtils sharedInstance] start]; //kAudioSessionCategory_PlayAndRecord
+        [[SipStackUtils sharedInstance] start];
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         // Register remote notification
@@ -190,7 +190,7 @@ const float kColorB = 60/100.0;
     [MobClick startWithAppkey:kUmengSDKKey];
     [UMFeedback checkWithAppkey:kUmengSDKKey];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(umCheck:) name:UMFBCheckFinishedNotification object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNetworkEvent:) name:kNgnNetworkEventArgs_Name object:nil];
     return YES;
 }
 
@@ -259,10 +259,6 @@ const float kColorB = 60/100.0;
 		case CONN_STATE_CONNECTING:
         case CONN_STATE_CONNECTED:
             break;
-		case CONN_STATE_TERMINATING:
-			[[SipStackUtils sharedInstance] unRegisterIdentity];
-            [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-			break;
         default:
             [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
 			break;
@@ -588,6 +584,34 @@ const float kColorB = 60/100.0;
         }];
     }
 }
+
+# pragma mark -- network change
+- (void)onNetworkEvent:(NSNotification*)notification {
+	NgnNetworkEventArgs *eargs = [notification object];
+	
+	switch (eargs.eventType) {
+		case NETWORK_EVENT_STATE_CHANGED:
+		default:
+		{
+			if([NgnEngine sharedInstance].networkService.reachable)
+            {
+                if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+                    [[UIApplication sharedApplication] clearKeepAliveTimeout];
+                    [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:^{
+                        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+                    }];
+                }
+            }
+            else{
+                if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+                    [[UIApplication sharedApplication] clearKeepAliveTimeout];
+                }
+            }
+			break;
+		}
+	}
+}
+
 
 # pragma mark -- Umeng
 - (void)umCheck:(NSNotification *)notification

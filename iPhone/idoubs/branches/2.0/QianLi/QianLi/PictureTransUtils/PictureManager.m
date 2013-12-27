@@ -439,7 +439,9 @@ static PictureManager *pictureManager;
             }
             
         } failure:^( RKObjectRequestOperation *operation , NSError *error){
-
+            if (success) {
+                success(-1);
+            }
         }];
         [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
     }
@@ -457,7 +459,9 @@ static PictureManager *pictureManager;
                     success(regStatus.status);
                 }
             } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                
+                if (success) {
+                    success(-1);
+                }
             }];
         }];
     }
@@ -494,6 +498,13 @@ static PictureManager *pictureManager;
             success(regStatus.status);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [manager postObject:account path:@"/users/verify/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            VerifyStatus *regStatus = (VerifyStatus *)[mappingResult firstObject];
+            if (success) {
+                success(regStatus.status);
+            }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        }];
     }];
 }
 

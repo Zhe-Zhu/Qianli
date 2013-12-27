@@ -466,7 +466,6 @@
     jsonRequest = [NSString stringWithFormat:@"%@]",jsonRequest];
     NSString *urlString= @"http://112.124.36.134:8080/users/whoisactive/.json";
     NSURL* url = [[NSURL alloc] initWithString:urlString];
-    //NSLog(@"json1:%@",jsonRequest);
     
     NSData* requestData = [jsonRequest dataUsingEncoding:NSUTF8StringEncoding];
     NSString* requestDataLengthString = [[NSString alloc] initWithFormat:@"%d", [requestData length]];
@@ -506,27 +505,12 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-   // NSLog(@"didReceiveData:%@", str);
-    NSCharacterSet *charSet = [NSCharacterSet characterSetWithCharactersInString:@"\""];
-    NSArray *array = [str componentsSeparatedByCharactersInSet:charSet];
-    
-    NSMutableArray *numberArray = [NSMutableArray array];
-    for (int i = 1; i < [array count] - 1; ++i) {
-        if ([[(NSString *)[array objectAtIndex:i] substringToIndex:2] isEqualToString:@"00"]) {
-            [numberArray addObject: [array objectAtIndex:i]];
-        }
+    NSError *error;
+    NSArray *JsonArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    if (error) {
+        return;
     }
-    if ([array count] > 1) {
-        if ([[array objectAtIndex:0] isEqualToString:@"["] && [[array lastObject] isEqualToString:@"]"]) {
-            [self selectFriendsFromContactsByNumber:numberArray];
-        }
-    }
-    else if([array count] == 1){
-        if ([[array objectAtIndex:0] isEqualToString:@"[]"]) {
-            [self selectFriendsFromContactsByNumber:numberArray];
-        }
-    }
+    [self selectFriendsFromContactsByNumber:JsonArray];
 }
 
 - (void)selectFriendsFromContactsByNumber:(NSArray *)numbers
