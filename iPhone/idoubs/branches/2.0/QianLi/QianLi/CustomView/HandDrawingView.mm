@@ -9,7 +9,6 @@
 #import "HandDrawingView.h"
 #import "SipStackUtils.h"
 
-#define EraseExtra 16
 
 @interface HandDrawingView (){
     UIBezierPath *_path;
@@ -33,6 +32,7 @@
 }
 
 @property(assign, nonatomic) CGFloat lineWidth;
+@property(assign, nonatomic) CGFloat eraseLineWidth;
 @property(assign, nonatomic) CGFloat remoteLineWidth;
 @property(strong, nonatomic) UIColor *remoteStrokeColor;
 @property(strong, nonatomic) UIColor *strokeColor;
@@ -55,6 +55,7 @@
         colorIndex = [userData integerForKey:kDoodleLineColor];
         _strokeColor = [self getColorWithIndex:colorIndex];
         _lineWidth = [self getWidthWithIndex:[userData integerForKey:kDoodleLineWidth]];
+        _eraseLineWidth = [self getWidthWithIndex:[userData integerForKey:kDoodleEraseWidth]];
         [self setMultipleTouchEnabled:NO];
         _path = [UIBezierPath bezierPath];
         _remotePath = [UIBezierPath bezierPath];
@@ -91,7 +92,7 @@
     }
     else{
         if (!isDrawing) {
-            [_path setLineWidth:_lineWidth + EraseExtra];
+            [_path setLineWidth:_eraseLineWidth];
             [[UIColor whiteColor] setStroke];
             [_path stroke];
         }
@@ -191,7 +192,7 @@
     }
     else{
         [self sendDoodleMessage:@"ERASE" touchEnd:YES];
-        [self writeToImageWithPath:_path color:[UIColor whiteColor] width:_lineWidth + EraseExtra isDrawing:isDrawing];
+        [self writeToImageWithPath:_path color:[UIColor whiteColor] width:_eraseLineWidth isDrawing:isDrawing];
     }
     [_path removeAllPoints];
     [_pathPoints removeAllObjects];
@@ -232,12 +233,7 @@
     else{
         [_pathFormedImage drawAtPoint:CGPointZero];
     }
-    if (drawing) {
-        [path setLineWidth:width];
-    }
-    else{
-        [path setLineWidth:width + EraseExtra];
-    }
+    [path setLineWidth:width];
     [color setStroke];
     [path stroke];
     _prePathFormedImage = [_pathFormedImage copy];
@@ -270,7 +266,7 @@
             [_remotePath setLineWidth:_remoteLineWidth];
         }
         else{
-            _remoteLineWidth = width + EraseExtra;
+            _remoteLineWidth = width;
             _remoteStrokeColor = [UIColor whiteColor];
             [_remotePath setLineWidth:_remoteLineWidth];
         }
@@ -368,9 +364,14 @@
     UIGraphicsEndImageContext();
 }
 
-- (void)changeDrawLineWidthTo:(CGFloat)lWidth
+- (void)changeEraseLineWidthTo:(NSInteger)index
 {
-    _lineWidth = lWidth;
+    _eraseLineWidth = [self getWidthWithIndex:index];
+}
+
+- (void)changeDrawLineWidthTo:(NSInteger)index
+{
+    _lineWidth = [self getWidthWithIndex:index];
 }
 
 - (void)changeDrawLineColorTo:(NSInteger)index

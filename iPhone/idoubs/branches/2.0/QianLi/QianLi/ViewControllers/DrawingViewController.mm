@@ -13,9 +13,11 @@
 
 #define ColourButtonStartTag 10000
 #define WidthButtonStartTag 100000
+#define EraseWidthButtonStartTag 1000000
 
 @interface DrawingViewController (){
     BOOL isShowWidthButton;
+    BOOL isShowEraseWidthButton;
     double beginTime;
 }
 
@@ -27,10 +29,6 @@
 @property (nonatomic, strong) NSMutableArray *drawings;
 @property (weak, nonatomic) UIView *changeColorBar;
 @property (weak, nonatomic) UIView *toolBar;
-
-- (IBAction)revoke:(UIButton *)sender;
-- (IBAction)clear:(id)sender;
-
 @end
 
 @implementation DrawingViewController
@@ -55,6 +53,11 @@
     NSInteger index = [userData integerForKey:kDoodleLineWidth];
     if ((index < 1) || (index > 5)) {
         [userData setInteger:1 forKey:kDoodleLineWidth];
+        [userData synchronize];
+    }
+    index = [userData integerForKey:kDoodleEraseWidth];
+    if ((index < 1) || (index > 5)) {
+        [userData setInteger:1 forKey:kDoodleEraseWidth];
         [userData synchronize];
     }
     index = [userData integerForKey:kDoodleLineColor];
@@ -97,6 +100,7 @@
     [self.view addSubview:view];
     [self.view sendSubviewToBack:view];
     [self addCHangeWidthButtonToView:self.view];
+    [self addCHangeEraseWidthButtonToView:self.view];
     
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     [cancelButton setImage:[UIImage imageNamed:@"arrowLeft.png"]];
@@ -255,7 +259,6 @@
         if (widthButton == nil) {
             widthButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [widthButton addTarget:self action:@selector(pressedWidthButton:) forControlEvents:UIControlEventTouchUpInside];
-            //widthButton.frame = CGRectMake(28, (view.frame.size.height - normalImage.size.width) / 2.0 + (i - 1) * (normalImage.size.height + 5), normalImage.size.width, normalImage.size.height);
             widthButton.frame = CGRectMake(28 - normalImage.size.width / 2.0, (_drawingView.frame.size.height + _drawingView.frame.origin.y + 3), normalImage.size.width, normalImage.size.height);
             widthButton.tag = WidthButtonStartTag + i;
             [view addSubview:widthButton];
@@ -266,15 +269,56 @@
     }
 }
 
-- (void)showChangeWidthButton
+- (void)addCHangeEraseWidthButtonToView:(UIView *)view
 {
-    if (isShowWidthButton) {
-        return;
+    NSUserDefaults *userData = [NSUserDefaults standardUserDefaults];
+    NSInteger colorIndex = [userData integerForKey:kDoodleEraseWidth];
+    for (int i = 1; i < 5; ++i) {
+        UIImage *normalImage;
+        if (i == colorIndex) {
+            normalImage = [UIImage imageNamed:[NSString stringWithFormat:@"doodle_width_%d_selected.png", i]];
+        }
+        else{
+            normalImage = [UIImage imageNamed:[NSString stringWithFormat:@"doodle_width_%d.png", i]];
+        }
+        UIButton *widthButton = (UIButton *)[view viewWithTag:EraseWidthButtonStartTag + i];
+        if (widthButton == nil) {
+            widthButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [widthButton addTarget:self action:@selector(pressedEraseWidthButton:) forControlEvents:UIControlEventTouchUpInside];
+            widthButton.frame = CGRectMake(28 - normalImage.size.width / 2.0 + 66, (_drawingView.frame.size.height + _drawingView.frame.origin.y + 3), normalImage.size.width, normalImage.size.height);
+            widthButton.tag = EraseWidthButtonStartTag + i;
+            [view addSubview:widthButton];
+            [view bringSubviewToFront:widthButton];
+            widthButton.alpha = 0.0;
+        }
+        [widthButton setImage:normalImage forState:UIControlStateNormal];
     }
-    isShowWidthButton = YES;
+}
+
+- (void)showChangeWidthButton:(BOOL)isDrawingWidth
+{
+    if (isDrawingWidth) {
+        if (isShowWidthButton) {
+            return;
+        }
+        isShowWidthButton = YES;
+    }
+    else{
+        if (isShowEraseWidthButton) {
+            return;
+        }
+        isShowEraseWidthButton = YES;
+    }
+    
     [UIView animateWithDuration:0.2 animations:^{
         for (int i = 1; i < 5; ++i) {
-            UIButton *button = (UIButton *)[self.view viewWithTag:WidthButtonStartTag + i];
+            UIButton *button;
+            if (isDrawingWidth) {
+                button = (UIButton *)[self.view viewWithTag:WidthButtonStartTag + i];
+            }
+            else{
+                button = (UIButton *)[self.view viewWithTag:EraseWidthButtonStartTag + i];
+            }
             button.alpha = 1.0;
             CGRect frame = button.frame;
             button.frame = CGRectMake(frame.origin.x, frame.origin.y - 7 - i * (frame.size.height + 5), frame.size.width, frame.size.height);
@@ -284,15 +328,29 @@
     }];
 }
 
-- (void)hideChangeWidthButton
+- (void)hideChangeWidthButton:(BOOL)isDrawingWidth
 {
-    if (!isShowWidthButton) {
-        return;
+    if (isDrawingWidth) {
+        if (!isShowWidthButton) {
+            return;
+        }
+        isShowWidthButton = NO;
     }
-    isShowWidthButton = NO;
+    else{
+        if (!isShowEraseWidthButton) {
+            return;
+        }
+        isShowEraseWidthButton = NO;
+    }
     [UIView animateWithDuration:0.2 animations:^{
         for (int i = 1; i < 5; ++i) {
-            UIButton *button = (UIButton *)[self.view viewWithTag:WidthButtonStartTag + i];
+            UIButton *button;
+            if (isDrawingWidth) {
+                button = (UIButton *)[self.view viewWithTag:WidthButtonStartTag + i];
+            }
+            else{
+                button = (UIButton *)[self.view viewWithTag:EraseWidthButtonStartTag + i];
+            }
             button.alpha = 0.0;
             CGRect frame = button.frame;
             button.frame = CGRectMake(frame.origin.x, frame.origin.y + 7 + i * (frame.size.height + 5), frame.size.width, frame.size.height);
@@ -307,7 +365,10 @@
 - (void)handDrawingDidDraw
 {
     if (isShowWidthButton) {
-        [self hideChangeWidthButton];
+        [self hideChangeWidthButton:YES];
+    }
+    if (isShowEraseWidthButton) {
+        [self hideChangeWidthButton:NO];
     }
     _undoButton.enabled = YES;
     _clearAll.enabled = YES;
@@ -339,12 +400,25 @@
     [_penButton setImage:pen forState:UIControlStateNormal];
 }
 
-- (void)updateWidthButtons
+- (void)updateWidthButtons:(BOOL)isDrawingButton
 {
     NSUserDefaults *userData = [NSUserDefaults standardUserDefaults];
-    NSInteger tag = [userData integerForKey:kDoodleLineWidth];
+    NSInteger tag;
+    if (isDrawingButton) {
+      tag = [userData integerForKey:kDoodleLineWidth];
+
+    }
+    else{
+       tag = [userData integerForKey:kDoodleEraseWidth];
+    }
     for (int i = 1; i < 5; ++i) {
-        UIButton *button = (UIButton *)[self.view viewWithTag:WidthButtonStartTag + i];
+        UIButton *button;
+        if (isDrawingButton) {
+            button = (UIButton *)[self.view viewWithTag:WidthButtonStartTag + i];
+        }
+        else{
+            button = (UIButton *)[self.view viewWithTag:EraseWidthButtonStartTag + i];
+        }
         if (i == tag) {
             [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"doodle_width_%d_selected", tag]] forState:UIControlStateNormal];
         }
@@ -354,47 +428,39 @@
     }
 }
 
+- (void)pressedEraseWidthButton:(UIButton *)button
+{
+    NSInteger tag = button.tag - EraseWidthButtonStartTag;
+    NSUserDefaults *userData = [NSUserDefaults standardUserDefaults];
+    [userData setInteger:tag forKey:kDoodleEraseWidth];
+    [userData synchronize];
+    [self updateWidthButtons:NO];
+    [self hideChangeWidthButton:NO];
+    [_drawingView changeEraseLineWidthTo:tag];
+}
+
 - (void)pressedWidthButton:(UIButton *)button
 {
     NSInteger tag = button.tag - WidthButtonStartTag;
     NSUserDefaults *userData = [NSUserDefaults standardUserDefaults];
     [userData setInteger:tag forKey:kDoodleLineWidth];
     [userData synchronize];
-    [self updateWidthButtons];
-    [self hideChangeWidthButton];
-    switch (tag) {
-        case 1:
-            [_drawingView changeDrawLineWidthTo:5.0];
-            break;
-        case 2:
-            [_drawingView changeDrawLineWidthTo:13.0];
-            break;
-        case 3:
-            [_drawingView changeDrawLineWidthTo:20.0];
-            break;
-        case 4:
-            [_drawingView changeDrawLineWidthTo:28.0];
-            break;
-        default:
-            [_drawingView changeDrawLineWidthTo:5.0];
-            break;
-    }
+    [self updateWidthButtons:YES];
+    [self hideChangeWidthButton:YES];
+    [_drawingView changeDrawLineWidthTo:tag];
 }
 
 - (void)pressedPenButton:(UIButton *)button
 {
-    if (![_drawingView getDrawingMode]) {
-        [_drawingView changeToDrawMode];
-        [_eraseButton setImage:[UIImage imageNamed:@"doodle_eraser.png"] forState:UIControlStateNormal];
-        [self updatePenButton];
+    [_drawingView changeToDrawMode];
+    [_eraseButton setImage:[UIImage imageNamed:@"doodle_eraser.png"] forState:UIControlStateNormal];
+    [self updatePenButton];
+    [self hideChangeWidthButton:NO];
+    if (!isShowWidthButton) {
+        [self showChangeWidthButton:YES];
     }
     else{
-        if (!isShowWidthButton) {
-            [self showChangeWidthButton];
-        }
-        else{
-            [self hideChangeWidthButton];
-        }
+        [self hideChangeWidthButton:YES];
     }
 }
 
@@ -404,27 +470,31 @@
     UIImage *eraser = [UIImage imageNamed:@"doodle_eraser_selected.png"];
     [button setImage:eraser forState:UIControlStateNormal];
     [self updatePenButton];
-    [self hideChangeWidthButton];
+    [self hideChangeWidthButton:YES];
+    [self showChangeWidthButton:NO];
 }
 
 - (void)pressedUndoButton:(UIButton *)button
 {
     [_drawingView revoke];
     button.enabled = NO;
-    [self hideChangeWidthButton];
+    [self hideChangeWidthButton:YES];
+    [self hideChangeWidthButton:NO];
     _eraseButton.enabled = YES;
 }
 
 - (void)pressedTrashButton:(UIButton *)button
 {
-    [self hideChangeWidthButton];
+    [self hideChangeWidthButton:YES];
+    [self hideChangeWidthButton:NO];
     [_drawingView clearAll];
     button.enabled = NO;
 }
 
 - (void)pressedSaveButton:(UIButton *)button
 {
-    [self hideChangeWidthButton];
+    [self hideChangeWidthButton:YES];
+    [self hideChangeWidthButton:NO];
     [self.drawings addObject:[Utils screenshot:_drawingView toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     UIImage *image = [_drawingView screenshot];
     UIImageWriteToSavedPhotosAlbum(image, NULL, NULL, NULL);
