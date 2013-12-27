@@ -216,7 +216,14 @@
     }
     //Send message to remotrparty
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@%@%d%@%f%@%d",kDrawingPoints,kSeparator,drawing,kSeparator,_pointsMessage, kSeparator, colorIndex, kSeparator, _lineWidth, kSeparator, touchFlag];
+    CGFloat width;
+    if (drawing) {
+        width = _lineWidth;
+    }
+    else{
+        width = _eraseLineWidth;
+    }
+    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@%@%d%@%f%@%d",kDrawingPoints,kSeparator,drawing,kSeparator,_pointsMessage, kSeparator, colorIndex, kSeparator, width, kSeparator, touchFlag];
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
 }
 
