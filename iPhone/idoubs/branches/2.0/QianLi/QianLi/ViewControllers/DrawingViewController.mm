@@ -21,8 +21,6 @@
     double beginTime;
 }
 
-@property (weak, nonatomic) UIButton *undoButton;
-@property (weak, nonatomic) UIButton *clearAll;
 @property (weak, nonatomic) UIButton *penButton;
 @property (weak, nonatomic) UIButton *eraseButton;
 

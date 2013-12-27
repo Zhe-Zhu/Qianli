@@ -63,6 +63,7 @@
             success(YES);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        // try push it once more
         [manager postObject:message path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             if (success) {
                 success(YES);

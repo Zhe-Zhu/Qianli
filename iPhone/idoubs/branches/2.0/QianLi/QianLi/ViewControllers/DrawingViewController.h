@@ -11,6 +11,8 @@
 
 @interface DrawingViewController : UIViewController<HandDrawingDelegate>
 
+@property (weak, nonatomic) UIButton *undoButton;
+@property (weak, nonatomic) UIButton *clearAll;
 @property (nonatomic, assign) BOOL isIncoming;;
 @property(weak, nonatomic) HandDrawingView *drawingView;
 - (void)cancelFromRemoteParty;
