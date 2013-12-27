@@ -49,8 +49,8 @@
     }
     else{
         [self startAudioSession];
-        [self enableBackgroundSound];
         if ([SipCallManager SharedInstance].audioVC) {
+            [self enableBackgroundSound];
             [[SipStackUtils sharedInstance].audioService.audioSession resumeCall];
         }
     }

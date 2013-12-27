@@ -439,7 +439,9 @@ static PictureManager *pictureManager;
             }
             
         } failure:^( RKObjectRequestOperation *operation , NSError *error){
-
+            if (success) {
+                success(-1);
+            }
         }];
         [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
     }
@@ -457,7 +459,9 @@ static PictureManager *pictureManager;
                     success(regStatus.status);
                 }
             } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                
+                if (success) {
+                    success(-1);
+                }
             }];
         }];
     }

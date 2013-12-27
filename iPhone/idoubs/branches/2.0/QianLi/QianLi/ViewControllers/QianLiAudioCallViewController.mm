@@ -215,6 +215,14 @@
     [[SipStackUtils sharedInstance].soundService stopRingTone];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if (didEndCall) {
+        [self resumeMusicAppIfNeeded];
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -578,7 +586,8 @@
 
 - (void)pressButtonEndCall
 {
-    [[SipStackUtils sharedInstance].audioService hangUpCall];
+    //[[SipStackUtils sharedInstance].audioService hangUpCall];
+    [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [timer invalidate]; // 停止计时并从Runloop中释放
     
@@ -690,7 +699,8 @@
 // 按下拒绝接听按钮
 - (void)pressRejectButton
 {
-    [[SipStackUtils sharedInstance].audioService hangUpCall];
+   // [[SipStackUtils sharedInstance].audioService hangUpCall];
+    [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
         
     }];
@@ -708,7 +718,8 @@
 {
     if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
         if (_viewState == ReceivingCall) {
-            [[SipStackUtils sharedInstance].audioService acceptCall];
+            //[[SipStackUtils sharedInstance].audioService acceptCall];
+            [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(acceptCall) withObject:nil];
             [pickupTheCall removeFromSuperview];
             [rejectTheCall removeFromSuperview];
             [self retrieveCallerBulletionBoard];
@@ -1088,7 +1099,6 @@
 - (void)dismissSelf
 {
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-    [self resumeMusicAppIfNeeded];
 }
 
 - (void)showImageVC
@@ -1477,7 +1487,8 @@
 
 - (void)hangUpCallFromRemoteParty
 {
-    [[SipStackUtils sharedInstance].audioService hangUpCall];
+    //[[SipStackUtils sharedInstance].audioService hangUpCall];
+    [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [self dismissAllViewController];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [timer invalidate]; // 停止计时并从Runloop中释放
