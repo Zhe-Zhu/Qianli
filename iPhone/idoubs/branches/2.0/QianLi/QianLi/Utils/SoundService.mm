@@ -42,10 +42,11 @@
 {
     NSDictionary *userInfo = notification.userInfo;
     if ([[userInfo objectForKey:AVAudioSessionInterruptionTypeKey] integerValue]== AVAudioSessionInterruptionTypeBegan) {
-        
+        [[AVAudioSession sharedInstance] setActive:NO error:NULL];
     }
     else{
-        [self resumeCallAfterInterruption];
+        [[AVAudioSession sharedInstance] setActive:YES error:NULL];
+        //[self resumeCallAfterInterruption];
     }
 }
 
@@ -85,8 +86,9 @@
 - (void)resumeCallAfterInterruption
 {
     if ([SipCallManager SharedInstance].audioVC) {
-        [self startAudioSession];
-        [self enableBackgroundSound];
+//        [self startAudioSession];
+//        [self enableBackgroundSound];
+        [[AVAudioSession sharedInstance] setActive:YES error:NULL];
     }
     else{
         [self startAudioSession];
