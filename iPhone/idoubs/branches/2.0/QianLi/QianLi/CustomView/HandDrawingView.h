@@ -30,7 +30,8 @@
 - (void)revokeFromRemoteParty;
 - (UIImage*)screenshot;
 - (BOOL)getDrawingMode;
-- (void)changeDrawLineWidthTo:(CGFloat)lWidth;
+- (void)changeEraseLineWidthTo:(NSInteger)index;
+- (void)changeDrawLineWidthTo:(NSInteger)index;
 - (void)changeDrawLineColorTo:(NSInteger)index;
 
 @end

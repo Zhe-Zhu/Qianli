@@ -1357,6 +1357,7 @@
     
     else if ([message isEqualToString:kClearAllHandWriting]){
         [_drawingVC.drawingView clearAllFromRemote];
+        _drawingVC.clearAll.enabled = NO;
     }
     
     else if ([message isEqualToString:kDrawingPoints]){
@@ -1387,6 +1388,7 @@
     }
     else if ([message isEqualToString:kHandDrawingRevoke]){
         [_drawingVC.drawingView revokeFromRemoteParty];
+        _drawingVC.undoButton.enabled = NO;
     }
     else if ([message isEqualToString:kCancelDrawing]){
         [_drawingVC cancelFromRemoteParty];

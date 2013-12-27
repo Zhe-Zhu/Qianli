@@ -169,5 +169,6 @@ nil]
 
 //doodle
 #define kDoodleLineWidth @"doodlelinewidth"
+#define kDoodleEraseWidth @"doodleerasewidth"
 #define kDoodleLineColor @"doodlelinecolor"
 #endif
