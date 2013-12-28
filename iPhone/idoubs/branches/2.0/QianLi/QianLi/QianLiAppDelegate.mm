@@ -26,6 +26,7 @@
     UITabBarController *_tabController;
     SignUpEditProfileViewController *_signUpEditProfileViewController;
     BOOL multitaskingSupported;
+    BOOL didLaunch;
 }
 
 @property(nonatomic, strong) SignUpEditProfileViewController *signUpEditProfileViewController;
@@ -51,6 +52,7 @@ const float kColorB = 60/100.0;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     _didJustLaunch = YES;
+    didLaunch = YES;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
@@ -278,7 +280,7 @@ const float kColorB = 60/100.0;
     if (_tabController.selectedIndex == 0) {
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
-    
+    didLaunch = NO;
     // Umeng
     [UMFeedback checkWithAppkey:kUmengSDKKey];
 }
@@ -289,6 +291,11 @@ const float kColorB = 60/100.0;
     [self saveContext];
     [[SipStackUtils sharedInstance] stop];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    //TODO: deleta
+    UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
+    locaNotif.alertBody = @"qianli is killed";
+    [[UIApplication sharedApplication] presentLocalNotificationNow:locaNotif];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
@@ -507,11 +514,18 @@ const float kColorB = 60/100.0;
     NSDictionary *aps = [userInfo objectForKey:@"aps"];
     NSDictionary *dic = [aps objectForKey:@"alert"];
     NSString *type = [dic objectForKey:@"loc-key"];
-    if (application.applicationState == UIApplicationStateActive) {
-        if ([type isEqualToString:@"PUSHCALLING"]) {
+    if ([type isEqualToString:@"PUSHCALLING"]) {
+        if (application.applicationState == UIApplicationStateActive) {
             [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
             handler(UIBackgroundFetchResultNewData);
             return;
+        }
+        else{
+            if (!didLaunch) {
+                [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+                handler(UIBackgroundFetchResultNewData);
+                return;
+            }
         }
     }
     
@@ -595,7 +609,7 @@ const float kColorB = 60/100.0;
 		{
 			if([NgnEngine sharedInstance].networkService.reachable)
             {
-                if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+                if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
                     [[UIApplication sharedApplication] clearKeepAliveTimeout];
                     [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:^{
                         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
@@ -603,7 +617,7 @@ const float kColorB = 60/100.0;
                 }
             }
             else{
-                if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+                if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
                     [[UIApplication sharedApplication] clearKeepAliveTimeout];
                 }
             }

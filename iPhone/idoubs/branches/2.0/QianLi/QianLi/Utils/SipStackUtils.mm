@@ -47,7 +47,7 @@ static SipStackUtils * sipStackUtilsInstance;
 @property(nonatomic, readwrite, strong) SoundService * soundService;
 @property(nonatomic, readwrite, strong) MessageService * messageService;
 @property(nonatomic, readwrite, strong) NSString *remoteParty;
-@property(nonatomic, weak) UILocalNotification *localNotif;
+@property(nonatomic, strong) UILocalNotification *localNotif;
 @end
 
 @implementation SipStackUtils
@@ -357,6 +357,7 @@ static SipStackUtils * sipStackUtilsInstance;
                 locaNotif.alertAction = @"PUSHACTIONKEY";
                 locaNotif.userInfo = @{@"IDKey": @"IncomingCall"};
                 [[UIApplication sharedApplication] presentLocalNotificationNow:locaNotif];
+                self.localNotif = locaNotif;
                 [self receiveIncomingCall:incomingSession];
             }
 			else if(incomingSession){
@@ -425,6 +426,7 @@ static SipStackUtils * sipStackUtilsInstance;
             
             if (_localNotif) {
                 [[UIApplication sharedApplication] cancelLocalNotification:_localNotif];
+                self.localNotif = nil;
             }
 			break;
 		}
