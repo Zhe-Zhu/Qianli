@@ -766,8 +766,8 @@
 
 - (void)clearContacts
 {
-    [_allContacts removeAllObjects];
-    [_contacts removeAllObjects];
+    _allContacts = nil;
+    _contacts = nil;
     if (_inviteController) {
         [_inviteController clearAddressItems];
     }

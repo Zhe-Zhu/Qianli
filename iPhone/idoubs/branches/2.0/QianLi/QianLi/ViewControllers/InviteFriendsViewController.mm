@@ -131,8 +131,8 @@
 
 - (void)clearAddressItems
 {
-    [_contacts removeAllObjects];
-    [_filteredListContent removeAllObjects];
+    _contacts = nil;
+    _filteredListContent = nil;
 }
 
 -(void)getAddressBookPermission

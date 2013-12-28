@@ -144,7 +144,7 @@
 
 - (void)clearHistory
 {
-    [_historyRecords removeAllObjects];
+    _historyRecords = nil;
     if (_detailCV) {
         [_detailCV clearDetailHistory];
     }

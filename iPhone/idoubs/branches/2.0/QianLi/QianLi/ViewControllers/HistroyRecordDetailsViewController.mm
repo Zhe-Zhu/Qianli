@@ -134,7 +134,7 @@
 
 - (void)clearDetailHistory
 {
-    [_chatRecords removeAllObjects];
+    _chatRecords = nil;
 }
 
 - (void)loadMoreMessages
