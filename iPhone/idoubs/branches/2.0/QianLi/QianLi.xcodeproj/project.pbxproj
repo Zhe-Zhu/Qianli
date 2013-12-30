@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		180969C618717FC600198CD6 /* doodle_precise_position_with_parameters.png in Resources */ = {isa = PBXBuildFile; fileRef = 180969C518717FC600198CD6 /* doodle_precise_position_with_parameters.png */; };
 		1830D5FC185B15CE009E5D19 /* QianLiImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830D5FB185B15CE009E5D19 /* QianLiImagePickerViewController.m */; };
 		184EB7781851C91C00D70240 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D57182C8AF8001536CB /* libMobClickLibrary.a */; };
 		184EB7791851C91C00D70240 /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D76182C9E15001536CB /* libUMFeedback.a */; };
@@ -448,6 +449,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		180969C518717FC600198CD6 /* doodle_precise_position_with_parameters.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = doodle_precise_position_with_parameters.png; sourceTree = "<group>"; };
 		1830D5FA185B15CE009E5D19 /* QianLiImagePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QianLiImagePickerViewController.h; sourceTree = "<group>"; };
 		1830D5FB185B15CE009E5D19 /* QianLiImagePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QianLiImagePickerViewController.m; sourceTree = "<group>"; };
 		2F81372C17AFB54500DB23F2 /* QianLi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QianLi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1183,6 +1185,7 @@
 		505A077617B09FB40053E1B7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				180969C518717FC600198CD6 /* doodle_precise_position_with_parameters.png */,
 				CE758B5C18483EAF00541FA0 /* hudEarphone@2x.png */,
 				CE758B5A1848370500541FA0 /* doodleClear@2x.png */,
 				CE1E8D49184462D900A956A2 /* callingIndicatorSpin@2x.png */,
@@ -1741,6 +1744,7 @@
 				CE345F6517CB13FF009D52D4 /* add.png in Resources */,
 				CE5F66AD17E945C40098E161 /* doodleWidth@2x.png in Resources */,
 				CE345F7917CB13FF009D52D4 /* lineUnderPhoneNumber@2x.png in Resources */,
+				180969C618717FC600198CD6 /* doodle_precise_position_with_parameters.png in Resources */,
 				CE5D0D7D182CD064001536CB /* settingFeedback@2x.png in Resources */,
 				CE345F7C17CB13FF009D52D4 /* missedCallIcon@2x.png in Resources */,
 				CE5ECA06180533CF00BDE0B0 /* videoForward@2x.png in Resources */,
