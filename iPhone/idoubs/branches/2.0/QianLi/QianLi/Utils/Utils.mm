@@ -11,6 +11,11 @@
 #import "UserDataAccessor.h"
 #import "MainHistoryDataAccessor.h"
 #import "QianLiContactsAccessor.h"
+#import "SipCallManager.h"
+#import "SipStackUtils.h"
+#import "HistoryTransUtils.h"
+#import "PictureManager.h"
+#import "WebHistoryDataAccessor.h"
 
 @implementation Utils
 
@@ -282,6 +287,19 @@
         return samllImage;
     }
     return image;
+}
+
++ (void)clearAllSharedInstance
+{
+    [[SipCallManager SharedInstance] clearCallManager];
+    //[[NgnEngine sharedInstance] clearSharedInstance];
+    //[[SipStackUtils sharedInstance] clearSharedInstance];
+    [[HistoryTransUtils sharedInstance] clearSharedInstance];
+    [[PictureManager sharedInstance] clearSharedInstance];
+    [[DetailHistoryAccessor sharedInstance] clearSharedInstance];
+    [[WebHistoryDataAccessor sharedInstance] clearSharedInstance];
+    [[QianLiContactsAccessor sharedInstance] clearSharedInstance];
+    [[MainHistoryDataAccessor sharedInstance] clearSharedInstance];
 }
 
 @end

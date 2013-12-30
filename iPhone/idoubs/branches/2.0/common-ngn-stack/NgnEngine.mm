@@ -57,6 +57,8 @@
 //
 @implementation NgnEngine
 
+static NgnEngine* sInstance = nil;
+
 -(NgnEngine*)init{
 	if((self = [super init])){
 		[NgnEngine initialize];
@@ -195,12 +197,16 @@
 }
 
 +(NgnEngine*) sharedInstance{
-	static NgnEngine* sInstance = nil;
 	
 	if(sInstance == nil){
 		sInstance = [[NgnEngine alloc] init];
 	}
 	return sInstance;
+}
+
+- (void)clearSharedInstance
+{
+    sInstance = nil;
 }
 
 @end

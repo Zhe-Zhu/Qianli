@@ -217,7 +217,7 @@
     //Send message to remotrparty
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
     CGFloat width;
-    if (drawing) {
+    if ([drawing isEqualToString:@"DRAW"]) {
         width = _lineWidth;
     }
     else{

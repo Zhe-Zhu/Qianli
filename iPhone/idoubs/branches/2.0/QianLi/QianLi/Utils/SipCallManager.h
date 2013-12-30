@@ -15,6 +15,7 @@
 @property(nonatomic, weak) QianLiAudioCallViewController *audioVC;
 
 + (SipCallManager *)SharedInstance;
+- (void)clearCallManager;
 - (void)makeQianliCallToRemote:(NSString *)remoteParty;
 
 @end

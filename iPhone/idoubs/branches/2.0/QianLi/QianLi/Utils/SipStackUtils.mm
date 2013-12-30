@@ -542,4 +542,9 @@ static SipStackUtils * sipStackUtilsInstance;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)clearSharedInstance
+{
+    sipStackUtilsInstance = nil;
+}
+
 @end

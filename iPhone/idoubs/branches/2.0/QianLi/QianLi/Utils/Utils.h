@@ -28,4 +28,6 @@
 +(void)changeNavigationBarButtonLookingForiOS6;
 + (BOOL)isHeadsetPluggedIn;
 + (UIImage*)screenshot:(UIView *)view toSize:(CGSize)size;
+
++ (void)clearAllSharedInstance;
 @end

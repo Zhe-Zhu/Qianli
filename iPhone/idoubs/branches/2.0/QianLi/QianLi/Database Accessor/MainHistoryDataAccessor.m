@@ -20,10 +20,10 @@
 @implementation MainHistoryDataAccessor
 
 @synthesize managedObjectContext = _managedObjectContext;
+ static MainHistoryDataAccessor *mainHistoryDataAccessor;
 
 +(id)sharedInstance
 {
-    static MainHistoryDataAccessor *mainHistoryDataAccessor;
     if (!mainHistoryDataAccessor)
     {
         mainHistoryDataAccessor = [[MainHistoryDataAccessor alloc] init];
@@ -237,6 +237,11 @@
         }
     }
     [self.managedObjectContext unlock];
+}
+
+- (void)clearSharedInstance
+{
+    mainHistoryDataAccessor = nil;
 }
 
 @end

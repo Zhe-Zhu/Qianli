@@ -508,4 +508,9 @@ static PictureManager *pictureManager;
     }];
 }
 
+- (void)clearSharedInstance
+{
+    pictureManager = nil;
+}
+
 @end
