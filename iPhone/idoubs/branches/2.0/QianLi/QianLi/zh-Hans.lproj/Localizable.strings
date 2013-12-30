@@ -10,6 +10,7 @@
 
 // Push notification
 "PUSHCALLING" = "[%@]正在呼叫你，点击接听";
+"LOCALMESSAGE" = "%@ 正分享给你有趣的事";
 "PUSHACTIONKEY" = "接听";
 "APPOINTMENT" ="有空的话给我回个电话吧? - %@";
 "APPOINTMENTACTIONKEY" = "好的";
