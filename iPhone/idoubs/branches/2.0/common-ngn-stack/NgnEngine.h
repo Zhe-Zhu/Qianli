@@ -67,5 +67,6 @@
 +(void)initialize;
 +(NgnEngine*)getInstance __attribute__ ((deprecated)); // Replaced by "+(NgnEngine*)sharedInstance"
 +(NgnEngine*)sharedInstance;
+//- (void)clearSharedInstance;
 
 @end

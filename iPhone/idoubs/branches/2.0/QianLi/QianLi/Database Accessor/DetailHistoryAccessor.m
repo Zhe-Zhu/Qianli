@@ -19,9 +19,10 @@
 @implementation DetailHistoryAccessor
 @synthesize managedObjectContext = _managedObjectContext;
 
+static DetailHistoryAccessor *detailHistAccessor = nil;
+
 + (DetailHistoryAccessor *)sharedInstance
 {
-    static DetailHistoryAccessor *detailHistAccessor = nil;
     if (detailHistAccessor == nil) {
         detailHistAccessor = [[DetailHistoryAccessor alloc] init];
         QianLiAppDelegate *appDelegate = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -142,6 +143,11 @@
         NSLog(@"saving error during updating");
     }
     [self.managedObjectContext unlock];
+}
+
+- (void)clearSharedInstance
+{
+    detailHistAccessor = nil;
 }
 
 @end

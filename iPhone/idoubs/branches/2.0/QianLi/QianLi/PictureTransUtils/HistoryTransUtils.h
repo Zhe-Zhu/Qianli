@@ -14,6 +14,7 @@
 @interface HistoryTransUtils : NSObject<NSURLConnectionDelegate>
 
 +(HistoryTransUtils *)sharedInstance;
+- (void)clearSharedInstance;
 
 - (void)getHistoryInBackground:(BOOL)willVibrate;
 @end

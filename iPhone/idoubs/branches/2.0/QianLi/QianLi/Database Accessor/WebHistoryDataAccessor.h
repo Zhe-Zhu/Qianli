@@ -11,7 +11,7 @@
 @interface WebHistoryDataAccessor : NSObject
 
 + (WebHistoryDataAccessor *)sharedInstance;
-
+- (void)clearSharedInstance;
 - (void)insert:(NSString *)title url:(NSString *)url type:(NSString *)type;
 - (void)update:(NSString *)title url:(NSString *)url type:(NSString *)type;
 - (NSArray *)getAllObjectsWithType:(NSString *)type;

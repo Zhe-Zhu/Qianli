@@ -20,9 +20,10 @@
 
 @synthesize managedObjectContext = _managedObjectContext;
 
+static WebHistoryDataAccessor *webHistAccessor;
+
 + (WebHistoryDataAccessor *)sharedInstance
 {
-    static WebHistoryDataAccessor *webHistAccessor;
     if (webHistAccessor == nil) {
         webHistAccessor = [[WebHistoryDataAccessor alloc] init];
         QianLiAppDelegate *appDelegate = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -129,6 +130,11 @@
         NSLog(@"saving error during updating");
     }
     [self.managedObjectContext unlock];
+}
+
+- (void)clearSharedInstance
+{
+    webHistAccessor = nil;
 }
 
 @end

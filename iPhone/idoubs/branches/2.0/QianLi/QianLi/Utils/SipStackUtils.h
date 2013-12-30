@@ -44,7 +44,7 @@
 
 // for global access, only has one instance when app lives.
 + (SipStackUtils *)sharedInstance;
-
+- (void)clearSharedInstance;
 // sip register method
 - (BOOL)queryConfigurationAndRegister;
 - (BOOL)unRegisterIdentity;

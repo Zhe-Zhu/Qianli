@@ -192,7 +192,7 @@ const float kColorB = 60/100.0;
     [MobClick startWithAppkey:kUmengSDKKey];
     [UMFeedback checkWithAppkey:kUmengSDKKey];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(umCheck:) name:UMFBCheckFinishedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNetworkEvent:) name:kNgnNetworkEventArgs_Name object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNetworkEvent:) name:kNgnNetworkEventArgs_Name object:nil];
     return YES;
 }
 
@@ -235,6 +235,9 @@ const float kColorB = 60/100.0;
     [_contactViewController clearContacts];
     [_historyMainController clearHistory];
     [_settingViewController clearImages];
+    if ([SipCallManager SharedInstance].audioVC == nil) {
+        [Utils clearAllSharedInstance];
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -291,11 +294,6 @@ const float kColorB = 60/100.0;
     [self saveContext];
     [[SipStackUtils sharedInstance] stop];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    //TODO: deleta
-    UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
-    locaNotif.alertBody = @"qianli is killed";
-    [[UIApplication sharedApplication] presentLocalNotificationNow:locaNotif];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
@@ -511,9 +509,15 @@ const float kColorB = 60/100.0;
 # pragma mark -- Push notification --
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
+    //TODO: deleta
+    UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
+    locaNotif.alertBody = @"qianli is launched due to push notification";
+    [[UIApplication sharedApplication] presentLocalNotificationNow:locaNotif];
+
     NSDictionary *aps = [userInfo objectForKey:@"aps"];
     NSDictionary *dic = [aps objectForKey:@"alert"];
     NSString *type = [dic objectForKey:@"loc-key"];
+    
     if ([type isEqualToString:@"PUSHCALLING"]) {
         if (application.applicationState == UIApplicationStateActive) {
             [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
@@ -529,7 +533,7 @@ const float kColorB = 60/100.0;
         }
     }
     
-    if ([type isEqualToString:@"MISSEDCALL"]) {
+    if ([type isEqualToString:@"MISSEDCALL"] || [type isEqualToString:@"APPOINTMENT"]) {
         [[HistoryTransUtils sharedInstance] getHistoryInBackground:NO];
         handler(UIBackgroundFetchResultNewData);
     }
@@ -598,34 +602,6 @@ const float kColorB = 60/100.0;
         }];
     }
 }
-
-# pragma mark -- network change
-- (void)onNetworkEvent:(NSNotification*)notification {
-	NgnNetworkEventArgs *eargs = [notification object];
-	
-	switch (eargs.eventType) {
-		case NETWORK_EVENT_STATE_CHANGED:
-		default:
-		{
-			if([NgnEngine sharedInstance].networkService.reachable)
-            {
-                if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-                    [[UIApplication sharedApplication] clearKeepAliveTimeout];
-                    [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:^{
-                        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-                    }];
-                }
-            }
-            else{
-                if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-                    [[UIApplication sharedApplication] clearKeepAliveTimeout];
-                }
-            }
-			break;
-		}
-	}
-}
-
 
 # pragma mark -- Umeng
 - (void)umCheck:(NSNotification *)notification

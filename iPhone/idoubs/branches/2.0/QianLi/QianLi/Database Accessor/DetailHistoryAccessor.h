@@ -13,6 +13,7 @@
 @interface DetailHistoryAccessor : NSObject
 
 + (DetailHistoryAccessor *)sharedInstance;
+- (void)clearSharedInstance;
 - (NSArray *)getDetailHistForRemoteParty:(NSString *)remoteParty withNumber:(NSInteger)number;
 - (NSArray *)getAllDetailHistForRemoteParty:(NSString *)remoteParty;
 - (void)addEventWithRemoteParty:(NSString *)remote start:(double)startT end:(double)endT status:(NSString *)status type:(NSString *)type content:(NSData *)content;

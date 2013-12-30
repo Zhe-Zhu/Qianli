@@ -19,10 +19,10 @@
 @implementation QianLiContactsAccessor
 
 @synthesize managedObjectContext = _managedObjectContext;
+static QianLiContactsAccessor *contactsAccessor;
 
 + (id)sharedInstance
 {
-    static QianLiContactsAccessor *contactsAccessor;
     if (!contactsAccessor)
     {
         contactsAccessor = [[QianLiContactsAccessor alloc] init];
@@ -310,6 +310,11 @@
         [self.managedObjectContext unlock];
         return NO;
     }
+}
+
+- (void)clearSharedInstance
+{
+    contactsAccessor = nil;
 }
 
 @end

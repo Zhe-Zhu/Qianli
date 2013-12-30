@@ -14,9 +14,10 @@
 
 @implementation SipCallManager
 
+static SipCallManager *callManager = nil;
+
 +(SipCallManager *)SharedInstance
 {
-    static SipCallManager *callManager = nil;
     if (callManager == nil) {
         callManager = [[SipCallManager alloc] init];
     }
@@ -71,7 +72,11 @@
     else{
         
     }
+}
 
+- (void)clearCallManager
+{
+    callManager = nil;
 }
 
 @end

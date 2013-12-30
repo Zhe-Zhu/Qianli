@@ -13,6 +13,7 @@
 @interface QianLiContactsAccessor : NSObject
 
 + (id)sharedInstance;
+- (void)clearSharedInstance;
 - (NSArray *)getAllContacts;
 - (NSString *)getNameForRemoteParty:(NSString *)remoteParty;
 - (UIImage *)getProfileForRemoteParty:(NSString *)remoteParty;
