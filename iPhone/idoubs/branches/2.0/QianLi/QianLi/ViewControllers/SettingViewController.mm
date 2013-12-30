@@ -254,6 +254,9 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     UINavigationController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
     [[UIApplication sharedApplication] delegate].window.rootViewController = signUpEditProfileViewController;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:NO forKey:kSingUpKey];
+    [userDefaults synchronize];
 }
 
 # pragma mark -- Umeng Feedback

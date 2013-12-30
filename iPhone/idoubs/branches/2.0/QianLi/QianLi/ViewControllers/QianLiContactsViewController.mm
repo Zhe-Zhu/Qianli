@@ -380,7 +380,7 @@
                         if (![strippedNumber isEqualToString:[UserDataAccessor getUserRemoteParty]]) {
                             [telephone addObject:strippedNumber];
                         }
-                        addressBook.tel = telephone;
+                        addressBook.telAarry = telephone;
                         break;
                     }
                         
@@ -408,37 +408,10 @@
     else{
         [_allContacts removeAllObjects];
     }
-    [self sortContacts:addressBookTemp SortedContacts:_allContacts];
+    [self sortContacts:addressBookTemp sortedContacts:_allContacts];
 }
 
-- (void)sortContacts:(NSArray *)rawContacts SortedContacts:(NSMutableArray *)sortedContacts
-{
-    UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
-    for (QianLiAddressBookItem *addressBook in rawContacts) {
-        NSInteger sect = [theCollation sectionForObject:addressBook
-                                collationStringSelector:@selector(name)];
-        addressBook.sectionNumber = sect;
-    }
-    
-    NSInteger highSection = [[theCollation sectionTitles] count];
-    NSMutableArray *sectionArrays = [NSMutableArray arrayWithCapacity:highSection];
-    for (int i = 0; i < highSection; i++) {
-        NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity: 1];
-        [sectionArrays addObject:sectionArray];
-    }
-    
-    for (QianLiAddressBookItem *addressBook in rawContacts) {
-        [(NSMutableArray *)[sectionArrays objectAtIndex:addressBook.sectionNumber] addObject:addressBook];
-    }
-    
-    for (NSMutableArray *sectionArray in sectionArrays) {
-        NSArray *sortedSection = [theCollation sortedArrayFromArray:sectionArray collationStringSelector:@selector(name)];
-        [sortedContacts addObject:sortedSection];
-    }
-}
-
-// TODO: 和上面那个不是一样的么?
-- (void)sortQianLiContacts:(NSArray *)rawContacts SortedContacts:(NSMutableArray *)sortedContacts
+- (void)sortContacts:(NSArray *)rawContacts sortedContacts:(NSMutableArray *)sortedContacts
 {
     UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
     for (QianLiContactsItem *addressBook in rawContacts) {
@@ -477,14 +450,14 @@
         NSArray *arr = (NSArray *)[_allContacts objectAtIndex:i];
         for (int j = 0; j < [arr count]; j++) {
             QianLiAddressBookItem *item = (QianLiAddressBookItem *)[arr objectAtIndex:j];
-            if ([item.tel count] > 0) {
-                for (int k = 0; k < [item.tel count]; ++k) {
+            if ([item.telAarry count] > 0) {
+                for (int k = 0; k < [item.telAarry count]; ++k) {
                     if (first) {
-                        jsonRequest = [NSString stringWithFormat:@"%@\"%@\"", jsonRequest, (NSString *)[item.tel objectAtIndex:k]];
+                        jsonRequest = [NSString stringWithFormat:@"%@\"%@\"", jsonRequest, (NSString *)[item.telAarry objectAtIndex:k]];
                         first = NO;
                     }
                     else{
-                        jsonRequest = [NSString stringWithFormat:@"%@,\"%@\"", jsonRequest, (NSString *)[item.tel objectAtIndex:k]];
+                        jsonRequest = [NSString stringWithFormat:@"%@,\"%@\"", jsonRequest, (NSString *)[item.telAarry objectAtIndex:k]];
                     }
                 }
             }
@@ -493,7 +466,6 @@
     jsonRequest = [NSString stringWithFormat:@"%@]",jsonRequest];
     NSString *urlString= @"http://112.124.36.134:8080/users/whoisactive/.json";
     NSURL* url = [[NSURL alloc] initWithString:urlString];
-    //NSLog(@"json1:%@",jsonRequest);
     
     NSData* requestData = [jsonRequest dataUsingEncoding:NSUTF8StringEncoding];
     NSString* requestDataLengthString = [[NSString alloc] initWithFormat:@"%d", [requestData length]];
@@ -533,27 +505,12 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-   // NSLog(@"didReceiveData:%@", str);
-    NSCharacterSet *charSet = [NSCharacterSet characterSetWithCharactersInString:@"\""];
-    NSArray *array = [str componentsSeparatedByCharactersInSet:charSet];
-    
-    NSMutableArray *numberArray = [NSMutableArray array];
-    for (int i = 1; i < [array count] - 1; ++i) {
-        if ([[(NSString *)[array objectAtIndex:i] substringToIndex:2] isEqualToString:@"00"]) {
-            [numberArray addObject: [array objectAtIndex:i]];
-        }
+    NSError *error;
+    NSArray *JsonArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    if (error) {
+        return;
     }
-    if ([array count] > 1) {
-        if ([[array objectAtIndex:0] isEqualToString:@"["] && [[array lastObject] isEqualToString:@"]"]) {
-            [self selectFriendsFromContactsByNumber:numberArray];
-        }
-    }
-    else if([array count] == 1){
-        if ([[array objectAtIndex:0] isEqualToString:@"[]"]) {
-            [self selectFriendsFromContactsByNumber:numberArray];
-        }
-    }
+    [self selectFriendsFromContactsByNumber:JsonArray];
 }
 
 - (void)selectFriendsFromContactsByNumber:(NSArray *)numbers
@@ -566,8 +523,8 @@
             
             for (int j = 0; j < [arr count]; ++j) {
                 QianLiAddressBookItem *contact = (QianLiAddressBookItem *) [arr objectAtIndex:j];
-                for (int k = 0; k < [contact.tel count]; ++k) {
-                    NSString *numStr = (NSString *) [contact.tel objectAtIndex:k];
+                for (int k = 0; k < [contact.telAarry count]; ++k) {
+                    NSString *numStr = (NSString *) [contact.telAarry objectAtIndex:k];
                     if ([numStr isEqualToString: (NSString *)[numbers objectAtIndex:r]]){
                         QianLiContactsItem *contactItem = [[QianLiContactsItem alloc] init];
                         contactItem.name = contact.name;
@@ -590,7 +547,7 @@
     }
     
     [_contacts removeAllObjects];
-    [self sortQianLiContacts:friends SortedContacts:_contacts];
+    [self sortContacts:friends sortedContacts:_contacts];
     NSArray *items = [[QianLiContactsAccessor sharedInstance] getAllContacts];
     for (int j = 0; j < [_contacts count]; ++j) {
         NSArray *arr = [_contacts objectAtIndex:j];
@@ -793,7 +750,7 @@
     else{
         [_contacts removeAllObjects];
     }
-    [self sortQianLiContacts:qianliContacts SortedContacts:_contacts];
+    [self sortContacts:qianliContacts sortedContacts:_contacts];
 }
 
 - (void)restoreContacts
@@ -809,8 +766,8 @@
 
 - (void)clearContacts
 {
-    [_allContacts removeAllObjects];
-    [_contacts removeAllObjects];
+    _allContacts = nil;
+    _contacts = nil;
     if (_inviteController) {
         [_inviteController clearAddressItems];
     }
@@ -852,6 +809,7 @@
     _inviteController = [storyBoard instantiateViewControllerWithIdentifier:@"InviteController"];
     _inviteController.title = @"Invite";
     _inviteController.contacts = [_allContacts mutableCopy];
+    _allContacts = nil;
     _inviteController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:_inviteController animated:YES];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];

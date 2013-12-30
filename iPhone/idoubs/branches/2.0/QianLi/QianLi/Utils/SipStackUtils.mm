@@ -37,6 +37,8 @@ static SipStackUtils * sipStackUtilsInstance;
 	BOOL scheduleRegistration; //TODO: what is this var used for
     long _sessionID;
     NSString *_remoteParty;
+    
+    NSInteger localNofificationTimes;
 }
 
 // the read-write version of the properites
@@ -47,7 +49,7 @@ static SipStackUtils * sipStackUtilsInstance;
 @property(nonatomic, readwrite, strong) SoundService * soundService;
 @property(nonatomic, readwrite, strong) MessageService * messageService;
 @property(nonatomic, readwrite, strong) NSString *remoteParty;
-@property(nonatomic, weak) UILocalNotification *localNotif;
+@property(nonatomic, strong) UILocalNotification *localNotif;
 @end
 
 @implementation SipStackUtils
@@ -174,7 +176,7 @@ static SipStackUtils * sipStackUtilsInstance;
                 }
                 if ([SipCallManager SharedInstance].audioVC) {
                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notice", nil) message:NSLocalizedString(@"TerminateCall", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"iknow", nil) otherButtonTitles: nil];
-                    [alertView show];
+                    [alertView performSelector:@selector(show) withObject:nil afterDelay:2.0];
                 }
             }
 			break;
@@ -306,7 +308,30 @@ static SipStackUtils * sipStackUtilsInstance;
                     NSString * str = [[NSString alloc] initWithData:content encoding:NSUTF8StringEncoding];
                     NSNotification *receivedImageNotification = [NSNotification notificationWithName:@"receivedImageNotification" object:str];
                     [[NSNotificationCenter defaultCenter] postNotification:receivedImageNotification];
-				}
+                    
+                    if (localNofificationTimes == 0) {
+                        localNofificationTimes ++;
+                        NSArray* words = [str componentsSeparatedByString:kSeparator];
+                        if (![[words objectAtIndex:0] isEqualToString:kAppointment]) {
+                            NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
+                            if ((name == nil) | [name isEqualToString:@""]) {
+                                name = [[MainHistoryDataAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
+                            }
+                            NSString *message;
+                            if (!name | [name isEqualToString:@""]) {
+                                message = [NSString stringWithFormat:NSLocalizedString(@"LOCALMESSAGE", nil), self.remoteParty];
+                            }
+                            else{
+                                message = [NSString stringWithFormat:NSLocalizedString(@"LOCALMESSAGE", nil), name];
+                            }
+                            
+                            UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
+                            locaNotif.alertBody = message;
+                            locaNotif.soundName = UILocalNotificationDefaultSoundName;
+                            [[UIApplication sharedApplication] presentLocalNotificationNow:locaNotif];
+                        }
+                    }
+                }
 				else {
                     NSString * str = [[NSString alloc] initWithData:content encoding:NSUTF8StringEncoding];
                     NSNotification *receivedImageNotification = [NSNotification notificationWithName:@"receivedImageNotification" object:str];
@@ -339,6 +364,7 @@ static SipStackUtils * sipStackUtilsInstance;
                         return;
                     }
                 }
+                localNofificationTimes = 0;
                 self.remoteParty = [self getRemoteParty:remotePartyUri];
                 UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
                 NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
@@ -357,10 +383,12 @@ static SipStackUtils * sipStackUtilsInstance;
                 locaNotif.alertAction = @"PUSHACTIONKEY";
                 locaNotif.userInfo = @{@"IDKey": @"IncomingCall"};
                 [[UIApplication sharedApplication] presentLocalNotificationNow:locaNotif];
+                self.localNotif = locaNotif;
                 [self receiveIncomingCall:incomingSession];
             }
 			else if(incomingSession){
                 // when app is in forground, present the audioCallViewController.
+                localNofificationTimes = 0;
                 NSString *remotePartyUri = [incomingSession getRemotePartyUri];
                 if ([SipCallManager SharedInstance].audioVC) {
                     if (![[SipCallManager SharedInstance].audioVC.remotePartyNumber isEqualToString:[self getRemoteParty:remotePartyUri]]) {
@@ -394,6 +422,7 @@ static SipStackUtils * sipStackUtilsInstance;
 		
 		case INVITE_EVENT_TERMINATED:
 		{
+            localNofificationTimes = 0;
             [[SipStackUtils sharedInstance].soundService stopRingTone];
             if ([UIApplication sharedApplication].applicationState ==  UIApplicationStateBackground) {
                 QianLiAppDelegate *appDelegate = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -425,6 +454,7 @@ static SipStackUtils * sipStackUtilsInstance;
             
             if (_localNotif) {
                 [[UIApplication sharedApplication] cancelLocalNotification:_localNotif];
+                self.localNotif = nil;
             }
 			break;
 		}
@@ -538,6 +568,11 @@ static SipStackUtils * sipStackUtilsInstance;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)clearSharedInstance
+{
+    sipStackUtilsInstance = nil;
 }
 
 @end

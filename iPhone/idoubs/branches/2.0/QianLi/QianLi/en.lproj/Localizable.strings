@@ -10,6 +10,7 @@
 
 // Push notification
 "PUSHCALLING" = "%@: incoming call";
+"LOCALMESSAGE" = "%@ is sharing fun things with you";
 "PUSHACTIONKEY" = "answer";
 "APPOINTMENT" ="%@ wants to talk with you";
 "APPOINTMENTACTIONKEY" = "OK";
@@ -157,4 +158,8 @@
 "cancelDoodle" = "Cancel doodle";
 
 "Notice" = "notice";
-"TerminateCall" = "The call is terminated due to no internet access anymore. Try again when internet access is available again!";
+"TerminateCall" = "The call is terminated due to no internet access anymore. Try again when internet access is available!";
+"Photos" = " Photos";
+
+"alertRecordingTitle" = "recording is not allowed";
+"alertRecordingBody" = "Qianli needs the permission of accessing microphone to establish a call, please grant permission in the Settings App!";

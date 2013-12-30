@@ -144,7 +144,7 @@
 
 - (void)clearHistory
 {
-    [_historyRecords removeAllObjects];
+    _historyRecords = nil;
     if (_detailCV) {
         [_detailCV clearDetailHistory];
     }
@@ -224,7 +224,6 @@
     NSString *message = [NSString stringWithFormat:@"%@%@%@", kAppointment,kSeparator,[UserDataAccessor getUserRemoteParty]];
     [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:entry.remoteParty];
     
-    // Add to history record TODO: modify the media_type of the event
     DetailHistEvent *event = [[DetailHistEvent alloc] init];
     event.remoteParty = entry.remoteParty;
     event.status = kHistoryEventStatus_Appointment;
@@ -270,7 +269,6 @@
     }
 }
 
-// TODO: 考虑把call作为全局函数, 目前太多相同的地方了
 - (void)call:(NSString *)remotePartyPhoneNumber
 {
     [[SipCallManager SharedInstance] makeQianliCallToRemote:remotePartyPhoneNumber];

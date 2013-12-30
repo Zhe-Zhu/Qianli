@@ -259,11 +259,11 @@
     
     if ((imageSize.width / imageSize.height) <= (width / height)) {
         newImageSize.height = height;
-        newImageSize.width = imageSize.width * height / imageSize.height;
+        newImageSize.width = roundf(imageSize.width * height / imageSize.height);
     }
     else {
         newImageSize.width = width;
-        newImageSize.height = imageSize.height * width / imageSize.width;
+        newImageSize.height = roundf(imageSize.height * width / imageSize.width);
     }
     
     return newImageSize;
@@ -406,6 +406,9 @@
         [_addMoreImagesController dismissViewControllerAnimated:YES completion:nil];
     }
     [self.navigationController popViewControllerAnimated:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden: NO];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
     [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
         NSLog(@"end session");
     }];
@@ -438,6 +441,8 @@
     [_doodleView removeFromSuperview];
     [_doodleToolBar removeFromSuperview];
     [self.navigationItem.leftBarButtonItem setTitle:NSLocalizedString(@"Cancel", nil)];
+    [[UIApplication sharedApplication] setStatusBarHidden: NO];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (IBAction)addMoreImage:(id)sender
@@ -464,7 +469,6 @@
     AssetGroupPickerController *assetVC = [storyboard instantiateViewControllerWithIdentifier:@"AssetGroupPickerVC"];
     assetVC.delegate = self;
     
-    //[[SipStackUtils sharedInstance].messageService sendMessage:kAddNewImage  toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
     UINavigationController *navigationVC = [[UINavigationController alloc] init];
     navigationVC.viewControllers = @[assetVC];
     _addMoreImagesController = navigationVC;
@@ -479,12 +483,14 @@
     navigationVC.viewControllers = @[cameraCV];
     _addMoreImagesController = navigationVC;
     [self presentViewController:navigationVC animated:YES completion:nil];
-    
-//    [[SipStackUtils sharedInstance].messageService sendMessage:kAddNewImage  toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
-}
+ }
 
-- (void)doodleWithImageIndex:(NSInteger)index
+- (void)doodleWithImageAtIndex:(NSInteger)index
 {
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    _imageScrollView.backgroundColor = [UIColor whiteColor];
+    
     int ind = [_indexs indexOfObject:[NSString stringWithFormat:@"%d",index]];
     if (ind == NSNotFound) {
         return;
@@ -509,8 +515,8 @@
     _toolBar.hidden = YES;
     UIImage *image = (UIImage *)[_images objectAtIndex:index];
     CGSize imageSize = [self adjustImageFrame:image.size];
-    CGRect scrollFrame = _imageScrollView.frame;
-    CGRect frame = CGRectMake((320-imageSize.width)/2, (scrollFrame.size.height-imageSize.height)/2, imageSize.width, imageSize.height);
+    CGRect scrollFrame = self.view.frame;//_imageScrollView.frame;
+    CGRect frame = CGRectMake((320 - imageSize.width) / 2.0, (scrollFrame.size.height-imageSize.height) / 2.0, imageSize.width, imageSize.height);
     DoodleView *view = [[DoodleView alloc] initWithFrame:frame];
     _doodleView = view;
     _doodleView.image = image;
@@ -573,9 +579,35 @@
 {
     UIImage *image = [_doodleView screenshot];
     UIImageWriteToSavedPhotosAlbum(image, NULL, NULL, NULL);
+    
+    UIView *flashView = [[UIView alloc] initWithFrame:_doodleView.frame];
+    flashView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:flashView];
+    [UIView animateWithDuration:0.2 animations:^{
+        flashView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        [flashView removeFromSuperview];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        imageView.frame = _doodleView.frame;
+        [self.view addSubview:imageView];
+        [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            CGAffineTransform scaleTransform = CGAffineTransformMakeScale(0.01, 0.01);
+            CGAffineTransform translation;
+            if (IS_IPHONE5) {
+                translation = CGAffineTransformMakeTranslation(- 126.0, 260.0);
+            }
+            else{
+                translation = CGAffineTransformMakeTranslation(- 126.0, 220.0);
+            }
+            imageView.transform = CGAffineTransformConcat(scaleTransform, translation);
+        } completion:^(BOOL finished) {
+            [imageView removeFromSuperview];
+        }];
+    }];
+
 }
 
-- (void)didTipOnView
+- (void)didTapOnView
 {
     [self hideDoodleTools];
 }

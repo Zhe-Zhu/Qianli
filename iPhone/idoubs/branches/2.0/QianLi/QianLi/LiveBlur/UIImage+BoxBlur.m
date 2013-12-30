@@ -86,8 +86,6 @@
     
     CGImageRelease(imageRef);
     
-    
-    
     return returnImage;
 }
 

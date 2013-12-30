@@ -22,13 +22,16 @@
     BOOL fromRemoteParty;
     BOOL remoteDrawing;
     BOOL isClearAll;
-    NSInteger numberOfPoints;
+    NSInteger numberOfPoints; 
     
     CGPoint previousPoint;
     CGPoint thirdLastPoint;
 }
 
+@property(assign, nonatomic) CGFloat lineWidth;
 @property(strong, nonatomic) UIColor *strokeColor;
+@property(assign, nonatomic) CGFloat remoteLineWidth;
+@property(strong, nonatomic) UIColor *remoteStrokeColor;
 @property(strong, nonatomic) NSString *pointsMessage;
 
 @end
@@ -45,8 +48,10 @@
         [self setMultipleTouchEnabled:YES];
         _path = [UIBezierPath bezierPath];
         _remotePath = [UIBezierPath bezierPath];
-        [_path setLineWidth:2.0];
-        [_remotePath setLineWidth:2.0];
+        _lineWidth = 2.0;
+        _remoteLineWidth = 2.0;
+        [_path setLineWidth:_lineWidth];
+        [_remotePath setLineWidth:_remoteLineWidth];
         _path.lineCapStyle = kCGLineCapRound;
         _remotePath.lineCapStyle = kCGLineCapRound;
         _strokeColor = [UIColor redColor];
@@ -58,7 +63,6 @@
         _pathPoints = [[NSMutableArray alloc] initWithCapacity:2];
         self.backgroundColor = nil;
         self.layer.opaque = NO;
-        
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
         [self addGestureRecognizer: tapGesture];
     }
@@ -83,16 +87,13 @@
     if (rect.size.width > 20) {
         [_pathFormedImage drawInRect:rect];
     }
-    [_strokeColor setStroke];
-    
     if (fromRemoteParty) {
         fromRemoteParty = NO;
         if (remoteDrawing) {
+            [_remoteStrokeColor setStroke];
             [_remotePath stroke];
         }
         else{
-//            CGContextRef context = UIGraphicsGetCurrentContext();
-//            CGContextClearRect(context, rect);
         }
     }
     else{
@@ -101,6 +102,7 @@
             CGContextClearRect(context, rect);
         }
         else{
+            [_strokeColor setStroke];
             [_path stroke];
         }
     }
@@ -108,7 +110,7 @@
 
 -(void)handleTap:(UITapGestureRecognizer *)tap
 {
-    [_delegate didTipOnView];
+    [_delegate didTapOnView];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -171,7 +173,6 @@
         numberOfPoints = 3;
         _pointsMessage = [NSString stringWithFormat:@"%f:%f:%f:%f:%f:%f", thirdLastPoint.x / winSize.width, thirdLastPoint.y / winSize.height, previousPoint.x / winSize.width, previousPoint.y / winSize.height, point.x / winSize.width, point.y / winSize.height];
     }
-    
     thirdLastPoint = previousPoint;
     previousPoint = point;
     
@@ -218,19 +219,21 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [super touchesCancelled:touches withEvent:event];
     [self touchesEnded:touches withEvent:event];
 }
 
-- (void)sendDoodleMessage:(NSString *)drawing{
-    //Send message to remotrparty
+- (void)sendDoodleMessage:(NSString *)drawing
+{
+    //Send message to remotrparty TODO://change line width
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@",kDoodleImagePoints,kSeparator,drawing,kSeparator,_pointsMessage];
+    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@%@%d%@%f", kDoodleImagePoints, kSeparator, drawing, kSeparator, _pointsMessage, kSeparator, 1, kSeparator, _lineWidth];
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
 }
 
 - (void)writeToImageWithPath:(UIBezierPath*)path Color:(UIColor *)color
 {
-    CGSize size= self.bounds.size;
+    CGSize size = self.bounds.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     if (firstTime) {
         [self drawImage];
@@ -247,12 +250,11 @@
 
 - (void)drawImage
 {
-    if (_image == nil) {
+    if (_image == nil){
         return;
     }
-//    [_image drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     CGSize newImageSize = [self adjustImageFrame:_image.size];
-    [_image drawInRect:CGRectMake((self.frame.size.width-newImageSize.width)/2, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
+    [_image drawInRect:CGRectMake((self.frame.size.width - newImageSize.width) / 2.0, (self.frame.size.height - newImageSize.height) / 2.0, newImageSize.width, newImageSize.height)];
 }
 
 - (CGSize)adjustImageFrame:(CGSize)imageSize
@@ -265,23 +267,25 @@
     
     if ((imageSize.width / imageSize.height) <= (width / height)) {
         newImageSize.height = height;
-        newImageSize.width = imageSize.width * height / imageSize.height;
+        newImageSize.width = roundf(imageSize.width * height / imageSize.height);
     }
     else {
         newImageSize.width = width;
-        newImageSize.height = imageSize.height * width / imageSize.width;
+        newImageSize.height = roundf(imageSize.height * width / imageSize.width);
     }
     
     return newImageSize;
 }
 
-- (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing
+- (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing lineWidth:(CGFloat)width strokeColor:(UIColor *)color
 {
     remoteDrawing = drawing;
     [_remotePath removeAllPoints];
     NSArray *array = [self calculateSmoothLinePoints:points];
     if (drawing) {
-        //NSArray *array = [self calculateSmoothLinePoints:points];
+        [_remotePath setLineWidth:width];
+        _remoteLineWidth = width;
+        _remoteStrokeColor = color;
         for (int i = 0; i < [array count]; ++i) {
             if (i == 0) {
                 CGPoint p = [[array objectAtIndex:i] CGPointValue];
@@ -294,17 +298,11 @@
         }
         fromRemoteParty = YES;
         [self setNeedsDisplay];
-        [self writeToImageWithPath:_remotePath Color:_strokeColor];
+        [self writeToImageWithPath:_remotePath Color:color];
     }
     else{
         CGSize imageSize = self.bounds.size;
-        if (NULL != UIGraphicsBeginImageContextWithOptions){
-            UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-        }
-        else{
-            UIGraphicsBeginImageContext(imageSize);
-        }
-        
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         CGContextRef context = UIGraphicsGetCurrentContext();
         [[self layer] renderInContext:context];
         fromRemoteParty = YES;
@@ -314,7 +312,7 @@
         }
         _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        [self setNeedsDisplay];
+        [self setNeedsDisplayInRect:self.bounds];
     }
 }
 
@@ -356,6 +354,15 @@
     }
 }
 
+- (void)changeLineWidthTo:(CGFloat)widht
+{
+}
+
+- (void)changeLineColor:(UIColor *)col0r
+{
+    
+}
+
 - (void)changePaintingMode
 {
     _isDrawing = !_isDrawing;
@@ -378,7 +385,7 @@
 
 - (void)initPathImage
 {
-    CGSize size= self.bounds.size;
+    CGSize size = self.bounds.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     [self drawImage];
     _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -388,18 +395,11 @@
 - (UIImage*)screenshot
 {
     // Create a graphics context with the target size
-    // On iOS 4 and later, use UIGraphicsBeginImageContextWithOptions to take the scale into consideration
-    // On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
     CGSize imageSize = self.bounds.size;
-    if (NULL != UIGraphicsBeginImageContextWithOptions){
-        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-    }
-    else{
-        UIGraphicsBeginImageContext(imageSize);
-    }
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     
     CGSize newImageSize = [self adjustImageFrame:_image.size];
-    [_image drawInRect:CGRectMake((320-newImageSize.width)/2, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
+    [_image drawInRect:CGRectMake((320 - newImageSize.width) / 2.0, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     [[self layer] renderInContext:context];

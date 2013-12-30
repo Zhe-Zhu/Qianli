@@ -120,7 +120,7 @@
         device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     }
 	_currentInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
-    if (error!=nil){
+    if (error != nil){
 //        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Failed with error %d", (int)[error code]]
 //															message:[error localizedDescription]
 //														   delegate:nil
@@ -303,23 +303,9 @@
 			[device setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
 			[device unlockForConfiguration];
 		} else {
-			if ([self  respondsToSelector:@selector(displayErrorOnMainQueue: withMessage:)]) {
-                [self  displayErrorOnMainQueue:error withMessage:@"Something with continuous foucs"];
-			}
+			
 		}
 	}
-}
-
-- (void)displayErrorOnMainQueue:(NSError *)error withMessage:(NSString *)message
-{
-	dispatch_async(dispatch_get_main_queue(), ^(void) {
-//		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ (%d)", message, (int)[error code]]
-//															message:[error localizedDescription]
-//														   delegate:nil
-//												  cancelButtonTitle:@"Dismiss"
-//												  otherButtonTitles:nil];
-//		[alertView show];
-	});
 }
 
 - (NSUInteger)supportedInterfaceOrientations

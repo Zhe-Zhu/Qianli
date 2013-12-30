@@ -23,6 +23,22 @@
 #import "SVStatusHUD.h"
 #import "SipCallManager.h"
 
+@interface QianLiAudioCallViewController (MusicApp)
+
+- (void)resumeMusicAppIfNeeded;
+@end
+
+@implementation QianLiAudioCallViewController (MusicApp)
+
+- (void)resumeMusicAppIfNeeded
+{
+    if (musicAppState == MPMusicPlaybackStatePlaying) {
+        [[MPMusicPlayerController iPodMusicPlayer] play];
+    }
+}
+
+@end
+
 @interface QianLiAudioCallViewController ()
 {
     UIImageView *callingIndicator; // calling等待指示器
@@ -53,7 +69,7 @@
     BOOL beginDownload;
     BOOL didEndCall;
     BOOL shouldPlayRingTone;
-    
+    BOOL shouldPlayMusic;
     double videoBeginTime;
 }
 
@@ -68,7 +84,7 @@
 @property bool isNoMicroPhoneOn;
 @property bool isSpeakerOn;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
-@property (strong, nonatomic) UILabel *calling;
+@property (weak, nonatomic) UILabel *calling;
 
 @property(nonatomic, weak) ImageDisplayController *imageDispVC;
 @property(nonatomic, weak) VideoViewController *vedioVC;
@@ -106,19 +122,14 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    musicAppState = [MPMusicPlayerController iPodMusicPlayer].playbackState;
     // Check the UI state
     switch (_viewState) {
         case Calling: {
             // calling someone
             // Load someone's Profile Photo
             
-            [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
-            [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
-                UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
-                if (image) {
-                    [_bigProfileImage performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
-                }
-            }];
+            [self setBigDisplayImage];
             // Make the Photo dark
             _bigProfileImage.alpha = 0.4f;
             // Present all the icons
@@ -132,18 +143,14 @@
 //            [self addNetworkIndicator];
             [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
             shouldPlayRingTone = YES;
+            shouldPlayMusic = NO;
             break;
         }
         case ReceivingCall: {
             // called
             // Load Caller's Profile Photo
-            [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
-            [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
-                UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
-                if (image) {
-                    [_bigProfileImage performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
-                }
-            }];
+            [[SipStackUtils sharedInstance].soundService enableInComingCallSound];
+            [self setBigDisplayImage];
             // Hide the navigation bar
             [self.navigationController.navigationBar setHidden:YES];
             // Hide the toolbar
@@ -153,6 +160,7 @@
             // Raise the Caller bulletin board
             [self raiseCallerBulletinBoard];
             shouldPlayRingTone = NO;
+            shouldPlayMusic = YES;
             break;
         }
         default: {
@@ -162,6 +170,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onInviteEvent:) name:kNgnInviteEventArgs_Name object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveIncomingGettingImageMessage:) name:@"receivedImageNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handelAudioRouteChange) name:AVAudioSessionRouteChangeNotification object:nil];
     getImageQueue = dispatch_queue_create("com.ashstudio.getImageQueue", NULL);
     imageSessionExists = NO;
     getIndexArray = NO;
@@ -176,13 +185,14 @@
         [_toolbar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forToolbarPosition:UIBarPositionBottom barMetrics:UIBarMetricsDefault];
         _buttonAdd.tintColor = [UIColor blackColor];
     }
-    
-    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge void *)self);
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if (_bigProfileImage.image == nil) {
+        [self setBigDisplayImage];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -192,6 +202,10 @@
         [[SipStackUtils sharedInstance].soundService playRingBackTone];
         shouldPlayRingTone = NO;
     }
+    if (shouldPlayMusic) {
+        shouldPlayMusic = NO;
+        [[SipStackUtils sharedInstance].soundService playRingTone];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -199,6 +213,14 @@
     [super viewWillDisappear:animated];
     [[SipStackUtils sharedInstance].soundService stopRingBackTone];
     [[SipStackUtils sharedInstance].soundService stopRingTone];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if (didEndCall) {
+        [self resumeMusicAppIfNeeded];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -210,26 +232,30 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, propListener, (__bridge void *)self);
 }
 
-void propListener(	void *                  inClientData,
-                  AudioSessionPropertyID	inID,
-                  UInt32                  inDataSize,
-                  const void *            inData)
+- (void)handelAudioRouteChange
 {
-    QianLiAudioCallViewController *audioVC = (__bridge QianLiAudioCallViewController *)inClientData;
-    if (inID == kAudioSessionProperty_AudioRouteChange)
-	{
-		if (![Utils isHeadsetPluggedIn]) {
-            if (audioVC.presentedViewController) {
-                [audioVC openSpeaker];
-            }
+    if (![Utils isHeadsetPluggedIn]) {
+        if (self.presentedViewController) {
+            [self openSpeaker];
         }
-        else{
-            [audioVC shutUpSpeaker];
+    }
+    else{
+        [self shutUpSpeaker];
+    }
+}
+
+- (void)setBigDisplayImage
+{
+    [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
+    UIImageView *imageView = _bigProfileImage;
+    [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
+        UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
+        if (image) {
+            [imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
         }
-	}
+    }];
 }
 
 // 当拨打别人或被拨打接通电话后调用, 将界面的外观转换到In Call界面
@@ -238,16 +264,18 @@ void propListener(	void *                  inClientData,
     // 进入In Call 模式
     [self retrieveBulletinBoard];
     // 加入缓慢消失的动画效果
-    [callingIndicator setAlpha:0.3f];
+    UIImageView *indicator = callingIndicator;
+    [indicator setAlpha:0.3f];
     [UIView animateWithDuration:0.5f animations:^{
-        [callingIndicator setAlpha:0.0f];
+        [indicator setAlpha:0.0f];
     }completion:^(BOOL finished){
-        [callingIndicator.layer removeAllAnimations];
-        [callingIndicator removeFromSuperview];
+        [indicator.layer removeAllAnimations];
+        [indicator removeFromSuperview];
     }];
     // 头像缓慢变亮
+    UIImageView *imageView = _bigProfileImage;
     [UIView animateWithDuration:1.2f animations:^{
-        [_bigProfileImage setAlpha:1.0f];
+        [imageView setAlpha:1.0f];
     }];
 
     // Enable the Add button
@@ -281,11 +309,11 @@ void propListener(	void *                  inClientData,
     NSRunLoop *runloop = [NSRunLoop currentRunLoop];
     timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateTimeLabel) userInfo:nil repeats:YES];
     [runloop addTimer:timer forMode:NSRunLoopCommonModes];
-//    [runloop addTimer:timer forMode:UITrackingRunLoopMode];
     
     // 加入缓慢出现的动画效果
+    UILabel *label = timeLabel;
     [UIView animateWithDuration:1.2f animations:^{
-        [timeLabel setAlpha:1.0f];
+        [label setAlpha:1.0f];
     }];
 }
 
@@ -343,8 +371,6 @@ void propListener(	void *                  inClientData,
     }
     [_buttonEndCall setTarget:self];
     [_buttonEndCall setAction:@selector(pressButtonEndCall)];
-//    UIImageView *buttonEndCallBackground = [[UIImageView alloc] initWithFrame:CGRectMake(320-63, 0, 126, 88)];
-//    buttonEndCallBackground.backgroundColor = [UIColor colorWithRed:213/255.0 green:11/255.0 blue:11/255.0 alpha:1.0f];
     UIButton *buttonEndCallBackground = [[UIButton alloc] initWithFrame:CGRectMake(320-63, 0, 126, 44)];
     if (IS_OS_7_OR_LATER) {
         buttonEndCallBackground.backgroundColor = [UIColor colorWithRed:213/255.0 green:11/255.0 blue:11/255.0 alpha:1.0f];
@@ -402,11 +428,12 @@ void propListener(	void *                  inClientData,
     frame.size.height = 60.0f;
     frame.origin.y = frame.origin.y - frame.size.height;
     
+    UIImageView *imageView = bulletinBoard;
     [UIView animateWithDuration:0.5f animations:^{
-        bulletinBoard.frame = frame;
+        imageView.frame = frame;
     } completion:^(BOOL finished){
-        [bulletinBoard addSubview:herName];
-        [bulletinBoard addSubview:callingLabel];
+        [imageView addSubview:herName];
+        [imageView addSubview:callingLabel];
     }];
 }
 
@@ -420,10 +447,11 @@ void propListener(	void *                  inClientData,
     CGFloat height = frame.size.height;
     frame.size.height = 0.0f;
     frame.origin.y = frame.origin.y + height;
+    UIImageView *imageView = bulletinBoard;
     [UIView animateWithDuration:0.3f animations:^{
-        bulletinBoard.frame = frame;
+        imageView.frame = frame;
     } completion:^(BOOL finished){
-        [bulletinBoard removeFromSuperview];
+        [imageView removeFromSuperview];
     }];
 }
 
@@ -548,15 +576,18 @@ void propListener(	void *                  inClientData,
     CGRect moveToolBarFrame = _toolbar.frame;
     moveToolBarFrame.origin.y = moveToolBarFrame.origin.y - 230.0f;
     
+    UIView *view = _toolbar;
+    UIImageView *imageView = _blurImage;
     [UIView animateWithDuration:kSemiModalAnimationDuration animations:^{
-        _toolbar.frame = moveToolBarFrame;
-        _blurImage.alpha = 1.0f;
+        view.frame = moveToolBarFrame;
+        imageView.alpha = 1.0f;
     }];
 }
 
 - (void)pressButtonEndCall
 {
-    [[SipStackUtils sharedInstance].audioService hangUpCall];
+    //[[SipStackUtils sharedInstance].audioService hangUpCall];
+    [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [timer invalidate]; // 停止计时并从Runloop中释放
     
@@ -650,11 +681,12 @@ void propListener(	void *                  inClientData,
     frame.size.height = 60.0f;
     frame.origin.y = frame.origin.y - frame.size.height;
     
+    UIImageView *imageView = bulletinBoard;
     [UIView animateWithDuration:0.5f animations:^{
-        bulletinBoard.frame = frame;
+        imageView.frame = frame;
     } completion:^(BOOL finished){
-        [bulletinBoard addSubview:herName];
-        [bulletinBoard addSubview:calling];
+        [imageView addSubview:herName];
+        [imageView addSubview:calling];
     }];
 }
 
@@ -667,7 +699,8 @@ void propListener(	void *                  inClientData,
 // 按下拒绝接听按钮
 - (void)pressRejectButton
 {
-    [[SipStackUtils sharedInstance].audioService hangUpCall];
+   // [[SipStackUtils sharedInstance].audioService hangUpCall];
+    [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
         
     }];
@@ -685,21 +718,27 @@ void propListener(	void *                  inClientData,
 {
     if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
         if (_viewState == ReceivingCall) {
-            [[SipStackUtils sharedInstance].audioService acceptCall];
+            //[[SipStackUtils sharedInstance].audioService acceptCall];
+            [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(acceptCall) withObject:nil];
+            [pickupTheCall removeFromSuperview];
+            [rejectTheCall removeFromSuperview];
+            [self retrieveCallerBulletionBoard];
+            [_toolbar setHidden:NO];
+            [self.navigationController.navigationBar setHidden:NO];
+            [self presentAllCallingIcons];
+            // 因为目前无法检测网络状态,所以不加入此功能
+            //    [self addNetworkIndicator];
+            
+            [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+        }
+        else{
+            
         }
     }
-    
-    [pickupTheCall removeFromSuperview];
-    [rejectTheCall removeFromSuperview];
-    [self retrieveCallerBulletionBoard];
-    [_toolbar setHidden:NO];
-    [self.navigationController.navigationBar setHidden:NO];
-    [self presentAllCallingIcons];
-    // 因为目前无法检测网络状态,所以不加入此功能
-//    [self addNetworkIndicator];
-    [self changeViewAppearanceToInCall];
-    
-    [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+    else{
+       
+    }
+    [[SipStackUtils sharedInstance].soundService stopRingTone];
 }
 
 #pragma mark QianLiUIMenuBar delegate Method
@@ -707,9 +746,11 @@ void propListener(	void *                  inClientData,
 {
     CGRect moveToolBarFrame = _toolbar.frame;
     moveToolBarFrame.origin.y = moveToolBarFrame.origin.y + 230.0f;
+    UIImageView *imageView = _blurImage;
+    UIView *view = _toolbar;
     [UIView animateWithDuration:kSemiModalAnimationDuration animations:^{
-        _toolbar.frame = moveToolBarFrame;
-        _blurImage.alpha = 0.0f;
+        view.frame = moveToolBarFrame;
+        imageView.alpha = 0.0f;
     }];
 }
 
@@ -807,6 +848,7 @@ void propListener(	void *                  inClientData,
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     _drawingVC = [storyboard instantiateViewControllerWithIdentifier:@"DrawingViewController"];
+    _drawingVC.isIncoming = NO;
     [[SipStackUtils sharedInstance].messageService sendMessage:kHandDrawing toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
     
     UINavigationControllerPortraitViewController *navigationVC = [[UINavigationControllerPortraitViewController alloc] init];
@@ -861,11 +903,13 @@ void propListener(	void *                  inClientData,
     }
     
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleTimer:) userInfo:imageArray repeats:YES];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    _imageDispVC = [storyboard instantiateViewControllerWithIdentifier:@"ImageDisplayVC"];
-    _imageDispVC.isIncoming = NO;
-    [self.navigationController pushViewController:_imageDispVC animated:YES];
+    if (_imageDispVC == nil) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        _imageDispVC = [storyboard instantiateViewControllerWithIdentifier:@"ImageDisplayVC"];
+        [self.navigationController pushViewController:_imageDispVC animated:YES];
+    }
     
+    _imageDispVC.isIncoming = NO;
     NSMutableArray *array = [NSMutableArray arrayWithArray:imageArray];
     _imageDispVC.images = array;
     
@@ -937,9 +981,6 @@ void propListener(	void *                  inClientData,
 		}
 		case INVITE_EVENT_TERMWAIT:
             [SipStackUtils sharedInstance].audioService.audioSession = nil;
-//            if (_viewState == Calling) {
-//                [[SipStackUtils sharedInstance].audioService releaseAudioSession];
-//            }
         case INVITE_EVENT_TERMINATED:
 		{
 			// updates view and state
@@ -952,6 +993,46 @@ void propListener(	void *                  inClientData,
 	}
 }
 
+-(void) updateViewAndState
+{
+	if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
+		switch ([[SipStackUtils sharedInstance].audioService getAudioSessionState]) {
+			case INVITE_STATE_INPROGRESS:
+			{
+                break;
+			}
+			case INVITE_STATE_INCOMING:
+			{
+				break;
+			}
+			case INVITE_STATE_REMOTE_RINGING:
+			{
+                _calling.text = NSLocalizedString(@"callingRingingText", nil);
+				break;
+			}
+			case INVITE_STATE_INCALL:
+			{
+                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+                [[SipStackUtils sharedInstance].soundService stopRingTone];
+                [self changeViewAppearanceToInCall];
+                if (_isSpeakerOn) {
+                    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
+                }
+				break;
+			}
+			case INVITE_STATE_TERMINATED:
+			case INVITE_STATE_TERMINATING:
+			{
+                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+                [[SipStackUtils sharedInstance].soundService stopRingTone];
+				break;
+			}
+			default:
+				break;
+		}
+    }
+}
+
 - (void)timerSuicideTick
 {
     if (didEndCall) {
@@ -960,7 +1041,12 @@ void propListener(	void *                  inClientData,
     didEndCall = YES;
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
-  
+    [timer invalidate]; 
+    if (menuBar) {
+        [menuBar dismiss];
+        menuBar = nil;
+    }
+
     //LLGG
     [self dismissAllViewController];
    //[self changeViewAppearanceToInCall];
@@ -1012,49 +1098,7 @@ void propListener(	void *                  inClientData,
 
 - (void)dismissSelf
 {
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        [SipCallManager SharedInstance].audioVC = nil;
-    }];
-}
-
--(void) updateViewAndState{
-	if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
-		switch ([[SipStackUtils sharedInstance].audioService getAudioSessionState]) {
-			case INVITE_STATE_INPROGRESS:
-			{
-                break;
-			}
-			case INVITE_STATE_INCOMING:
-			{
-				break;
-			}
-			case INVITE_STATE_REMOTE_RINGING:
-			{
-				//self.labelStatus.text = @"Remote is ringing";
-                _calling.text = NSLocalizedString(@"callingRingingText", nil);
-				break;
-			}
-			case INVITE_STATE_INCALL:
-			{
-                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
-                [[SipStackUtils sharedInstance].soundService stopRingTone];
-                [self changeViewAppearanceToInCall];
-                if (_isSpeakerOn) {
-                    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
-                }
-				break;
-			}
-			case INVITE_STATE_TERMINATED:
-			case INVITE_STATE_TERMINATING:
-			{
-                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
-                [[SipStackUtils sharedInstance].soundService stopRingTone];
-				break;
-			}
-			default:
-				break;
-		}
-    }
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)showImageVC
@@ -1077,6 +1121,7 @@ void propListener(	void *                  inClientData,
     if (!_drawingVC) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         _drawingVC = [storyboard instantiateViewControllerWithIdentifier:@"DrawingViewController"];
+        _drawingVC.isIncoming = YES;
         UINavigationControllerPortraitViewController *navigationVC = [[UINavigationControllerPortraitViewController alloc] init];
         navigationVC.viewControllers = @[_drawingVC];
         [self presentViewController:navigationVC animated:YES completion:nil];
@@ -1107,6 +1152,7 @@ void propListener(	void *                  inClientData,
     [self openSpeaker];
 }
 
+#pragma mark -- handling receiving message method--
 - (void)receiveIncomingGettingImageMessage:(NSNotification *)notification
 {
     NSString *info = notification.object;
@@ -1153,8 +1199,11 @@ void propListener(	void *                  inClientData,
         [_imageDispVC scrollTO:_imageDispVC.totalNumber * PageWidth];
     }
     else if ([message isEqualToString:kImageDispCancel]){
-        if (_selectPhotoViewController) {
+        if (_selectPhotoViewController.presentingViewController) {
             [_selectPhotoViewController dismissViewControllerAnimated:YES completion:nil];
+        }
+        if (_cameraVC.presentingViewController) {
+            [_cameraVC dismissViewControllerAnimated:YES completion:nil];
         }
         [_imageDispVC cancelFromRemoteyParty];
     }
@@ -1175,10 +1224,13 @@ void propListener(	void *                  inClientData,
     }
     else if ([message isEqualToString:kDoodleImageIndex]){
        // [self showImageVC];
-        [_imageDispVC doodleWithImageIndex:[[words objectAtIndex:1] integerValue]];
+        [_imageDispVC doodleWithImageAtIndex:[[words objectAtIndex:1] integerValue]];
     }
     else if ([message isEqualToString:kDoodleImagePoints]){
        // [self showImageVC];
+        if ([words count] != 5) {
+            return;
+        }
         NSArray *coord = [[words objectAtIndex:2] componentsSeparatedByString:@":"];
         NSMutableArray *points = [NSMutableArray array];
         CGSize winSize = _imageDispVC.doodleView.frame.size;
@@ -1189,7 +1241,21 @@ void propListener(	void *                  inClientData,
             NSValue *pValue = [NSValue valueWithCGPoint:p];
             [points addObject:pValue];
         }
-        [_imageDispVC.doodleView drawingOnImageWithPoints:points Drawing:[[words objectAtIndex:1] isEqualToString:@"DRAW"]];
+        UIColor *color;
+        switch ([[words objectAtIndex:3] integerValue]) {
+            case 1:
+                color = [UIColor redColor];
+                break;
+            case 2:
+                color = [UIColor greenColor];
+                break;
+            default:
+                color = [UIColor blackColor];
+                break;
+        }
+        CGFloat lineWidth = [[words objectAtIndex:4] floatValue];
+        
+        [_imageDispVC.doodleView drawingOnImageWithPoints:points Drawing:[[words objectAtIndex:1] isEqualToString:@"DRAW"] lineWidth:lineWidth strokeColor:color];
     }
     else if ([message isEqualToString:kClearAllDoodle]){
         [_imageDispVC.doodleView clearAllFromRemote];
@@ -1301,10 +1367,14 @@ void propListener(	void *                  inClientData,
     
     else if ([message isEqualToString:kClearAllHandWriting]){
         [_drawingVC.drawingView clearAllFromRemote];
+        _drawingVC.clearAll.enabled = NO;
     }
     
     else if ([message isEqualToString:kDrawingPoints]){
         //[self showDrawingVC];
+        if ([words count] != 6) {
+            return;
+        }
         CGSize winSize = _drawingVC.drawingView.bounds.size;
         NSArray *coord = [[words objectAtIndex:2] componentsSeparatedByString:@":"];
         NSMutableArray *points = [NSMutableArray array];
@@ -1315,7 +1385,20 @@ void propListener(	void *                  inClientData,
             NSValue *pValue = [NSValue valueWithCGPoint:p];
             [points addObject:pValue];
         }
-        [_drawingVC.drawingView drawingOnImageWithPoints:points Drawing:[[words objectAtIndex:1] isEqualToString:@"DRAW"]];
+        CGFloat lineWidth = [[words objectAtIndex:4] floatValue];
+        BOOL touchEnd;
+        if ([[words objectAtIndex:5] integerValue] == 1) {
+            touchEnd = YES;
+        }
+        else
+        {
+            touchEnd = NO;
+        }
+        [_drawingVC.drawingView drawingOnImageWithPoints:points Drawing:[[words objectAtIndex:1] isEqualToString:@"DRAW"] lineWidth:lineWidth strokeColorIndex:[[words objectAtIndex:3] integerValue] touchEnd:touchEnd];
+    }
+    else if ([message isEqualToString:kHandDrawingRevoke]){
+        [_drawingVC.drawingView revokeFromRemoteParty];
+        _drawingVC.undoButton.enabled = NO;
     }
     else if ([message isEqualToString:kCancelDrawing]){
         [_drawingVC cancelFromRemoteParty];
@@ -1404,7 +1487,8 @@ void propListener(	void *                  inClientData,
 
 - (void)hangUpCallFromRemoteParty
 {
-    [[SipStackUtils sharedInstance].audioService hangUpCall];
+    //[[SipStackUtils sharedInstance].audioService hangUpCall];
+    [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [self dismissAllViewController];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [timer invalidate]; // 停止计时并从Runloop中释放
@@ -1423,6 +1507,7 @@ void propListener(	void *                  inClientData,
         [menuBar dismiss];
         menuBar=nil;
     }
+    [self resumeMusicAppIfNeeded];
 }
 
 @end

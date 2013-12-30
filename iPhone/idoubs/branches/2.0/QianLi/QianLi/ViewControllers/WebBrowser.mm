@@ -74,7 +74,6 @@
     _webView.scrollView.delegate = self;
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baidu.com"]]];
     
-//    _toolbar.backgroundColor = [UIColor colorWithRed:244/255.0 green:244/255.0 blue:244/255.0 alpha:1.0];
     _toolbar.backgroundColor = [UIColor whiteColor];
     [self.view bringSubviewToFront:_toolbar];
     [self.view bringSubviewToFront:_urlInputUIImageView];
@@ -88,7 +87,6 @@
     didControlsHide = NO;
     didJustLoad = YES;
     
-//    _urlInput.clearButtonMode = UITextFieldViewModeWhileEditing;
     _urlInput.clearsOnBeginEditing = YES;
     _urlInput.autocorrectionType = UITextAutocorrectionTypeNo;
     
@@ -98,22 +96,11 @@
     [_activityIndicator setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin)];
     [_activityIndicator setFrame:CGRectMake(CGRectGetMinX(_activityIndicator.frame)+3, CGRectGetMinY(_activityIndicator.frame)+3, CGRectGetWidth(_activityIndicator.frame), CGRectGetHeight(_activityIndicator.frame))];
     
-
-//    //record the beginning time
-//    _beginTime = [[NSDate date] timeIntervalSince1970];
-    
     _checkMarkImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"checkmarkForSync.png"]];
     [_checkMarkImageView setFrame:CGRectMake(CGRectGetMinX(_checkMarkImageView.frame)+3, CGRectGetMinY(_checkMarkImageView.frame)+3, CGRectGetWidth(_checkMarkImageView.frame), CGRectGetHeight(_checkMarkImageView.frame))];
     _crossImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"crossForSync.png"]];
     [_crossImageView setFrame:CGRectMake(CGRectGetMinX(_crossImageView.frame)+3, CGRectGetMinY(_crossImageView.frame)+3, CGRectGetWidth(_crossImageView.frame), CGRectGetHeight(_crossImageView.frame))];
     
-//    UIButton *syncButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    syncButton.frame = CGRectMake(8, 26, 54, 44);
-//    [self.view addSubview:syncButton];
-//    _synButton = syncButton;
-//    [syncButton setTitle:@"同步" forState:UIControlStateNormal];
-//    syncButton.titleLabel.font = [UIFont fontWithName:@"American Typewriter" size:17];;
-//    [syncButton addTarget:self action:@selector(synChronize:) forControlEvents:UIControlEventTouchUpInside];
     [_synButton addSubview:_activityIndicator];
     [_synButton addSubview:_checkMarkImageView];
     [_synButton addSubview:_crossImageView];
@@ -226,7 +213,6 @@
     [_urlInput resignFirstResponder];
 }
 
-
 - (BOOL) validateUrl: (NSString *) candidate
 {
     NSDataDetector *linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
@@ -325,11 +311,6 @@
     [_synButton setTitle:@"" forState:UIControlStateNormal];
     [_activityIndicator startAnimating];
     _stopSynTimer = [NSTimer scheduledTimerWithTimeInterval:8.0 target:self selector:@selector(stopSyn) userInfo:nil repeats:NO];
-    
-    // Change to UIActivityView
-    //    self.navigationItem.leftBarButtonItem = _loadingSynButton;
-    //    [_activityIndicator startAnimating];
-    //    _stopSynTimer = [NSTimer scheduledTimerWithTimeInterval:8.0 target:self selector:@selector(stopSyn) userInfo:nil repeats:NO];
 }
 
 - (void)synSuccessed
@@ -342,9 +323,6 @@
     // Stop the stopsyn timer
     [_stopSynTimer invalidate];
     _stopSynTimer = nil;
-    
-    // add to history
-//    [self addImages:[self smallScreenshot]];
 }
 
 - (void)stopSyn
@@ -369,22 +347,6 @@
 - (void)cancelFromRemoteParty
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-//    if ([_synImages count] == 0) {
-//        [self addImages:[self smallScreenshot]];
-//    }
-//    
-//    // add to history
-//    NSData *imageData = [NSKeyedArchiver archivedDataWithRootObject:_synImages];
-//    NgnHistoryImageEvent *imageEvent = [NgnHistoryEvent createImageEventWithStatus:HistoryEventStatus_Incoming andRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] andContent:imageData];
-//    imageEvent.start = _beginTime;
-//    imageEvent.end = [[NSDate date] timeIntervalSince1970];
-//    if (_inComing) {
-//        imageEvent.status = HistoryEventStatus_Incoming;
-//    }
-//    else{
-//        imageEvent.status = HistoryEventStatus_Outgoing;
-//    }
-//    [[SipStackUtils sharedInstance].historyService addEvent:(NgnHistoryEvent *)imageEvent];
 }
 
 - (IBAction)cancel:(id)sender

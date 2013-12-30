@@ -30,6 +30,7 @@
 + (void)endImageSession:(NSString *)sessionID Success:(void(^)(BOOL success))success;
 
 + (PictureManager*)sharedInstance;
+- (void)clearSharedInstance;
 - (void)setImageSession:(NSString *)imageSessionID;
 - (NSString *)getImageSession;
 

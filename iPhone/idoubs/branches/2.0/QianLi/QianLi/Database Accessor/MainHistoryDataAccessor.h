@@ -17,6 +17,7 @@
 - (void)updateForRemoteParty:(NSString *)remoteParty Content: (NSString *)content Time:(double)time Type:(NSString *)type;
 - (void)updateNameForRemotyParty:(NSString *)remoteParty withName:(NSString *)name;
 + (id)sharedInstance;
+- (void)clearSharedInstance;
 - (void)deleteAllObjects;
 - (NSString *)getNameForRemoteParty:(NSString *)remote;
 - (void)updateTypeForRemotyParty:(NSString *)remoteParty withType:(NSString *)type;

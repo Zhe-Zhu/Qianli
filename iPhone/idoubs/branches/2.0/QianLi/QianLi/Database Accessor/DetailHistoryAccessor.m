@@ -19,9 +19,10 @@
 @implementation DetailHistoryAccessor
 @synthesize managedObjectContext = _managedObjectContext;
 
+static DetailHistoryAccessor *detailHistAccessor = nil;
+
 + (DetailHistoryAccessor *)sharedInstance
 {
-    static DetailHistoryAccessor *detailHistAccessor = nil;
     if (detailHistAccessor == nil) {
         detailHistAccessor = [[DetailHistoryAccessor alloc] init];
         QianLiAppDelegate *appDelegate = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -114,7 +115,6 @@
     else{
         [self addEventWithRemoteParty:entry.remoteParty start:entry.start end:entry.start status:entry.status type:entry.type content:entry.content];
     }
-    
 }
 
 - (void)deleteHistoryForRemoteParty:(NSString *)remoteParty
@@ -143,6 +143,11 @@
         NSLog(@"saving error during updating");
     }
     [self.managedObjectContext unlock];
+}
+
+- (void)clearSharedInstance
+{
+    detailHistAccessor = nil;
 }
 
 @end

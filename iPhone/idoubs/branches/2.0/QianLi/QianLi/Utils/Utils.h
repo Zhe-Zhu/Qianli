@@ -13,10 +13,7 @@
 // this class implement some useful utilites functions.
 @interface Utils : NSObject
 
-// used to inform user the network is not reachable.
-+ (void)networkAlert:(NSString *)message;
-// used to inform user when new message is coming. 
-+ (void)newMessageAlert:(NSString *)message;
++ (void)displayErrorOnMainQueue:(NSError *)error withMessage:(NSString *)message;
 
 + (NSString *)readableTimeFromSecondsSince1970: (double)time;
 // 内容友好的时间显示方式微信版
@@ -30,4 +27,7 @@
 
 +(void)changeNavigationBarButtonLookingForiOS6;
 + (BOOL)isHeadsetPluggedIn;
++ (UIImage*)screenshot:(UIView *)view toSize:(CGSize)size;
+
++ (void)clearAllSharedInstance;
 @end

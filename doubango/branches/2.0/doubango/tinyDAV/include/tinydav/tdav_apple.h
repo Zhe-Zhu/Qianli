@@ -41,7 +41,7 @@ static int tdav_apple_init()
 	}
 	
 	// enable record/playback
-	UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;
+	UInt32 audioCategory = kAudioSessionCategory_AmbientSound;//kAudioSessionCategory_PlayAndRecord;
 	status = AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(audioCategory), &audioCategory);
 	if(status){
 		TSK_DEBUG_ERROR("AudioSessionSetProperty(kAudioSessionProperty_AudioCategory) failed with status code=%d", (int32_t)status);

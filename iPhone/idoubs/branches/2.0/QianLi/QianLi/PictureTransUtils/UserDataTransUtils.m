@@ -92,9 +92,15 @@
              success(info.update_time);
          }
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get Update Info Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//         [alertView show];
-         //success(-1);
+         [manager getObjectsAtPath:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+          {
+              UpdateInfo *info = (UpdateInfo *)[mappingResult firstObject];
+              if (success) {
+                  success(info.update_time);
+              }
+          } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+              
+          }];
      }];
 }
 
@@ -108,9 +114,14 @@
              success(YES);
          }
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Account Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//         [alertView show];
-         //success(NO);
+         [manager deleteObject:nil path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+          {
+              if (success) {
+                  success(YES);
+              }
+          } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+              
+          }];
      }];
 }
 
@@ -139,9 +150,24 @@
          }
          
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get user data Info Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//         [alertView show];
-         //success(-1);
+         [manager getObjectsAtPath:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+          {
+              UserData *userData = (UserData *)[mappingResult firstObject];
+              NSArray* words = [userData.avatarURL componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/."]];
+              if ([words count] == 3) {
+                  if (success) {
+                      success(userData.name, [words objectAtIndex:1]);
+                  }
+              }
+              else{
+                  if (success) {
+                      success(userData.name, nil);
+                  }
+              }
+              
+          } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+              
+          }];
      }];
 }
 
@@ -152,10 +178,10 @@
     // Downloading Image is a very basic operation, therefore, we just invoke the method provided by ios.
     NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&error];
     if (error) {
-        // If an error occured during downloading, we display this error to user using UIAlert and return nil.
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get user profile Error" message:[NSString stringWithFormat:@"%@,%@",[error localizedDescription], path] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-        return nil;
+        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&error];
+        if (error) {
+            return nil;
+        };
     }
     return [UIImage imageWithData:imageData];
 }
@@ -182,8 +208,13 @@
             success(YES);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Put user image error %d", error.code] message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
+        [manager patchObject:userName path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            if (success) {
+                success(YES);
+            }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            
+        }];
     }];
 }
 
@@ -196,6 +227,7 @@
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:updateMapping method:RKRequestMethodPATCH pathPattern:path keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [manager addResponseDescriptor:responseDescriptor];
     
+    NSInteger __block triedTime = 0;
     NSMutableURLRequest *request = [manager multipartFormRequestWithObject:nil method:RKRequestMethodPATCH path:path parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData){
         [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 0.5)
                                     name:@"avatar"
@@ -208,8 +240,10 @@
             success(YES);
         }
     } failure:^( RKObjectRequestOperation *operation , NSError *error){
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Put user image error %d", error.code] message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
+        if (triedTime <= 0) {
+            [manager enqueueObjectRequestOperation:operation];
+            triedTime ++;
+        }
     }];
     [manager enqueueObjectRequestOperation:operation];
 }
@@ -223,6 +257,7 @@
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:updateMapping method:RKRequestMethodPATCH pathPattern:path keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [manager addResponseDescriptor:responseDescriptor];
     
+    NSInteger __block triedTime = 0;
     NSMutableURLRequest *request = [manager multipartFormRequestWithObject:nil method:RKRequestMethodPATCH path:path parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData){
         [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 0.5)
                                     name:@"large_avatar"
@@ -235,8 +270,10 @@
             success(YES);
         }
     } failure:^( RKObjectRequestOperation *operation , NSError *error){
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Put user big image error %d", error.code] message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
+        if (triedTime <= 0) {
+            [manager enqueueObjectRequestOperation:operation];
+            triedTime ++;
+        }
     }];
     [manager enqueueObjectRequestOperation:operation];
 }
@@ -260,9 +297,18 @@
              }
          }
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get user data Info Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//         [alertView show];
-         //success(-1);
+         [manager getObjectsAtPath:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+          {
+              BigProfile *userData = (BigProfile *)[mappingResult firstObject];
+              NSArray* words = [userData.bigAavatar componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/."]];
+              if ([words count] == 3) {
+                  if (success) {
+                      success([words objectAtIndex:1]);
+                  }
+              }
+          } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+              
+          }];
      }];
 }
 
@@ -290,9 +336,12 @@
             success(YES);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"update user name error: %d", error.code] message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-
+        [manager putObject:updateinfo path:@"/friend/add/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            if (success) {
+                success(YES);
+            }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        }];
     }];
 }
 

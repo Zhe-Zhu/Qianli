@@ -9,6 +9,7 @@
 #import "HandDrawingView.h"
 #import "SipStackUtils.h"
 
+
 @interface HandDrawingView (){
     UIBezierPath *_path;
     UIBezierPath *_remotePath;
@@ -21,15 +22,23 @@
     BOOL fromRemoteParty;
     BOOL remoteDrawing;
     BOOL isClearAll;
+    BOOL remotePathHasPoints;
     NSInteger drawPointsNumber;
     
     CGPoint previousPoint;
     CGPoint thirdLastPoint;
+    
+    NSInteger colorIndex;
 }
 
+@property(assign, nonatomic) CGFloat lineWidth;
+@property(assign, nonatomic) CGFloat eraseLineWidth;
+@property(assign, nonatomic) CGFloat remoteLineWidth;
+@property(strong, nonatomic) UIColor *remoteStrokeColor;
 @property(strong, nonatomic) UIColor *strokeColor;
 @property(strong, nonatomic) NSString *pointsMessage;
 @property(strong, nonatomic) UIImage *pathFormedImage;
+@property(strong, nonatomic) UIImage *prePathFormedImage;
 
 @end
 
@@ -37,35 +46,16 @@
 
 @synthesize pathFormedImage = _pathFormedImage;
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        // Initialization code
-        [self setMultipleTouchEnabled:NO];
-        _path = [UIBezierPath bezierPath];
-        _remotePath = [UIBezierPath bezierPath];
-        [_path setLineWidth:2.0];
-        [_remotePath setLineWidth:2.0];
-        _path.lineCapStyle = kCGLineCapRound;
-        _remotePath.lineCapStyle = kCGLineCapRound;
-        //_pathsArray = [[NSMutableArray alloc] initWithCapacity:1];
-        firstTime = YES;
-        isDrawing = YES;
-        fromRemoteParty = NO;
-        isClearAll = NO;
-        _pathPoints = [[NSMutableArray alloc] initWithCapacity:2];
-        _strokeColor = [UIColor blackColor];
-        self.backgroundColor = [UIColor clearColor];
-    }
-    return self;
-}
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        NSUserDefaults *userData = [NSUserDefaults standardUserDefaults];
+        colorIndex = [userData integerForKey:kDoodleLineColor];
+        _strokeColor = [self getColorWithIndex:colorIndex];
+        _lineWidth = [self getWidthWithIndex:[userData integerForKey:kDoodleLineWidth]];
+        _eraseLineWidth = [self getWidthWithIndex:[userData integerForKey:kDoodleEraseWidth]];
         [self setMultipleTouchEnabled:NO];
         _path = [UIBezierPath bezierPath];
         _remotePath = [UIBezierPath bezierPath];
@@ -91,25 +81,24 @@
         CGContextClearRect(context, rect);
         return;
     }
-    [_pathFormedImage drawInRect:rect];
-    [_strokeColor setStroke];
+    if (rect.size.width > 20) {
+        [_pathFormedImage drawInRect:rect];
+    }
     
     if (fromRemoteParty) {
         fromRemoteParty = NO;
-        if (remoteDrawing) {
-            [_remotePath stroke];
-        }
-        else{
-//            CGContextRef context = UIGraphicsGetCurrentContext();
-//            CGContextClearRect(context, rect);
-        }
+        [_remoteStrokeColor setStroke];
+        [_remotePath stroke];
     }
     else{
         if (!isDrawing) {
-            CGContextRef context = UIGraphicsGetCurrentContext();
-            CGContextClearRect(context, rect);
+            [_path setLineWidth:_eraseLineWidth];
+            [[UIColor whiteColor] setStroke];
+            [_path stroke];
         }
         else{
+            [_path setLineWidth:_lineWidth];
+            [_strokeColor setStroke];
             [_path stroke];
         }
     }
@@ -117,11 +106,6 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (!isDrawing) {
-        _pointsMessage = @"";
-        drawPointsNumber = 0;
-        return;
-    }
     UITouch *touch = [touches anyObject];
     CGPoint p = [touch locationInView:self];
     NSValue *val = [NSValue valueWithCGPoint:[touch locationInView:self]];
@@ -133,6 +117,9 @@
     CGSize winSize = self.frame.size;
     _pointsMessage = [NSString stringWithFormat:@"%f:%f", p.x /winSize.width, p.y / winSize.height];
     drawPointsNumber = 1;
+    if ([_delegate respondsToSelector:@selector(handDrawingDidDraw)]) {
+        [_delegate handDrawingDidDraw];
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -146,12 +133,7 @@
     NSArray *points = [self calculateSmoothLinePoints:_pathPoints];
     for (int i = 0; i < [points count]; ++i) {
         CGPoint p = [[points objectAtIndex:i] CGPointValue];
-        if (!isDrawing) {
-            [self setNeedsDisplayInRect:CGRectMake(p.x - 6, p.y - 6, 12, 12)];
-        }
-        else{
-            [_path addLineToPoint: p];
-        }
+        [_path addLineToPoint: p];
     }
     
     // Prepare the drawing points
@@ -167,46 +149,36 @@
     }
     else{
         if (isDrawing) {
-            [self sendDoodleMessage:@"DRAW"];
+            [self sendDoodleMessage:@"DRAW" touchEnd:NO];
         }
         else{
-            [self sendDoodleMessage:@"ERASE"];
+            [self sendDoodleMessage:@"ERASE" touchEnd:NO];
         }
-        drawPointsNumber = 3;
-        _pointsMessage = [NSString stringWithFormat:@"%f:%f:%f:%f:%f:%f", thirdLastPoint.x / winSize.width, thirdLastPoint.y / winSize.height, previousPoint.x / winSize.width, previousPoint.y / winSize.height, point.x / winSize.width, point.y / winSize.height];
-    }
-    
-    thirdLastPoint = previousPoint;
-    previousPoint = point;
-    
-    if (!isDrawing) {
-        return;
+        drawPointsNumber = 0;
+        _pointsMessage = @"";
     }
     [self setNeedsDisplay];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (!isDrawing) {
-        [_path removeAllPoints];
-        [_pathPoints removeAllObjects];
-        [self sendDoodleMessage:@"ERASE"];
-        _pathFormedImage = [self screenshot];
-        return;
-    }
     UITouch *touch = [touches anyObject];
-    CGPoint pos = [touch locationInView:self];
+    CGPoint point = [touch locationInView:self];
     if (drawPointsNumber < MaxDrawPoints) {
         CGSize winSize = self.bounds.size;
-        _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f",_pointsMessage, pos.x / winSize.width, pos.y / winSize.height];
+        if ([_pointsMessage isEqualToString:@""]) {
+            _pointsMessage = [NSString stringWithFormat:@"%f:%f", point.x / winSize.width, point.y / winSize.height];
+        }
+        else{
+            _pointsMessage = [NSString stringWithFormat:@"%@:%f:%f", _pointsMessage, point.x / winSize.width, point.y / winSize.height];
+        }
     }
     
-    [self sendDoodleMessage:@"DRAW"];
     if (firstTouch) {
-        [_path addLineToPoint:pos];
+        [_path addLineToPoint:point];
     }
     else{
-        NSValue *val = [NSValue valueWithCGPoint:pos];
+        NSValue *val = [NSValue valueWithCGPoint:point];
         [_pathPoints addObject: val];
         NSArray *points = [self calculateSmoothLinePoints:_pathPoints];
         for (int i = 0; i < [points count]; ++i) {
@@ -214,7 +186,14 @@
             [_path addLineToPoint:p];
         }
     }
-    [self writeToImageWithPath:_path Color:_strokeColor];
+    if (isDrawing) {
+        [self sendDoodleMessage:@"DRAW" touchEnd:YES];
+        [self writeToImageWithPath:_path color:_strokeColor width:_lineWidth isDrawing:isDrawing];
+    }
+    else{
+        [self sendDoodleMessage:@"ERASE" touchEnd:YES];
+        [self writeToImageWithPath:_path color:[UIColor whiteColor] width:_eraseLineWidth isDrawing:isDrawing];
+    }
     [_path removeAllPoints];
     [_pathPoints removeAllObjects];
     [self setNeedsDisplay];
@@ -222,17 +201,33 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [super touchesCancelled:touches withEvent:event];
     [self touchesEnded:touches withEvent:event];
 }
 
-- (void)sendDoodleMessage:(NSString *)drawing{
+- (void)sendDoodleMessage:(NSString *)drawing touchEnd:(BOOL)touchEnd
+{
+    int touchFlag = -1;
+    if (touchEnd) {
+        touchFlag = 1;
+    }
+    else{
+        touchFlag = 0;
+    }
     //Send message to remotrparty
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@",kDrawingPoints,kSeparator,drawing,kSeparator,_pointsMessage];
+    CGFloat width;
+    if ([drawing isEqualToString:@"DRAW"]) {
+        width = _lineWidth;
+    }
+    else{
+        width = _eraseLineWidth;
+    }
+    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@%@%d%@%f%@%d",kDrawingPoints,kSeparator,drawing,kSeparator,_pointsMessage, kSeparator, colorIndex, kSeparator, width, kSeparator, touchFlag];
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
 }
 
-- (void)writeToImageWithPath:(UIBezierPath*)path Color:(UIColor *)color
+- (void)writeToImageWithPath:(UIBezierPath*)path color:(UIColor *)color width:(CGFloat)width isDrawing:(BOOL)drawing
 {
     CGSize size= self.bounds.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
@@ -245,56 +240,57 @@
     else{
         [_pathFormedImage drawAtPoint:CGPointZero];
     }
+    [path setLineWidth:width];
     [color setStroke];
     [path stroke];
+    _prePathFormedImage = [_pathFormedImage copy];
     _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 }
 
-- (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing
+//handle drawing commands from remoteparty
+- (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing lineWidth:(CGFloat)width strokeColorIndex:(NSInteger)index touchEnd:(BOOL) touchEnd
 {
     //firstTime = NO;
     remoteDrawing = drawing;
-    [_remotePath removeAllPoints];
     NSArray *array = [self calculateSmoothLinePoints:points];
-    if (drawing) {
-        for (int i = 0; i < [array count]; ++i) {
-            if (i == 0) {
-                CGPoint p = [[array objectAtIndex:i] CGPointValue];
-                [_remotePath moveToPoint:p];
-            }
-            else{
-                CGPoint p = [[array objectAtIndex:i] CGPointValue];
-                [_remotePath addLineToPoint:p];
-            }
-        }
-        fromRemoteParty = YES;
-        [self setNeedsDisplay];
-        [self writeToImageWithPath:_remotePath Color:_strokeColor];
-    }
-    else{
-        CGSize imageSize = self.bounds.size;
-        if (NULL != UIGraphicsBeginImageContextWithOptions){
-            UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
+    for (int i = 0; i < [array count]; ++i) {
+        if (!remotePathHasPoints) {
+            CGPoint p = [[array objectAtIndex:i] CGPointValue];
+            [_remotePath moveToPoint:p];
         }
         else{
-            UIGraphicsBeginImageContext(imageSize);
-        }
-        UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
-        [[UIColor whiteColor] setFill];
-        [rectpath fill];
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        [[self layer] renderInContext:context];
-
-        for (int i = 0; i < [array count]; ++i) {
             CGPoint p = [[array objectAtIndex:i] CGPointValue];
-            CGContextClearRect(context, CGRectMake(p.x - 6, p.y - 6, 12, 12));
+            [_remotePath addLineToPoint:p];
         }
-        //_pathFormedImage = [self screenshot];
-        _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        remotePathHasPoints = YES;
+    }
+    
+    if (touchEnd) {
+        if (drawing) {
+            _remoteLineWidth = width;
+            _remoteStrokeColor = [self getColorWithIndex:index];
+            [_remotePath setLineWidth:_remoteLineWidth];
+        }
+        else{
+            _remoteLineWidth = width;
+            _remoteStrokeColor = [UIColor whiteColor];
+            [_remotePath setLineWidth:_remoteLineWidth];
+        }
+        if (drawing) {
+            [self writeToImageWithPath:_remotePath color:
+             [self getColorWithIndex:index] width:_remoteLineWidth isDrawing:drawing];
+        }
+        else{
+            [self writeToImageWithPath:_remotePath color:[UIColor whiteColor] width:_remoteLineWidth isDrawing:drawing];
+        }
+        [_remotePath removeAllPoints];
+        remotePathHasPoints = NO;
         fromRemoteParty = YES;
         [self setNeedsDisplay];
+        if ([_delegate respondsToSelector:@selector(handDrawingDidDraw)]) {
+            [_delegate handDrawingDidDraw];
+        }
     }
 }
 
@@ -346,8 +342,21 @@
 - (void)clearAllFromRemote
 {
     isClearAll = YES;
-    [self setNeedsDisplayInRect:self.frame];
+    [self setNeedsDisplay];
     [self initPathImage];
+}
+
+- (void)revoke
+{
+    NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+    [[SipStackUtils sharedInstance].messageService sendMessage:kHandDrawingRevoke toRemoteParty:remotePartyNumber];
+    [self revokeFromRemoteParty];
+}
+
+- (void)revokeFromRemoteParty
+{
+    _pathFormedImage = [_prePathFormedImage copy];
+    [self setNeedsDisplay];
 }
 
 - (void)initPathImage
@@ -357,27 +366,101 @@
     UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, size.width, size.height)];
     [[UIColor whiteColor] setFill];
     [rectpath fill];
+    _prePathFormedImage = [_pathFormedImage copy];
     _pathFormedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 }
 
-- (void)changePaintingMode
+- (void)changeEraseLineWidthTo:(NSInteger)index
 {
-    isDrawing = !isDrawing;
+    _eraseLineWidth = [self getWidthWithIndex:index];
+}
+
+- (void)changeDrawLineWidthTo:(NSInteger)index
+{
+    _lineWidth = [self getWidthWithIndex:index];
+}
+
+- (void)changeDrawLineColorTo:(NSInteger)index
+{
+    _strokeColor = [self getColorWithIndex:index];
+    colorIndex = index;
+}
+
+
+- (void)changeToDrawMode
+{
+    isDrawing = YES;
+}
+
+- (void)changeToEraseMode
+{
+    isDrawing = NO;
+}
+
+- (BOOL)getDrawingMode
+{
+    return isDrawing;
+}
+
+- (CGFloat)getWidthWithIndex:(NSInteger)index
+{
+    CGFloat width;
+    switch (index) {
+        case 1:
+            width = 5.0;
+            break;
+        case 2:
+            width = 13.0;
+            break;
+        case 3:
+            width = 20.0;
+            break;
+        case 4:
+            width = 28.0;
+            break;
+        default:
+            width = 5.0;
+            break;
+    }
+    return width;
+}
+
+- (UIColor *)getColorWithIndex:(NSInteger)index
+{
+    UIColor *colour;
+    switch (index) {
+        case 1:
+             colour = [UIColor colorWithRed:35.0 / 255.0 green:31.0 / 255.0 blue:32.0 / 255.0 alpha:1.0];
+            break;
+        case 2:
+            colour = [UIColor colorWithRed:235.0 / 255.0 green:28.0 / 255.0 blue:36.0 / 255.0 alpha:1.0];
+            break;
+        case 3:
+            colour = [UIColor colorWithRed:249.0 / 255.0 green:222.0 / 255.0 blue:27.0 / 255.0 alpha:1.0];
+            break;
+        case 4:
+            colour = [UIColor colorWithRed:1.0 / 255.0 green:128.0 / 255.0 blue:229.0 / 255.0 alpha:1.0];
+            break;
+        case 5:
+            colour = [UIColor colorWithRed:17.0 / 255.0 green:185.0 / 255.0 blue:45.0 / 255.0 alpha:1.0];
+            break;
+        case 6:
+            colour = [UIColor colorWithRed:180.0 / 255.0 green:46.0 / 255.0 blue:178.0 / 255.0 alpha:1.0];
+            break;
+            
+        default:
+            colour = [UIColor colorWithRed:35.0 / 255.0 green:31.0 / 255.0 blue:32.0 / 255.0 alpha:1.0];
+            break;
+    }
+    return colour;
 }
 
 - (UIImage*)screenshot
 {
     // Create a graphics context with the target size
-    // On iOS 4 and later, use UIGraphicsBeginImageContextWithOptions to take the scale into consideration
-    // On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
     CGSize imageSize = self.bounds.size;
-    if (NULL != UIGraphicsBeginImageContextWithOptions){
-        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-    }
-    else{
-        UIGraphicsBeginImageContext(imageSize);
-    }
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     UIBezierPath *rectpath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
     [[UIColor whiteColor] setFill];
     [rectpath fill];

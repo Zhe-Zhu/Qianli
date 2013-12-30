@@ -18,14 +18,11 @@
     switch (errorType) {
         case NetworkNotReachable:
         {
-            [Utils networkAlert:NSLocalizedString(@"NetworkAlertMsgNotReachable", nil)];
             break;
         }
         case Network3GNotEnabled:
         {
-            [Utils networkAlert:NSLocalizedString(@"NetworkAlertMsgThreedGNotEnabled", nil) ];
             break;
-            
         }
         case SipRegisterFailed:
         {

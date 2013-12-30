@@ -57,6 +57,8 @@
 //
 @implementation NgnEngine
 
+static NgnEngine* sInstance = nil;
+
 -(NgnEngine*)init{
 	if((self = [super init])){
 		[NgnEngine initialize];
@@ -97,11 +99,8 @@
 	// Order is important
 	bSuccess &= [self.configurationService start];
 	bSuccess &= [self.networkService start];
-	//bSuccess &= [self.storageService start];
-	//bSuccess &= [self.contactService start];
-	bSuccess &= [self.sipService start];	
+	bSuccess &= [self.sipService start];
 	bSuccess &= [self.httpClientService start];
-	//bSuccess &= [self.historyService start]; //LG
 	bSuccess &= [self.soundService start];
 	
 	mStarted = TRUE;
@@ -198,12 +197,16 @@
 }
 
 +(NgnEngine*) sharedInstance{
-	static NgnEngine* sInstance = nil;
 	
 	if(sInstance == nil){
 		sInstance = [[NgnEngine alloc] init];
 	}
 	return sInstance;
+}
+
+- (void)clearSharedInstance
+{
+    sInstance = nil;
 }
 
 @end

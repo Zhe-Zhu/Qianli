@@ -10,11 +10,28 @@
 #import <UIKit/UIKit.h>
 #import "Global.h"
 
+@protocol HandDrawingDelegate <NSObject>
+
+@optional
+
+- (void)handDrawingDidDraw;
+@end
+
 @interface HandDrawingView : UIView
 
--(void)changePaintingMode;
-- (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing;
+@property(weak, nonatomic) id<HandDrawingDelegate>delegate;
+
+- (void)changeToDrawMode;
+- (void)changeToEraseMode;
+- (void)drawingOnImageWithPoints:(NSMutableArray *)points Drawing:(BOOL)drawing lineWidth:(CGFloat)width strokeColorIndex:(NSInteger)index touchEnd:(BOOL) touchEnd;
 - (void)clearAll;
 - (void)clearAllFromRemote;
+- (void)revoke;
+- (void)revokeFromRemoteParty;
+- (UIImage*)screenshot;
+- (BOOL)getDrawingMode;
+- (void)changeEraseLineWidthTo:(NSInteger)index;
+- (void)changeDrawLineWidthTo:(NSInteger)index;
+- (void)changeDrawLineColorTo:(NSInteger)index;
 
 @end

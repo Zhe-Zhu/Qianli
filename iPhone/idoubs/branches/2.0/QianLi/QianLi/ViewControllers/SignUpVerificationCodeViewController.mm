@@ -228,7 +228,7 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
             [self deactivateButtonContinue];
             [UserDataAccessor setUserRemoteParty:_number];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setBool:YES forKey:@"SignedUp"];
+            [userDefaults setBool:YES forKey:kSingUpKey];
             [userDefaults synchronize];
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
             SignUpEditProfileViewController *editProfileCV = [storyboard instantiateViewControllerWithIdentifier:@"SignUpEditProfileViewController"];

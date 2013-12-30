@@ -22,9 +22,10 @@
 
 @implementation HistoryTransUtils
 
+static HistoryTransUtils *histUtils;
+
 +(HistoryTransUtils *)sharedInstance
 {
-    static HistoryTransUtils *histUtils;
     if (histUtils == nil) {
         histUtils = [[HistoryTransUtils alloc] init];
         histUtils.finished = NO;
@@ -200,6 +201,11 @@
         [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:remoteParty Content:contentStr Time:startingTime Type:kMainHistAppMark];
         [Utils updateMainHistNameForRemoteParty:remoteParty];
     }
+}
+
+- (void)clearSharedInstance
+{
+    histUtils = nil;
 }
 
 @end

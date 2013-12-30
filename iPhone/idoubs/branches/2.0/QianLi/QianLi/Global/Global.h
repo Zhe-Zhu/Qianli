@@ -12,6 +12,7 @@
 #define IS_OS_5_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0)
 #define IS_OS_6_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0)
 #define IS_OS_7_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+#define IS_IPHONE5 ([UIScreen mainScreen].bounds.size.height > 560.0)
 
 // error code
 #define NetworkNotReachable 0
@@ -99,6 +100,7 @@ nil]
 #define kVideoHideControls 4
 
 #define kHandDrawing @"HANDDRAW"
+#define kHandDrawingRevoke @"HandDrawingRevoke"
 #define kDrawingPoints @"DRAWINGPOINTS"
 #define kCancelDrawing @"CANCELDRAWING"
 #define kAppointment @"APPOINTMENT"
@@ -143,11 +145,12 @@ nil]
 
 // Umeng SDK Key
 #define kUmengSDKKey @"527c513f56240b352905fbfb"
+#define kSingUpKey @"SignedUp"
 
 //notification
 #define kHistoryChangedNotification @"HistoryChanged"
 
-#define MaxDrawPoints 120
+#define MaxDrawPoints 100
 
 // history
 #define kHistoryEventStatus_Appointment @"HistoryEventStatus_Appointment"
@@ -164,4 +167,8 @@ nil]
 #define kMediaType_Video @"MediaType_Video"
 #define kMediaType_Image @"MediaType_Image"
 
+//doodle
+#define kDoodleLineWidth @"doodlelinewidth"
+#define kDoodleEraseWidth @"doodleerasewidth"
+#define kDoodleLineColor @"doodlelinecolor"
 #endif

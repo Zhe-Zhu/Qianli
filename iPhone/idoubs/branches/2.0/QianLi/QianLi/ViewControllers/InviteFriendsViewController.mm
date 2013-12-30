@@ -131,8 +131,8 @@
 
 - (void)clearAddressItems
 {
-    [_contacts removeAllObjects];
-    [_filteredListContent removeAllObjects];
+    _contacts = nil;
+    _filteredListContent = nil;
 }
 
 -(void)getAddressBookPermission
@@ -253,7 +253,7 @@
                 switch (j) {
                     case 0: {// Phone number
                         //addressBook.tel = (__bridge NSString*)value;
-                        [addressBook.tel addObject:value];
+                        [addressBook.telAarry addObject:value];
                         break;
                     }
                     case 1: {// Email
@@ -466,7 +466,6 @@
     [self.searchDisplayController.searchResultsTableView reloadData];
 }
 
-
 - (void)checkButtonTapped:(id)sender event:(id)event
 {
 	NSSet *touches = [event allTouches];
@@ -486,7 +485,6 @@
         }
     }
 }
-
 
 //#pragma mark -
 //#pragma mark UISearchBarDelegate
@@ -569,8 +567,8 @@
         {
             if (addressBook.rowSelected)
             {
-                for (int i = 0; i < [addressBook.tel count]; ++i) {
-                    [recipients addObject:[addressBook.tel objectAtIndex:i]];
+                for (int i = 0; i < [addressBook.telAarry count]; ++i) {
+                    [recipients addObject:[addressBook.telAarry objectAtIndex:i]];
                 }
             }
         }

@@ -26,13 +26,14 @@
     UITabBarController *_tabController;
     SignUpEditProfileViewController *_signUpEditProfileViewController;
     BOOL multitaskingSupported;
+    BOOL didLaunch;
 }
 
 @property(nonatomic, strong) SignUpEditProfileViewController *signUpEditProfileViewController;
-@property(nonatomic, weak)QianLiContactsViewController *contactViewController;
-@property(nonatomic, weak)HistoryRecordsMainViewController *historyMainController;
-@property(nonatomic, weak)SettingViewController *settingViewController;
-@property(nonatomic, weak)QianLiAudioCallViewController *audioCallViewController;
+@property(nonatomic, weak) QianLiContactsViewController *contactViewController;
+@property(nonatomic, weak) HistoryRecordsMainViewController *historyMainController;
+@property(nonatomic, weak) SettingViewController *settingViewController;
+@property(nonatomic, weak) QianLiAudioCallViewController *audioCallViewController;
 
 @end
 
@@ -51,6 +52,7 @@ const float kColorB = 60/100.0;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     _didJustLaunch = YES;
+    didLaunch = YES;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
@@ -154,7 +156,7 @@ const float kColorB = 60/100.0;
     }
     settingNavigationController.tabBarItem = settingIcon;
     
-    NSArray *controllers = @[histroyNaviCV, contactNavigationVC,settingNavigationController];
+    NSArray *controllers = @[histroyNaviCV, contactNavigationVC, settingNavigationController];
     _tabController.viewControllers = controllers;
     [_tabController.tabBar setTintColor:[UIColor colorWithRed:56/255.0 green:181/255.0 blue:199/255.0 alpha:1.0]];
     if ([_tabController.tabBar respondsToSelector:@selector(setTranslucent:)]) {
@@ -163,19 +165,15 @@ const float kColorB = 60/100.0;
     [self.window makeKeyAndVisible];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveIncomingCallNotif:) name:kReceiveIncomingCallNotifName object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStackEvent:) name:kNgnStackEventArgs_Name object:nil];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if ([userDefaults boolForKey:@"SignedUp"]) {
+    if ([userDefaults boolForKey:kSingUpKey]) {
         self.window.rootViewController = _tabController;
         [[SipStackUtils sharedInstance] start];
-        [self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
-        [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         // Register remote notification
-        UIApplication *app = [UIApplication sharedApplication];
-        [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+        [self registerAPNS];
     }
     else{
         if ([userDefaults boolForKey:@"noHelp"]) {
@@ -194,7 +192,7 @@ const float kColorB = 60/100.0;
     [MobClick startWithAppkey:kUmengSDKKey];
     [UMFeedback checkWithAppkey:kUmengSDKKey];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(umCheck:) name:UMFBCheckFinishedNotification object:nil];
-    
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNetworkEvent:) name:kNgnNetworkEventArgs_Name object:nil];
     return YES;
 }
 
@@ -207,18 +205,15 @@ const float kColorB = 60/100.0;
     [[SipStackUtils sharedInstance] start];
     [self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
     [[SipStackUtils sharedInstance].soundService configureAudioSession];
-    [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
     [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
     // Register remote notification
-    UIApplication *app = [UIApplication sharedApplication];
-    [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+    [self registerAPNS];
 }
 
-- (void)configureSip
+- (void)registerAPNS
 {
-    // Set media parameters if you want
-	MediaSessionMgr::defaultsSetAudioGain(0, 0);
-	// Set some codec priorities
+    UIApplication *app = [UIApplication sharedApplication];
+    [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -240,6 +235,9 @@ const float kColorB = 60/100.0;
     [_contactViewController clearContacts];
     [_historyMainController clearHistory];
     [_settingViewController clearImages];
+    if ([SipCallManager SharedInstance].audioVC == nil) {
+        [Utils clearAllSharedInstance];
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -264,17 +262,16 @@ const float kColorB = 60/100.0;
     ConnectionState_t registrationState = [[NgnEngine sharedInstance].sipService getRegistrationState];
     switch (registrationState) {
 		case CONN_STATE_CONNECTING:
-		case CONN_STATE_TERMINATING:
-			[[SipStackUtils sharedInstance] unRegisterIdentity];
-            [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-			break;
+        case CONN_STATE_CONNECTED:
+            break;
         default:
             [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
 			break;
 	}
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if ([userDefaults boolForKey:@"SignedUp"]) {
-        [self displayPushNotificationWarning];
+    if ([userDefaults boolForKey:kSingUpKey]) {
+        [self displayNoPushNotificationWarning];
+        [self displayNoRecordingWarning];
     }
 }
 
@@ -286,7 +283,7 @@ const float kColorB = 60/100.0;
     if (_tabController.selectedIndex == 0) {
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
-    
+    didLaunch = NO;
     // Umeng
     [UMFeedback checkWithAppkey:kUmengSDKKey];
 }
@@ -327,16 +324,17 @@ const float kColorB = 60/100.0;
     // handle a incoming call
 	if([notifKey isEqualToString:kNotifKey_IncomingCall])
     {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-        UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
-        _audioCallViewController = (QianLiAudioCallViewController *)audioCallNavigationController.topViewController;
-        _audioCallViewController.ViewState = ReceivingCall;
-        
         NSNumber* sessionId = [info objectForKey:kNotifIncomingCall_SessionId];
         if ([[SipStackUtils sharedInstance].audioService hasSessionWithId:[sessionId longValue]]) {
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];
+            _audioCallViewController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallViewController"];            audioCallNavigationController.viewControllers = @[_audioCallViewController];
+            _audioCallViewController.ViewState = ReceivingCall;
             _audioCallViewController.audioSessionID = [sessionId longValue];
             [SipStackUtils sharedInstance].sessionID = [sessionId longValue];
             _audioCallViewController.remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+            [self.tabController presentViewController:audioCallNavigationController animated:YES completion:nil];
+            [SipCallManager SharedInstance].audioVC = _audioCallViewController;
             
             NSString *imageSessionID = [NSString stringWithFormat:@"%@%@",[[SipStackUtils sharedInstance] getRemotePartyNumber], [UserDataAccessor getUserRemoteParty]];
             [[PictureManager sharedInstance] setImageSession:imageSessionID];
@@ -348,21 +346,16 @@ const float kColorB = 60/100.0;
             }
             [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] Content:NSLocalizedString(@"historyReceivedCall", nil) Time:[[NSDate date] timeIntervalSince1970] Type:@"InComingCall"];
             [Utils updateMainHistNameForRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+            
+            // Add to history record
+            DetailHistEvent *event = [[DetailHistEvent alloc] init];
+            event.remoteParty = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+            event.type = kMediaType_Audio;
+            event.status = kHistoryEventStatus_Incoming;
+            event.start = [[NSDate date] timeIntervalSince1970];
+            _audioCallViewController.activeEvent = event;
         }
-        
-        [self.tabController presentViewController:audioCallNavigationController animated:YES completion:nil];
-        [SipCallManager SharedInstance].audioVC = _audioCallViewController;
-        // Add to history record
-        DetailHistEvent *event = [[DetailHistEvent alloc] init];
-        event.remoteParty = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-        event.type = kMediaType_Audio;
-        event.status = kHistoryEventStatus_Incoming;
-        event.start = [[NSDate date] timeIntervalSince1970];
-        _audioCallViewController.activeEvent = event;
-        
-        //play music
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-            [[SipStackUtils sharedInstance].soundService playRingTone];
+        else{
         }
     }
 }
@@ -516,17 +509,36 @@ const float kColorB = 60/100.0;
 # pragma mark -- Push notification --
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
+    //TODO: deleta
+    UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
+    locaNotif.alertBody = @"qianli is launched due to push notification";
+    [[UIApplication sharedApplication] presentLocalNotificationNow:locaNotif];
+
     NSDictionary *aps = [userInfo objectForKey:@"aps"];
     NSDictionary *dic = [aps objectForKey:@"alert"];
     NSString *type = [dic objectForKey:@"loc-key"];
+    
     if ([type isEqualToString:@"PUSHCALLING"]) {
-        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-        handler(UIBackgroundFetchResultNewData);
+        if (application.applicationState == UIApplicationStateActive) {
+            [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+            handler(UIBackgroundFetchResultNewData);
+            return;
+        }
+        else{
+            if (!didLaunch) {
+                [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+                handler(UIBackgroundFetchResultNewData);
+                return;
+            }
+        }
     }
     
-    if ([type isEqualToString:@"MISSEDCALL"]) {
+    if ([type isEqualToString:@"MISSEDCALL"] || [type isEqualToString:@"APPOINTMENT"]) {
         [[HistoryTransUtils sharedInstance] getHistoryInBackground:NO];
         handler(UIBackgroundFetchResultNewData);
+    }
+    else{
+        handler(UIBackgroundFetchResultNoData);
     }
 }
 
@@ -547,20 +559,6 @@ const float kColorB = 60/100.0;
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     //add code
-}
-
--(void) onStackEvent:(NSNotification*)notification {
-	NgnStackEventArgs * eargs = [notification object];
-	switch (eargs.eventType) {
-		case STACK_STATE_STARTING:
-		{
-			// this is the only place where we can be sure that the audio system is up
-			[[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
-			break;
-		}
-		default:
-			break;
-	}
 }
 
 - (id)getAppDelegateAudioVC
@@ -585,11 +583,23 @@ const float kColorB = 60/100.0;
     return  [histItem.badgeValue integerValue];
 }
 
-- (void)displayPushNotificationWarning
+- (void)displayNoPushNotificationWarning
 {
     if ([UIApplication sharedApplication].enabledRemoteNotificationTypes == UIRemoteNotificationTypeNone) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"alertNotificationTitle", nil) message:NSLocalizedString(@"alertNotificationBody", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"alertNotificationButton", nil) otherButtonTitles:nil];
         [alertView show];
+    }
+}
+
+- (void)displayNoRecordingWarning
+{
+    if (IS_OS_7_OR_LATER) {
+        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+            if (!granted) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"alertRecordingTitle", nil) message:NSLocalizedString(@"alertRecordingBody", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"alertNotificationButton", nil) otherButtonTitles:nil];
+                [alertView show];
+            }
+        }];
     }
 }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3OY-Nm-vgF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3OY-Nm-vgF">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
         <!--History Records Main View Controller-->
@@ -835,7 +835,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Pl-AK-E7d" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-978" y="1058"/>
+            <point key="canvasLocation" x="-684" y="973"/>
         </scene>
         <!--Sign Up Verification Code View Controller - 验证码-->
         <scene sceneID="HBR-3m-W4r">
@@ -1048,64 +1048,12 @@
                     <view key="view" contentMode="scaleToFill" id="ur9-te-2sS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Sy-OI-SYJ">
-                                <rect key="frame" x="16" y="430" width="74" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="74" id="gb9-bJ-t1P"/>
-                                </constraints>
-                                <state key="normal" image="doodleClear.png">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="changColor:" destination="l6K-ri-YmP" eventType="touchUpInside" id="d5i-yU-V4j"/>
-                                    <action selector="clear:" destination="l6K-ri-YmP" eventType="touchUpInside" id="zVS-fR-g5d"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dhq-fg-yNc">
-                                <rect key="frame" x="121" y="430" width="78" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="doodleWidth.png">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="changeWidth:" destination="l6K-ri-YmP" eventType="touchUpInside" id="Q2e-Pb-7NI"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YaO-9Q-sPB">
-                                <rect key="frame" x="232" y="430" width="72" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="72" id="yAF-js-CNu"/>
-                                </constraints>
-                                <state key="normal" image="doodleDraw.png">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="draw:" destination="l6K-ri-YmP" eventType="touchUpInside" id="zLx-xp-p7f"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="4Sy-OI-SYJ" firstAttribute="top" secondItem="YaO-9Q-sPB" secondAttribute="top" id="4yv-VR-drJ"/>
-                            <constraint firstItem="YaO-9Q-sPB" firstAttribute="leading" secondItem="dhq-fg-yNc" secondAttribute="trailing" constant="33" id="IxV-jp-9ao"/>
-                            <constraint firstAttribute="trailing" secondItem="YaO-9Q-sPB" secondAttribute="trailing" constant="16" id="e7Y-pZ-Qlw"/>
-                            <constraint firstItem="4Sy-OI-SYJ" firstAttribute="leading" secondItem="ur9-te-2sS" secondAttribute="leading" constant="16" id="gAN-Hl-Fz4"/>
-                            <constraint firstItem="IFR-67-ogL" firstAttribute="top" secondItem="4Sy-OI-SYJ" secondAttribute="bottom" constant="20" id="jkz-37-3CA"/>
-                            <constraint firstItem="4Sy-OI-SYJ" firstAttribute="top" secondItem="dhq-fg-yNc" secondAttribute="top" id="ny9-II-NdG"/>
-                            <constraint firstItem="dhq-fg-yNc" firstAttribute="leading" secondItem="4Sy-OI-SYJ" secondAttribute="trailing" constant="31" id="uWf-ln-AsP"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="clearAll" destination="4Sy-OI-SYJ" id="AWJ-dC-He2"/>
-                        <outlet property="ereaser" destination="YaO-9Q-sPB" id="WEE-OS-ZpY"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MQ0-4m-rZ3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1078" y="965"/>
+            <point key="canvasLocation" x="1056" y="968"/>
         </scene>
         <!--Web Browser-->
         <scene sceneID="yiD-R1-qma">
@@ -1613,9 +1561,6 @@
         <image name="browserHistory.png" width="35" height="35"/>
         <image name="buttonContinueBackground.png" width="280" height="44"/>
         <image name="captchaCover.png" width="40" height="40"/>
-        <image name="doodleClear.png" width="30" height="30"/>
-        <image name="doodleDraw.png" width="30" height="30"/>
-        <image name="doodleWidth.png" width="30" height="30"/>
         <image name="edit.png" width="27" height="26"/>
         <image name="icon.png" width="140" height="140"/>
         <image name="profileButtonCancel.png" width="40" height="40"/>

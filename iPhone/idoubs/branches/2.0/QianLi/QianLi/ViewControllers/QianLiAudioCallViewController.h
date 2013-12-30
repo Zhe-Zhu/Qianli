@@ -34,7 +34,9 @@ typedef enum
     InCall, //during a call
 }ViewState;
 
-@interface QianLiAudioCallViewController : UIViewController <QianLiUIMenuBarDelegate, SelectImageDelegate>
+@interface QianLiAudioCallViewController : UIViewController <QianLiUIMenuBarDelegate, SelectImageDelegate>{
+    MPMusicPlaybackState musicAppState;
+}
 
 // the state the audio call view.
 @property(nonatomic, assign)ViewState viewState;
@@ -42,8 +44,6 @@ typedef enum
 @property(nonatomic, assign)long audioSessionID;
 // the phone number of the remote one.
 @property(nonatomic, strong)NSString * remotePartyNumber;
-// the head portrait of the remote one
-@property(nonatomic, strong) UIImage * remoteHeadPortrait;
 
 @property(nonatomic, strong) DetailHistEvent *activeEvent;
 

@@ -17,7 +17,7 @@
 @interface WebViewController ()
 
 @property (strong, nonatomic) NSString *request;
-@property (strong, nonatomic) NSTimer *stopSynTimer;
+@property (weak, nonatomic) NSTimer *stopSynTimer;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (weak, nonatomic) UIActionSheet *actionSheet;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
@@ -55,7 +55,6 @@
         [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_initialURL]]];
     }
     
-//    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.taobao.com/"]]];
     _webView.delegate = self;
     UIBarButtonItem *moreButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showMore)];
     _moreButton = moreButton;
@@ -152,6 +151,7 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    [_synImages removeAllObjects];
 }
 
 - (void)loadWebWithURL:(NSString *)url
@@ -192,7 +192,7 @@
     _stopSynTimer = nil;
     
     // add to history
-    [self addImages:[self smallScreenshot]];
+    [self addImages:[Utils screenshot:self.view toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
 }
 
 - (void)backToNormalButton
@@ -206,7 +206,6 @@
         [_activityIndicator stopAnimating];
         [self.navigationItem setLeftBarButtonItem:_crossButton animated:YES];
         [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(backToNormalButton) userInfo:nil repeats:NO];
-    //    [self.navigationItem setLeftBarButtonItem:_normalSynButton animated:YES];
     }
 }
 
@@ -246,7 +245,7 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
     if ([_synImages count] == 0) {
-        [self addImages:[self smallScreenshot]];
+        [self addImages:[Utils screenshot:self.view toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
     
     // add to history
@@ -264,17 +263,6 @@
         imageEvent.status = kHistoryEventStatus_Outgoing;
     }
     [[DetailHistoryAccessor sharedInstance] addHistEntry:imageEvent];
-    
-//    NgnHistoryImageEvent *imageEvent = [NgnHistoryEvent createImageEventWithStatus:HistoryEventStatus_Incoming andRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber] andContent:imageData];
-//    imageEvent.start = _beginTime;
-//    imageEvent.end = [[NSDate date] timeIntervalSince1970];
-//    if (_inComing) {
-//        imageEvent.status = HistoryEventStatus_Incoming;
-//    }
-//    else{
-//        imageEvent.status = HistoryEventStatus_Outgoing;
-//    }
-//    [[SipStackUtils sharedInstance].historyService addEvent:(NgnHistoryEvent *)imageEvent];
 }
 
 - (void)quit
@@ -332,27 +320,6 @@
 //            [self setOffset:_remoteOffset];
 //        }
 //    }
-}
-
-- (UIImage*)smallScreenshot
-{
-    // Create a graphics context with the target size
-    CGSize imageSize = self.view.bounds.size;
-    if (NULL != UIGraphicsBeginImageContextWithOptions){
-        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-    }
-    else{
-        UIGraphicsBeginImageContext(imageSize);
-    }
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [[self.view layer] renderInContext:context];
-    
-    // Retrieve the screenshot image
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    UIImage *samllImage = [image imageByResizing:CGSizeMake(HistoryImageSize, HistoryImageSize)];
-    
-    return samllImage;
 }
 
 @end

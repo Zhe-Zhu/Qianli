@@ -134,7 +134,7 @@
 
 - (void)clearDetailHistory
 {
-    [_chatRecords removeAllObjects];
+    _chatRecords = nil;
 }
 
 - (void)loadMoreMessages
@@ -312,7 +312,6 @@
     NSString *message = [NSString stringWithFormat:@"%@%@%@", kAppointment,kSeparator,[UserDataAccessor getUserRemoteParty]];
     [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:_remotePartyPhoneNumber];
     
-    // Add to history record TODO: modify the media_type of the event
     DetailHistEvent *event = [[DetailHistEvent alloc] init];
     event.remoteParty = _remotePartyPhoneNumber;
     event.type = kMediaType_Audio;
@@ -347,6 +346,7 @@
     [[MainHistoryDataAccessor sharedInstance] deleteObjectForRemoteParty:_remotePartyPhoneNumber];
     [self displayHistoryWithEntryNumber];
     [self dismissMenuBar];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)buttonMorePressed
@@ -358,12 +358,6 @@
             return;
         }
     }
-//    // 加入遮盖原view的imageview
-//    UIImageView *cover = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    cover.backgroundColor = [UIColor blackColor];
-//    cover.alpha = 0;
-//    [self.view addSubview:cover];
-    
     [self showCover];
     
     CGSize size = CGSizeMake(self.view.bounds.size.width, 60);

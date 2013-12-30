@@ -27,6 +27,7 @@
 @property(nonatomic, strong) NSString *emailAddress;
 @property(nonatomic, strong) NSString *systemIndicator;
 @property(nonatomic, strong) NSString *avatarURL;
+@property(nonatomic, strong) NSString *bigAvatarURL;
 
 @end
 
@@ -110,7 +111,7 @@
 @end
 
 @implementation Account
-@synthesize udid, password, nickname, phoneNumber, emailAddress, systemIndicator, avatarURL;
+@synthesize udid, password, nickname, phoneNumber, emailAddress, systemIndicator, avatarURL, bigAvatarURL;
 @end
 
 @implementation APNStokenwrapping
@@ -163,10 +164,11 @@ static PictureManager *pictureManager;
     // Downloading Image is a very basic operation, therefore, we just invoke the method provided by ios.
     NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&error];
     if (error) {
-        // If an error occured during downloading, we display this error to user using UIAlert and return nil.
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get Image Error" message:[NSString stringWithFormat:@"%@,%@",[error localizedDescription], path] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-        return nil;
+        NSError *err;
+        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&err];
+        if (err) {
+            return nil;
+        }
     }
     return imageData;
 }
@@ -240,10 +242,7 @@ static PictureManager *pictureManager;
             }
             
         } failure:^( RKObjectRequestOperation *operation , NSError *error){
-            // If the operation is a failure, we send it again
-//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Post Image Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//            [alertView show];
-            //[[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
+            
         }];
         // Put the post image operation in the request queue.
         [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
@@ -273,8 +272,15 @@ static PictureManager *pictureManager;
             success(YES);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Registration ImageSession Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
+        // do it again if the first time is a failure
+        [manager postObject:session path:@"/pictures/registersessionid/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+         {
+             if (success) {
+                 success(YES);
+             }
+         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+             
+         }];
     }];
 }
 
@@ -317,15 +323,19 @@ static PictureManager *pictureManager;
             success(starter.baseIndex);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"state image session Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-        //success(-1);
+        [manager postObject:startSession path:@"/pictures/getstartindex/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            ImageTransBegining *starter = (ImageTransBegining *)[mappingResult firstObject];
+            if (success) {
+                success(starter.baseIndex);
+            }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            
+        }];
     }];
 }
 
 + (void)getMaximumIndex:(NSString *)sessionID Success:(void(^)(NSInteger number))success
 {
-    
     //  maximum_index
     NSString *str1 = @"/pictures/getmaximumindex/";
     NSString *str2 = @"/";
@@ -343,9 +353,15 @@ static PictureManager *pictureManager;
              success(total.totalImages);
          }
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get Maximumindex Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//         [alertView show];
-         //success(0);
+         [manager getObjectsAtPath:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+          {
+              TotalImages *total = (TotalImages *)[mappingResult firstObject];
+              if (success) {
+                  success(total.totalImages);
+              }
+          } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+              
+          }];
      }];
 }
 
@@ -361,10 +377,15 @@ static PictureManager *pictureManager;
              success(YES);
          }
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete ImageSession Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//         [alertView show];
+         [manager deleteObject:nil path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+          {
+              if (success) {
+                  success(YES);
+              }
+          } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+              
+          }];
     }];
-
 }
 
 - (void)setImageSession:(NSString *)imageSessionID
@@ -379,33 +400,6 @@ static PictureManager *pictureManager;
 
 +(void)registerWithUDID:(NSString *)udid Password:(NSString *)password Name:(NSString *)name PhoneNumber:(NSString *)phoneNumber Email:(NSString *)email OS:(NSString *)os Avatar:(UIImage *)avatar Success:(void(^)(int status))success
 {
-    // Some information is required in order to register an account. If the user does not provide enough information, we will display it to user and throw an exception.
-//    if (udid == nil || [[self stringbyRmovingSpaceFromString: udid] isEqualToString:@""] ) {
-//        [NSException raise:@"udid must not be empty" format:@"Plsease fill out a valid name"];
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An Error Has Occurred" message:@"account name must not be empty!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-//        return;
-//    }
-//    if (password == nil || [[self stringbyRmovingSpaceFromString: password] isEqualToString:@""] ) {
-//        [NSException raise:@"password must not be empty" format:@"Plsease fill out a valid password"];
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An Error Has Occurred" message:@"account password must not be empty!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-//        return;
-//    }
-//    if (name == nil || [[self stringbyRmovingSpaceFromString: name] isEqualToString:@""] ) {
-//        [NSException raise:@"name must not be empty" format:@"Plsease fill out a valid name"];
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An Error Has Occurred" message:@"nickname must not be empty!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-//        return;
-//    }
-//    if ((phoneNumber == nil || [[self stringbyRmovingSpaceFromString: phoneNumber] isEqualToString:@""])&& (email == nil || [[self stringbyRmovingSpaceFromString: email] isEqualToString:@""])) {
-//        
-//        [NSException raise:@"phone number and email address must not both be empty" format:@"Plsease fill out a valid phone number or an valid email address"];
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An Error Has Occurred" message:@"Either phone number or email address must not be empty!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-//        return;
-//    }
-    
     RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString: kBaseURL]];
     // For registration.
     RKObjectMapping *registerMapping = [RKObjectMapping mappingForClass:[RegistrationStatus class]];
@@ -413,7 +407,7 @@ static PictureManager *pictureManager;
     RKResponseDescriptor *registerResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:registerMapping method:RKRequestMethodPOST pathPattern:@"/users/register/" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     
     RKObjectMapping *registerRequestMapping = [RKObjectMapping requestMapping];
-    [registerRequestMapping addAttributeMappingsFromDictionary:@{@"udid": @"udid", @"password": @"password", @"nickname": @"name", @"phoneNumber": @"phone_number", @"emailAddress": @"email", @"systemIndicator": @"os_type", @"avatarURL": @"avatar"}];
+    [registerRequestMapping addAttributeMappingsFromDictionary:@{@"udid": @"udid", @"password": @"password", @"nickname": @"name", @"phoneNumber": @"phone_number", @"emailAddress": @"email", @"systemIndicator": @"os_type", @"avatarURL": @"avatar", @"bigAvatarURL": @"large_avatar"}];
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:registerRequestMapping objectClass:[Account class] rootKeyPath:nil method:RKRequestMethodPOST];
     [manager addResponseDescriptor:registerResponseDescriptor];
     [manager addRequestDescriptor:requestDescriptor];
@@ -426,6 +420,7 @@ static PictureManager *pictureManager;
     account.emailAddress = [Utils stringbyRmovingSpaceFromString:email];
     account.systemIndicator = [Utils stringbyRmovingSpaceFromString:os];
     account.avatarURL = nil;
+    account.bigAvatarURL = nil;
     account.password = [Utils stringbyRmovingSpaceFromString:password];
     // If the shared object manager is nil, we initialize a new one.
     if (avatar) {
@@ -438,17 +433,15 @@ static PictureManager *pictureManager;
         }];
         
         RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^( RKObjectRequestOperation *operation , RKMappingResult *mappingResult ){
-            //Account *tempAccount = (Account *)[mappingResult firstObject];
-            // The block parameter gives others an opportunity to take proper actions no matter the operation is successful or failed.
             RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
             if (success) {
                 success(regStatus.status);
             }
             
         } failure:^( RKObjectRequestOperation *operation , NSError *error){
-//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An Error Has Occurred" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//            [alertView show];
-            //success(@"");
+            if (success) {
+                success(-1);
+            }
         }];
         [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
     }
@@ -456,9 +449,20 @@ static PictureManager *pictureManager;
         // If the user does not provide profile, then we just use all the information to register an account.
         [[RKObjectManager sharedManager] postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
-            success(regStatus.status);
+            if (success) {
+                success(regStatus.status);
+            }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            success(-1);
+            [[RKObjectManager sharedManager] postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
+                if (success) {
+                    success(regStatus.status);
+                }
+            } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                if (success) {
+                    success(-1);
+                }
+            }];
         }];
     }
 }
@@ -494,9 +498,19 @@ static PictureManager *pictureManager;
             success(regStatus.status);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Verifying Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
+        [manager postObject:account path:@"/users/verify/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            VerifyStatus *regStatus = (VerifyStatus *)[mappingResult firstObject];
+            if (success) {
+                success(regStatus.status);
+            }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        }];
     }];
+}
+
+- (void)clearSharedInstance
+{
+    pictureManager = nil;
 }
 
 @end
