@@ -10,6 +10,7 @@
 
 // Push notification
 "PUSHCALLING" = "%@: incoming call";
+"LOCALMESSAGE" = "%@ is sharing fun things with you";
 "PUSHACTIONKEY" = "answer";
 "APPOINTMENT" ="%@ wants to talk with you";
 "APPOINTMENTACTIONKEY" = "OK";
