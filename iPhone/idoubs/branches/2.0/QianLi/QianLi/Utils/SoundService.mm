@@ -38,6 +38,17 @@
     return YES;
 }
 
+- (BOOL)disableAudioSession
+{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *error;
+    [audioSession setActive:NO error:&error];
+    if (error) {
+        return NO;
+    }
+    return YES;
+}
+
 - (void)handleAudioInterruption:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo;

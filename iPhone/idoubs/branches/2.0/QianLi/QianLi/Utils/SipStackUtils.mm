@@ -79,12 +79,12 @@ static SipStackUtils * sipStackUtilsInstance;
     self = [super init];
     if (self != nil) {
         // init the services
-        _sipService = [[SipService alloc] init];
-        _configurationService = [[ConfigurationService alloc] init];
-        _networkService = [[NetworkService alloc] init];
-        _audioService = [[AudioService alloc] init];
-        _soundService = [[SoundService alloc] init];
-        _messageService = [[MessageService alloc] init];
+//        _sipService = [[SipService alloc] init];
+//        _configurationService = [[ConfigurationService alloc] init];
+//        _networkService = [[NetworkService alloc] init];
+//        _audioService = [[AudioService alloc] init];
+//        _soundService = [[SoundService alloc] init];
+//        _messageService = [[MessageService alloc] init];
         //_historyService = [[HistoryService alloc] init];
         // add observers
         
@@ -570,9 +570,62 @@ static SipStackUtils * sipStackUtilsInstance;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)clearSharedInstance
+- (SipService *)sipService
 {
-    sipStackUtilsInstance = nil;
+    if (!_sipService) {
+        _sipService = [[SipService alloc] init];
+    }
+    return _sipService;
+}
+
+- (ConfigurationService *)configurationService
+{
+    if (!_configurationService) {
+        _configurationService = [[ConfigurationService alloc] init];
+    }
+    return _configurationService;
+}
+
+- (NetworkService *)networkService
+{
+    if (!_networkService) {
+        _networkService = [[NetworkService alloc] init];
+    }
+    return _networkService;
+}
+
+- (AudioService *)audioService
+{
+    if (!_audioService) {
+        _audioService = [[AudioService alloc] init];
+    }
+    return _audioService;
+}
+
+- (SoundService *)soundService
+{
+    if (!_soundService) {
+        _soundService = [[SoundService alloc] init];
+    }
+    return _soundService;
+}
+
+- (MessageService *)messageService
+{
+    if (!_messageService) {
+        _messageService = [[MessageService alloc] init];
+    }
+    return _messageService;
+}
+
+- (void)clearAllService
+{
+    _sipService = nil;
+    _configurationService = nil;
+    _networkService = nil;
+    _audioService = nil;
+    _soundService = nil;
+    _messageService = nil;
 }
 
 @end

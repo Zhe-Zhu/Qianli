@@ -479,6 +479,7 @@
     [self hideChangeWidthButton:YES];
     [self hideChangeWidthButton:NO];
     _eraseButton.enabled = YES;
+    _clearAll.enabled = YES;
 }
 
 - (void)pressedTrashButton:(UIButton *)button
@@ -496,6 +497,7 @@
     [self.drawings addObject:[Utils screenshot:_drawingView toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     UIImage *image = [_drawingView screenshot];
     UIImageWriteToSavedPhotosAlbum(image, NULL, NULL, NULL);
+    
     UIView *flashView = [[UIView alloc] initWithFrame:_drawingView.frame];
     flashView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:flashView];
@@ -520,6 +522,7 @@
              [imageView removeFromSuperview];
         }];
     }];
+    //[SVStatusHUD showWithImage:nil status:NSLocalizedString(@"PhotoSaved", nil)];
 }
 
 - (IBAction)clear:(id)sender

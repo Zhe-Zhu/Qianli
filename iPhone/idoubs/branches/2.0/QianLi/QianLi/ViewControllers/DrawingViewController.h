@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HandDrawingView.h"
+#import "SVStatusHUD.h"
 
 @interface DrawingViewController : UIViewController<HandDrawingDelegate>
 

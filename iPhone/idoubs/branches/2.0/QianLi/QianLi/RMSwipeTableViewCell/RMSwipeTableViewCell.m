@@ -10,6 +10,8 @@
 
 @interface RMSwipeTableViewCell ()
 
+@property(weak, nonatomic)UIPanGestureRecognizer *panGestureRecognizer;
+@property(weak, nonatomic)UILongPressGestureRecognizer *tap;
 @end
 
 @implementation RMSwipeTableViewCell
@@ -37,8 +39,14 @@
     // We need to set the contentView's background colour, otherwise the sides are clear on the swipe and animations
     [self.contentView setBackgroundColor:[UIColor whiteColor]];
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    _panGestureRecognizer = panGestureRecognizer;
     [panGestureRecognizer setDelegate:self];
     [self addGestureRecognizer:panGestureRecognizer];
+    
+    UILongPressGestureRecognizer *tap = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    _tap = tap;
+    [tap setDelegate:self];
+    [self addGestureRecognizer:tap];
     
     self.revealDirection = RMSwipeTableViewCellRevealDirectionBoth;
     self.animationType = RMSwipeTableViewCellAnimationTypeBounce;
@@ -72,7 +80,9 @@
     // We only want to deal with the gesture of it's a pan gesture
     if ([panGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] && self.revealDirection != RMSwipeTableViewCellRevealDirectionNone) {
         CGPoint translation = [panGestureRecognizer translationInView:[self superview]];
-        return (fabs(translation.x) / fabs(translation.y) > 1) ? YES : NO;
+        BOOL ret = (fabs(translation.x) >= fabs(translation.y)) ? YES : NO;
+        NSLog(@"ret:%hhd",ret);
+        return ret;
     } else {
         return NO;
     }
@@ -102,6 +112,11 @@
 	} else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
 		[self resetCellFromPoint:actualTranslation  velocity:velocity];
 	}
+}
+
+- (void)handleTap:(UILongPressGestureRecognizer *)tap
+{
+    
 }
 
 -(void)didStartSwiping {

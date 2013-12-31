@@ -13,7 +13,8 @@
 @interface SoundService : NSObject
 
 - (BOOL)configureAudioSession;
-
+- (BOOL)startAudioSession;
+- (BOOL)disableAudioSession;
 - (BOOL)enableBackgroundSound;
 - (BOOL)disableBackgroundSound;
 - (BOOL)enableInComingCallSound;

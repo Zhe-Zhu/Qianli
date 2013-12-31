@@ -173,3 +173,5 @@
 
 "alertRecordingTitle" = "麦克风被禁止";
 "alertRecordingBody" = "与好友进行通话需要允许千里使用麦克风，请在设置里面设置";
+
+"PhotoSaved" = "照片已经存入相册";

@@ -1399,6 +1399,7 @@
     else if ([message isEqualToString:kHandDrawingRevoke]){
         [_drawingVC.drawingView revokeFromRemoteParty];
         _drawingVC.undoButton.enabled = NO;
+        _drawingVC.clearAll.enabled = YES;
     }
     else if ([message isEqualToString:kCancelDrawing]){
         [_drawingVC cancelFromRemoteParty];
