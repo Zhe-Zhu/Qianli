@@ -82,7 +82,7 @@
 "callingRingingText" = "响铃中...";
 "Quit" = "退出";
 "emailSubject" = "邀请加入千里";
-"emailBody" = "千里是一款很酷的语音通信软件,它可以让您在和朋友聊天的同时发送图片,网址甚至视频等有意思的信息.了解更多和如何下载千里, 请点击 https://www.smore.com/x0hc";
+"emailBody" = "千里是一款很酷的语音通信软件,它可以让您在和朋友聊天的同时发送图片,网址甚至视频等有意思的信息.了解更多和如何下载千里, 请点击 https://www.qianliapp.cn";
 "emailWarningTitle" = "无法发送邮件";
 "emailWarningMessage" = "我们无法发出邮件, 请您检查下您的邮件设置.";
 "emailWarningOK" = "知道了,马上去";
