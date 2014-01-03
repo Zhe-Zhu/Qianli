@@ -4,13 +4,14 @@
 //
 //  Created by lutan on 8/27/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
 
 #import "ImageDisplayController.h"
 #import "SipStackUtils.h"
 #import "MobClick.h"
 #import "Utils.h"
 
+//CODE_REVIEW: 可以用NSDictory变量来代替indexs和images变量。
 @interface ImageDisplayController (){
     UILongPressGestureRecognizer *_longPress;
     UITapGestureRecognizer *_tapGesture;

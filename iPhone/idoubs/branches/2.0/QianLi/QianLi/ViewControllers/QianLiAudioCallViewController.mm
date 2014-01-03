@@ -4,7 +4,11 @@
 //
 //  Created by Chen Xiangwen on 5/8/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
+
+//CODE_REVIEW:
+//  1.这个类可以分割成多个类以提高封装性，
+//  2.所有关于sip request/message的操作可以放在sipStackUtils里以提高隔绝性。
 
 #import "QianLiAudioCallViewController.h"
 #import "QBAnimationGroup.h"
