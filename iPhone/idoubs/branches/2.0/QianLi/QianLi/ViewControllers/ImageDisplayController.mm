@@ -206,6 +206,7 @@
                 [_imageScrollView addSubview:contentView];
             }
             else{
+                //CODE_REVIEW:下面这段代码可以不要？
                 image = [UIImage imageNamed:@"blankImage.png"];
                 UIView * contentView = (UIView *)[_imageScrollView viewWithTag:1000+i];
                 UIImageView *imageView = (UIImageView *)[contentView viewWithTag:kImageViewTagInContentView];
@@ -233,6 +234,7 @@
                 [_imageScrollView addSubview:contentView];
             }
             else{
+                //CODE_REVIEW:下面这段代码可以不要？
                 if (ind < [_images count]) {
                     image = [_images objectAtIndex:ind];
                     NSLog(@"%d", image.imageOrientation);
@@ -256,7 +258,7 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
     CGSize newImageSize = imageSize;
-    
+    //CODE_REVIEW:需要防止除数为0的情况。
     if ((imageSize.width / imageSize.height) <= (width / height)) {
         newImageSize.height = height;
         newImageSize.width = roundf(imageSize.width * height / imageSize.height);
@@ -415,6 +417,7 @@
     
     // Add to history
     NSMutableArray *array = [NSMutableArray array];
+    //CODE_REVIEW:建议将下面imageByResizing函数放到第二线程去跑，以防止阻塞主线程。
     for (UIImage *image in _images) {
         [array addObject:[image imageByResizing:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
