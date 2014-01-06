@@ -218,7 +218,6 @@
         return;
     }
     // send some request
-    [NSTimer scheduledTimerWithTimeInterval:0.8 target:historyMainCell selector:@selector(stopSpin) userInfo:nil repeats:NO];
     NSIndexPath *indexPath = [_historyTableView indexPathForCell:historyMainCell];
     MainHistoryEntry *entry = (MainHistoryEntry *)[_historyRecords objectAtIndex:indexPath.row];
     NSString *message = [NSString stringWithFormat:@"%@%@%@", kAppointment,kSeparator,[UserDataAccessor getUserRemoteParty]];

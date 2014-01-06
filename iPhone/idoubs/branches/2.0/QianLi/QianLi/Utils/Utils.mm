@@ -292,8 +292,7 @@
 + (void)clearAllSharedInstance
 {
     [[SipCallManager SharedInstance] clearCallManager];
-    //[[NgnEngine sharedInstance] clearSharedInstance];
-    //[[SipStackUtils sharedInstance] clearSharedInstance];
+    //[[SipStackUtils sharedInstance] clearAllService];
     [[HistoryTransUtils sharedInstance] clearSharedInstance];
     [[PictureManager sharedInstance] clearSharedInstance];
     [[DetailHistoryAccessor sharedInstance] clearSharedInstance];

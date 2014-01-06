@@ -55,7 +55,10 @@
     }
     [MobClick beginEvent:@"watchVideo"];
     NSError *setCategoryError = nil;
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
+    if (![Utils isHeadsetPluggedIn]) {
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
+    }
+    [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMoviePlayback error:&setCategoryError];
     if (setCategoryError){
         NSLog(@"error");
     }

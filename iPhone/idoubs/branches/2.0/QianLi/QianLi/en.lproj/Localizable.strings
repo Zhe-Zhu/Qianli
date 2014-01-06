@@ -163,3 +163,5 @@
 
 "alertRecordingTitle" = "recording is not allowed";
 "alertRecordingBody" = "Qianli needs the permission of accessing microphone to establish a call, please grant permission in the Settings App!";
+
+"PhotoSaved" = "image is successfully saved to album";

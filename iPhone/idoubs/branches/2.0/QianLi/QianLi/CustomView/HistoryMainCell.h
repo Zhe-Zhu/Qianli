@@ -10,6 +10,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import "RMSwipeTableViewCell.h"
 
+# define kTriggerLength 100.0f // 拉动多长开始触发操作
+# define kRequestOffset 35.0f // 显示被请求状态时向左的偏移值
+
 @protocol HistoryMainCellDelegate;
 
 @interface HistoryMainCell : RMSwipeTableViewCell

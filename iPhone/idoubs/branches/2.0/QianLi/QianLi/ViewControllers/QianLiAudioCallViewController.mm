@@ -52,7 +52,6 @@
     UILabel *timeLabel; // 通话时长
     NSDateFormatter *dateFormatter;
     NSDate *callBeginTime; // 通话开始时间
-    NSTimer *timer;
     
     QianLiUIMenuBar *menuBar;
     
@@ -73,6 +72,7 @@
     double videoBeginTime;
 }
 
+@property(weak, nonatomic) NSTimer *timer;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMicroPhone;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSpeaker;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonAdd;
@@ -220,6 +220,7 @@
     [super viewDidDisappear:animated];
     if (didEndCall) {
         [self resumeMusicAppIfNeeded];
+        [_timer invalidate];
     }
 }
 
@@ -307,8 +308,8 @@
     callBeginTime = [[NSDate alloc] init];
     
     NSRunLoop *runloop = [NSRunLoop currentRunLoop];
-    timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateTimeLabel) userInfo:nil repeats:YES];
-    [runloop addTimer:timer forMode:NSRunLoopCommonModes];
+    _timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateTimeLabel) userInfo:nil repeats:YES];
+    [runloop addTimer:_timer forMode:NSRunLoopCommonModes];
     
     // 加入缓慢出现的动画效果
     UILabel *label = timeLabel;
@@ -589,7 +590,7 @@
     //[[SipStackUtils sharedInstance].audioService hangUpCall];
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
-    [timer invalidate]; // 停止计时并从Runloop中释放
+    [_timer invalidate]; // 停止计时并从Runloop中释放
     
     _didEndCallBySelf = YES;
     if (_viewState == InCall) {
@@ -1041,7 +1042,7 @@
     didEndCall = YES;
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
-    [timer invalidate]; 
+    [_timer invalidate];
     if (menuBar) {
         [menuBar dismiss];
         menuBar = nil;
@@ -1399,6 +1400,7 @@
     else if ([message isEqualToString:kHandDrawingRevoke]){
         [_drawingVC.drawingView revokeFromRemoteParty];
         _drawingVC.undoButton.enabled = NO;
+        _drawingVC.clearAll.enabled = YES;
     }
     else if ([message isEqualToString:kCancelDrawing]){
         [_drawingVC cancelFromRemoteParty];
@@ -1491,7 +1493,7 @@
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [self dismissAllViewController];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
-    [timer invalidate]; // 停止计时并从Runloop中释放
+    [_timer invalidate]; // 停止计时并从Runloop中释放
     
     _didEndCallBySelf = YES;
     if (_viewState == InCall) {
