@@ -29,7 +29,6 @@
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     NSError *error;
     [audioSession setCategory:AVAudioSessionCategoryAmbient withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&error];
-    [audioSession setMode:AVAudioSessionModeVoiceChat error:&error];
     [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
     [audioSession setActive:YES error:&error];
     if (error) {
@@ -53,16 +52,13 @@
 {
     NSDictionary *userInfo = notification.userInfo;
     if ([[userInfo objectForKey:AVAudioSessionInterruptionTypeKey] integerValue]== AVAudioSessionInterruptionTypeBegan) {
-        if ([SipCallManager SharedInstance].audioVC) {
-            [[SipStackUtils sharedInstance].audioService.audioSession holdCall];
-        }
         [[AVAudioSession sharedInstance] setActive:NO error:NULL];
     }
-    else{
+    else if([[userInfo objectForKey:AVAudioSessionInterruptionTypeKey] integerValue]== AVAudioSessionInterruptionTypeEnded){
         [self startAudioSession];
         if ([SipCallManager SharedInstance].audioVC) {
             [self enableBackgroundSound];
-            [[SipStackUtils sharedInstance].audioService.audioSession resumeCall];
+            [[SipStackUtils sharedInstance].audioService acceptCall];
         }
     }
 }
@@ -72,6 +68,8 @@
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     NSError *error;
     [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&error];
+    [audioSession setMode:AVAudioSessionModeVoiceChat error:&error];
+    [audioSession setActive:YES error:&error];
     if (error) {
         return NO;
     }
@@ -94,6 +92,7 @@
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     NSError *error;
     [audioSession setCategory:AVAudioSessionCategorySoloAmbient error:&error];
+    [audioSession setActive:YES error:&error];
     if (error) {
         return NO;
     }
@@ -120,13 +119,11 @@
 - (void)playRingBackTone
 {
     [[NgnEngine sharedInstance].soundService playRingBackTone];
-    
 }
 
 - (void)stopRingBackTone
 {
     [[NgnEngine sharedInstance].soundService stopRingBackTone];
-    
 }
 
 - (void)playDtmf:(int)tag

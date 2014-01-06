@@ -12,6 +12,7 @@
 #import "UserDataAccessor.h"
 #import "UINavigationControllerPortraitViewController.h"
 #import "UITabBarController+Portrait.h"
+#import "HelpView.h"
 
 @interface QianLiAppDelegate : UIResponder <UIApplicationDelegate>
 

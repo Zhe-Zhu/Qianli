@@ -292,7 +292,7 @@
 + (void)clearAllSharedInstance
 {
     [[SipCallManager SharedInstance] clearCallManager];
-    [[SipStackUtils sharedInstance] clearAllService];
+    //[[SipStackUtils sharedInstance] clearAllService];
     [[HistoryTransUtils sharedInstance] clearSharedInstance];
     [[PictureManager sharedInstance] clearSharedInstance];
     [[DetailHistoryAccessor sharedInstance] clearSharedInstance];

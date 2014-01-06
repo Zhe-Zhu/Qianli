@@ -11,7 +11,6 @@
 @interface RMSwipeTableViewCell ()
 
 @property(weak, nonatomic)UIPanGestureRecognizer *panGestureRecognizer;
-@property(weak, nonatomic)UILongPressGestureRecognizer *tap;
 @end
 
 @implementation RMSwipeTableViewCell
@@ -42,11 +41,6 @@
     _panGestureRecognizer = panGestureRecognizer;
     [panGestureRecognizer setDelegate:self];
     [self addGestureRecognizer:panGestureRecognizer];
-    
-    UILongPressGestureRecognizer *tap = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    _tap = tap;
-    [tap setDelegate:self];
-    [self addGestureRecognizer:tap];
     
     self.revealDirection = RMSwipeTableViewCellRevealDirectionBoth;
     self.animationType = RMSwipeTableViewCellAnimationTypeBounce;
@@ -112,11 +106,6 @@
 	} else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
 		[self resetCellFromPoint:actualTranslation  velocity:velocity];
 	}
-}
-
-- (void)handleTap:(UILongPressGestureRecognizer *)tap
-{
-    
 }
 
 -(void)didStartSwiping {

@@ -64,13 +64,12 @@ const float kColorB = 60/100.0;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     if ([userDefaults boolForKey:kSingUpKey]) {
-        if (application.applicationState == UIApplicationStateInactive) {
-            self.window.rootViewController = self.tabController;
-        }
+        self.window.rootViewController = self.tabController;
         [[SipStackUtils sharedInstance] start];
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         [self registerAPNS];
+       // [self setHelpView];
     }
     else{
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -329,10 +328,6 @@ const float kColorB = 60/100.0;
     [[NgnEngine sharedInstance].contactService unload];
 	[[NgnEngine sharedInstance].historyService clear];
 	[[NgnEngine sharedInstance].storageService clearFavorites];
-//    if ([SipCallManager SharedInstance].audioVC == nil) {
-//        _window.rootViewController = nil;
-//        _tabController = nil;
-//    }
 }
 
 - (void)saveContext
@@ -648,6 +643,12 @@ const float kColorB = 60/100.0;
         // 在设置界面显示反馈的数目
         [_settingViewController newReplies:RepliesNumber];
     }
+}
+
+- (void)setHelpView
+{
+    HelpView *helpView = [[HelpView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [self.window addSubview:helpView];
 }
 
 @end

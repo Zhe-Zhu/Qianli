@@ -57,7 +57,7 @@ static int tdav_apple_init()
 	}
 	
 	// enable audio session
-	status = AudioSessionSetActive(false);
+	status = AudioSessionSetActive(true);
 	if(status){
 		TSK_DEBUG_ERROR("AudioSessionSetActive(true) failed with status code=%d", (int32_t)status);
 		return -4;
