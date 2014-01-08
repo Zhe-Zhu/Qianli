@@ -4,7 +4,7 @@
 //
 //  Created by lutan on 9/15/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
 
 #import "VideoViewController.h"
 #import "SipStackUtils.h"
@@ -216,6 +216,7 @@
 -(void)playMovieStream:(NSURL *)movieFileURL
 {
     MoviePlayerViewController *player = [[MoviePlayerViewController alloc] init];
+    //CODE_REVIEW:可以不用传递_videoThumbs，在MoviePlayer里不能截屏。
     player.thumbs = _vedioThumbs;
     _moviePlayer = player;
    [self presentViewController:player animated:YES completion: nil];

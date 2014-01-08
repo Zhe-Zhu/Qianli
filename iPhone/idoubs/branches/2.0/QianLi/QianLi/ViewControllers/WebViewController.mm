@@ -4,7 +4,7 @@
 //
 //  Created by lutan on 9/17/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
 
 #import "WebViewController.h"
 #import "Global.h"
@@ -169,6 +169,7 @@
 - (void)synchronize
 {
     // 对网页内容进行同步
+    //CODE_REVIEW:在iphone4S和iphone5上测试，不能同步。
     float offsetx = _webView.scrollView.contentOffset.x;
     float offsety = _webView.scrollView.contentOffset.y;
     NSString *message = [NSString stringWithFormat:@"%@%@%@%@%f%@%f", kShoppingSyn, kSeparator, _request, kSeparator,offsetx, kSeparator, offsety];
