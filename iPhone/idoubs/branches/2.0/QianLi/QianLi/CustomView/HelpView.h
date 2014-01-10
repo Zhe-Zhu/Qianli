@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "HistoryMainCell.h"
 #import "Utils.h"
+#import "Global.h"
 
 @interface HelpView : UIView <UIScrollViewDelegate, HistoryMainCellDelegate, RMSwipeTableViewCellDelegate>
 
