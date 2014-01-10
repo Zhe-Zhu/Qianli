@@ -289,14 +289,14 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     //if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-    _request = [[request URL] absoluteString];
-    if ([_request isEqualToString:@"http://cdn.tanx.com/t/acookie/acbeacon2.html"]) {
+    if ([[[request URL] absoluteString] isEqualToString:@"http://cdn.tanx.com/t/acookie/acbeacon2.html"]) {
         return NO;
     }
-    if ([_request isEqualToString:@"about:blank"]) {
+    if ([[[request URL] absoluteString] isEqualToString:@"about:blank"]) {
         return NO;
     }
     //}
+    _request = [[request URL] absoluteString];
     return YES;
 }
 

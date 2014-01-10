@@ -1056,7 +1056,7 @@
     }
 
     //LLGG
-    [self dismissAllViewController];
+   [self dismissAllViewController];
    //[self changeViewAppearanceToInCall];
     
     if (!_didEndCallBySelf) {

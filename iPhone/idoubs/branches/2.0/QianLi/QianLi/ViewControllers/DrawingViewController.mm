@@ -498,31 +498,31 @@
     UIImage *image = [_drawingView screenshot];
     UIImageWriteToSavedPhotosAlbum(image, NULL, NULL, NULL);
     
-    UIView *flashView = [[UIView alloc] initWithFrame:_drawingView.frame];
-    flashView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:flashView];
-    [UIView animateWithDuration:0.2 animations:^{
-        flashView.alpha = 0.0;
-    } completion:^(BOOL finished) {
-        [flashView removeFromSuperview];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.frame = _drawingView.frame;
-        [self.view addSubview:imageView];
-        [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            CGAffineTransform scaleTransform = CGAffineTransformMakeScale(0.01, 0.01);
-            CGAffineTransform translation;
-            if (IS_IPHONE5) {
-                translation = CGAffineTransformMakeTranslation(150.0, 258.0);
-            }
-            else{
-                translation = CGAffineTransformMakeTranslation(150.0, 218.0);
-            }
-            imageView.transform = CGAffineTransformConcat(scaleTransform, translation);
-        } completion:^(BOOL finished) {
-             [imageView removeFromSuperview];
-        }];
-    }];
-    //[SVStatusHUD showWithImage:nil status:NSLocalizedString(@"PhotoSaved", nil)];
+//    UIView *flashView = [[UIView alloc] initWithFrame:_drawingView.frame];
+//    flashView.backgroundColor = [UIColor whiteColor];
+//    [self.view addSubview:flashView];
+//    [UIView animateWithDuration:0.2 animations:^{
+//        flashView.alpha = 0.0;
+//    } completion:^(BOOL finished) {
+//        [flashView removeFromSuperview];
+//        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+//        imageView.frame = _drawingView.frame;
+//        [self.view addSubview:imageView];
+//        [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+//            CGAffineTransform scaleTransform = CGAffineTransformMakeScale(0.01, 0.01);
+//            CGAffineTransform translation;
+//            if (IS_IPHONE5) {
+//                translation = CGAffineTransformMakeTranslation(150.0, 258.0);
+//            }
+//            else{
+//                translation = CGAffineTransformMakeTranslation(150.0, 218.0);
+//            }
+//            imageView.transform = CGAffineTransformConcat(scaleTransform, translation);
+//        } completion:^(BOOL finished) {
+//             [imageView removeFromSuperview];
+//        }];
+//    }];
+    [SVStatusHUD showWithImage:[UIImage imageNamed:@"hudSaveInAlbum.png"] status:NSLocalizedString(@"PhotoSaved", nil)];
 }
 
 - (IBAction)clear:(id)sender
