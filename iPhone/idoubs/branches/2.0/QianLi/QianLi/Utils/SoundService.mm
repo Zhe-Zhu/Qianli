@@ -52,13 +52,14 @@
 {
     NSDictionary *userInfo = notification.userInfo;
     if ([[userInfo objectForKey:AVAudioSessionInterruptionTypeKey] integerValue]== AVAudioSessionInterruptionTypeBegan) {
-        [[AVAudioSession sharedInstance] setActive:NO error:NULL];
+        if ([SipCallManager SharedInstance].audioVC.viewState == InCall) {
+            [[SipCallManager SharedInstance] sendInterruptionMessage:kInterruption];
+        }
     }
     else if([[userInfo objectForKey:AVAudioSessionInterruptionTypeKey] integerValue]== AVAudioSessionInterruptionTypeEnded){
-        [self startAudioSession];
-        if ([SipCallManager SharedInstance].audioVC) {
+        if ([SipCallManager SharedInstance].audioVC && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
             [self enableBackgroundSound];
-            [[SipStackUtils sharedInstance].audioService acceptCall];
+            [[SipCallManager SharedInstance] reconnectVoiceCall:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
         }
     }
 }
