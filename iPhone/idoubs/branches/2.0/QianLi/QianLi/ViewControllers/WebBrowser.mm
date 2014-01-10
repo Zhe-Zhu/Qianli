@@ -28,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *urlInput;
 @property (weak, nonatomic) IBOutlet UIImageView *urlInputUIImageView;
 @property (weak, nonatomic) UIWebView *webView;
+@property (strong, nonatomic) NSString *currentURL;
 @property (weak, nonatomic) IBOutlet UIView *toolbar;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -213,7 +214,7 @@
     [_urlInput resignFirstResponder];
 }
 
-- (BOOL) validateUrl: (NSString *) candidate
+- (BOOL)validateUrl: (NSString *) candidate
 {
     NSDataDetector *linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
     NSArray *matches = [linkDetector matchesInString:candidate options:0 range:NSMakeRange(0, [candidate length])];
@@ -241,6 +242,7 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+    self.currentURL = [request.URL absoluteString];
     return YES;
 }
 
@@ -305,7 +307,7 @@
     // 对网页内容进行同步
     float offsetx = _webView.scrollView.contentOffset.x;
     float offsety = _webView.scrollView.contentOffset.y;
-    NSString *message = [NSString stringWithFormat:@"%@%@%@%@%f%@%f", kBrowserSyn, kSeparator, [[_webView.request URL] absoluteString], kSeparator,offsetx, kSeparator, offsety];
+    NSString *message = [NSString stringWithFormat:@"%@%@%@%@%f%@%f", kBrowserSyn, kSeparator, /*[[_webView.request URL] absoluteString]*/ _currentURL, kSeparator,offsetx, kSeparator, offsety];
     [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
 
     [_synButton setTitle:@"" forState:UIControlStateNormal];
