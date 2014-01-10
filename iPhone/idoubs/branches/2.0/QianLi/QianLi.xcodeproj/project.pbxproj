@@ -49,7 +49,6 @@
 		18096A30187181B600198CD6 /* doodle_width_4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18096A07187181B600198CD6 /* doodle_width_4@2x.png */; };
 		18096A31187181B600198CD6 /* doodle_width_4_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18096A08187181B600198CD6 /* doodle_width_4_selected@2x.png */; };
 		1830D5FC185B15CE009E5D19 /* QianLiImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830D5FB185B15CE009E5D19 /* QianLiImagePickerViewController.m */; };
-		184EB7781851C91C00D70240 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D57182C8AF8001536CB /* libMobClickLibrary.a */; };
 		184EB7791851C91C00D70240 /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D76182C9E15001536CB /* libUMFeedback.a */; };
 		18E36D581877F6CD00D685EA /* HelpView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18E36D571877F6CD00D685EA /* HelpView.mm */; };
 		18E36D78187807FC00D685EA /* arwen_avatar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E36D70187807FC00D685EA /* arwen_avatar@2x.png */; };
@@ -89,6 +88,7 @@
 		18EA7DEF187CF1450098A824 /* help_drag_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EA7DD2187CF1450098A824 /* help_drag_left@2x.png */; };
 		18EA7DF0187CF1450098A824 /* help_drag_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EA7DD3187CF1450098A824 /* help_drag_right@2x.png */; };
 		18EA7DF1187CF1450098A824 /* help_quit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EA7DD4187CF1450098A824 /* help_quit@2x.png */; };
+		2F6F0A0A1876A6B1004769A2 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D57182C8AF8001536CB /* libMobClickLibrary.a */; };
 		2F81373117AFB54500DB23F2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F81373017AFB54500DB23F2 /* UIKit.framework */; };
 		2F81373317AFB54500DB23F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F81373217AFB54500DB23F2 /* Foundation.framework */; };
 		2F81373517AFB54500DB23F2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F81373417AFB54500DB23F2 /* CoreGraphics.framework */; };
@@ -977,7 +977,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				184EB7781851C91C00D70240 /* libMobClickLibrary.a in Frameworks */,
+				2F6F0A0A1876A6B1004769A2 /* libMobClickLibrary.a in Frameworks */,
 				184EB7791851C91C00D70240 /* libUMFeedback.a in Frameworks */,
 				CE1E8CAE1842F61D00A956A2 /* libPods.a in Frameworks */,
 				CE5D0D74182C8B38001536CB /* libz.dylib in Frameworks */,
@@ -2407,6 +2407,7 @@
 					"/Users/user/Documents/Workspace/Objective-C/QianLiWithVoiceModuleForUse/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK",
 					/Users/albert/Desktop/lutanSVN/QianLiWithVoiceModule/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK,
 					"/Users/Apple/Desktop/Qianli-github/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK",
+					/Users/chenxiangwen/Desktop/Qianli/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK,
 				);
 				NGN_STACK_HOME = ..;
 				ONLY_ACTIVE_ARCH = NO;
@@ -2491,6 +2492,7 @@
 					"/Users/user/Documents/Workspace/Objective-C/QianLiWithVoiceModuleForUse/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK",
 					/Users/albert/Desktop/lutanSVN/QianLiWithVoiceModule/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK,
 					"/Users/Apple/Desktop/Qianli-github/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK",
+					/Users/chenxiangwen/Desktop/Qianli/iPhone/idoubs/branches/2.0/QianLi/QianLi/UmengSDK,
 				);
 				NGN_STACK_HOME = ..;
 				ONLY_ACTIVE_ARCH = NO;
