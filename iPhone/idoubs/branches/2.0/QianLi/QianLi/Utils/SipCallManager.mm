@@ -10,6 +10,7 @@
 
 @interface SipCallManager ()
 
+@property(nonatomic, weak) NSTimer *timer;
 @end
 
 @implementation SipCallManager
@@ -20,8 +21,14 @@ static SipCallManager *callManager = nil;
 {
     if (callManager == nil) {
         callManager = [[SipCallManager alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:callManager selector:@selector(receiveIncomingMessage:) name:@"receivedImageNotification" object:nil];
     }
     return callManager;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)makeQianliCallToRemote:(NSString *)remoteParty
@@ -74,9 +81,87 @@ static SipCallManager *callManager = nil;
     }
 }
 
+- (void)reconnectVoiceCall:(NSString *)remoteParty
+{
+    _endWithoutDismissAudioVC = NO;
+    long sID;
+    if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteParty andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])
+    {
+        _audioVC.audioSessionID = sID;
+    }
+}
+
+- (void)resumeCallWithID:(long)callID
+{
+    if (_audioVC && _endWithoutDismissAudioVC) {
+        [SipStackUtils sharedInstance].sessionID = callID;
+        _endWithoutDismissAudioVC = NO;
+        _audioVC.audioSessionID = callID;
+        [[SipStackUtils sharedInstance].audioService acceptCall];
+    }
+}
+
+- (void)sendInterruptionMessage:(NSString *)message
+{
+    [SipCallManager SharedInstance].endWithoutDismissAudioVC = YES;
+    [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+}
+
+- (void)sendNetworkChangeMessage
+{
+    [[SipStackUtils sharedInstance].messageService sendMessage:kWillChangeNetwork toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:[SipCallManager SharedInstance] selector:@selector(handleConnectionChange) userInfo:nil repeats:NO];
+}
+
+- (void)handleConnectionChange
+{
+    [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+    [[NgnEngine sharedInstance].sipService registerIdentity];
+    [[SipCallManager SharedInstance] sendInterruptionMessage:kChangeNetWork];
+}
+
+- (void)setAudioVC:(QianLiAudioCallViewController *)audioVC
+{
+    _audioVC = audioVC;
+    _endWithoutDismissAudioVC = NO;
+    _netDidWorkChanged = NO;
+}
+
 - (void)clearCallManager
 {
     callManager = nil;
+}
+
+#pragma mark -- handling receiving message method--
+- (void)receiveIncomingMessage:(NSNotification *)notification
+{
+    NSString *info = notification.object;
+    NSArray* words = [info componentsSeparatedByString:kSeparator];
+    NSString *message;
+    if ([words count] > 0) {
+        message = [words objectAtIndex:0];
+    }
+    
+    if ([message isEqualToString:kInterruption]) {
+        _endWithoutDismissAudioVC = YES;
+        [[SipStackUtils sharedInstance].audioService hangUpCall];
+    }
+    else if ([message isEqualToString:kInterruptionOK]){
+        
+    }
+    else if ([message isEqualToString:kWillChangeNetwork]){
+        _netDidWorkChanged = YES;
+        _endWithoutDismissAudioVC = YES;
+        [[SipStackUtils sharedInstance].messageService sendMessage:kChangeNetworkOK toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+    }
+    else if ([message isEqualToString:kChangeNetworkOK]){
+       // [_timer fire];
+    }
+    else if ([message isEqualToString:kChangeNetWork]){
+         _endWithoutDismissAudioVC = YES;
+        _netDidWorkChanged = YES;
+        [[SipStackUtils sharedInstance].audioService hangUpCall];
+    }
 }
 
 @end

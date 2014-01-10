@@ -66,10 +66,13 @@ const float kColorB = 60/100.0;
     if ([userDefaults boolForKey:kSingUpKey]) {
         self.window.rootViewController = self.tabController;
         [[SipStackUtils sharedInstance] start];
+        [self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         [self registerAPNS];
-       // [self setHelpView];
+        
+        //TODO:delete
+        [self setHelpView];
     }
     else{
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -214,6 +217,7 @@ const float kColorB = 60/100.0;
     [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
     // Register remote notification
     [self registerAPNS];
+    [self setHelpView];
 }
 
 - (void)registerAPNS

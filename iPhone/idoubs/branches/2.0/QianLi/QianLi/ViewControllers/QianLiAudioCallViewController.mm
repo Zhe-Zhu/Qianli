@@ -178,6 +178,7 @@
     videoBeginTime = 0;
     _didEndCallBySelf = NO;
     didEndCall = NO;
+    callBeginTime = [[NSDate alloc] init];
     
     if (!IS_OS_7_OR_LATER) {
         [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forBarMetrics:UIBarMetricsDefault];
@@ -305,7 +306,6 @@
     timeLabel.backgroundColor = [UIColor clearColor];
     dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"mm:ss"];
-    callBeginTime = [[NSDate alloc] init];
     
     NSRunLoop *runloop = [NSRunLoop currentRunLoop];
     _timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateTimeLabel) userInfo:nil repeats:YES];
@@ -988,7 +988,14 @@
 			// releases session
 			// starts timer suicide
             [SipStackUtils sharedInstance].audioService.audioSession = nil;
-            [self timerSuicideTick];
+            BOOL didWantResumeCall = [SipCallManager SharedInstance].endWithoutDismissAudioVC;
+            if (!didWantResumeCall) {
+                [self timerSuicideTick];
+            }
+            if ([SipCallManager SharedInstance].netDidWorkChanged) {
+                [SipCallManager SharedInstance].netDidWorkChanged = NO;
+                [[SipCallManager SharedInstance] reconnectVoiceCall:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+            }
 			break;
 		}
 	}
