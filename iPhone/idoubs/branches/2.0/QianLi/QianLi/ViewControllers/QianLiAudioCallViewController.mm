@@ -785,6 +785,8 @@
 #pragma mark touch Menu Bar Item
 - (void)selectPhoto
 {
+    [[SipStackUtils sharedInstance].audioService sendDTMF:15];
+    return;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     AssetGroupPickerController *assetVC = [storyboard instantiateViewControllerWithIdentifier:@"AssetGroupPickerVC"];
     assetVC.delegate = self;
