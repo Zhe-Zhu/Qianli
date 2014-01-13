@@ -59,9 +59,6 @@
 
 @implementation HistoryMainCell
 
-# define kTriggerLength 100.0f // 拉动多长开始触发操作
-# define kRequestOffset 35.0f // 显示被请求状态时向左的偏移值
-
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -358,6 +355,7 @@
             self.requestIconImageView.image = nil;
             self.userInteractionEnabled = NO;
             [self startSpin];
+            [NSTimer scheduledTimerWithTimeInterval:0.8 target:self selector:@selector(stopSpin) userInfo:nil repeats:NO];
             if ([self.historyMainCelldelegate respondsToSelector:@selector(sendRequest:)]) {
                 [self.historyMainCelldelegate sendRequest:self];
             }

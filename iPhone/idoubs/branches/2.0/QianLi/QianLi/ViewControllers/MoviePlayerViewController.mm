@@ -4,7 +4,7 @@
 //
 //  Created by lutan on 9/23/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
 
 #import "MoviePlayerViewController.h"
 #import "SipStackUtils.h"
@@ -55,7 +55,10 @@
     }
     [MobClick beginEvent:@"watchVideo"];
     NSError *setCategoryError = nil;
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
+    if (![Utils isHeadsetPluggedIn]) {
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
+    }
+    [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMoviePlayback error:&setCategoryError];
     if (setCategoryError){
         NSLog(@"error");
     }
