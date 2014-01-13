@@ -8,6 +8,7 @@
 
 #import "HelpView.h"
 #import "SipCallManager.h"
+#import "SVProgressHUD.h"
 
 #define PageWidth 340
 #define NumberOfPages 5
@@ -150,7 +151,7 @@
 - (void)makeACall:(HistoryMainCell *)historyMainCell
 {
     if (historyMainCell == _thirdPageCell){
-        [[SipCallManager SharedInstance] makeQianliCallToRemote:@"008618680309879"];
+        [[SipCallManager SharedInstance] makeQianliCallToRemote:QianLiRobotNumber];
         [self removeFromSuperview];
     }
 }

@@ -10,6 +10,9 @@
 #import "SipStackUtils.h"
 #import "MobClick.h"
 #import "Utils.h"
+#import "SVProgressHUD.h"
+#import "Global.h"
+
 
 //CODE_REVIEW: 可以用NSDictory变量来代替indexs和images变量。
 @interface ImageDisplayController (){
@@ -307,6 +310,11 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [self setIndicator];
+    if (kIsCallingQianLiRobot) {
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSlidePhoto", nil),_currentPage]];
+        //TODO: add or not
+        return;
+    }
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
     NSString *str = [NSString stringWithFormat:@"%@%@%f",kScrollOffset,kSeparator,_imageScrollView.contentOffset.x];
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
@@ -631,7 +639,12 @@
     if ([images count] == 0) {
         return;
     }
-    
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedPhotoNum += [images count];
+        if ([images count] > 0) {
+            [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotReceiveImages", nil), kQianLiRobotSharedPhotoNum]];
+        }
+    }
      __typeof(&*self) __weak weakSelf = self;
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
     [PictureManager startImageTransSession:[images count] SessionID:[[PictureManager sharedInstance] getImageSession] Success:^(NSInteger baseIndex) {

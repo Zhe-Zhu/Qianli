@@ -107,6 +107,9 @@
 		2F81376117AFBBCE00DB23F2 /* HistoryRecordsMainViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2F81376017AFBBCE00DB23F2 /* HistoryRecordsMainViewController.mm */; };
 		2F81376417AFBC4A00DB23F2 /* HistroyRecordDetailsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2F81376317AFBC4A00DB23F2 /* HistroyRecordDetailsViewController.mm */; };
 		2F81376717AFC92500DB23F2 /* QianLiAudioCallViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2F81376617AFC92400DB23F2 /* QianLiAudioCallViewController.mm */; };
+		2FB34F4618839209001B43B9 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2FB34F4318839209001B43B9 /* SVProgressHUD.bundle */; };
+		2FB34F4718839209001B43B9 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB34F4518839209001B43B9 /* SVProgressHUD.m */; };
+		2FB34F5F1883B5DC001B43B9 /* Global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FB34F5E1883B5DC001B43B9 /* Global.cpp */; };
 		50028A3217B3728E00029312 /* ff.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 50028A3117B3728E00029312 /* ff.jpg */; };
 		50028A3817B37E2300029312 /* baloon_out.png in Resources */ = {isa = PBXBuildFile; fileRef = 50028A3617B37E2300029312 /* baloon_out.png */; };
 		50028A3917B37E2300029312 /* baloon_out@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 50028A3717B37E2300029312 /* baloon_out@2x.png */; };
@@ -638,6 +641,11 @@
 		2F81376317AFBC4A00DB23F2 /* HistroyRecordDetailsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HistroyRecordDetailsViewController.mm; sourceTree = "<group>"; };
 		2F81376517AFC92400DB23F2 /* QianLiAudioCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QianLiAudioCallViewController.h; sourceTree = "<group>"; };
 		2F81376617AFC92400DB23F2 /* QianLiAudioCallViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QianLiAudioCallViewController.mm; sourceTree = "<group>"; };
+		2FB34F4218839209001B43B9 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
+		2FB34F4318839209001B43B9 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		2FB34F4418839209001B43B9 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		2FB34F4518839209001B43B9 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		2FB34F5E1883B5DC001B43B9 /* Global.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Global.cpp; sourceTree = "<group>"; };
 		50028A3117B3728E00029312 /* ff.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ff.jpg; sourceTree = "<group>"; };
 		50028A3617B37E2300029312 /* baloon_out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = baloon_out.png; sourceTree = "<group>"; };
 		50028A3717B37E2300029312 /* baloon_out@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "baloon_out@2x.png"; sourceTree = "<group>"; };
@@ -977,6 +985,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				505A078117B0A6720053E1B7 /* QuartzCore.framework in Frameworks */,
 				2F6F0A0A1876A6B1004769A2 /* libMobClickLibrary.a in Frameworks */,
 				184EB7791851C91C00D70240 /* libUMFeedback.a in Frameworks */,
 				CE1E8CAE1842F61D00A956A2 /* libPods.a in Frameworks */,
@@ -1015,7 +1024,6 @@
 				505A07A817B0B81A0053E1B7 /* MobileCoreServices.framework in Frameworks */,
 				2F81373717AFB54500DB23F2 /* CoreData.framework in Frameworks */,
 				505A07A617B0B8040053E1B7 /* CFNetwork.framework in Frameworks */,
-				505A078117B0A6720053E1B7 /* QuartzCore.framework in Frameworks */,
 				505A077117B09E5D0053E1B7 /* AddressBook.framework in Frameworks */,
 				505A076F17B09E520053E1B7 /* AddressBookUI.framework in Frameworks */,
 				2F81373117AFB54500DB23F2 /* UIKit.framework in Frameworks */,
@@ -1182,6 +1190,7 @@
 		2F81373817AFB54500DB23F2 /* QianLi */ = {
 			isa = PBXGroup;
 			children = (
+				2FB34F4118839209001B43B9 /* SVProgressHUD */,
 				CE1E8D08184384B600A956A2 /* SVStatusHUD */,
 				CE5D0D56182C8AF8001536CB /* UmengSDK */,
 				503DCDDB18068CAB00514A33 /* Sound */,
@@ -1287,6 +1296,17 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
+		2FB34F4118839209001B43B9 /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				2FB34F4218839209001B43B9 /* SVProgressHUD-Prefix.pch */,
+				2FB34F4318839209001B43B9 /* SVProgressHUD.bundle */,
+				2FB34F4418839209001B43B9 /* SVProgressHUD.h */,
+				2FB34F4518839209001B43B9 /* SVProgressHUD.m */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
 		500C2AE817D0ADDF004391AF /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1365,6 +1385,7 @@
 			isa = PBXGroup;
 			children = (
 				50508FCA17BDC93A0035A8AE /* Global.h */,
+				2FB34F5E1883B5DC001B43B9 /* Global.cpp */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -1947,6 +1968,7 @@
 				18096A0F187181B600198CD6 /* doodle_color_3_selected@2x.png in Resources */,
 				CE1E8CFB1843377A00A956A2 /* iOS6contactIcon@2x.png in Resources */,
 				CE345F6917CB13FF009D52D4 /* buttonContinueBackground@2x.png in Resources */,
+				2FB34F4618839209001B43B9 /* SVProgressHUD.bundle in Resources */,
 				CEBAFC4E182225560021764A /* browserHistory@2x.png in Resources */,
 				CE7CE9F617CF339B0042F057 /* requestLoading@2x.png in Resources */,
 				CE1E8D011843377A00A956A2 /* iOS6TabbarEmptySelected@2x.png in Resources */,
@@ -2218,6 +2240,7 @@
 				5096C7BC180C456600931C69 /* CameraViewController.mm in Sources */,
 				502AA60617C721F400FA2F27 /* SipService.mm in Sources */,
 				502AA60717C721F400FA2F27 /* SipStackUtils.mm in Sources */,
+				2FB34F4718839209001B43B9 /* SVProgressHUD.m in Sources */,
 				CE345FCD17CB5BC0009D52D4 /* UIImage+BoxBlur.m in Sources */,
 				502AA60817C721F400FA2F27 /* SoundService.mm in Sources */,
 				502AA60917C721F400FA2F27 /* Utils.mm in Sources */,
@@ -2249,6 +2272,7 @@
 				507B182218116ADA00DE6D88 /* WebHistoryCell.m in Sources */,
 				CE3A1C3317FD1A1B00051970 /* SettingChangeNameViewController.m in Sources */,
 				50CEC3C517EEE34200BBE3BA /* QianLiContactsAccessor.m in Sources */,
+				2FB34F5F1883B5DC001B43B9 /* Global.cpp in Sources */,
 				2F81375817AFB83700DB23F2 /* SignUpVerificationCodeViewController.mm in Sources */,
 				2F81375B17AFBA3E00DB23F2 /* QianLiContactsViewController.mm in Sources */,
 				509B368417D87D3C00AA872D /* UIImageExtras.m in Sources */,

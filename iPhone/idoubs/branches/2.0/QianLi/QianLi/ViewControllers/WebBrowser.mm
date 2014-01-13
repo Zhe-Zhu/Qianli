@@ -12,6 +12,7 @@
 #import "SipStackUtils.h"
 #import "Global.h"
 #import "MobClick.h"
+#import "SVProgressHUD.h"
 
 #define ToolBarHeight 48
 
@@ -304,6 +305,10 @@
 }
 
 - (IBAction)synChronize:(id)sender {
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedWebNum++;
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSynWeb", nil),[_webView stringByEvaluatingJavaScriptFromString:@"document.title"]]];
+    }
     // 对网页内容进行同步
     float offsetx = _webView.scrollView.contentOffset.x;
     float offsety = _webView.scrollView.contentOffset.y;

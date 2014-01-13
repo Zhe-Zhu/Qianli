@@ -8,6 +8,8 @@
 
 #import "QianLiContactsAccessor.h"
 
+#define HaveAccessedID @"firstAccess"
+
 @interface QianLiContactsAccessor (){
     NSManagedObjectContext *_managedObjectContext;
 }
@@ -28,6 +30,11 @@ static QianLiContactsAccessor *contactsAccessor;
         contactsAccessor = [[QianLiContactsAccessor alloc] init];
         QianLiAppDelegate *appDelegate = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;
         contactsAccessor.managedObjectContext = appDelegate.managedObjectContext;
+        NSUserDefaults *userData = [NSUserDefaults standardUserDefaults];
+        if (![userData boolForKey:HaveAccessedID]) {
+            [userData setBool:YES forKey:HaveAccessedID];
+            [contactsAccessor insertNewObject:@"qianli" Email:@"no" Profile:nil Numbers:@"008600000000000" UpdateCounter:1];
+        }
     }
     return contactsAccessor;
 }

@@ -7,6 +7,8 @@
 //
 
 #import "SipCallManager.h"
+#import "SVProgressHUD.h"
+#import "Global.h"
 
 @interface SipCallManager ()
 
@@ -33,11 +35,26 @@ static SipCallManager *callManager = nil;
 
 - (void)makeQianliCallToRemote:(NSString *)remoteParty
 {
+    if ([remoteParty isEqualToString:QianLiRobotNumber]) {
+        kIsCallingQianLiRobot = YES;
+        kQianLiRobotSharedDoodleNum = 0;
+        kQianLiRobotSharedPhotoNum = 0;
+        kQianLiRobotSharedWebNum = 0;
+        kQianLiRobotsharedVideoNum = 0;
+    }
+    else
+    {
+        kIsCallingQianLiRobot = NO;
+    }
     if ([remoteParty isEqualToString:[UserDataAccessor getUserRemoteParty]]) {
         return;
     }
     
     if (![Utils checkInternetAndDispWarning:YES]) {
+        if (kIsCallingQianLiRobot) {
+            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"CallQianLiRobotNetworkFailed", nil)];
+            return;
+        }
         return;
     }
     

@@ -11,6 +11,7 @@
 #import "SipStackUtils.h"
 #import "UIImageExtras.h"
 #import "MobClick.h"
+#import "SVProgressHUD.h"
 
 #define MaxiNum 3
 
@@ -168,6 +169,10 @@
 
 - (void)synchronize
 {
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedWebNum++;
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSynWeb", nil),[_webView stringByEvaluatingJavaScriptFromString:@"document.title"]]];
+    }
     // 对网页内容进行同步
     //CODE_REVIEW:在iphone4S和iphone5上测试，不能同步。
     float offsetx = _webView.scrollView.contentOffset.x;

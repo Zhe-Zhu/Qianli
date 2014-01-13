@@ -10,6 +10,8 @@
 #import "SipStackUtils.h"
 #import "UIImageExtras.h"
 #import "MobClick.h"
+#import "SVProgressHUD.h"
+#import "Global.h"
 
 @interface MoviePlayerViewController ()
 {
@@ -222,6 +224,9 @@
 {
     float time = _moviePlayerController.currentPlaybackTime;
     [self forwardFromRemote:time];
+    if (kIsCallingQianLiRobot) {
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat: NSLocalizedString(@"QianLiRobotForwardBackVideo", nil),((int)_moviePlayerController.currentPlaybackTime) / 60, ((int)_moviePlayerController.currentPlaybackTime) % 60]];
+    }
     NSString *message = [NSString stringWithFormat:@"%@%@%f", kVideoForward, kSeparator, time];
     [[SipStackUtils sharedInstance].messageService sendMessage: message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
 }
@@ -243,6 +248,10 @@
 {
     float time = _moviePlayerController.currentPlaybackTime;
     [self backwardFromRemote:time];
+    if (kIsCallingQianLiRobot) {
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat: NSLocalizedString(@"QianLiRobotForwardBackVideo", nil),((int)_moviePlayerController.currentPlaybackTime) / 60, ((int)_moviePlayerController.currentPlaybackTime) % 60]];
+    }
+
     NSString *message = [NSString stringWithFormat:@"%@%@%f", kVideoBackward, kSeparator, time];
     [[SipStackUtils sharedInstance].messageService sendMessage: message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
 }
@@ -265,6 +274,9 @@
 
 - (void)pause
 {
+    if (kIsCallingQianLiRobot && !_paused) {
+        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"QianLiRobotPauseVideo", nil)];
+    }
     _paused = !_paused;
     [self pauseFromRemote:_paused];
     // 0 - play

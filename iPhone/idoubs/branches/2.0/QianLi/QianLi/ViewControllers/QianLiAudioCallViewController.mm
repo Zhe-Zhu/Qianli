@@ -26,6 +26,8 @@
 #import "Utils.h"
 #import "SVStatusHUD.h"
 #import "SipCallManager.h"
+#import "SVProgressHUD.h"
+
 
 @interface QianLiAudioCallViewController (MusicApp)
 
@@ -591,6 +593,11 @@
 
 - (void)pressButtonEndCall
 {
+    if (kIsCallingQianLiRobot) {
+        NSDate *currentDate = [[NSDate alloc] init];
+        NSTimeInterval time = [currentDate timeIntervalSinceDate:callBeginTime];
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotEndCall", nil),((int)time) / 60,((int)time) % 60, kQianLiRobotSharedPhotoNum, kQianLiRobotSharedDoodleNum, kQianLiRobotSharedWebNum, kQianLiRobotsharedVideoNum]];
+    }
     //[[SipStackUtils sharedInstance].audioService hangUpCall];
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
@@ -786,8 +793,8 @@
 #pragma mark touch Menu Bar Item
 - (void)selectPhoto
 {
-    [[SipStackUtils sharedInstance].audioService sendDTMF:15];
-    return;
+    //[[SipStackUtils sharedInstance].audioService sendDTMF:15];
+    //return;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     AssetGroupPickerController *assetVC = [storyboard instantiateViewControllerWithIdentifier:@"AssetGroupPickerVC"];
     assetVC.delegate = self;
@@ -853,6 +860,9 @@
 
 - (void)selectHandWriting
 {
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedDoodleNum++;
+    }
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     _drawingVC = [storyboard instantiateViewControllerWithIdentifier:@"DrawingViewController"];
     _drawingVC.isIncoming = NO;
@@ -875,6 +885,9 @@
 
 - (void)selectShopping
 {
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedWebNum++;
+    }
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     _shoppingVC = [storyboard instantiateViewControllerWithIdentifier:@"WebViewController"];
     _shoppingVC.inComing = NO;
@@ -894,6 +907,9 @@
 
 - (void)selectBrowser
 {
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedWebNum++;
+    }
     // 发送同步信息
     [[SipStackUtils sharedInstance].messageService sendMessage:kBeginBrowser toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
     
@@ -908,7 +924,13 @@
     if ([imageArray count] == 0 || !imageSessionExists) {
         return;
     }
-    
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedPhotoNum += [imageArray count];
+        if ([imageArray count] > 0) {
+            [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotReceiveImages", nil), kQianLiRobotSharedPhotoNum]];
+        }
+    }
+         
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleTimer:) userInfo:imageArray repeats:YES];
     if (_imageDispVC == nil) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -1032,6 +1054,8 @@
                 if (_isSpeakerOn) {
                     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
                 }
+                [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"CallQianLiRobotSuccessfully", nil)];
+                
 				break;
 			}
 			case INVITE_STATE_TERMINATED:
