@@ -117,6 +117,11 @@ nil]
 #define kClearAllDoodle @"CLEARDOODLE"
 #define kHangUpcall @"hangUpCall"
 
+#define kInterruption @"interruption"
+#define kChangeNetWork @"changenetwork"
+#define kInterruptionOK @"interruptionOK"
+#define kChangeNetworkOK @"changenetworkOK"
+#define kWillChangeNetwork @"willchangenetwork"
 
 #define kProfileSize  320
 #define avatarDiameter 30

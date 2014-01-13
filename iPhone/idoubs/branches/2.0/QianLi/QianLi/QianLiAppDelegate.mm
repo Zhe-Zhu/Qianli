@@ -27,6 +27,8 @@
     SignUpEditProfileViewController *_signUpEditProfileViewController;
     BOOL multitaskingSupported;
     BOOL didLaunch;
+    UIBackgroundTaskIdentifier backgroundTaskID;
+    UIBackgroundTaskIdentifier backgroundKeepAliveID;
 }
 
 @property(nonatomic, strong) SignUpEditProfileViewController *signUpEditProfileViewController;
@@ -56,126 +58,24 @@ const float kColorB = 60/100.0;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
-    UITabBarController *tabController = [[UITabBarController alloc] init];
-    _tabController = tabController;
-    if (!IS_OS_7_OR_LATER) {
-        [_tabController.tabBar setBackgroundImage:[UIImage imageNamed:@"iOS6TabbarBackground@2x.png"]];
-        CGRect oldFrame = _tabController.tabBar.frame;
-        [_tabController.tabBar setFrame:CGRectMake(CGRectGetMinX(oldFrame), [[UIScreen mainScreen]bounds].size.height - 49, CGRectGetWidth(oldFrame), 49)];
-        [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"iOS6TabbarEmptySelected.png"]];
-        UIColor *titleHighlightedColor = [UIColor colorWithRed:94/255.0 green:201/255.0 blue:217/255.0 alpha:1.0];
-        [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                           titleHighlightedColor, UITextAttributeTextColor,
-                                                           nil] forState:UIControlStateHighlighted];
-    }
-    
-    // load the storyboard by name
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    
-    // 设置TabBar
-    _contactViewController = [storyboard instantiateViewControllerWithIdentifier:@"ContactViewController"];
-    _contactViewController.title = NSLocalizedString(@"contactTitle", Nil);
-    UINavigationController *contactNavigationVC = [[UINavigationController alloc] init];
-    // 配置navigation controller
-    [contactNavigationVC.navigationBar setTranslucent:NO];
-    if ([contactNavigationVC.navigationBar respondsToSelector:@selector(setBarTintColor:)]) {
-        [contactNavigationVC.navigationBar setBarTintColor:[UIColor colorWithHue:kColorH saturation:kColorS brightness:kColorB alpha:1.0]];
-    }
-    [contactNavigationVC.navigationBar setBarStyle:UIBarStyleBlack];
-    if (!IS_OS_7_OR_LATER) {
-        [contactNavigationVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"iOS6SignUpNavigationBarBackground"] forBarMetrics:UIBarMetricsDefault];
-    }
-    //contactNavigationVC.viewControllers = @[_contactViewController];
-    [contactNavigationVC pushViewController:_contactViewController animated:NO];
-    // 加入Tab Bar上的Icon
-    UITabBarItem *contactIcon;
-    if (IS_OS_7_OR_LATER) {
-        contactIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"contactTitle", Nil) image:[UIImage imageNamed:@"contactIcon.png"] selectedImage:[UIImage imageNamed:@"contactIconSelected.png"]];
-    }
-    else{
-        contactIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"contactTitle", Nil) image:[UIImage imageNamed:@"contactIcon.png"] tag:9999];
-        [contactIcon setFinishedSelectedImage:[UIImage imageNamed:@"contactIconSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iOS6contactIcon.png"]];
-    }
-    contactNavigationVC.tabBarItem = contactIcon;
-    
-    _historyMainController = [storyboard instantiateViewControllerWithIdentifier:@"HistroryRecordMainController"];
-    _historyMainController.title = NSLocalizedString(@"recentCalls", nil);
-    UINavigationController *histroyNaviCV = [[UINavigationController alloc] init];
-    // 配置navigation controller
-    [histroyNaviCV.navigationBar setTranslucent:NO];
-    if ([histroyNaviCV.navigationBar respondsToSelector:@selector(setBarTintColor:)]) {
-        [histroyNaviCV.navigationBar setBarTintColor:[UIColor colorWithHue:kColorH saturation:kColorS brightness:kColorB alpha:1.0]];
-    }
-    [histroyNaviCV.navigationBar setBarStyle:UIBarStyleBlack];
-    if (!IS_OS_7_OR_LATER) {
-        [histroyNaviCV.navigationBar setBackgroundImage:[UIImage imageNamed:@"iOS6SignUpNavigationBarBackground"] forBarMetrics:UIBarMetricsDefault];
-    }
-    
-    // NavigationBar下的阴影
-//    UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 44, 320, 2)];
-//    lineView.backgroundColor = [UIColor colorWithRed:160/255.0 green:160/255.0 blue:160/255.0 alpha:0.3];
-//    [histroyNaviCV.navigationBar addSubview:lineView];
-   // histroyNaviCV.viewControllers = @[_historyMainController];
-    [histroyNaviCV pushViewController:_historyMainController animated:NO];
-    
-    // 加入Tab Bar上的Icon
-    UITabBarItem *historyIcon;
-    if (IS_OS_7_OR_LATER) {
-        historyIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"recentCalls", nil) image:[UIImage imageNamed:@"historyIcon.png"] selectedImage:[UIImage imageNamed:@"historyIconSelected.png"]];
-    }
-    else{
-        historyIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"recentCalls", nil) image:[UIImage imageNamed:@"historyIcon.png"] tag:9999];
-        [historyIcon setFinishedSelectedImage:[UIImage imageNamed:@"historyIconSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iOS6historyIcon.png"]];
-    }
-    histroyNaviCV.tabBarItem = historyIcon;
-    
-    // 读取storyboard中的setting view
-    _settingViewController = [storyboard instantiateViewControllerWithIdentifier:@"SettingViewController"];
-    _settingViewController.title = NSLocalizedString(@"setting", nil);
-    UINavigationController *settingNavigationController = [[UINavigationController alloc] init];
-    // 配置navigation controller
-    [settingNavigationController.navigationBar setTranslucent:NO];
-    if ([settingNavigationController.navigationBar respondsToSelector:@selector(setBarTintColor:)]) {
-        [settingNavigationController.navigationBar setBarTintColor:[UIColor colorWithHue:kColorH saturation:kColorS brightness:kColorB alpha:1.0]];
-    }
-    [settingNavigationController.navigationBar setBarStyle:UIBarStyleBlack];
-    if (!IS_OS_7_OR_LATER) {
-        [settingNavigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"iOS6SignUpNavigationBarBackground"] forBarMetrics:UIBarMetricsDefault];
-    }
-    [settingNavigationController pushViewController:_settingViewController animated:NO];
-    //settingNavigationController.viewControllers = @[_settingViewController];
-
-    // 加入Tab Bar上的Icon
-    UITabBarItem *settingIcon;
-    if (IS_OS_7_OR_LATER) {
-        settingIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"setting", nil) image:[UIImage imageNamed:@"settingIcon.png"] selectedImage:[UIImage imageNamed:@"settingIconSelected.png"]];
-    }
-    else{
-        settingIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"setting", nil) image:[UIImage imageNamed:@"settingIcon.png"] tag:9999];
-        [settingIcon setFinishedSelectedImage:[UIImage imageNamed:@"settingIconSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iOS6settingIcon.png"]];
-    }
-    settingNavigationController.tabBarItem = settingIcon;
-    
-    NSArray *controllers = @[histroyNaviCV, contactNavigationVC, settingNavigationController];
-    _tabController.viewControllers = controllers;
-    [_tabController.tabBar setTintColor:[UIColor colorWithRed:56/255.0 green:181/255.0 blue:199/255.0 alpha:1.0]];
-    if ([_tabController.tabBar respondsToSelector:@selector(setTranslucent:)]) {
-        [_tabController.tabBar setTranslucent:YES];
-    }
     [self.window makeKeyAndVisible];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveIncomingCallNotif:) name:kReceiveIncomingCallNotifName object:nil];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     if ([userDefaults boolForKey:kSingUpKey]) {
-        self.window.rootViewController = _tabController;
+        self.window.rootViewController = self.tabController;
         [[SipStackUtils sharedInstance] start];
+        [self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-        // Register remote notification
         [self registerAPNS];
+        
+        //TODO:delete
+        [self setHelpView];
     }
     else{
+         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         if ([userDefaults boolForKey:@"noHelp"]) {
             SignUpEditProfileViewController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
             _signUpEditProfileViewController = signUpEditProfileViewController;
@@ -196,10 +96,119 @@ const float kColorB = 60/100.0;
     return YES;
 }
 
+- (UITabBarController *)tabController
+{
+    if (!_tabController) {
+        UITabBarController *tabController = [[UITabBarController alloc] init];
+        _tabController = tabController;
+        if (!IS_OS_7_OR_LATER) {
+            [_tabController.tabBar setBackgroundImage:[UIImage imageNamed:@"iOS6TabbarBackground@2x.png"]];
+            CGRect oldFrame = _tabController.tabBar.frame;
+            [_tabController.tabBar setFrame:CGRectMake(CGRectGetMinX(oldFrame), [[UIScreen mainScreen]bounds].size.height - 49, CGRectGetWidth(oldFrame), 49)];
+            [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"iOS6TabbarEmptySelected.png"]];
+            UIColor *titleHighlightedColor = [UIColor colorWithRed:94/255.0 green:201/255.0 blue:217/255.0 alpha:1.0];
+            [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                               titleHighlightedColor, UITextAttributeTextColor,
+                                                               nil] forState:UIControlStateHighlighted];
+        }
+        
+        // load the storyboard by name
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        
+        // 设置TabBar
+        _contactViewController = [storyboard instantiateViewControllerWithIdentifier:@"ContactViewController"];
+        _contactViewController.title = NSLocalizedString(@"contactTitle", Nil);
+        UINavigationController *contactNavigationVC = [[UINavigationController alloc] init];
+        // 配置navigation controller
+        [contactNavigationVC.navigationBar setTranslucent:NO];
+        if ([contactNavigationVC.navigationBar respondsToSelector:@selector(setBarTintColor:)]) {
+            [contactNavigationVC.navigationBar setBarTintColor:[UIColor colorWithHue:kColorH saturation:kColorS brightness:kColorB alpha:1.0]];
+        }
+        [contactNavigationVC.navigationBar setBarStyle:UIBarStyleBlack];
+        if (!IS_OS_7_OR_LATER) {
+            [contactNavigationVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"iOS6SignUpNavigationBarBackground"] forBarMetrics:UIBarMetricsDefault];
+        }
+        //contactNavigationVC.viewControllers = @[_contactViewController];
+        [contactNavigationVC pushViewController:_contactViewController animated:NO];
+        // 加入Tab Bar上的Icon
+        UITabBarItem *contactIcon;
+        if (IS_OS_7_OR_LATER) {
+            contactIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"contactTitle", Nil) image:[UIImage imageNamed:@"contactIcon.png"] selectedImage:[UIImage imageNamed:@"contactIconSelected.png"]];
+        }
+        else{
+            contactIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"contactTitle", Nil) image:[UIImage imageNamed:@"contactIcon.png"] tag:9999];
+            [contactIcon setFinishedSelectedImage:[UIImage imageNamed:@"contactIconSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iOS6contactIcon.png"]];
+        }
+        contactNavigationVC.tabBarItem = contactIcon;
+        
+        _historyMainController = [storyboard instantiateViewControllerWithIdentifier:@"HistroryRecordMainController"];
+        _historyMainController.title = NSLocalizedString(@"recentCalls", nil);
+        UINavigationController *histroyNaviCV = [[UINavigationController alloc] init];
+        // 配置navigation controller
+        [histroyNaviCV.navigationBar setTranslucent:NO];
+        if ([histroyNaviCV.navigationBar respondsToSelector:@selector(setBarTintColor:)]) {
+            [histroyNaviCV.navigationBar setBarTintColor:[UIColor colorWithHue:kColorH saturation:kColorS brightness:kColorB alpha:1.0]];
+        }
+        [histroyNaviCV.navigationBar setBarStyle:UIBarStyleBlack];
+        if (!IS_OS_7_OR_LATER) {
+            [histroyNaviCV.navigationBar setBackgroundImage:[UIImage imageNamed:@"iOS6SignUpNavigationBarBackground"] forBarMetrics:UIBarMetricsDefault];
+        }
+        
+        // NavigationBar下的阴影
+        [histroyNaviCV pushViewController:_historyMainController animated:NO];
+        
+        // 加入Tab Bar上的Icon
+        UITabBarItem *historyIcon;
+        if (IS_OS_7_OR_LATER) {
+            historyIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"recentCalls", nil) image:[UIImage imageNamed:@"historyIcon.png"] selectedImage:[UIImage imageNamed:@"historyIconSelected.png"]];
+        }
+        else{
+            historyIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"recentCalls", nil) image:[UIImage imageNamed:@"historyIcon.png"] tag:9999];
+            [historyIcon setFinishedSelectedImage:[UIImage imageNamed:@"historyIconSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iOS6historyIcon.png"]];
+        }
+        histroyNaviCV.tabBarItem = historyIcon;
+        
+        // 读取storyboard中的setting view
+        _settingViewController = [storyboard instantiateViewControllerWithIdentifier:@"SettingViewController"];
+        _settingViewController.title = NSLocalizedString(@"setting", nil);
+        UINavigationController *settingNavigationController = [[UINavigationController alloc] init];
+        // 配置navigation controller
+        [settingNavigationController.navigationBar setTranslucent:NO];
+        if ([settingNavigationController.navigationBar respondsToSelector:@selector(setBarTintColor:)]) {
+            [settingNavigationController.navigationBar setBarTintColor:[UIColor colorWithHue:kColorH saturation:kColorS brightness:kColorB alpha:1.0]];
+        }
+        [settingNavigationController.navigationBar setBarStyle:UIBarStyleBlack];
+        if (!IS_OS_7_OR_LATER) {
+            [settingNavigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"iOS6SignUpNavigationBarBackground"] forBarMetrics:UIBarMetricsDefault];
+        }
+        [settingNavigationController pushViewController:_settingViewController animated:NO];
+        //settingNavigationController.viewControllers = @[_settingViewController];
+        
+        // 加入Tab Bar上的Icon
+        UITabBarItem *settingIcon;
+        if (IS_OS_7_OR_LATER) {
+            settingIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"setting", nil) image:[UIImage imageNamed:@"settingIcon.png"] selectedImage:[UIImage imageNamed:@"settingIconSelected.png"]];
+        }
+        else{
+            settingIcon = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"setting", nil) image:[UIImage imageNamed:@"settingIcon.png"] tag:9999];
+            [settingIcon setFinishedSelectedImage:[UIImage imageNamed:@"settingIconSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iOS6settingIcon.png"]];
+        }
+        settingNavigationController.tabBarItem = settingIcon;
+        
+        NSArray *controllers = @[histroyNaviCV, contactNavigationVC, settingNavigationController];
+        _tabController.viewControllers = controllers;
+        [_tabController.tabBar setTintColor:[UIColor colorWithRed:56/255.0 green:181/255.0 blue:199/255.0 alpha:1.0]];
+        if ([_tabController.tabBar respondsToSelector:@selector(setTranslucent:)]) {
+            [_tabController.tabBar setTranslucent:YES];
+        }
+    }
+    return _tabController;
+}
+
 - (void)resetRootViewController
 {
     [UIView transitionFromView:_signUpEditProfileViewController.view toView:_tabController.view duration:0.5 options:UIViewAnimationOptionCurveEaseIn|UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished){
-        self.window.rootViewController = _tabController;
+        self.window.rootViewController = self.tabController;
     }];
     
     [[SipStackUtils sharedInstance] start];
@@ -208,6 +217,7 @@ const float kColorB = 60/100.0;
     [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
     // Register remote notification
     [self registerAPNS];
+    [self setHelpView];
 }
 
 - (void)registerAPNS
@@ -227,22 +237,43 @@ const float kColorB = 60/100.0;
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
-    [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-    [application setKeepAliveTimeout:600 handler:^{
-        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+    backgroundTaskID = [application beginBackgroundTaskWithExpirationHandler:^{
+        [application endBackgroundTask:backgroundTaskID];
+        backgroundTaskID = UIBackgroundTaskInvalid;
     }];
-
-    [_contactViewController clearContacts];
-    [_historyMainController clearHistory];
-    [_settingViewController clearImages];
-    if ([SipCallManager SharedInstance].audioVC == nil) {
-        [Utils clearAllSharedInstance];
-    }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+        [application setKeepAliveTimeout:600 handler:^{
+            backgroundKeepAliveID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                [[UIApplication sharedApplication] endBackgroundTask:backgroundKeepAliveID];
+                backgroundKeepAliveID = UIBackgroundTaskInvalid;
+            }];
+            [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+        }];
+        
+        [_contactViewController clearContacts];
+        [_historyMainController clearHistory];
+        [_settingViewController clearImages];
+        if ([SipCallManager SharedInstance].audioVC == nil) {
+            [self clearManagedObjects];
+            [[SipStackUtils sharedInstance].soundService disableAudioSession];
+            [Utils clearAllSharedInstance];
+        }
+        [application endBackgroundTask:backgroundTaskID];
+        backgroundTaskID = UIBackgroundTaskInvalid;
+    });
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    if (_window.rootViewController == nil) {
+        _window.rootViewController = self.tabController;
+    }
+    if ([SipCallManager SharedInstance].audioVC == nil) {
+        [[SipStackUtils sharedInstance].soundService startAudioSession];
+    }
     [[HistoryTransUtils sharedInstance] getHistoryInBackground:NO];
     [application clearKeepAliveTimeout];
     switch (_tabController.selectedIndex) {
@@ -333,6 +364,9 @@ const float kColorB = 60/100.0;
             _audioCallViewController.audioSessionID = [sessionId longValue];
             [SipStackUtils sharedInstance].sessionID = [sessionId longValue];
             _audioCallViewController.remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+            if (_window.rootViewController == nil) {
+                _window.rootViewController = self.tabController;
+            }
             [self.tabController presentViewController:audioCallNavigationController animated:YES completion:nil];
             [SipCallManager SharedInstance].audioVC = _audioCallViewController;
             
@@ -451,6 +485,13 @@ const float kColorB = 60/100.0;
     return _persistentStoreCoordinator;
 }
 
+- (void)clearManagedObjects
+{
+    _managedObjectContext = nil;
+    _managedObjectModel = nil;
+    _persistentStoreCoordinator = nil;
+}
+
 #pragma mark - Application's Documents directory
 
 // Returns the URL to the application's Documents directory.
@@ -509,11 +550,6 @@ const float kColorB = 60/100.0;
 # pragma mark -- Push notification --
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
-    //TODO: deleta
-    UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
-    locaNotif.alertBody = @"qianli is launched due to push notification";
-    [[UIApplication sharedApplication] presentLocalNotificationNow:locaNotif];
-
     NSDictionary *aps = [userInfo objectForKey:@"aps"];
     NSDictionary *dic = [aps objectForKey:@"alert"];
     NSString *type = [dic objectForKey:@"loc-key"];
@@ -532,7 +568,6 @@ const float kColorB = 60/100.0;
             }
         }
     }
-    
     if ([type isEqualToString:@"MISSEDCALL"] || [type isEqualToString:@"APPOINTMENT"]) {
         [[HistoryTransUtils sharedInstance] getHistoryInBackground:NO];
         handler(UIBackgroundFetchResultNewData);
@@ -612,6 +647,12 @@ const float kColorB = 60/100.0;
         // 在设置界面显示反馈的数目
         [_settingViewController newReplies:RepliesNumber];
     }
+}
+
+- (void)setHelpView
+{
+    HelpView *helpView = [[HelpView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [self.window addSubview:helpView];
 }
 
 @end
