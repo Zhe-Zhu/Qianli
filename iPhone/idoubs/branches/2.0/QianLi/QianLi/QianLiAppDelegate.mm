@@ -21,6 +21,7 @@
 #import "MobClick.h"
 #import "UMFeedback.h"
 #import "SipCallManager.h"
+#import "Global.h"
 
 @interface QianLiAppDelegate (){
     UITabBarController *_tabController;
@@ -353,6 +354,7 @@ const float kColorB = 60/100.0;
 {
     NSDictionary * info = [userInfo userInfo];
     NSString *notifKey = (NSString *)[info objectForKey:kNotifKey];
+    kIsCallingQianLiRobot = NO;
     // handle a incoming call
 	if([notifKey isEqualToString:kNotifKey_IncomingCall])
     {

@@ -67,6 +67,7 @@ static SipCallManager *callManager = nil;
     if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteParty andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])
     {
         //audioCallViewController
+            //[[SipStackUtils sharedInstance].soundService playRingBackTone];
         [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         UINavigationController *audioCallNavigationController = [storyboard instantiateViewControllerWithIdentifier:@"audioCallNavigationController"];

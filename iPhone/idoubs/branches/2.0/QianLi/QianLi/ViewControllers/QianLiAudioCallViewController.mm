@@ -1048,13 +1048,19 @@
 			}
 			case INVITE_STATE_INCALL:
 			{
-                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+                if (kIsCallingQianLiRobot) {
+                    [self performSelector:@selector(stopRingBack) withObject:nil afterDelay:1];
+                }
+                
+                
                 [[SipStackUtils sharedInstance].soundService stopRingTone];
                 [self changeViewAppearanceToInCall];
                 if (_isSpeakerOn) {
                     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
                 }
-                [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"CallQianLiRobotSuccessfully", nil)];
+                if (kIsCallingQianLiRobot) {
+                    [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"CallQianLiRobotSuccessfully", nil)];
+                }
                 
 				break;
 			}
@@ -1069,6 +1075,11 @@
 				break;
 		}
     }
+}
+
+- (void)stopRingBack
+{
+    [[SipStackUtils sharedInstance].soundService stopRingBackTone];
 }
 
 - (void)timerSuicideTick
