@@ -36,7 +36,7 @@
 	// Do any additional setup after loading the view.
     // a page is the width of the scroll view
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+    CGFloat screenHeight = self.view.frame.size.height;
     CGFloat iPhone5Offset = 0;
     if (abs(screenHeight-568)<=0.1) {
         iPhone5Offset = 14;
@@ -47,7 +47,12 @@
         self.scrollView.frame = CGRectMake(0, 0, screenWidth, screenHeight - 117/2.0);
     }
     else {
-        self.scrollView.frame = CGRectMake(0, 0, screenWidth, screenHeight - 117/2.0 -44);
+        if (IS_IPHONE5) {
+            self.scrollView.frame = CGRectMake(0, 0, screenWidth, screenHeight - 117/2.0 - 44);
+        }
+        else{
+            self.scrollView.frame = CGRectMake(0, 0, screenWidth, screenHeight - 117/2.0);
+        }
     }
     
     self.scrollView.pagingEnabled = YES;
@@ -60,7 +65,17 @@
     self.scrollView.backgroundColor = [UIColor colorWithRed:253/255.0 green:253/255.0 blue:253/255.0 alpha:1.0f];
     [self.view addSubview:self.scrollView];
     
-    self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenWidth/2.0-20, CGRectGetMaxY(self.scrollView.frame) - 20, 40, 20)];
+    if (IS_OS_7_OR_LATER) {
+        self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenWidth/2.0-20, CGRectGetMaxY(self.scrollView.frame) - 20, 40, 20)];
+    }
+    else{
+        if (IS_IPHONE5) {
+            self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenWidth/2.0-20, CGRectGetMaxY(self.scrollView.frame) - 20, 40, 20)];
+        }
+        else{
+            self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenWidth/2.0-20, CGRectGetMaxY(self.scrollView.frame) - 15, 40, 20)];
+        }
+    }
     self.pageControl.numberOfPages = 4;
     self.pageControl.currentPage = 0;
     self.pageControl.pageIndicatorTintColor = [UIColor grayColor];
