@@ -71,9 +71,6 @@ const float kColorB = 60/100.0;
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         [self registerAPNS];
         [self setHelpView];
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-        HelpViewController *helpViewController = [storyboard instantiateViewControllerWithIdentifier:@"HelpViewController"];
-        self.window.rootViewController = helpViewController;
     }
     else{
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
