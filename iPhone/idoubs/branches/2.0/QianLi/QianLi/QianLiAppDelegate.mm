@@ -70,8 +70,6 @@ const float kColorB = 60/100.0;
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         [self registerAPNS];
-        
-        //TODO:delete
         [self setHelpView];
     }
     else{
@@ -209,6 +207,7 @@ const float kColorB = 60/100.0;
 {
     [UIView transitionFromView:_signUpEditProfileViewController.view toView:_tabController.view duration:0.5 options:UIViewAnimationOptionCurveEaseIn|UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished){
         self.window.rootViewController = self.tabController;
+        [self setHelpView];
     }];
     
     [[SipStackUtils sharedInstance] start];
@@ -217,7 +216,6 @@ const float kColorB = 60/100.0;
     [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
     // Register remote notification
     [self registerAPNS];
-    [self setHelpView];
 }
 
 - (void)registerAPNS
@@ -290,15 +288,17 @@ const float kColorB = 60/100.0;
             break;
     }
     
-    ConnectionState_t registrationState = [[NgnEngine sharedInstance].sipService getRegistrationState];
-    switch (registrationState) {
-		case CONN_STATE_CONNECTING:
-        case CONN_STATE_CONNECTED:
-            break;
-        default:
-            [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-			break;
-	}
+    if (!didLaunch) {
+        ConnectionState_t registrationState = [[NgnEngine sharedInstance].sipService getRegistrationState];
+        switch (registrationState) {
+            case CONN_STATE_CONNECTING:
+            case CONN_STATE_CONNECTED:
+                break;
+            default:
+                [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+                break;
+        }
+    }
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults boolForKey:kSingUpKey]) {
         [self displayNoPushNotificationWarning];
@@ -559,13 +559,6 @@ const float kColorB = 60/100.0;
             [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
             handler(UIBackgroundFetchResultNewData);
             return;
-        }
-        else{
-            if (!didLaunch) {
-                [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-                handler(UIBackgroundFetchResultNewData);
-                return;
-            }
         }
     }
     if ([type isEqualToString:@"MISSEDCALL"] || [type isEqualToString:@"APPOINTMENT"]) {

@@ -20,6 +20,7 @@
     BOOL didSecondPageShowReleaseText;
     
     CGPoint prePoint;
+    CGPoint firstPoint;
 }
 
 @property(weak, nonatomic) UIScrollView *scrollView;
@@ -28,6 +29,7 @@
 @property(weak, nonatomic) UIImageView *thirdImageView;
 @property(weak, nonatomic) UIImageView *fourthImageView;
 @property(weak, nonatomic) UIImageView *fifthImageView;
+@property(weak, nonatomic) UIPageControl *pageControl;
 
 @property(weak, nonatomic) UIImageView *subImageView1;
 @property(weak, nonatomic) UIImageView *subImageView2;
@@ -65,11 +67,25 @@
         _scrollView.showsHorizontalScrollIndicator = NO;
         [self addSubview:_scrollView];
         
+        //add uipagecontrol
+        UIPageControl *pageControl = [[UIPageControl alloc] init];
+        _pageControl = pageControl;
+        pageControl.numberOfPages = NumberOfPages;
+        pageControl.currentPage = 0;
+        pageControl.backgroundColor = [UIColor redColor];
+        if (!IS_IPHONE5) {
+            pageControl.frame = CGRectMake(0, 450, 320, 30);
+        }
+        else{
+            
+        }
+        //[self addSubview:pageControl];
+        
         //add button
         UIImage *cancelImage = [UIImage imageNamed:@"help_quit.png"];
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [cancelButton setImage:cancelImage forState:UIControlStateNormal];
-        cancelButton.frame = CGRectMake(286, 15, cancelImage.size.width, cancelImage.size.height);
+        cancelButton.frame = CGRectMake(286, 35, cancelImage.size.width, cancelImage.size.height);
         [self addSubview:cancelButton];
         [cancelButton addTarget:self action:@selector(quit) forControlEvents:UIControlEventTouchUpInside];
         didShowGoonText = NO;
@@ -94,34 +110,84 @@
 #pragma mark --RMSwipeTableViewDelegate--
 - (void)swipeTableViewCellDidStartSwiping:(RMSwipeTableViewCell*)swipeTableViewCell
 {
-    if (swipeTableViewCell == _fisrtPageCell) {
-        [_fingerView removeFromSuperview];
-    }
-    else if (swipeTableViewCell == _secondPageCell){
-        [_leftFingerView removeFromSuperview];
-    }
 }
 
 - (void)swipeTableViewCell:(RMSwipeTableViewCell*)swipeTableViewCell didSwipeToPoint:(CGPoint)point velocity:(CGPoint)velocity
 {
     if (swipeTableViewCell == _fisrtPageCell) {
+        if (point.x > 5) {
+            [_fingerView removeFromSuperview];
+        }
         if (!didShowGoonText && point.x > 70) {
             didShowGoonText = YES;
-            _firstImageView.image = [UIImage imageNamed:@"help_1_dragging_background_words.png"];
+            UIImage *image;
+            if (IS_IPHONE5) {
+                image = [UIImage imageNamed:@"help_1_dragging_background_words_1136.png"];
+            }
+            else{
+                image = [UIImage imageNamed:@"help_1_dragging_background_words.png"];
+            }
+            _firstImageView.image = image;
         }
-        else if (!didShowReleaseText &&  point.x > 130){
+        else if (!didShowReleaseText &&  point.x > 102){
             didShowReleaseText = YES;
-            _firstImageView.image = [UIImage imageNamed:@"help_1_draged_background_words.png"];
+            UIImage *image;
+            if (IS_IPHONE5) {
+                image = [UIImage imageNamed:@"help_1_draged_background_words_1136.png"];
+            }
+            else{
+                image = [UIImage imageNamed:@"help_1_draged_background_words.png"];
+            }
+            _firstImageView.image = image;
+        }
+        else if (didShowReleaseText &&  point.x < 102){
+            didShowReleaseText = NO;
+            UIImage *image;
+            if (IS_IPHONE5) {
+                image = [UIImage imageNamed:@"help_1_dragging_background_words_1136.png"];
+            }
+            else{
+                image = [UIImage imageNamed:@"help_1_dragging_background_words.png"];
+            }
+            _firstImageView.image = image;
         }
     }
     else if (swipeTableViewCell == _secondPageCell){
+        if (point.x < -5) {
+            [_leftFingerView removeFromSuperview];
+        }
         if (!didSecondPageShowGoonText && point.x < -65) {
             didSecondPageShowGoonText = YES;
-            _secondImageView.image = [UIImage imageNamed:@"help_2_dragging_background_words.png"];
+            UIImage *image;
+            if (IS_IPHONE5) {
+                image = [UIImage imageNamed:@"help_2_dragging_background_words_1136.png"];
+            }
+            else{
+                image = [UIImage imageNamed:@"help_2_dragging_background_words.png"];
+            }
+            _secondImageView.image = image;
         }
         else if (!didSecondPageShowReleaseText &&  point.x < -105){
             didSecondPageShowReleaseText = YES;
-            _secondImageView.image = [UIImage imageNamed:@"help_2_draged_background_words.png"];
+            UIImage *image;
+            if (IS_IPHONE5) {
+                image = [UIImage imageNamed:@"help_2_draged_background_words_1136.png"];
+            }
+            else{
+                image = [UIImage imageNamed:@"help_2_draged_background_words.png"];
+            }
+            _secondImageView.image = image;
+        }
+        else if (didSecondPageShowReleaseText &&  point.x > -105){
+            didSecondPageShowReleaseText = NO;
+            UIImage *image;
+            if (IS_IPHONE5) {
+                image = [UIImage imageNamed:@"help_2_dragging_background_words_1136.png"];
+            }
+            else{
+                image = [UIImage imageNamed:@"help_2_dragging_background_words.png"];
+            }
+            _secondImageView.image = image;
         }
     }
 }
@@ -132,15 +198,43 @@
         didShowGoonText = NO;
         if (didShowReleaseText) {
             didShowReleaseText = NO;
-            _firstImageView.image = [UIImage imageNamed:@"help_1_done_background_words.png"];
-            [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(showPartnerView) userInfo:nil repeats:NO];
+            UIImage *image;
+            if (IS_IPHONE5) {
+                image = [UIImage imageNamed:@"help_1_done_background_words_1136.png"];
+            }
+            else{
+                image = [UIImage imageNamed:@"help_1_done_background_words.png"];
+            }
+            _firstImageView.image = image;
+            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(showPartnerView) userInfo:nil repeats:NO];
         }
         else{
-            _firstImageView.image = [UIImage imageNamed:@"help_1_background_words.png"];
+            UIImage *image;
+            if (IS_IPHONE5) {
+                image = [UIImage imageNamed:@"help_1_background_words_1136.png"];
+            }
+            else{
+                image = [UIImage imageNamed:@"help_1_background_words.png"];
+            }
+            _firstImageView.image = image;
         }
     }
     else if (swipeTableViewCell == _secondPageCell){
-        [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(showCallView) userInfo:nil repeats:NO];
+        didSecondPageShowGoonText = NO;
+        if (didSecondPageShowReleaseText) {
+            [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(showCallView) userInfo:nil repeats:NO];
+            didSecondPageShowReleaseText = NO;
+        }
+        else{
+            UIImage *image;
+            if (IS_IPHONE5) {
+                image = [UIImage imageNamed:@"help_2_background_words_1136.png"];
+            }
+            else{
+                image = [UIImage imageNamed:@"help_2_background_words.png"];
+            }
+            _secondImageView.image = image;
+        }
     }
     else if (swipeTableViewCell == _thirdPageCell){
         
@@ -155,10 +249,22 @@
     }
 }
 
+- (void)sendRequest:(HistoryMainCell *)historyMainCell
+{
+    
+}
+
 // the first page
 - (void)setFirstView
 {
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"help_1_background_words.png"]];
+    UIImage *image;
+    if (IS_IPHONE5) {
+        image = [UIImage imageNamed:@"help_1_background_words_1136.png"];
+    }
+    else{
+        image = [UIImage imageNamed:@"help_1_background_words.png"];
+    }
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     _firstImageView = imageView;
     imageView.frame = CGRectMake(0, 0, 320, self.frame.size.height);
     [_scrollView addSubview:imageView];
@@ -178,6 +284,7 @@
     historyCell.historyMainCelldelegate = self;
     historyCell.delegate = self;
     _fisrtPageCell = historyCell;
+    historyCell.revealDirection = RMSwipeTableViewCellRevealDirectionLeft;
     UIImage *avatar = [UIImage imageNamed:@"arwen_avatar.png"];
     NSString *name = @"Arwen Undomiel";
     
@@ -193,6 +300,8 @@
     //_imageView.image = [UIImage imageNamed:@"help_1_background_words.png"];
     [_partnerCell removeFromSuperview];
     [_label removeFromSuperview];
+    UIView *view = [_firstImageView viewWithTag:100000];
+    [view removeFromSuperview];
 }
 
 - (void)showPartnerView
@@ -225,8 +334,18 @@
             label.alpha = 1.0;
         } completion:^(BOOL finished) {
             [historyCell activateRequestStatus];
+            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 370, historyCell.frame.size.width, historyCell.frame.size.height)];
+            view.backgroundColor = [UIColor clearColor];
+            UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dummyCallback)];
+            [view addGestureRecognizer:pan];
+            view.tag = 100000;
+            [_firstImageView addSubview:view];
         }];
     }];
+}
+
+- (void)dummyCallback
+{
 }
 
 - (void)moveFinger:(NSTimer *)timer
@@ -247,7 +366,14 @@
 // the second page
 - (void)setSecondPage
 {
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"help_2_background_words.png"]];
+    UIImage *image;
+    if (IS_IPHONE5) {
+        image = [UIImage imageNamed:@"help_2_background_words_1136.png"];
+    }
+    else{
+        image = [UIImage imageNamed:@"help_2_background_words.png"];
+    }
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     _secondImageView = imageView;
     imageView.frame = CGRectMake(PageWidth, 0, 320, self.frame.size.height);
     [_scrollView addSubview:imageView];
@@ -258,6 +384,7 @@
     historyCell.historyMainCelldelegate = self;
     historyCell.delegate = self;
     _secondPageCell = historyCell;
+    historyCell.revealDirection = RMSwipeTableViewCellRevealDirectionRight;
     UIImage *avatar = [UIImage imageNamed:@"aragon_avatar.png"];
     NSString *name = @"Aragorn";
     
@@ -294,7 +421,7 @@
 - (void)showCallView
 {
     UIImage *callingImage;
-    if (!IS_IPHONE5) {
+    if (IS_IPHONE5) {
         callingImage = [UIImage imageNamed:@"help_2_calling_1136.png"];
     }
     else{
@@ -314,7 +441,13 @@
 
 - (void)doneMakeingCall:(NSTimer *)timer
 {
-    UIImage *doneCallImage = [UIImage imageNamed:@"help_2_done_background_words.png"];
+     UIImage *doneCallImage;
+    if (IS_IPHONE5) {
+        doneCallImage = [UIImage imageNamed:@"help_2_done_background_words_1136.png"];
+    }
+    else{
+        doneCallImage = [UIImage imageNamed:@"help_2_done_background_words.png"];
+    }
     UIImageView *doneCallImageView = [[UIImageView alloc] initWithImage:doneCallImage];
     doneCallImageView.userInteractionEnabled = YES;
     doneCallImageView.frame = _secondImageView.frame;
@@ -345,7 +478,14 @@
 
 - (void)setThirdPage
 {
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"help_3_background_words.png"]];
+    UIImage *image;
+    if (IS_IPHONE5) {
+        image = [UIImage imageNamed:@"help_3_background_words_1136.png"];
+    }
+    else{
+        image = [UIImage imageNamed:@"help_3_background_words.png"];
+    }
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     _thirdImageView = imageView;
     imageView.frame = CGRectMake(PageWidth * 2, 0, 320, self.frame.size.height);
     [_scrollView addSubview:imageView];
@@ -353,8 +493,12 @@
     
     //408, 918, 100, 80
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(179, 443, 50, 40);
-   // [button setImage:[UIImage imageNamed:@"help_3_background_words.png"] forState:UIControlStateNormal];
+    if (IS_IPHONE5) {
+        button.frame = CGRectMake(179, 531, 50, 40);
+    }
+    else{
+        button.frame = CGRectMake(179, 443, 50, 40);
+    }
     [_thirdImageView addSubview:button];
     [button addTarget:self action:@selector(showShareBar) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -362,7 +506,7 @@
 - (void)showShareBar
 {
     UIImage *callingImage;
-    if (!IS_IPHONE5) {
+    if (IS_IPHONE5) {
         callingImage = [UIImage imageNamed:@"help_2_calling_1136.png"];
     }
     else{
@@ -374,14 +518,26 @@
     callImageview.frame = frame;
     [_thirdImageView addSubview:callImageview];
     
-    UIImage *shareBar = [UIImage imageNamed:@"help_3_menu_view.png"];
+    UIImage *shareBar;
+    if (IS_IPHONE5) {
+        shareBar = [UIImage imageNamed:@"help_3_menu_view.png"];
+    }
+    else{
+        shareBar = [UIImage imageNamed:@"help_3_menu_view.png"];
+    }
     UIImageView *barView = [[UIImageView alloc] initWithImage:shareBar];
     barView.frame = CGRectMake(0, self.frame.size.height, 320, shareBar.size.height);
     [callImageview addSubview:barView];
     [UIView animateWithDuration:1.0 animations:^{
         barView.frame = CGRectMake(0, self.frame.size.height - shareBar.size.height, 320, shareBar.size.height);
     } completion:^(BOOL finished) {
-        UIImage *shadeImage = [UIImage imageNamed:@"help_3_done.png"];
+        UIImage *shadeImage;
+        if (IS_IPHONE5) {
+            shadeImage = [UIImage imageNamed:@"help_3_done_1136.png"];
+        }
+        else{
+            shadeImage = [UIImage imageNamed:@"help_3_done.png"];
+        }
         UIImageView *doneShareView = [[UIImageView alloc] initWithImage:shadeImage];
         doneShareView.frame = CGRectMake(0, 0, 320, shadeImage.size.height);
         doneShareView.alpha = 0.0;
@@ -409,7 +565,14 @@
 
 - (void)setFourthPage
 {
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"help_4_background_words.png"]];
+    UIImage *image;
+    if (IS_IPHONE5) {
+        image = [UIImage imageNamed:@"help_4_background_words_1136.png"];
+    }
+    else{
+        image = [UIImage imageNamed:@"help_4_background_words.png"];
+    }
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     _fourthImageView = imageView;
     imageView.frame = CGRectMake(PageWidth * 3, 0, 320, self.frame.size.height);
     [_scrollView addSubview:imageView];
@@ -456,10 +619,14 @@
         subImageView2.userInteractionEnabled = YES;
         
         prePoint = [panGestureRecognizer locationInView:self];
-        [_shareFinerView removeFromSuperview];
+        firstPoint = prePoint;
     }
     else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged){
         CGPoint point = [panGestureRecognizer locationInView:self];
+        if (point.x > firstPoint.x) {
+            return;
+        }
+        [_shareFinerView removeFromSuperview];
         CGFloat deltaX = point.x - prePoint.x;
         CGPoint center1 = _subImageView1.center;
         CGPoint center2 = _subImageView2.center;
@@ -472,6 +639,10 @@
         prePoint = point;
     }
     else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded){
+        CGPoint point = [panGestureRecognizer locationInView:self];
+        if (point.x > firstPoint.x) {
+            return;
+        }
         [UIView animateWithDuration:0.4 animations:^{
             CGPoint center1 = _subImageView1.center;
             CGPoint center2 = _subImageView2.center;
@@ -503,7 +674,13 @@
 
 - (void)showButton
 {
-    UIImage *doneShareImage = [UIImage imageNamed:@"help_4_done.png"];
+    UIImage *doneShareImage;
+    if (IS_IPHONE5) {
+        doneShareImage = [UIImage imageNamed:@"help_4_done_1136.png"];
+    }
+    else{
+        doneShareImage = [UIImage imageNamed:@"help_4_done.png"];
+    }
     _fourthImageView.image = doneShareImage;
     
     UIImage *buttonImage = [UIImage imageNamed:@"help_4_button.png"];
@@ -523,7 +700,14 @@
 
 - (void)setFifthPage
 {
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"help_5_background_words.png"]];
+    UIImage *image;
+    if (IS_IPHONE5) {
+        image = [UIImage imageNamed:@"help_5_background_words_1136.png"];
+    }
+    else{
+        image = [UIImage imageNamed:@"help_5_background_words.png"];
+    }
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     _fifthImageView = imageView;
     imageView.frame = CGRectMake(PageWidth * 4, 0, 320, self.frame.size.height);
     [_scrollView addSubview:imageView];
@@ -549,6 +733,14 @@
     historyCell.frame = CGRectMake(0, 300, historyCell.frame.size.width, historyCell.frame.size.height);
     historyCell.shouldAnimateCellReset = YES;
     [imageView addSubview:historyCell];
+}
+
+#pragma UIScrollView Delegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float fractionalPage = self.scrollView.contentOffset.x / PageWidth;
+    NSInteger page = lround(fractionalPage);
+    self.pageControl.currentPage = page; // you need to have a **iVar** with getter for pageControl
 }
 
 @end
