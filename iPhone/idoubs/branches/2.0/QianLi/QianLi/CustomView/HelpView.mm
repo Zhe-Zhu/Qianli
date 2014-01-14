@@ -60,6 +60,7 @@
         _scrollView = scrollView;
         _scrollView.backgroundColor = [UIColor colorWithRed:245 / 255.0 green:245 / 255.0 blue:245 / 255.0 alpha:1.0];
         _scrollView.pagingEnabled = YES;
+        _scrollView.scrollEnabled = NO;
         _scrollView.alwaysBounceVertical = NO;
         _scrollView.directionalLockEnabled = YES;
         _scrollView.contentOffset = CGPointMake(0, 0);
@@ -302,6 +303,7 @@
     [_label removeFromSuperview];
     UIView *view = [_firstImageView viewWithTag:100000];
     [view removeFromSuperview];
+    [_scrollView setContentOffset:CGPointMake(PageWidth, 0) animated:YES];
 }
 
 - (void)showPartnerView
