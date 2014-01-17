@@ -592,7 +592,11 @@ const float kColorB = 60/100.0;
 #pragma mark -- UILocalNotification --
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    //add code
+    //add code @{@"IDKey": @"IncomingCall"}
+    NSDictionary *dict = notification.userInfo;
+    if ([[dict objectForKey:@"IDKey"] isEqualToString:@"IncomingCall"]) {
+        [application cancelLocalNotification:notification];
+    }
 }
 
 - (id)getAppDelegateAudioVC
