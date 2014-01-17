@@ -776,7 +776,6 @@
 
 - (void)updateContactsFromServer
 {
-    return;
     // Update contacts
     // Setup the Network Info and create a CTCarrier object
     CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
