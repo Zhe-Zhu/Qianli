@@ -135,11 +135,18 @@ static QianLiContactsAccessor *contactsAccessor;
     [self.managedObjectContext lock];
     NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"QianLiContacts" inManagedObjectContext:_managedObjectContext];
     
+    UIImage *image;
+    if (profile == nil) {
+        image = [UIImage imageNamed:@"blank.png"];
+    }
+    else{
+        image = profile;
+    }
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
     [newManagedObject setValue:name forKey:@"name"];
     [newManagedObject setValue:email forKey:@"email"];
-    [newManagedObject setValue:UIImageJPEGRepresentation(profile, 0.5) forKey:@"profile"];
+    [newManagedObject setValue:UIImageJPEGRepresentation(image, 0.5) forKey:@"profile"];
     [newManagedObject setValue:number forKey:@"number"];
     [newManagedObject setValue:[NSNumber numberWithInteger:nums] forKey:@"updatecounter"];
     
