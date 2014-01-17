@@ -547,6 +547,14 @@
         }
     }
     
+    //add qianli robots
+    QianLiContactsItem *contactItem = [[QianLiContactsItem alloc] init];
+    contactItem.name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:QianLiRobotNumber];
+    contactItem.tel = QianLiRobotNumber;
+    contactItem.thumbnail = [[QianLiContactsAccessor sharedInstance] getProfileForRemoteParty:QianLiRobotNumber];
+    contactItem.email = @"";
+    [friends addObject:contactItem];
+
     [_contacts removeAllObjects];
     [self sortContacts:friends sortedContacts:_contacts];
     NSArray *items = [[QianLiContactsAccessor sharedInstance] getAllContacts];

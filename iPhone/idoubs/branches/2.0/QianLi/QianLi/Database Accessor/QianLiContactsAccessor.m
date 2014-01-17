@@ -84,6 +84,10 @@ static QianLiContactsAccessor *contactsAccessor;
 
 - (void)deleteItemForRemoteParty:(NSString *)remoteParty
 {
+    //QianLiRobotNumber
+    if ([remoteParty isEqualToString:QianLiRobotNumber]) {
+        return;
+    }
     [self.managedObjectContext lock];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QianLiContacts"];
     fetchRequest.includesPropertyValues = NO;
@@ -181,6 +185,10 @@ static QianLiContactsAccessor *contactsAccessor;
     }
     
     for (NSManagedObject *managedObject in items) {
+        NSString *remoteParty = [managedObject valueForKey:@"number"];
+        if ([remoteParty isEqualToString:QianLiRobotNumber]) {
+            return;
+        }
         [_managedObjectContext deleteObject:managedObject];
     }
     if (![_managedObjectContext save:&error]) {
