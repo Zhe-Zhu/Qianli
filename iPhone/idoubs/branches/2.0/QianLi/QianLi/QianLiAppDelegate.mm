@@ -72,7 +72,7 @@ const float kColorB = 60/100.0;
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         [self registerAPNS];
-        [self setHelpView];
+        //[self setHelpView];
     }
     else{
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
