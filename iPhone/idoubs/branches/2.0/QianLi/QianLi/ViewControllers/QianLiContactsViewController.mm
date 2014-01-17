@@ -776,6 +776,7 @@
 
 - (void)updateContactsFromServer
 {
+    return;
     // Update contacts
     // Setup the Network Info and create a CTCarrier object
     CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
@@ -876,6 +877,7 @@
 	// Call someone
     QianLiContactsItem *item = (QianLiContactsItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     NSString *remoteParty = item.tel;
+    remoteParty = @"008600000000000";
     [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
     [self callWithRemoteParty:remoteParty];
     [self.friendsTableView deselectRowAtIndexPath:indexPath animated:YES];

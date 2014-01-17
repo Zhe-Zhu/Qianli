@@ -10,6 +10,8 @@
 #import "SipStackUtils.h"
 #import "MobClick.h"
 #import "Utils.h"
+#import "Global.h"
+#import "SVProgressHUD.h"
 
 #define ColourButtonStartTag 10000
 #define WidthButtonStartTag 100000
@@ -488,6 +490,10 @@
     [self hideChangeWidthButton:NO];
     [_drawingView clearAll];
     button.enabled = NO;
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedDoodleNum++;
+        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"QianLiRobotClearDrawingView", nil)];
+    }
 }
 
 - (void)pressedSaveButton:(UIButton *)button

@@ -21,6 +21,7 @@
 #import "MobClick.h"
 #import "UMFeedback.h"
 #import "SipCallManager.h"
+#import "Global.h"
 
 @interface QianLiAppDelegate (){
     UITabBarController *_tabController;
@@ -53,6 +54,7 @@ const float kColorB = 60/100.0;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //[self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
     _didJustLaunch = YES;
     didLaunch = YES;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -352,6 +354,7 @@ const float kColorB = 60/100.0;
 {
     NSDictionary * info = [userInfo userInfo];
     NSString *notifKey = (NSString *)[info objectForKey:kNotifKey];
+    kIsCallingQianLiRobot = NO;
     // handle a incoming call
 	if([notifKey isEqualToString:kNotifKey_IncomingCall])
     {
@@ -398,11 +401,14 @@ const float kColorB = 60/100.0;
 {
     [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_DISPLAY_NAME andValue:number];
     [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@112.124.36.134",number]];
+//    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@115.28.37.152",number]];
     [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPI andValue:number];
     [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_PASSWORD andValue:number];
     [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:@"112.124.36.134"];
+//    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:@"115.28.37.152"];
     [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_EARLY_IMS andValue:YES];
     [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:@"112.124.36.134"];
+//    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:@"115.28.37.152"];
    // [[NgnEngine sharedInstance].configurationService setBoolWithKey:NATT_USE_STUN_DISCO andValue:YES];
     [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_KEEPAWAKE andValue:YES];
     [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_3G andValue:YES];

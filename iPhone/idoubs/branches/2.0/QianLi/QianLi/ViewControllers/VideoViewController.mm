@@ -9,6 +9,7 @@
 #import "VideoViewController.h"
 #import "SipStackUtils.h"
 #import "UIImageExtras.h"
+#import "SVProgressHUD.h"
 
 @interface VideoViewController (){
     MoviePlayerViewController __weak *_moviePlayer;
@@ -127,6 +128,10 @@
             NSString *videoID = [[array objectAtIndex:0] substringFromIndex:3];
             NSString *videoURL = [self getVedioURL:videoID];
             [self playMovieStream:[NSURL URLWithString:videoURL]];
+            if (kIsCallingQianLiRobot) {
+                kQianLiRobotsharedVideoNum++;
+                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotPlayVieo", nil), @"Unknow"]];
+            }
             NSString *message = [NSString stringWithFormat:@"%@%@%@",kPlayVideo, kSeparator, videoURL];
             [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
             [self getHistoryImage];
