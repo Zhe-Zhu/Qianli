@@ -1051,6 +1051,11 @@
                 if (kIsCallingQianLiRobot) {
                     [self performSelector:@selector(stopRingBack) withObject:nil afterDelay:1];
                 }
+                else
+                {
+                    [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+                    
+                }
                 
                 
                 [[SipStackUtils sharedInstance].soundService stopRingTone];
