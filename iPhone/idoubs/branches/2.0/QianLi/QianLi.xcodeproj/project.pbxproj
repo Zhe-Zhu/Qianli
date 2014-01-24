@@ -2458,8 +2458,8 @@
 			baseConfigurationReference = DE0DB9F8308441E09E15B242 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: zhe zhu (87N4K2M736)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhe zhu (87N4K2M736)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_LIBS = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/i386;
 				"DOUBANGO_LIBS[arch=armv7]" = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/armv7;
@@ -2543,8 +2543,8 @@
 			baseConfigurationReference = DE0DB9F8308441E09E15B242 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: zhe zhu (87N4K2M736)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhe zhu (87N4K2M736)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_LIBS = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/i386;
 				"DOUBANGO_LIBS[arch=armv7]" = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/armv7;
