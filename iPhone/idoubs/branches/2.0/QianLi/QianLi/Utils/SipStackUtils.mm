@@ -79,12 +79,12 @@ static SipStackUtils * sipStackUtilsInstance;
     self = [super init];
     if (self != nil) {
         // init the services
-        _sipService = [[SipService alloc] init];
-        _configurationService = [[ConfigurationService alloc] init];
-        _networkService = [[NetworkService alloc] init];
-        _audioService = [[AudioService alloc] init];
-        _soundService = [[SoundService alloc] init];
-        _messageService = [[MessageService alloc] init];
+//        _sipService = [[SipService alloc] init];
+//        _configurationService = [[ConfigurationService alloc] init];
+//        _networkService = [[NetworkService alloc] init];
+//        _audioService = [[AudioService alloc] init];
+//        _soundService = [[SoundService alloc] init];
+//        _messageService = [[MessageService alloc] init];
         //_historyService = [[HistoryService alloc] init];
         // add observers
         
@@ -123,7 +123,7 @@ static SipStackUtils * sipStackUtilsInstance;
 			
 			if([NgnEngine sharedInstance].networkService.reachable)
             {
-				BOOL onMobileNework = ([NgnEngine sharedInstance].networkService.networkType & NetworkType_WWAN);				
+				BOOL onMobileNework = ([NgnEngine sharedInstance].networkService.networkType & NetworkType_WWAN);
 				if(onMobileNework)
                 {
                     // 3G, 4G, EDGE ...
@@ -155,13 +155,18 @@ static SipStackUtils * sipStackUtilsInstance;
                         str = [SipCallManager SharedInstance].audioVC.remotePartyNumber;
                     }
                     
-					[[NgnEngine sharedInstance].sipService stopStackSynchronously];
-					[[NgnEngine sharedInstance].sipService registerIdentity];
+                    //sometimes when 3g and wifi are available at the same time
                     if (willSendMessage) {
-                        [[SipStackUtils sharedInstance].messageService sendMessage:kHangUpcall toRemoteParty:str];
+                        [[SipCallManager SharedInstance] sendNetworkChangeMessage];
+//                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+//                        [[NgnEngine sharedInstance].sipService registerIdentity];
+//                        [[SipStackUtils sharedInstance].messageService sendMessage:kHangUpcall toRemoteParty:str];
                     }
-                    
-                    //TODO: add uialertview
+                    else
+                    {
+                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+                        [[NgnEngine sharedInstance].sipService registerIdentity];
+                    }
 				}
                 
                 // download history
@@ -352,20 +357,28 @@ static SipStackUtils * sipStackUtilsInstance;
 		case INVITE_EVENT_INCOMING:
 		{
 			NgnAVSession* incomingSession = [NgnAVSession getSessionWithId: eargs.sessionId];
-			if (incomingSession && [UIApplication sharedApplication].applicationState ==  UIApplicationStateBackground) {
-                // when app is in background, post a local notification to inform user.
+            if(incomingSession){
+                // when app is in forground, present the audioCallViewController.
+                localNofificationTimes = 0;
                 NSString *remotePartyUri = [incomingSession getRemotePartyUri];
                 if ([SipCallManager SharedInstance].audioVC) {
                     if (![[SipCallManager SharedInstance].audioVC.remotePartyNumber isEqualToString:[self getRemoteParty:remotePartyUri]]) {
-                        //
+                        //refuse other people's call when you are in a call
                         return;
                     }
                     else{
-                        return;
+                        //resume call is network changed of call is interrupted
+                        if ([SipCallManager SharedInstance].audioVC && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
+                            [[SipCallManager SharedInstance] resumeCallWithID:eargs.sessionId];
+                            return;
+                        }
                     }
                 }
-                localNofificationTimes = 0;
                 self.remoteParty = [self getRemoteParty:remotePartyUri];
+				[self receiveIncomingCall:incomingSession];
+			}
+			if (incomingSession && [UIApplication sharedApplication].applicationState ==  UIApplicationStateBackground) {
+                // when app is in background, post a local notification to inform user.
                 UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
                 NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
                 if ((name == nil) | [name isEqualToString:@""]) {
@@ -384,24 +397,7 @@ static SipStackUtils * sipStackUtilsInstance;
                 locaNotif.userInfo = @{@"IDKey": @"IncomingCall"};
                 [[UIApplication sharedApplication] presentLocalNotificationNow:locaNotif];
                 self.localNotif = locaNotif;
-                [self receiveIncomingCall:incomingSession];
             }
-			else if(incomingSession){
-                // when app is in forground, present the audioCallViewController.
-                localNofificationTimes = 0;
-                NSString *remotePartyUri = [incomingSession getRemotePartyUri];
-                if ([SipCallManager SharedInstance].audioVC) {
-                    if (![[SipCallManager SharedInstance].audioVC.remotePartyNumber isEqualToString:[self getRemoteParty:remotePartyUri]]) {
-                        //
-                        return;
-                    }
-                    else{
-                        return;
-                    }
-                }
-                self.remoteParty = [self getRemoteParty:remotePartyUri];
-				[self receiveIncomingCall:incomingSession];
-			}
 			break;
 		}
 			
@@ -570,9 +566,62 @@ static SipStackUtils * sipStackUtilsInstance;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)clearSharedInstance
+- (SipService *)sipService
 {
-    sipStackUtilsInstance = nil;
+    if (!_sipService) {
+        _sipService = [[SipService alloc] init];
+    }
+    return _sipService;
+}
+
+- (ConfigurationService *)configurationService
+{
+    if (!_configurationService) {
+        _configurationService = [[ConfigurationService alloc] init];
+    }
+    return _configurationService;
+}
+
+- (NetworkService *)networkService
+{
+    if (!_networkService) {
+        _networkService = [[NetworkService alloc] init];
+    }
+    return _networkService;
+}
+
+- (AudioService *)audioService
+{
+    if (!_audioService) {
+        _audioService = [[AudioService alloc] init];
+    }
+    return _audioService;
+}
+
+- (SoundService *)soundService
+{
+    if (!_soundService) {
+        _soundService = [[SoundService alloc] init];
+    }
+    return _soundService;
+}
+
+- (MessageService *)messageService
+{
+    if (!_messageService) {
+        _messageService = [[MessageService alloc] init];
+    }
+    return _messageService;
+}
+
+- (void)clearAllService
+{
+    _sipService = nil;
+    _configurationService = nil;
+    _networkService = nil;
+    _audioService = nil;
+    _soundService = nil;
+    _messageService = nil;
 }
 
 @end

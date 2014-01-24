@@ -4,11 +4,12 @@
 //
 //  Created by lutan on 9/15/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
 
 #import "VideoViewController.h"
 #import "SipStackUtils.h"
 #import "UIImageExtras.h"
+#import "SVProgressHUD.h"
 
 @interface VideoViewController (){
     MoviePlayerViewController __weak *_moviePlayer;
@@ -127,6 +128,10 @@
             NSString *videoID = [[array objectAtIndex:0] substringFromIndex:3];
             NSString *videoURL = [self getVedioURL:videoID];
             [self playMovieStream:[NSURL URLWithString:videoURL]];
+            if (kIsCallingQianLiRobot) {
+                kQianLiRobotsharedVideoNum++;
+                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotPlayVieo", nil), @"Unknow"]];
+            }
             NSString *message = [NSString stringWithFormat:@"%@%@%@",kPlayVideo, kSeparator, videoURL];
             [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
             [self getHistoryImage];
@@ -216,6 +221,7 @@
 -(void)playMovieStream:(NSURL *)movieFileURL
 {
     MoviePlayerViewController *player = [[MoviePlayerViewController alloc] init];
+    //CODE_REVIEW:可以不用传递_videoThumbs，在MoviePlayer里不能截屏。
     player.thumbs = _vedioThumbs;
     _moviePlayer = player;
    [self presentViewController:player animated:YES completion: nil];

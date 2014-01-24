@@ -4,13 +4,17 @@
 //
 //  Created by lutan on 8/27/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
 
 #import "ImageDisplayController.h"
 #import "SipStackUtils.h"
 #import "MobClick.h"
 #import "Utils.h"
+#import "SVProgressHUD.h"
+#import "Global.h"
 
+
+//CODE_REVIEW: 可以用NSDictory变量来代替indexs和images变量。
 @interface ImageDisplayController (){
     UILongPressGestureRecognizer *_longPress;
     UITapGestureRecognizer *_tapGesture;
@@ -141,7 +145,6 @@
         [self.navigationItem.leftBarButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor colorWithRed:0 green:0.5 blue:1 alpha:1],  UITextAttributeTextColor,nil] forState:UIControlStateNormal];
         
         [_toolBar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forToolbarPosition:UIBarPositionBottom barMetrics:UIBarMetricsDefault];
-        
     }
 }
 
@@ -206,6 +209,7 @@
                 [_imageScrollView addSubview:contentView];
             }
             else{
+                //CODE_REVIEW:下面这段代码可以不要？
                 image = [UIImage imageNamed:@"blankImage.png"];
                 UIView * contentView = (UIView *)[_imageScrollView viewWithTag:1000+i];
                 UIImageView *imageView = (UIImageView *)[contentView viewWithTag:kImageViewTagInContentView];
@@ -233,6 +237,7 @@
                 [_imageScrollView addSubview:contentView];
             }
             else{
+                //CODE_REVIEW:下面这段代码可以不要？
                 if (ind < [_images count]) {
                     image = [_images objectAtIndex:ind];
                     NSLog(@"%d", image.imageOrientation);
@@ -256,7 +261,7 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
     CGSize newImageSize = imageSize;
-    
+    //CODE_REVIEW:需要防止除数为0的情况。
     if ((imageSize.width / imageSize.height) <= (width / height)) {
         newImageSize.height = height;
         newImageSize.width = roundf(imageSize.width * height / imageSize.height);
@@ -304,6 +309,11 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [self setIndicator];
+    if (kIsCallingQianLiRobot) {
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSlidePhoto", nil),_currentPage]];
+        //TODO: add or not
+        return;
+    }
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
     NSString *str = [NSString stringWithFormat:@"%@%@%f",kScrollOffset,kSeparator,_imageScrollView.contentOffset.x];
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
@@ -415,6 +425,7 @@
     
     // Add to history
     NSMutableArray *array = [NSMutableArray array];
+    //CODE_REVIEW:建议将下面imageByResizing函数放到第二线程去跑，以防止阻塞主线程。
     for (UIImage *image in _images) {
         [array addObject:[image imageByResizing:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
@@ -627,7 +638,12 @@
     if ([images count] == 0) {
         return;
     }
-    
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedPhotoNum += [images count];
+        if ([images count] > 0) {
+            [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotReceiveImages", nil), kQianLiRobotSharedPhotoNum]];
+        }
+    }
      __typeof(&*self) __weak weakSelf = self;
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
     [PictureManager startImageTransSession:[images count] SessionID:[[PictureManager sharedInstance] getImageSession] Success:^(NSInteger baseIndex) {

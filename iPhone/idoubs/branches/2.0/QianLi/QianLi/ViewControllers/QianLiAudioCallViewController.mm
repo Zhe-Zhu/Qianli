@@ -4,7 +4,11 @@
 //
 //  Created by Chen Xiangwen on 5/8/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
+
+//CODE_REVIEW:
+//  1.这个类可以分割成多个类以提高封装性，
+//  2.所有关于sip request/message的操作可以放在sipStackUtils里以提高隔绝性。
 
 #import "QianLiAudioCallViewController.h"
 #import "QBAnimationGroup.h"
@@ -22,6 +26,8 @@
 #import "Utils.h"
 #import "SVStatusHUD.h"
 #import "SipCallManager.h"
+#import "SVProgressHUD.h"
+
 
 @interface QianLiAudioCallViewController (MusicApp)
 
@@ -52,7 +58,6 @@
     UILabel *timeLabel; // 通话时长
     NSDateFormatter *dateFormatter;
     NSDate *callBeginTime; // 通话开始时间
-    NSTimer *timer;
     
     QianLiUIMenuBar *menuBar;
     
@@ -73,6 +78,7 @@
     double videoBeginTime;
 }
 
+@property(weak, nonatomic) NSTimer *timer;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMicroPhone;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSpeaker;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonAdd;
@@ -178,6 +184,7 @@
     videoBeginTime = 0;
     _didEndCallBySelf = NO;
     didEndCall = NO;
+    callBeginTime = [[NSDate alloc] init];
     
     if (!IS_OS_7_OR_LATER) {
         [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forBarMetrics:UIBarMetricsDefault];
@@ -220,6 +227,7 @@
     [super viewDidDisappear:animated];
     if (didEndCall) {
         [self resumeMusicAppIfNeeded];
+        [_timer invalidate];
     }
 }
 
@@ -304,11 +312,10 @@
     timeLabel.backgroundColor = [UIColor clearColor];
     dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"mm:ss"];
-    callBeginTime = [[NSDate alloc] init];
     
     NSRunLoop *runloop = [NSRunLoop currentRunLoop];
-    timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateTimeLabel) userInfo:nil repeats:YES];
-    [runloop addTimer:timer forMode:NSRunLoopCommonModes];
+    _timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateTimeLabel) userInfo:nil repeats:YES];
+    [runloop addTimer:_timer forMode:NSRunLoopCommonModes];
     
     // 加入缓慢出现的动画效果
     UILabel *label = timeLabel;
@@ -586,10 +593,15 @@
 
 - (void)pressButtonEndCall
 {
+    if (kIsCallingQianLiRobot) {
+        NSDate *currentDate = [[NSDate alloc] init];
+        NSTimeInterval time = [currentDate timeIntervalSinceDate:callBeginTime];
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotEndCall", nil),((int)time) / 60,((int)time) % 60, kQianLiRobotSharedPhotoNum, kQianLiRobotSharedDoodleNum, kQianLiRobotSharedWebNum, kQianLiRobotsharedVideoNum]];
+    }
     //[[SipStackUtils sharedInstance].audioService hangUpCall];
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
-    [timer invalidate]; // 停止计时并从Runloop中释放
+    [_timer invalidate]; // 停止计时并从Runloop中释放
     
     _didEndCallBySelf = YES;
     if (_viewState == InCall) {
@@ -781,6 +793,8 @@
 #pragma mark touch Menu Bar Item
 - (void)selectPhoto
 {
+    //[[SipStackUtils sharedInstance].audioService sendDTMF:15];
+    //return;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     AssetGroupPickerController *assetVC = [storyboard instantiateViewControllerWithIdentifier:@"AssetGroupPickerVC"];
     assetVC.delegate = self;
@@ -846,6 +860,9 @@
 
 - (void)selectHandWriting
 {
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedDoodleNum++;
+    }
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     _drawingVC = [storyboard instantiateViewControllerWithIdentifier:@"DrawingViewController"];
     _drawingVC.isIncoming = NO;
@@ -868,6 +885,9 @@
 
 - (void)selectShopping
 {
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedWebNum++;
+    }
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     _shoppingVC = [storyboard instantiateViewControllerWithIdentifier:@"WebViewController"];
     _shoppingVC.inComing = NO;
@@ -887,6 +907,9 @@
 
 - (void)selectBrowser
 {
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedWebNum++;
+    }
     // 发送同步信息
     [[SipStackUtils sharedInstance].messageService sendMessage:kBeginBrowser toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
     
@@ -901,7 +924,13 @@
     if ([imageArray count] == 0 || !imageSessionExists) {
         return;
     }
-    
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedPhotoNum += [imageArray count];
+        if ([imageArray count] > 0) {
+            [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotReceiveImages", nil), kQianLiRobotSharedPhotoNum]];
+        }
+    }
+         
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleTimer:) userInfo:imageArray repeats:YES];
     if (_imageDispVC == nil) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -987,7 +1016,14 @@
 			// releases session
 			// starts timer suicide
             [SipStackUtils sharedInstance].audioService.audioSession = nil;
-            [self timerSuicideTick];
+            BOOL didWantResumeCall = [SipCallManager SharedInstance].endWithoutDismissAudioVC;
+            if (!didWantResumeCall) {
+                [self timerSuicideTick];
+            }
+            if ([SipCallManager SharedInstance].netDidWorkChanged) {
+                [SipCallManager SharedInstance].netDidWorkChanged = NO;
+                [[SipCallManager SharedInstance] reconnectVoiceCall:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+            }
 			break;
 		}
 	}
@@ -1012,12 +1048,20 @@
 			}
 			case INVITE_STATE_INCALL:
 			{
-                [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+                if (kIsCallingQianLiRobot) {
+                    [self performSelector:@selector(stopRingBack) withObject:nil afterDelay:1];
+                }
+                
+                
                 [[SipStackUtils sharedInstance].soundService stopRingTone];
                 [self changeViewAppearanceToInCall];
                 if (_isSpeakerOn) {
                     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
                 }
+                if (kIsCallingQianLiRobot) {
+                    [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"CallQianLiRobotSuccessfully", nil)];
+                }
+                
 				break;
 			}
 			case INVITE_STATE_TERMINATED:
@@ -1033,6 +1077,11 @@
     }
 }
 
+- (void)stopRingBack
+{
+    [[SipStackUtils sharedInstance].soundService stopRingBackTone];
+}
+
 - (void)timerSuicideTick
 {
     if (didEndCall) {
@@ -1041,14 +1090,14 @@
     didEndCall = YES;
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
-    [timer invalidate]; 
+    [_timer invalidate];
     if (menuBar) {
         [menuBar dismiss];
         menuBar = nil;
     }
 
     //LLGG
-    [self dismissAllViewController];
+   [self dismissAllViewController];
    //[self changeViewAppearanceToInCall];
     
     if (!_didEndCallBySelf) {
@@ -1399,6 +1448,7 @@
     else if ([message isEqualToString:kHandDrawingRevoke]){
         [_drawingVC.drawingView revokeFromRemoteParty];
         _drawingVC.undoButton.enabled = NO;
+        _drawingVC.clearAll.enabled = YES;
     }
     else if ([message isEqualToString:kCancelDrawing]){
         [_drawingVC cancelFromRemoteParty];
@@ -1491,7 +1541,7 @@
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [self dismissAllViewController];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
-    [timer invalidate]; // 停止计时并从Runloop中释放
+    [_timer invalidate]; // 停止计时并从Runloop中释放
     
     _didEndCallBySelf = YES;
     if (_viewState == InCall) {

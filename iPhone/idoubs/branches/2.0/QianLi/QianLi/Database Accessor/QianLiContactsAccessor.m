@@ -8,6 +8,8 @@
 
 #import "QianLiContactsAccessor.h"
 
+#define HaveAccessedID @"firstAccess"
+
 @interface QianLiContactsAccessor (){
     NSManagedObjectContext *_managedObjectContext;
 }
@@ -28,6 +30,11 @@ static QianLiContactsAccessor *contactsAccessor;
         contactsAccessor = [[QianLiContactsAccessor alloc] init];
         QianLiAppDelegate *appDelegate = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;
         contactsAccessor.managedObjectContext = appDelegate.managedObjectContext;
+        NSUserDefaults *userData = [NSUserDefaults standardUserDefaults];
+        if (![userData boolForKey:HaveAccessedID]) {
+            [userData setBool:YES forKey:HaveAccessedID];
+            [contactsAccessor insertNewObject:@"qianli" Email:@"no" Profile:nil Numbers:@"008600000000000" UpdateCounter:1];
+        }
     }
     return contactsAccessor;
 }
@@ -77,6 +84,10 @@ static QianLiContactsAccessor *contactsAccessor;
 
 - (void)deleteItemForRemoteParty:(NSString *)remoteParty
 {
+    //QianLiRobotNumber
+    if ([remoteParty isEqualToString:QianLiRobotNumber]) {
+        return;
+    }
     [self.managedObjectContext lock];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QianLiContacts"];
     fetchRequest.includesPropertyValues = NO;
@@ -135,11 +146,18 @@ static QianLiContactsAccessor *contactsAccessor;
     [self.managedObjectContext lock];
     NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"QianLiContacts" inManagedObjectContext:_managedObjectContext];
     
+    UIImage *image;
+    if (profile == nil) {
+        image = [UIImage imageNamed:@"blank.png"];
+    }
+    else{
+        image = profile;
+    }
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
     [newManagedObject setValue:name forKey:@"name"];
     [newManagedObject setValue:email forKey:@"email"];
-    [newManagedObject setValue:UIImageJPEGRepresentation(profile, 0.5) forKey:@"profile"];
+    [newManagedObject setValue:UIImageJPEGRepresentation(image, 0.5) forKey:@"profile"];
     [newManagedObject setValue:number forKey:@"number"];
     [newManagedObject setValue:[NSNumber numberWithInteger:nums] forKey:@"updatecounter"];
     
@@ -167,6 +185,10 @@ static QianLiContactsAccessor *contactsAccessor;
     }
     
     for (NSManagedObject *managedObject in items) {
+        NSString *remoteParty = [managedObject valueForKey:@"number"];
+        if ([remoteParty isEqualToString:QianLiRobotNumber]) {
+            return;
+        }
         [_managedObjectContext deleteObject:managedObject];
     }
     if (![_managedObjectContext save:&error]) {

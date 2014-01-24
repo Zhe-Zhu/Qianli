@@ -74,7 +74,7 @@
 "callingRingingText" = "ringing...";
 "Quit" = "Cancel";
 "emailSubject" = "Join Qianli with me!";
-"emailBody" = "Qianli is a free VOIP app, which allows you to share pictures, url links or even videos with others while talking. To know more and how to download Qianli, please click: https://www.smore.com/x0hc";
+"emailBody" = "Qianli is a free VOIP app, which allows you to share pictures, url links or even videos with others while talking. To know more and how to download Qianli, please click: https://www.qianliapp.cn";
 "emailWarningTitle" = "Can't send email";
 "emailWarningMessage" = "We can't send out email. Please check your email setting.";
 "emailWarningOK" = "OK";
@@ -163,3 +163,16 @@
 
 "alertRecordingTitle" = "recording is not allowed";
 "alertRecordingBody" = "Qianli needs the permission of accessing microphone to establish a call, please grant permission in the Settings App!";
+
+"PhotoSaved" = "image is successfully saved to album";
+"CallQianLiRobotSuccessfully" = "The call is sucessful, you can explore QianLi now";
+"CallQianLiRobotNetworkFailed" = "The call fails, please check your network is OK";
+"QianLiRobotReceiveImages" = "Great, I have received %d photos from you";
+"QianLiRobotSlidePhoto" = "you slided photo, the %d th photo is being displayed";
+"QianLiRobotClearDrawingView" = "You clear the drawing view, would you like to draw again?";
+"QianLiRobotForwardBackVideo" = "The video is in %d mins %d seconds";
+"QianLiRobotPauseVideo" = "my video is paused";
+"QianLiRobotPlayVieo" = "My screen is displaying vieo: %@";
+"QianLiRobotSynWeb" = "My screen is displaying web: %@";
+"QianLiRobotEndCall" = "GoodBye! the call between last for %d mins %d seconds, you and I \n [*share %d photos; \n *complete %d drawings; \n *browse %d webs; \n *watch %d videos]";
+"QianLiRobotDrawingGood" = "You are good at drawing, do your parent know that?";

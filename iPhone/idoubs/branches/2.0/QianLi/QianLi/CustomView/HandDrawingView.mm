@@ -8,6 +8,8 @@
 
 #import "HandDrawingView.h"
 #import "SipStackUtils.h"
+#import "Global.h"
+#import "SVProgressHUD.h"
 
 
 @interface HandDrawingView (){
@@ -29,6 +31,8 @@
     CGPoint thirdLastPoint;
     
     NSInteger colorIndex;
+    int drawingCount;
+    BOOL hasShownInfomation;
 }
 
 @property(assign, nonatomic) CGFloat lineWidth;
@@ -66,6 +70,8 @@
         firstTime = YES;
         isDrawing = YES;
         fromRemoteParty = NO;
+        drawingCount = 0;
+        hasShownInfomation = NO;
         _pathPoints = [[NSMutableArray alloc] initWithCapacity:2];
         self.backgroundColor = [UIColor clearColor];
     }
@@ -162,6 +168,11 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    drawingCount++;
+    if (drawingCount > 15 && !hasShownInfomation) {
+        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"QianLiRobotDrawingGood", nil)];
+        hasShownInfomation = YES;
+    }
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
     if (drawPointsNumber < MaxDrawPoints) {
@@ -334,6 +345,8 @@
 
 - (void)clearAll
 {
+    drawingCount = 0;
+    hasShownInfomation = NO;
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
     [[SipStackUtils sharedInstance].messageService sendMessage:kClearAllHandWriting toRemoteParty:remotePartyNumber];
     [self clearAllFromRemote];

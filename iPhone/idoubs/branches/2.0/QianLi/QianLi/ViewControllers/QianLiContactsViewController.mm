@@ -4,7 +4,7 @@
 //
 //  Created by Chen Xiangwen on 5/8/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
 
 #import "QianLiContactsViewController.h"
 #import "SipCallManager.h"
@@ -464,6 +464,7 @@
         }
     }
     jsonRequest = [NSString stringWithFormat:@"%@]",jsonRequest];
+    //CODEREVIEW: urlString 可以放在global文件里或者当前类文件的头部
     NSString *urlString= @"http://112.124.36.134:8080/users/whoisactive/.json";
     NSURL* url = [[NSURL alloc] initWithString:urlString];
     
@@ -546,6 +547,14 @@
         }
     }
     
+    //add qianli robots
+    QianLiContactsItem *contactItem = [[QianLiContactsItem alloc] init];
+    contactItem.name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:QianLiRobotNumber];
+    contactItem.tel = QianLiRobotNumber;
+    contactItem.thumbnail = [[QianLiContactsAccessor sharedInstance] getProfileForRemoteParty:QianLiRobotNumber];
+    contactItem.email = @"";
+    [friends addObject:contactItem];
+
     [_contacts removeAllObjects];
     [self sortContacts:friends sortedContacts:_contacts];
     NSArray *items = [[QianLiContactsAccessor sharedInstance] getAllContacts];
