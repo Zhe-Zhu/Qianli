@@ -142,15 +142,11 @@
 //
 -(BOOL) setSpeakerEnabled:(BOOL)enabled{
 #if TARGET_OS_IPHONE
-	UInt32 audioRouteOverride = enabled ? kAudioSessionOverrideAudioRoute_Speaker : kAudioSessionOverrideAudioRoute_None;
-	if(AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute, sizeof(audioRouteOverride),&audioRouteOverride) == 0){
-		speakerOn = enabled;
-		return YES;
-	}
-//    AVAudioSessionPortOverride audioRouteOverride = enabled ? kAudioSessionOverrideAudioRoute_Speaker : kAudioSessionOverrideAudioRoute_None;
-//    if ([[AVAudioSession sharedInstance] overrideOutputAudioPort:audioRouteOverride error:nil]) {
-//        return YES;
-//    }
+
+    AVAudioSessionPortOverride audioRouteOverride = enabled ? kAudioSessionOverrideAudioRoute_Speaker : kAudioSessionOverrideAudioRoute_None;
+    if ([[AVAudioSession sharedInstance] overrideOutputAudioPort:audioRouteOverride error:nil]) {
+        return YES;
+    }
 	return NO;
 #else
 	return NO;

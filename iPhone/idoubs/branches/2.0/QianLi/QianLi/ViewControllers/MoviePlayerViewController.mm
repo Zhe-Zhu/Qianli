@@ -4,12 +4,14 @@
 //
 //  Created by lutan on 9/23/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
 
 #import "MoviePlayerViewController.h"
 #import "SipStackUtils.h"
 #import "UIImageExtras.h"
 #import "MobClick.h"
+#import "SVProgressHUD.h"
+#import "Global.h"
 
 @interface MoviePlayerViewController ()
 {
@@ -55,7 +57,10 @@
     }
     [MobClick beginEvent:@"watchVideo"];
     NSError *setCategoryError = nil;
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
+    if (![Utils isHeadsetPluggedIn]) {
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
+    }
+    [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMoviePlayback error:&setCategoryError];
     if (setCategoryError){
         NSLog(@"error");
     }
@@ -219,6 +224,9 @@
 {
     float time = _moviePlayerController.currentPlaybackTime;
     [self forwardFromRemote:time];
+    if (kIsCallingQianLiRobot) {
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat: NSLocalizedString(@"QianLiRobotForwardBackVideo", nil),((int)_moviePlayerController.currentPlaybackTime) / 60, ((int)_moviePlayerController.currentPlaybackTime) % 60]];
+    }
     NSString *message = [NSString stringWithFormat:@"%@%@%f", kVideoForward, kSeparator, time];
     [[SipStackUtils sharedInstance].messageService sendMessage: message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
 }
@@ -240,6 +248,10 @@
 {
     float time = _moviePlayerController.currentPlaybackTime;
     [self backwardFromRemote:time];
+    if (kIsCallingQianLiRobot) {
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat: NSLocalizedString(@"QianLiRobotForwardBackVideo", nil),((int)_moviePlayerController.currentPlaybackTime) / 60, ((int)_moviePlayerController.currentPlaybackTime) % 60]];
+    }
+
     NSString *message = [NSString stringWithFormat:@"%@%@%f", kVideoBackward, kSeparator, time];
     [[SipStackUtils sharedInstance].messageService sendMessage: message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
 }
@@ -262,6 +274,9 @@
 
 - (void)pause
 {
+    if (kIsCallingQianLiRobot && !_paused) {
+        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"QianLiRobotPauseVideo", nil)];
+    }
     _paused = !_paused;
     [self pauseFromRemote:_paused];
     // 0 - play

@@ -117,6 +117,11 @@ nil]
 #define kClearAllDoodle @"CLEARDOODLE"
 #define kHangUpcall @"hangUpCall"
 
+#define kInterruption @"interruption"
+#define kChangeNetWork @"changenetwork"
+#define kInterruptionOK @"interruptionOK"
+#define kChangeNetworkOK @"changenetworkOK"
+#define kWillChangeNetwork @"willchangenetwork"
 
 #define kProfileSize  320
 #define avatarDiameter 30
@@ -171,4 +176,14 @@ nil]
 #define kDoodleLineWidth @"doodlelinewidth"
 #define kDoodleEraseWidth @"doodleerasewidth"
 #define kDoodleLineColor @"doodlelinecolor"
+
+//QianLi Robot
+#define QianLiRobotNumber @"008600000000000"
+
+extern bool kIsCallingQianLiRobot;
+extern int kQianLiRobotSharedPhotoNum;
+extern int kQianLiRobotSharedDoodleNum;
+extern int kQianLiRobotSharedWebNum;
+extern int kQianLiRobotsharedVideoNum;
+
 #endif

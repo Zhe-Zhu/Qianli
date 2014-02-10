@@ -48,7 +48,6 @@
     {
         [_audioSession hangUpCall];
     }
-    
 }
 
 - (void)acceptCall

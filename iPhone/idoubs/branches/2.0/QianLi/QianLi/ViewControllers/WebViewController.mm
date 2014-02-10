@@ -4,13 +4,14 @@
 //
 //  Created by lutan on 9/17/13.
 //  Copyright (c) 2013 Chen Xiangwen. All rights reserved.
-//
+//  CODEREVIEW DONE
 
 #import "WebViewController.h"
 #import "Global.h"
 #import "SipStackUtils.h"
 #import "UIImageExtras.h"
 #import "MobClick.h"
+#import "SVProgressHUD.h"
 
 #define MaxiNum 3
 
@@ -168,7 +169,12 @@
 
 - (void)synchronize
 {
+    if (kIsCallingQianLiRobot) {
+        kQianLiRobotSharedWebNum++;
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSynWeb", nil),[_webView stringByEvaluatingJavaScriptFromString:@"document.title"]]];
+    }
     // 对网页内容进行同步
+    //CODE_REVIEW:在iphone4S和iphone5上测试，不能同步。
     float offsetx = _webView.scrollView.contentOffset.x;
     float offsety = _webView.scrollView.contentOffset.y;
     NSString *message = [NSString stringWithFormat:@"%@%@%@%@%f%@%f", kShoppingSyn, kSeparator, _request, kSeparator,offsetx, kSeparator, offsety];
@@ -289,14 +295,14 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     //if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-    _request = [[request URL] absoluteString];
-    if ([_request isEqualToString:@"http://cdn.tanx.com/t/acookie/acbeacon2.html"]) {
+    if ([[[request URL] absoluteString] isEqualToString:@"http://cdn.tanx.com/t/acookie/acbeacon2.html"]) {
         return NO;
     }
-    if ([_request isEqualToString:@"about:blank"]) {
+    if ([[[request URL] absoluteString] isEqualToString:@"about:blank"]) {
         return NO;
     }
     //}
+    _request = [[request URL] absoluteString];
     return YES;
 }
 

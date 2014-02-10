@@ -12,6 +12,7 @@
 #import "UserDataAccessor.h"
 #import "UINavigationControllerPortraitViewController.h"
 #import "UITabBarController+Portrait.h"
+#import "HelpView.h"
 
 @interface QianLiAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -19,7 +20,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (nonatomic, strong) UITabBarController *tabController;
+@property (nonatomic, strong, readonly) UITabBarController *tabController;
 @property (nonatomic, assign) BOOL didJustLaunch;
 
 - (void)saveContext;
