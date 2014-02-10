@@ -87,6 +87,7 @@
         _timeLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     }
     [self.contentView addSubview:_timeLabel];
+    _timeLabel.backgroundColor = [UIColor clearColor];
     
     UILabel *contentName = [[UILabel alloc] init];
     _contentLabel = contentName;
