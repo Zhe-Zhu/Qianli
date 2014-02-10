@@ -112,6 +112,11 @@
     [_vedioThumbs removeAllObjects];
 }
 
+- (void)dealloc
+{
+    _webView.delegate = nil;
+}
+
 #pragma mark  -- UIWebViewDelegate --
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {

@@ -156,6 +156,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    _webView.delegate = nil;
+}
+
 #pragma mark --UITextFieldDelegate--
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

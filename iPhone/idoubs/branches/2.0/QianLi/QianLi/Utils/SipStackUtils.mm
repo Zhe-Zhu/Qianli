@@ -367,7 +367,7 @@ static SipStackUtils * sipStackUtilsInstance;
                         return;
                     }
                     else{
-                        //resume call is network changed of call is interrupted
+                        //resume previous call if the call is interrupted
                         if ([SipCallManager SharedInstance].audioVC && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
                             [[SipCallManager SharedInstance] resumeCallWithID:eargs.sessionId];
                             return;
