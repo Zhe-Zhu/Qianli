@@ -303,9 +303,9 @@
 - (void)setOffset:(CGPoint)offset
 {
     _webView.scrollView.scrollEnabled = TRUE;
-//    [_webView.scrollView setContentOffset:offset animated:YES];
-    NSString *scrollString = [NSString stringWithFormat:@"window.scrollTo(%d, %d);", int(offset.x), int(offset.y)];
-    [_webView stringByEvaluatingJavaScriptFromString:scrollString];
+    [_webView.scrollView setContentOffset:offset animated:YES];
+//    NSString *scrollString = [NSString stringWithFormat:@"window.scrollTo(%d, %d);", int(offset.x), int(offset.y)];
+  //  [_webView stringByEvaluatingJavaScriptFromString:scrollString];
     //  it seems to work
 }
 
