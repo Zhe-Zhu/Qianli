@@ -155,6 +155,11 @@
     [_synImages removeAllObjects];
 }
 
+- (void)dealloc
+{
+    _webView.delegate = nil;
+}
+
 - (void)loadWebWithURL:(NSString *)url
 {
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
