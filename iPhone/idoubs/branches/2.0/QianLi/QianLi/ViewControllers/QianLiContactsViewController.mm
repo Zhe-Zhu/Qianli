@@ -805,7 +805,7 @@
     }
     else{
         NSLog(@"no country code");
-        // TODO:LLGG
+        // TODO:LLGG just for simulator
         [self getAddressBookPermission];
         _finished = NO;
         [self sendContactsToServer];

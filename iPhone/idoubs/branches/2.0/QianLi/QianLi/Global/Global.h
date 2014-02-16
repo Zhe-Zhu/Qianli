@@ -177,6 +177,10 @@ nil]
 #define kDoodleEraseWidth @"doodleerasewidth"
 #define kDoodleLineColor @"doodlelinecolor"
 
+//waitinglist
+#define kCheckStatusNotification @"statusnotification"
+#define kAddPartnerNotification @"addpartnernotification"
+
 //QianLi Robot
 #define QianLiRobotNumber @"008600000000000"
 
