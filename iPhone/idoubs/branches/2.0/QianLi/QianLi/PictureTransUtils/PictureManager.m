@@ -423,48 +423,25 @@ static PictureManager *pictureManager;
     account.bigAvatarURL = nil;
     account.password = [Utils stringbyRmovingSpaceFromString:password];
     // If the shared object manager is nil, we initialize a new one.
-    if (avatar) {
-        // If the user provide an image as profile, we translate all the information along with the image to the server.
-        NSMutableURLRequest *request = [manager multipartFormRequestWithObject:account method:RKRequestMethodPOST path:@"/users/register/" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData){
-            [formData appendPartWithFileData:UIImageJPEGRepresentation(avatar, 1)
-                                        name:@"avatar"
-                                    fileName:@"photo.jpeg"
-                                    mimeType:@"image/jpeg"];
-        }];
-        
-        RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^( RKObjectRequestOperation *operation , RKMappingResult *mappingResult ){
-            RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
-            if (success) {
-                success(regStatus.status);
-            }
-            
-        } failure:^( RKObjectRequestOperation *operation , NSError *error){
-            if (success) {
-                success(-1);
-            }
-        }];
-        [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
-    }
-    else{
-        // If the user does not provide profile, then we just use all the information to register an account.
-        [[RKObjectManager sharedManager] postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    // If the user does not provide profile, then we just use all the information to register an account.
+    [manager postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
+        if (success) {
+            success(regStatus.status);
+        }
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [manager postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
             if (success) {
                 success(regStatus.status);
             }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            [[RKObjectManager sharedManager] postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
-                if (success) {
-                    success(regStatus.status);
-                }
-            } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                if (success) {
-                    success(-1);
-                }
-            }];
+            if (success) {
+                success(-1);
+            }
         }];
-    }
+    }];
+
 }
 
 +(void)verifyWithUDID:(NSString *)udid Password:(NSString *)password Name:(NSString *)name PhoneNumber:(NSString *)phoneNumber Email:(NSString *)email OS:(NSString *)os Avatar:(UIImage *)avatar Verification:(NSString *)verificationCode Success:(void(^)(int status))success

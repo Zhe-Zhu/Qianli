@@ -237,7 +237,6 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
         else if (status == 0){
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"captchaErrorTitle", nil) message:NSLocalizedString(@"captchaErrorMessage", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"captchaErrorButton", nil) otherButtonTitles:nil];
             [alertView show];
-
         }
 
     }];
