@@ -458,7 +458,7 @@ static PictureManager *pictureManager;
     [manager addRequestDescriptor:verifyDescriptor];
     [manager addResponseDescriptor:verifyResponseDescriptor];
     
-    // Initilize a new account used to mapped to the registration request Json stuction during registration.
+    // Initilize a new account used to mapped to the registration request Json structure during registration.
     VerifyAccount *account = [VerifyAccount new];
     account.nickname = [Utils stringbyRmovingSpaceFromString:name];
     account.udid = [Utils stringbyRmovingSpaceFromString:udid];
@@ -483,6 +483,11 @@ static PictureManager *pictureManager;
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         }];
     }];
+}
+
++ (void)getVerificationCodeByAudio:(NSString *)number
+{
+    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString: kBaseURL]];
 }
 
 - (void)clearSharedInstance

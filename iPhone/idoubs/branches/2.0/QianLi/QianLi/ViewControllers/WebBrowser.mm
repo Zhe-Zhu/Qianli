@@ -235,7 +235,6 @@
 #pragma mark  -- UIWebViewDelegate --
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    //TODO:
     if (_urlInput.text && isUserInput) {
         NSURL *url =  [NSURL URLWithString: [NSString stringWithFormat:@"http://www.google.com/search?q=%@", _urlInput.text]];
         [_webView loadRequest:[NSURLRequest requestWithURL:url]];
@@ -248,7 +247,10 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    self.currentURL = [request.URL absoluteString];
+    NSString *url = [request.URL absoluteString];
+    if (![url isEqualToString:@"about:blank"]) {
+        self.currentURL = url;
+    }
     return YES;
 }
 

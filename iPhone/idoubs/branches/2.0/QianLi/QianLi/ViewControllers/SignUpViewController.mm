@@ -215,7 +215,7 @@
 {
     UITableViewController *tableView = [[UITableViewController alloc] init];
     tableView.title = NSLocalizedString(@"countryCode", nil);
-    [self.navigationController pushViewController:tableView  animated:YES];
+    //[self.navigationController pushViewController:tableView  animated:YES];
 }
 
 # pragma mark - UIAlertView delegate

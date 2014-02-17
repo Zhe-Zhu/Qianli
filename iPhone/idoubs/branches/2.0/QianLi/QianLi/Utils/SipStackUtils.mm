@@ -33,8 +33,8 @@ static SipStackUtils * sipStackUtilsInstance;
     AudioService * _audioService;
     SoundService * _soundService;
     MessageService * _messageService;
-    BOOL nativeABChangedWhileInBackground; //TODO: what is this var used for
-	BOOL scheduleRegistration; //TODO: what is this var used for
+    BOOL nativeABChangedWhileInBackground;
+	BOOL scheduleRegistration;
     long _sessionID;
     NSString *_remoteParty;
     
@@ -348,7 +348,6 @@ static SipStackUtils * sipStackUtilsInstance;
 	}
 }
 
-
 //== INVITE (audio/video, file transfer, chat, ...) events == //
 - (void)onInviteEvent:(NSNotification*)notification {
 	NgnInviteEventArgs* eargs = [notification object];
@@ -411,7 +410,6 @@ static SipStackUtils * sipStackUtilsInstance;
                 NSString *remotePartyUri = [session getRemotePartyUri];
                 self.remoteParty = [self getRemoteParty:remotePartyUri];
 			}
-            //TODO: verify what is going on here.
 			//[NgnAVSession releaseSession:&session];
 			break;
 		}

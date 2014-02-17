@@ -235,6 +235,9 @@
     if (buttonIndex == alertView.firstOtherButtonIndex){
         [self removeAccount];
     }
+    else if (buttonIndex == alertView.cancelButtonIndex){
+        [_deleteAccount setSelected:NO animated:YES];
+    }
 }
 
 - (void)removeAccount
