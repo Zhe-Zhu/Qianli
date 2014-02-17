@@ -146,7 +146,8 @@ static WaitingListUtils *waitingListUtils;
         return;
     }
     if (type == WaitingList_CheckingStatus){
-        [[NSNotificationCenter defaultCenter] postNotificationName:kCheckStatusNotification object:self userInfo:JsonArray];
+        NSNotification *notif = [NSNotification notificationWithName:kCheckStatusNotification object:self userInfo:JsonArray];
+        [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notif waitUntilDone:NO];
 //        NSInteger result = [[JsonArray valueForKey:@"result"] integerValue];
 //        if (result == 0) {
 //            NSInteger numOfBeforeUser = [[JsonArray valueForKey:@"before"] integerValue];
@@ -157,7 +158,8 @@ static WaitingListUtils *waitingListUtils;
 //        }
     }
     else if (type == WaitingList_AddPartner){
-        [[NSNotificationCenter defaultCenter] postNotificationName:kAddPartnerNotification object:self userInfo:JsonArray];
+        NSNotification *notif = [NSNotification notificationWithName:kAddPartnerNotification object:self userInfo:JsonArray];
+        [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notif waitUntilDone:NO];
     }
 }
 

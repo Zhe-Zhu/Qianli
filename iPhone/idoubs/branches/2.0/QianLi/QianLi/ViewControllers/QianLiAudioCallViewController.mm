@@ -614,9 +614,6 @@
         [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
     }
     
-    // TODO: 寻求更健壮的方案
-    // 本地强制结束
-    
     // 如果Menu Bar升起则将其dismiss
     if (menuBar) {
         [menuBar dismiss];
