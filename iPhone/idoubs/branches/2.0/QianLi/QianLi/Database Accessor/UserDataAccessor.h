@@ -25,4 +25,9 @@
 //+ (UIImage *)getCacheBigPhoto:(NSString *)remoteParty;
 //+ (void)setCacheBigPhoto:(NSString *)remoteParty setImage:(UIImage *)bigPhoto;
 
++ (NSString *)getUserWaitingNumber;
++ (void)setUserWaitingNumber:(NSString *)number;
+
++ (NSString *)getUserPartnerNumber;
++ (void)setUserPartnerNumber:(NSString *)number;
 @end

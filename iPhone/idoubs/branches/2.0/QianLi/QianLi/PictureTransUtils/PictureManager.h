@@ -22,7 +22,8 @@
 // Udid, password, nickname are required and can not be nil. Either phoneNumber or emailAddress must not be nil. systemIndicator should be 'i'(ios), 'a'(android), 'o'(others)
 + (void)registerWithUDID:(NSString *)udid Password:(NSString *)password Name:(NSString *)name PhoneNumber:(NSString *)phoneNumber Email:(NSString *)email OS:(NSString *)os Avatar:(UIImage *)avatar Success:(void(^)(int status))success;
 +(void)verifyWithUDID:(NSString *)udid Password:(NSString *)password Name:(NSString *)name PhoneNumber:(NSString *)phoneNumber Email:(NSString *)email OS:(NSString *)os Avatar:(UIImage *)avatar Verification:(NSString *)verificationCode Success:(void(^)(int status))success;
-//+ (void)verifyWithNumber:(NSString *)number Sucess:(void(^)(BOOL success))success;
++ (void)getVerificationCodeByAudio:(NSString *)number;
+
 
 + (void)registerImageTransSession:(NSString *)sessionID Success:(void(^)(BOOL success))success;
 + (void)startImageTransSession:(int)numberOfImages SessionID:(NSString *)sessionID Success:(void(^)(NSInteger baseIndex))success;

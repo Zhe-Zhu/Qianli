@@ -287,6 +287,11 @@
     }
     
     _urlInput.text = [[webView.request URL] absoluteString];
+    
+    NSString *str = [webView.request.URL absoluteString];
+    if (![_currentURL isEqualToString:str]) {
+        self.currentURL = str;
+    }
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView

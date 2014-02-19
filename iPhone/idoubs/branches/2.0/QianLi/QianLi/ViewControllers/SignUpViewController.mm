@@ -186,8 +186,46 @@
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setBool:YES forKey:kSingUpKey];
             [userDefaults synchronize];
-            QianLiAppDelegate *qianliAppDelegate = (QianLiAppDelegate*)[UIApplication sharedApplication].delegate;
+            QianLiAppDelegate *qianliAppDelegate = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;
             [qianliAppDelegate performSelectorOnMainThread:@selector(resetRootViewController) withObject:nil waitUntilDone:YES];
+        }
+        else if (status == 3){
+            // waiting list primary number
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            WaitingViewController *waitingCV = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+            waitingCV.succeed = NO;
+            waitingCV.isPartner = NO;
+            [UserDataAccessor setUserWaitingNumber:number];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:YES forKey:kWaitingKey];
+            [userDefaults synchronize];
+            [self performSelectorOnMainThread:@selector(showVC:) withObject:waitingCV waitUntilDone:NO];
+        }
+        else if (status == 4){
+            // waitinglist partner number
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            WaitingViewController *waitingCV = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+            waitingCV.succeed = NO;
+            waitingCV.isPartner = YES;
+            [UserDataAccessor setUserWaitingNumber:number];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:YES forKey:kWaitingKey];
+            [userDefaults synchronize];
+            [userDefaults setBool:YES forKey:@"isPartner"];
+            [self performSelectorOnMainThread:@selector(showVC:) withObject:waitingCV waitUntilDone:NO];
+        }
+        else if ( status == 5){
+            // waited list
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            WaitingViewController *waitingCV = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+            waitingCV.succeed = YES;
+            waitingCV.isPartner = NO;
+            [UserDataAccessor setUserWaitingNumber:number];
+            [UserDataAccessor setUserRemoteParty:number];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:YES forKey:kSingUpKey];
+            [userDefaults synchronize];
+            [self performSelectorOnMainThread:@selector(showVC:) withObject:waitingCV waitUntilDone:NO];
         }
         else if (status < 0) {
             // Show the Alert View
@@ -199,6 +237,13 @@
             [self activateButtonContinue];
         }
     }];
+}
+
+- (void)showVC:(UIViewController *)viewController
+{
+    UINavigationController *naviVC = [[UINavigationController alloc] init];
+    naviVC.viewControllers = @[viewController];
+    [self presentViewController:naviVC animated:YES completion:nil];
 }
 
 - (void)showVerifyingVC:(SignUpVerificationCodeViewController *)verifyCV

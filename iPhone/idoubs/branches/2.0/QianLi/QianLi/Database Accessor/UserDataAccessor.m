@@ -72,5 +72,29 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
++ (NSString *)getUserWaitingNumber
+{
+    NSString *number = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERWAITNUM"];
+    return number;
+}
+
++ (void)setUserWaitingNumber:(NSString *)number
+{
+    [[NSUserDefaults standardUserDefaults] setObject:number forKey:@"USERWAITNUM"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)getUserPartnerNumber
+{
+    NSString *number = [[NSUserDefaults standardUserDefaults] objectForKey:@"PARTNERNUM"];
+    return number;
+}
+
++ (void)setUserPartnerNumber:(NSString *)number
+{
+    [[NSUserDefaults standardUserDefaults] setObject:number forKey:@"PARTNERNUM"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 
 @end

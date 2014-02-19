@@ -71,10 +71,10 @@ static WaitingListUtils *waitingListUtils;
     NSString *urlString;
     
     if (type == WaitingList_CheckingStatus) {
-        urlString= [NSString stringWithFormat:@"http://112.124.36.134:8080/waitinglist/waitingstatus/%@/", [UserDataAccessor getUserRemoteParty]];
+        urlString= [NSString stringWithFormat:@"http://112.124.36.134:8080/waitinglist/waitingstatus/%@/", [UserDataAccessor getUserWaitingNumber]];
     }
     else if (type == WaitingList_AddPartner){
-        urlString= [NSString stringWithFormat:@"http://112.124.36.134:8080/waitinglist/addpartner/%@/%@/", [UserDataAccessor getUserRemoteParty], [info valueForKey:@"partner"]];
+        urlString= [NSString stringWithFormat:@"http://112.124.36.134:8080/waitinglist/addpartner/%@/%@/", [UserDataAccessor getUserWaitingNumber], [info valueForKey:@"partner"]];
     }
     _finished = NO;
     
@@ -148,14 +148,6 @@ static WaitingListUtils *waitingListUtils;
     if (type == WaitingList_CheckingStatus){
         NSNotification *notif = [NSNotification notificationWithName:kCheckStatusNotification object:self userInfo:JsonArray];
         [[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notif waitUntilDone:NO];
-//        NSInteger result = [[JsonArray valueForKey:@"result"] integerValue];
-//        if (result == 0) {
-//            NSInteger numOfBeforeUser = [[JsonArray valueForKey:@"before"] integerValue];
-//            NSInteger numOfBehindUser = [[JsonArray valueForKey:@"behind"] integerValue];
-//        }
-//        else if (result == 1){
-//            
-//        }
     }
     else if (type == WaitingList_AddPartner){
         NSNotification *notif = [NSNotification notificationWithName:kAddPartnerNotification object:self userInfo:JsonArray];

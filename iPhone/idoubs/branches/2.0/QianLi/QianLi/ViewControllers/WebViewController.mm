@@ -320,6 +320,11 @@
             [self setOffset:_remoteOffset];
         }
     }
+    
+    NSString *str = [webView.request.URL absoluteString];
+    if (![_request isEqualToString:str]) {
+        self.request = str;
+    }
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
