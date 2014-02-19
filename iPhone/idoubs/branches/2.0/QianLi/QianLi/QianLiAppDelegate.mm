@@ -22,10 +22,10 @@
 #import "UMFeedback.h"
 #import "SipCallManager.h"
 #import "Global.h"
+#import "WaitingViewController.h"
 
 @interface QianLiAppDelegate (){
     UITabBarController *_tabController;
-    SignUpEditProfileViewController *_signUpEditProfileViewController;
     BOOL multitaskingSupported;
     BOOL didLaunch;
     UIBackgroundTaskIdentifier backgroundTaskID;
@@ -74,11 +74,19 @@ const float kColorB = 60/100.0;
         [self registerAPNS];
         //[self setHelpView];
     }
+    else if ([userDefaults boolForKey:kWaitingKey]){
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        WaitingViewController *waitingVC = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+        waitingVC.isPartner = [[NSUserDefaults standardUserDefaults] boolForKey:@"isPartner"];
+        waitingVC.succeed = NO;
+        UINavigationController *naviVC = [[UINavigationController alloc] init];
+        naviVC.viewControllers = @[waitingVC];
+        self.window.rootViewController = naviVC;
+    }
     else{
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         if ([userDefaults boolForKey:@"noHelp"]) {
             SignUpEditProfileViewController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
-            _signUpEditProfileViewController = signUpEditProfileViewController;
             self.window.rootViewController = signUpEditProfileViewController;
         }
         else {
@@ -207,7 +215,8 @@ const float kColorB = 60/100.0;
 
 - (void)resetRootViewController
 {
-    [UIView transitionFromView:_signUpEditProfileViewController.view toView:_tabController.view duration:0.5 options:UIViewAnimationOptionCurveEaseIn|UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished){
+    UIView *view = self.tabController.view;
+    [UIView transitionFromView:nil toView:view duration:0.5 options:UIViewAnimationOptionCurveEaseIn|UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished){
         self.window.rootViewController = self.tabController;
         [self setHelpView];
     }];

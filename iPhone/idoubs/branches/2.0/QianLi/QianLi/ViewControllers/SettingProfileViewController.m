@@ -167,7 +167,6 @@
 }
 
 - (UIImage *)reSizeImage:(UIImage *)image toSize:(CGSize)reSize
-
 {
     UIGraphicsBeginImageContext(CGSizeMake(reSize.width, reSize.height));
     [image drawInRect:CGRectMake(0, 0, reSize.width, reSize.height)];
@@ -197,6 +196,10 @@
 {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
         [self openPhotoSourceWithIndex:buttonIndex];
+    }
+    else{
+        [_cellAvatar setSelected:NO animated:YES];
+        [_cellBigPhoto setSelected:NO animated:YES];
     }
 }
 

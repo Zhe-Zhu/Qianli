@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "SignUpVerificationCodeViewController.h"
 #import "QianLiAppDelegate.h"
+#import "WaitingViewController.h"
+#import "AddPartnerViewController.h"
 
 // this is a view controller used for user signing up. It appear before user signs up
 // and disappear after user signs up.

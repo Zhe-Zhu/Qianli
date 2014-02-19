@@ -123,7 +123,7 @@
         entry.time = [[object valueForKey:@"time"] doubleValue];
         entry.type = [object valueForKey:@"type"];
         entry.name = [object valueForKey:@"name"];
-        if (!entry.name) {
+        if (!entry.name || [entry.name isEqualToString:@""]) {
             [UserDataTransUtils getUserData:entry.remoteParty Completion:^(NSString *name, NSString *avatarURL) {
                 entry.name = name;
                 [[MainHistoryDataAccessor sharedInstance] updateNameForRemotyParty:entry.remoteParty withName:name];
