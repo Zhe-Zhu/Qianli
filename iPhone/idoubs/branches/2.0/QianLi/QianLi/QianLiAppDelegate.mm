@@ -49,8 +49,8 @@
 
 // 最近通话 联系人 设置界面的Navigation Bar颜色
 const float kColorH = 187/360.0;
-const float kColorS = 70/100.0;
-const float kColorB = 60/100.0;
+const float kColorS = 86/100.0;
+const float kColorB = 73/100.0;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
