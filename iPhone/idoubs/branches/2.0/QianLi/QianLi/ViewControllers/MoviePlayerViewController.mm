@@ -30,6 +30,8 @@
 @property (weak, nonatomic) UIView *playingProgress;
 @property (weak, nonatomic) UIView *availableProgress;
 @property (weak, nonatomic) NSTimer *progressTimer;
+@property (weak, nonatomic) UILabel *totalTimeLabel;
+@property (weak, nonatomic) UILabel *currentTimeLabel;
 @end
 
 @implementation MoviePlayerViewController
@@ -48,7 +50,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     NSTimer *progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(adjustProgress) userInfo:nil repeats:YES];
-    _progressTimer = progressTimer;
+     _progressTimer = progressTimer;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDuration) name:MPMovieDurationAvailableNotification object:nil];
 }
 
@@ -109,6 +111,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_progressTimer invalidate];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -118,12 +121,59 @@
 
 - (void)getDuration
 {
-    totalDuration = _moviePlayerController.duration;
+    totalDuration = floorf(_moviePlayerController.duration);
+    NSInteger minute = floorf(totalDuration / 60);
+    if (minute < 10) {
+        NSString *str;
+        if (int(totalDuration - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"0%d:%d", minute, int(totalDuration - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"0%d:0%d", minute, int(totalDuration - minute * 60)];
+        }
+        _totalTimeLabel.text = str;
+    }
+    else{
+        NSString *str;
+        if (int(totalDuration - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"%d:%d", minute, int(totalDuration - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"%d:0%d", minute, int(totalDuration - minute * 60)];
+        }
+        _totalTimeLabel.text = str;
+    }
 }
 
 - (void)adjustProgress
 {
+    CGFloat currentTime = floorf(_moviePlayerController.currentPlaybackTime);
+    NSInteger minute = floorf(currentTime / 60);
+    if (minute < 10) {
+        NSString *str;
+        if (int(currentTime - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"0%d:%d", minute, int(currentTime - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"0%d:0%d", minute, int(currentTime - minute * 60)];
+        }
+        _currentTimeLabel.text = str;
+    }
+    else{
+        NSString *str;
+        if (int(currentTime - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"%d:%d", minute, int(currentTime - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"%d:0%d", minute, int(currentTime - minute * 60)];
+        }
+        _currentTimeLabel.text = str;
+    }
     
+    CGFloat length = totalDurationLength * currentTime / totalDuration;
+    CGRect frame = _playingProgress.frame;
+    frame = CGRectMake(frame.origin.x, frame.origin.y, length, frame.size.height);
+    _playingProgress.frame = frame;
 }
 
 -(void)createAndConfigurePlayerWithURL:(NSURL *)movieURL sourceType:(MPMovieSourceType)sourceType
@@ -151,46 +201,61 @@
         [[player view] setFrame:viewInsetRect];
         [player view].backgroundColor = [UIColor lightGrayColor];
         
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, player.view.bounds.size.height - 60, player.view.bounds.size.width, 60)];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, player.view.bounds.size.height - 60, player.view.bounds.size.width, 70)];
         view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         _controls = view;
-        
-        totalDurationLength = player.view.bounds.size.width - 100;
-        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(50, 8, totalDurationLength, 3)];
-        lineView.backgroundColor = [UIColor darkGrayColor];
+
+        totalDurationLength = player.view.bounds.size.width - 160;
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(80, 12, totalDurationLength, 2)];
+        lineView.backgroundColor = [UIColor colorWithRed:99 / 255.0 green:99 / 255.0 blue:99 / 255.0 alpha:1.0];
         [view addSubview:lineView];
         
-        UIView *availableProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 8, 0, 3)];
-        availableProgress.backgroundColor = [UIColor yellowColor];
-        [view addSubview:availableProgress];
+        UILabel *totalTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(totalDurationLength + 80 + 5, 7, 70, 15)];
+        totalTimeLabel.backgroundColor = [UIColor clearColor];
+        _totalTimeLabel = totalTimeLabel;
+        totalTimeLabel.textColor = [UIColor whiteColor];
+        totalTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
+        [view addSubview:totalTimeLabel];
         
-        UIView *playingProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 8, 0, 3)];
-        playingProgress.backgroundColor = [UIColor redColor];
+        UILabel *totalTimeLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(30, 7, 70, 15)];
+        totalTimeLabel1.backgroundColor = [UIColor clearColor];
+        _currentTimeLabel = totalTimeLabel1;
+        totalTimeLabel1.textColor = [UIColor whiteColor];
+        totalTimeLabel1.font = [UIFont fontWithName:@"Helvetica" size:17];
+        [view addSubview:totalTimeLabel1];
+        
+//        UIView *availableProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 12, 0, 3)];
+//        availableProgress.backgroundColor = [UIColor yellowColor];
+//        [view addSubview:availableProgress];
+        
+        UIView *playingProgress = [[UIView alloc] initWithFrame: CGRectMake(80, 12, 0, 2)];
+        playingProgress.backgroundColor = [UIColor whiteColor];
         [view addSubview:playingProgress];
+        _playingProgress = playingProgress;
         
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [cancelButton setTitle:NSLocalizedString(@"Quit", nil) forState:UIControlStateNormal];
         [cancelButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
-        cancelButton.frame = CGRectMake(0, 10, 90, 55);
+        cancelButton.frame = CGRectMake(0, 15, 90, 55);
         [view addSubview:cancelButton];
         
         UIButton *forwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [forwardButton setImage:[UIImage imageNamed:@"videoForward.png"] forState:UIControlStateNormal];
         [forwardButton addTarget:self action:@selector(forward) forControlEvents:UIControlEventTouchUpInside];
-        forwardButton.frame = CGRectMake(winSize.height * 3 / 4.0, 15, 60, 40);
+        forwardButton.frame = CGRectMake(winSize.height * 3 / 4.0, 20, 60, 40);
         [view addSubview:forwardButton];
         
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [backButton setImage:[UIImage imageNamed:@"videoBackward.png"] forState:UIControlStateNormal];
         [backButton addTarget:self action:@selector(backward) forControlEvents:UIControlEventTouchUpInside];
-        backButton.frame = CGRectMake(winSize.height * 1 / 4.0, 15, 60, 40);
+        backButton.frame = CGRectMake(winSize.height * 1 / 4.0, 20, 60, 40);
         [view addSubview:backButton];
         
         _pauseButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_pauseButton setImage:[UIImage imageNamed:@"videoPause.png"] forState:UIControlStateNormal];
         [_pauseButton addTarget:self action:@selector(pause) forControlEvents:UIControlEventTouchUpInside];
-        _pauseButton.frame = CGRectMake(winSize.height * 2 / 4.0, 15, 60, 40);
+        _pauseButton.frame = CGRectMake(winSize.height * 2 / 4.0, 20, 60, 40);
         [view addSubview:_pauseButton];
         _hideControlsTimer = [NSTimer scheduledTimerWithTimeInterval:kVideoHideControls target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
         [player.view addSubview:view];
@@ -363,6 +428,7 @@
 {
     [_moviePlayerController pause];
     [_moviePlayerController stop];
+    [_progressTimer invalidate];
 }
 
 @end
