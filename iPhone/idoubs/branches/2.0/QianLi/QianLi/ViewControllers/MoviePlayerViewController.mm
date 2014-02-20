@@ -16,6 +16,7 @@
 @interface MoviePlayerViewController ()
 {
     CGFloat totalDurationLength;
+    CGFloat totalDuration;
 }
 
 @property (weak, nonatomic) UIView *movieView;
@@ -115,6 +116,16 @@
     return UIInterfaceOrientationMaskLandscape | UIInterfaceOrientationMaskLandscapeRight;
 }
 
+- (void)getDuration
+{
+    totalDuration = _moviePlayerController.duration;
+}
+
+- (void)adjustProgress
+{
+    
+}
+
 -(void)createAndConfigurePlayerWithURL:(NSURL *)movieURL sourceType:(MPMovieSourceType)sourceType
 {
     /* Create a new movie player object. */
@@ -141,19 +152,19 @@
         [player view].backgroundColor = [UIColor lightGrayColor];
         
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, player.view.bounds.size.height - 60, player.view.bounds.size.width, 60)];
-        view.backgroundColor = [UIColor grayColor];
+        view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         _controls = view;
         
         totalDurationLength = player.view.bounds.size.width - 100;
-        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10, 5, totalDurationLength, 3)];
-        lineView.backgroundColor = [UIColor blueColor];
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(50, 8, totalDurationLength, 3)];
+        lineView.backgroundColor = [UIColor darkGrayColor];
         [view addSubview:lineView];
         
-        UIView *availableProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 5, 0, 3)];
+        UIView *availableProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 8, 0, 3)];
         availableProgress.backgroundColor = [UIColor yellowColor];
         [view addSubview:availableProgress];
         
-        UIView *playingProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 5, 0, 3)];
+        UIView *playingProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 8, 0, 3)];
         playingProgress.backgroundColor = [UIColor redColor];
         [view addSubview:playingProgress];
         
@@ -161,25 +172,25 @@
         [cancelButton setTitle:NSLocalizedString(@"Quit", nil) forState:UIControlStateNormal];
         [cancelButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
-        cancelButton.frame = CGRectMake(0, 5, 90, 55);
+        cancelButton.frame = CGRectMake(0, 10, 90, 55);
         [view addSubview:cancelButton];
         
         UIButton *forwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [forwardButton setImage:[UIImage imageNamed:@"videoForward.png"] forState:UIControlStateNormal];
         [forwardButton addTarget:self action:@selector(forward) forControlEvents:UIControlEventTouchUpInside];
-        forwardButton.frame = CGRectMake(winSize.height * 3 / 4.0, 10, 60, 40);
+        forwardButton.frame = CGRectMake(winSize.height * 3 / 4.0, 15, 60, 40);
         [view addSubview:forwardButton];
         
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [backButton setImage:[UIImage imageNamed:@"videoBackward.png"] forState:UIControlStateNormal];
         [backButton addTarget:self action:@selector(backward) forControlEvents:UIControlEventTouchUpInside];
-        backButton.frame = CGRectMake(winSize.height * 1 / 4.0, 10, 60, 40);
+        backButton.frame = CGRectMake(winSize.height * 1 / 4.0, 15, 60, 40);
         [view addSubview:backButton];
         
         _pauseButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_pauseButton setImage:[UIImage imageNamed:@"videoPause.png"] forState:UIControlStateNormal];
         [_pauseButton addTarget:self action:@selector(pause) forControlEvents:UIControlEventTouchUpInside];
-        _pauseButton.frame = CGRectMake(winSize.height * 2 / 4.0, 10, 60, 40);
+        _pauseButton.frame = CGRectMake(winSize.height * 2 / 4.0, 15, 60, 40);
         [view addSubview:_pauseButton];
         _hideControlsTimer = [NSTimer scheduledTimerWithTimeInterval:kVideoHideControls target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
         [player.view addSubview:view];
