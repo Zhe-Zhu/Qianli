@@ -15,6 +15,7 @@
 
 @interface MoviePlayerViewController ()
 {
+    CGFloat totalDurationLength;
 }
 
 @property (weak, nonatomic) UIView *movieView;
@@ -25,6 +26,9 @@
 @property (strong, nonatomic) MPMoviePlayerController *moviePlayerController;
 @property (strong, nonatomic) UIButton *pauseButton;
 
+@property (weak, nonatomic) UIView *playingProgress;
+@property (weak, nonatomic) UIView *availableProgress;
+@property (weak, nonatomic) NSTimer *progressTimer;
 @end
 
 @implementation MoviePlayerViewController
@@ -42,6 +46,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    NSTimer *progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(adjustProgress) userInfo:nil repeats:YES];
+    _progressTimer = progressTimer;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDuration) name:MPMovieDurationAvailableNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -98,6 +105,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscape | UIInterfaceOrientationMaskLandscapeRight;
@@ -131,6 +143,19 @@
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, player.view.bounds.size.height - 60, player.view.bounds.size.width, 60)];
         view.backgroundColor = [UIColor grayColor];
         _controls = view;
+        
+        totalDurationLength = player.view.bounds.size.width - 100;
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10, 5, totalDurationLength, 3)];
+        lineView.backgroundColor = [UIColor blueColor];
+        [view addSubview:lineView];
+        
+        UIView *availableProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 5, 0, 3)];
+        availableProgress.backgroundColor = [UIColor yellowColor];
+        [view addSubview:availableProgress];
+        
+        UIView *playingProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 5, 0, 3)];
+        playingProgress.backgroundColor = [UIColor redColor];
+        [view addSubview:playingProgress];
         
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [cancelButton setTitle:NSLocalizedString(@"Quit", nil) forState:UIControlStateNormal];
