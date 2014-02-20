@@ -252,6 +252,11 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
             //waitedlist
             [captchaInput resignFirstResponder];
             [self deactivateButtonContinue];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:YES forKey:kSingUpKey];
+            [userDefaults synchronize];
+            [UserDataAccessor setUserRemoteParty:_number];
+            [UserDataAccessor setUserWaitingNumber:_number];
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
             WaitingViewController *waitingVC = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
             waitingVC.succeed = YES;
@@ -294,31 +299,25 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
 
 - (void)noCaptcha
 {
-//    // 再发送一次验证码
-//    if (isFirstTap) {
-//        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"sendAgain", nil), _readableNumber];
-//        UIAlertView *noCaptchaFirstTap = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"sendAgainTitle", nil) message:message delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Confirm", nil), nil];
-//        [noCaptchaFirstTap show];
-//    }
-//    // 如果是第二次按则显示我们的邮箱
-//    else {
-//        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"sendAgainAgain", nil)];
-//        UIAlertView *noCaptchaSecondTap = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"sendAgainAgainTitle", nil) message:message delegate:self cancelButtonTitle:NSLocalizedString(@"Confirm", nil) otherButtonTitles:nil];
-//        [noCaptchaSecondTap show];
-//    }
-    NSString *message = @"抱歉，短信系统没能及时让你收到验证码，千里后台会马上给你打电话，告诉你验证码！";
-    UIAlertView *noCaptchaSecondTap = [[UIAlertView alloc] initWithTitle:@"语音验证码" message:message delegate:self cancelButtonTitle:NSLocalizedString(@"Confirm", nil) otherButtonTitles:@"OK"];
+    NSString *message = @"点击\"短信\"，千里后台会再发一次短信给你，点击 \"电话\" 按钮千里后台会马上给你打电话，告诉你验证码！";
+    UIAlertView *noCaptchaSecondTap = [[UIAlertView alloc] initWithTitle:@"语音验证码" message:message delegate:self cancelButtonTitle:NSLocalizedString(@"", nil) otherButtonTitles:@"电话",nil];
     [noCaptchaSecondTap show];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     if (buttonIndex == 0) {
-        NSLog(@"user pressed Cancel");
+        //
     }
     else {
-//        isFirstTap = NO;
-//        NSString *udid = [Utils getDeviceUDID];
-//        [PictureManager registerWithUDID:udid Password:_number Name:_number PhoneNumber:_number Email:@"" OS:@"i" Avatar:nil Success:^(int status){}];
+        [PictureManager getVerificationCodeByAudio:_number Success:^(int status) {
+            if (status == 1) {
+                // the right
+            }
+            else{
+                //error
+            }
+        }];
     }
 }
 

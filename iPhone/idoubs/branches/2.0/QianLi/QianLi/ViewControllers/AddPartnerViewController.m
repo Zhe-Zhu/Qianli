@@ -54,6 +54,7 @@
     label.font = [UIFont fontWithName:@"ArialHebrew" size:16];
     label.textColor = [UIColor colorWithRed:137 / 255.0 green:137 / 255.0 blue:137 / 255.0 alpha:1.0];
     label.numberOfLines = 0;
+    label.backgroundColor = [UIColor clearColor];
     [self.view addSubview:label];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
@@ -170,10 +171,55 @@
     [[WaitingListUtils sharedInstance] addPartner:strippedNumber];
 }
 
-- (IBAction)sendMessage:(id)sender {
+- (IBAction)sendMessage:(id)sender
+{
+    if ([MFMessageComposeViewController canSendText]) {
+        MFMessageComposeViewController *messageComposer = [[MFMessageComposeViewController alloc] init];
+        messageComposer.recipients = @[[UserDataAccessor getUserPartnerNumber]];
+        NSString *message = NSLocalizedString(@"emailBody", nil);
+        [messageComposer setBody:message];
+        if (IS_OS_7_OR_LATER) {
+            if ([MFMessageComposeViewController canSendSubject]) {
+                messageComposer.subject = NSLocalizedString(@"emailSubject", nil);
+            }
+        }
+        messageComposer.messageComposeDelegate = self;
+        [self presentViewController:messageComposer animated:YES completion:nil];
+    }
 }
 
-- (IBAction)sendEmail:(id)sender {
+- (IBAction)sendEmail:(id)sender
+{
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *vc = [[MFMailComposeViewController alloc] init];
+        [vc setSubject:NSLocalizedString(@"emailSubject", nil)];
+        [vc setMessageBody:NSLocalizedString(@"emailBody", nil) isHTML:NO];
+        vc.mailComposeDelegate = self;
+        if (vc) {
+            [self presentViewController:vc animated:YES completion:nil];
+        }
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError*)error;
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark  ---MFMessageComposeViewControllerDelegate---
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    if(result == MessageComposeResultCancelled) {
+        //Message cancelled
+    } else if(result == MessageComposeResultSent) {
+        //Message sent
+    }
+    else if (result == MessageComposeResultFailed){
+        //
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark --UITextFieldDelegate--
