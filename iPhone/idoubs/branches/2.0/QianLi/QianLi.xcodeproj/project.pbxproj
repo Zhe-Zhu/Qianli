@@ -137,7 +137,6 @@
 		2FB34F4618839209001B43B9 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2FB34F4318839209001B43B9 /* SVProgressHUD.bundle */; };
 		2FB34F4718839209001B43B9 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB34F4518839209001B43B9 /* SVProgressHUD.m */; };
 		2FB34F5F1883B5DC001B43B9 /* Global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FB34F5E1883B5DC001B43B9 /* Global.cpp */; };
-		50028A3217B3728E00029312 /* ff.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 50028A3117B3728E00029312 /* ff.jpg */; };
 		50028A3817B37E2300029312 /* baloon_out.png in Resources */ = {isa = PBXBuildFile; fileRef = 50028A3617B37E2300029312 /* baloon_out.png */; };
 		50028A3917B37E2300029312 /* baloon_out@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 50028A3717B37E2300029312 /* baloon_out@2x.png */; };
 		5007EDD617C6165800E0D56F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5007EDD517C6165800E0D56F /* CoreVideo.framework */; };
@@ -703,7 +702,6 @@
 		2FB34F4418839209001B43B9 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		2FB34F4518839209001B43B9 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		2FB34F5E1883B5DC001B43B9 /* Global.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Global.cpp; sourceTree = "<group>"; };
-		50028A3117B3728E00029312 /* ff.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ff.jpg; sourceTree = "<group>"; };
 		50028A3617B37E2300029312 /* baloon_out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = baloon_out.png; sourceTree = "<group>"; };
 		50028A3717B37E2300029312 /* baloon_out@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "baloon_out@2x.png"; sourceTree = "<group>"; };
 		5007EDD517C6165800E0D56F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -1707,7 +1705,6 @@
 				CE345F6417CB13FF009D52D4 /* tabBarItemSelected@2x.png */,
 				50028A3617B37E2300029312 /* baloon_out.png */,
 				50028A3717B37E2300029312 /* baloon_out@2x.png */,
-				50028A3117B3728E00029312 /* ff.jpg */,
 				505A078817B0A9420053E1B7 /* checkBox.png */,
 				505A078917B0A9420053E1B7 /* checkBox@2x.png */,
 				505A078A17B0A9420053E1B7 /* uncheckBox.png */,
@@ -2286,7 +2283,6 @@
 				CE345F8517CB13FF009D52D4 /* speaker@2x.png in Resources */,
 				505A078F17B0A9430053E1B7 /* uncheckBox@2x.png in Resources */,
 				18096A09187181B600198CD6 /* doodle_button_width_40_40@2x.psd in Resources */,
-				50028A3217B3728E00029312 /* ff.jpg in Resources */,
 				50028A3817B37E2300029312 /* baloon_out.png in Resources */,
 				CEBAFC1B1821FAE10021764A /* cameraTakePhotoBackground@2x.png in Resources */,
 				CEB99B7B18210CE1000551E1 /* cameraRotation@2x.png in Resources */,
