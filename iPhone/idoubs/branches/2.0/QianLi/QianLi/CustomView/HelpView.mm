@@ -442,7 +442,7 @@
     [UIView animateWithDuration:0.4 animations:^{
         callImageview.frame = [UIScreen mainScreen].bounds;
     } completion:^(BOOL finished) {
-        [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(doneMakeingCall:) userInfo:callImageview repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(doneMakeingCall:) userInfo:callImageview repeats:NO];
     }];
 }
 
@@ -680,6 +680,7 @@
         UIImageView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"help_4_picture_2.png"]];
         view.frame = CGRectMake(320 - 29, 284, 100, 150);
         [_fourthImageView addSubview:view];
+        [_fourthImageView bringSubviewToFront:blockView1];
         [UIView animateWithDuration:1.0 animations:^{
             view.frame = CGRectMake(320 - 29 - 100, 284, 100, 150);
             _subImageView1.frame = CGRectMake(320 - 29 - 200, 284, 100, 150);
