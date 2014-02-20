@@ -299,17 +299,20 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
 
 - (void)noCaptcha
 {
-    NSString *message = @"点击\"短信\"，千里后台会再发一次短信给你，点击 \"电话\" 按钮千里后台会马上给你打电话，告诉你验证码！";
-    UIAlertView *noCaptchaSecondTap = [[UIAlertView alloc] initWithTitle:@"语音验证码" message:message delegate:self cancelButtonTitle:NSLocalizedString(@"", nil) otherButtonTitles:@"电话",nil];
+    NSString *str = @"点击\"短信\"，千里后台会再发一次短信给你，点击 \"电话\" 按钮千里后台会马上给你打电话，告诉你验证码！";
+    UIAlertView *noCaptchaSecondTap = [[UIAlertView alloc] initWithTitle:@"提示" message:str delegate:self cancelButtonTitle:@"短信" otherButtonTitles:@"电话",nil];
     [noCaptchaSecondTap show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
-        //
+        // send the verification code again
+        NSString *udid = [Utils getDeviceUDID];
+        [PictureManager registerWithUDID:udid Password:_number Name:_number PhoneNumber:_number Email:@"" OS:@"i" Avatar:nil Success:nil];
     }
     else {
+        //make auido call to tell user the verification code
         [PictureManager getVerificationCodeByAudio:_number Success:^(int status) {
             if (status == 1) {
                 // the right
