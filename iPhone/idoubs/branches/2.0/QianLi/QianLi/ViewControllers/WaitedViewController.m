@@ -38,7 +38,7 @@
     _queueLabel.textColor = [UIColor colorWithRed:137 / 255.0 green:137 / 255.0 blue:137 / 255.0 alpha:1.0];
     
     _numberLabel.text = [NSString stringWithFormat:@"%d", _totalWaitingPeople];
-    NSString *str = @"恭喜你，你现在可以使用千里提供的服务了";
+    NSString *str = NSLocalizedString(@"canUseQianli", nil);
     CGSize constraintSize;
     constraintSize.width = 240;
     constraintSize.height = MAXFLOAT;
@@ -55,9 +55,17 @@
     buttonLabel.textAlignment = NSTextAlignmentCenter;
     buttonLabel.backgroundColor = [UIColor clearColor];
     buttonLabel.textColor = [UIColor whiteColor];
-    buttonLabel.text = @"开始千里";
+    buttonLabel.text = NSLocalizedString(@"BeginQianli", nil);
     buttonLabel.font = [UIFont fontWithName:@"ArialHebrew" size:25];
     [_startButton addSubview:buttonLabel];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //added by Xiangwen
+    //localized queueLabel;
+    _queueLabel.text = NSLocalizedString(@"stillInQueue", nil);
 }
 
 - (void)didReceiveMemoryWarning

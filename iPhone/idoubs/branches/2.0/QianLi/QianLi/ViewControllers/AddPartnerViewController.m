@@ -44,7 +44,7 @@
     _numberField.backgroundColor = [UIColor colorWithRed:220 / 255.0 green:220 / 255.0 blue:220 / 255.0 alpha:1.0];
     
     self.navigationController.navigationBarHidden = NO;
-    NSString *str = @"输入一个亲友号码，当你获得千里使用资格后，我们会同时激活该号码";
+    NSString *str = NSLocalizedString(@"addPartnerIntro", nil);
     CGSize constraintSize;
     constraintSize.width = 240;
     constraintSize.height = MAXFLOAT;
@@ -68,14 +68,14 @@
         _partnerLabel.alpha = 0.0;
         _numberField.alpha = 0.0;
         _doneButton.alpha = 0.0;
-        label.text = [NSString stringWithFormat:@"你的亲友号码是:%@。你可以短信或邮件告诉你的好友。", partnerNumber];
+        label.text = [NSString stringWithFormat:NSLocalizedString(@"partnerVerifiedText", nil), partnerNumber];
     }
     UILabel *buttonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _doneButton.frame.size.width, _doneButton.frame.size.height)];
     _buttonLabel = buttonLabel;
     buttonLabel.textAlignment = NSTextAlignmentCenter;
     buttonLabel.backgroundColor = [UIColor clearColor];
     buttonLabel.textColor = [UIColor whiteColor];
-    buttonLabel.text = @"确定";
+    buttonLabel.text = NSLocalizedString(@"addPartnerOK", nil);
     buttonLabel.font = [UIFont fontWithName:@"ArialHebrew" size:25];
     [_doneButton addSubview:buttonLabel];
     
@@ -90,6 +90,9 @@
             [_numberField becomeFirstResponder];
         }
     }
+    //added by Xiangwen
+    //localized partnerLabel;
+    _partnerLabel.text = NSLocalizedString(@"partnerNumber", nil);
 }
 
 - (void)didReceiveMemoryWarning
@@ -111,12 +114,12 @@
     NSInteger result = [[jsonDict valueForKey:@"result"] integerValue];
     if (result == 0) {
        // partner number has already been in our system
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"亲，你想要绑定的号码已经在千里系统中，请选择其他号码" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"alreadyHavePartnerTitle", nil) message:NSLocalizedString(@"alreadyHavePartnerText", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"alreadyHavePartnerOK", nil) otherButtonTitles: nil];
         [alertView show];
     }
     else if (result == 1){
         // first time add partner successfully
-        _buttonLabel.text = @"绑定成功";
+        _buttonLabel.text = NSLocalizedString(@"bindPartnerSuccessfully", nil);
         [UserDataAccessor setUserPartnerNumber:_partnerNumber];
         [UIView animateWithDuration:1.0 animations:^{
             _emailButton.alpha = 1.0;
@@ -127,12 +130,12 @@
     }
     else if (result == 2){
         // changed partner successfully
-        _buttonLabel.text = @"绑定成功";
+        _buttonLabel.text = NSLocalizedString(@"bindPartnerSuccessfully", nil);
         [UserDataAccessor setUserPartnerNumber:_partnerNumber];
     }
     else if (result == 3){
         //can not changed partner
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"亲，你已近绑定了一个号码，不能再绑定其他号码了" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"notChangePartnerTitle", nil) message: NSLocalizedString(@"notChangePartnerText", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"notChangePartnerOK", nil) otherButtonTitles: nil];
         [alertView show];
     }
     else if (result == -1){
@@ -152,7 +155,7 @@
     
     NSString* strippedNumber = [words componentsJoinedByString:@""];
     if ([strippedNumber length] < 11 ) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"号码有误，请重新填写" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"addPartnerErrorTitle", nil) message:NSLocalizedString(@"addPartnerErrorText", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"addPartnerErrorOK", nil) otherButtonTitles: nil];
         [alertView show];
         return;
     }

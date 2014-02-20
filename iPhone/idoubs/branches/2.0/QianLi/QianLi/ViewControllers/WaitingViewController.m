@@ -64,6 +64,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    // added by Xiangwen
+    // localize beforeLabel and behindTextLabel
+    _beforeLabel.text = NSLocalizedString(@"beforeText", nil);
+    _behindTextLabel.text = NSLocalizedString(@"behindTextLabel", nil);
+    _partnerLabel.text = NSLocalizedString(@"partnerNumber", nil);
+    
     self.navigationController.navigationBarHidden = YES;
     NSString *partnerNumber = [UserDataAccessor getUserPartnerNumber];
     _partnerNumberLabel.text = partnerNumber;
