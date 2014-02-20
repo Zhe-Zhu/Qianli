@@ -206,3 +206,7 @@
 "BeginQianli" = "开始千里";
 "partnerNumber" = "亲友号码";
 "stillInQueue" = "仍在排队";
+"voiceCaptchaIntro" = "点击\"短信\"，千里后台会再发一次短信给你，点击 \"电话\" 按钮千里后台会马上给你打电话，告诉你验证码！";
+"voiceCaptchaTitle" = "提示";
+"message" = "message";
+"phoneCall" = "电话";

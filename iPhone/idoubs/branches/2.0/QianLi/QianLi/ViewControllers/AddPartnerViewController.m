@@ -76,7 +76,7 @@
     buttonLabel.backgroundColor = [UIColor clearColor];
     buttonLabel.textColor = [UIColor whiteColor];
     buttonLabel.text = NSLocalizedString(@"addPartnerOK", nil);
-    buttonLabel.font = [UIFont fontWithName:@"ArialHebrew" size:25];
+    buttonLabel.font = [UIFont fontWithName:@"ArialHebrew" size:20];
     [_doneButton addSubview:buttonLabel];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addPartner:) name:kAddPartnerNotification object:nil];
