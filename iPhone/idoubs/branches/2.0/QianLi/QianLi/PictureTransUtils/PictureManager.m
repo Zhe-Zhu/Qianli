@@ -93,6 +93,12 @@
 
 @end
 
+@interface AudioVerificacion : NSObject
+
+@property(nonatomic, strong) NSString  *phone_number;
+@property(nonatomic, strong) NSString  *country_code;
+@end
+
 
 @implementation VerifyStatus
 
@@ -132,6 +138,11 @@
 
 @implementation Picture
 @synthesize name, date, sender, receiver, sessionID,available, index, url;
+@end
+
+@implementation AudioVerificacion
+@synthesize phone_number, country_code;
+
 @end
 
 @interface PictureManager ()
@@ -486,9 +497,42 @@ static PictureManager *pictureManager;
     }];
 }
 
-+ (void)getVerificationCodeByAudio:(NSString *)number
++ (void)getVerificationCodeByAudio:(NSString *)number Success:(void(^)(int status))success
 {
     RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString: kBaseURL]];
+    
+    RKObjectMapping *verifyMapping = [RKObjectMapping mappingForClass:[VerifyStatus class]];
+    [verifyMapping addAttributeMappingsFromDictionary:@{@"status": @"status"}];
+    RKResponseDescriptor *verifyResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:verifyMapping method:RKRequestMethodPOST pathPattern:@"/captcha/sendcaptchabyvoice/" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    RKObjectMapping *verifyRequestMapping = [RKObjectMapping requestMapping];
+    [verifyRequestMapping addAttributeMappingsFromDictionary:@{@"phone_number": @"phone_number", @"country_code": @"country_code"}];
+    RKRequestDescriptor *verifyDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:verifyRequestMapping objectClass:[AudioVerificacion class] rootKeyPath:nil method:RKRequestMethodPOST];
+    [manager addRequestDescriptor:verifyDescriptor];
+    [manager addResponseDescriptor:verifyResponseDescriptor];
+    
+    // Initilize a new account used to mapped to the registration request Json structure during registration.
+    AudioVerificacion *verification = [AudioVerificacion new];
+    NSString *pnumber = [number substringWithRange:NSMakeRange(4, [number length] - 4)];
+    NSString *code = [number substringWithRange:NSMakeRange(0, 4)];
+    verification.country_code = code;
+    verification.phone_number = pnumber;
+    
+    [manager postObject:verification path:@"/captcha/sendcaptchabyvoice/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        VerifyStatus *regStatus = (VerifyStatus *)[mappingResult firstObject];
+        if (success) {
+            success(regStatus.status);
+        }
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [manager postObject:verification path:@"/captcha/sendcaptchabyvoice/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            VerifyStatus *regStatus = (VerifyStatus *)[mappingResult firstObject];
+            if (success) {
+                success(regStatus.status);
+            }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"");
+        }];
+    }];
 }
 
 - (void)clearSharedInstance

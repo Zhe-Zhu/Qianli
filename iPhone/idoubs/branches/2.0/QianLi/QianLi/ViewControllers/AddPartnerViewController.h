@@ -10,7 +10,9 @@
 #import "Global.h"
 #import "WaitingListUtils.h"
 #import "UserDataAccessor.h"
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
-@interface AddPartnerViewController : UIViewController
+@interface AddPartnerViewController : UIViewController<MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate>
 
 @end
