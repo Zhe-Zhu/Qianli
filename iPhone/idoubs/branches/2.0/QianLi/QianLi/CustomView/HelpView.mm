@@ -275,7 +275,7 @@
     //add finger
     UIImage *fingerImage = [UIImage imageNamed:@"help_1_drag_right.png"];
     UIImageView *fingerView = [[UIImageView alloc] initWithImage:fingerImage];
-    fingerView.frame = CGRectMake(27, 319, fingerImage.size.width, fingerImage.size.height);
+    fingerView.frame = CGRectMake(27, 282, fingerImage.size.width, fingerImage.size.height);
     [_firstImageView addSubview:fingerView];
     _fingerView = fingerView;
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(moveFinger:) userInfo:nil repeats:NO];
@@ -295,6 +295,8 @@
     historyCell.frame = CGRectMake(0, 223, historyCell.frame.size.width, historyCell.frame.size.height);
     historyCell.shouldAnimateCellReset = YES;
     [imageView addSubview:historyCell];
+    
+    [_firstImageView bringSubviewToFront:fingerView];
 }
 
 - (void)changeBackground
@@ -320,7 +322,9 @@
     historyCell.frame = frame;
     historyCell.shouldAnimateCellReset = YES;
     [_firstImageView addSubview:historyCell];
-    [NSTimer scheduledTimerWithTimeInterval:9.0 target:self selector:@selector(changeBackground) userInfo:nil repeats:NO];
+    
+    // partner view will display for 3 seconds
+    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(changeBackground) userInfo:nil repeats:NO];
     
     CGFloat width = 80;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((320 - width) / 2.0, 326.5, width, 20)];
@@ -400,7 +404,7 @@
     //add finger
     UIImage *fingerImage = [UIImage imageNamed:@"help_drag_left.png"];
     UIImageView *fingerView = [[UIImageView alloc] initWithImage:fingerImage];
-    fingerView.frame = CGRectMake(240, 319, fingerImage.size.width, fingerImage.size.height);
+    fingerView.frame = CGRectMake(240, 282, fingerImage.size.width, fingerImage.size.height);
     [_secondImageView addSubview:fingerView];
     _leftFingerView = fingerView;
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(moveLeftFinger) userInfo:nil repeats:NO];
@@ -585,7 +589,7 @@
     UIImageView *fingerImageView = [[UIImageView alloc] initWithImage:leftFiner];
     _shareFinerView = fingerImageView;
     [_fourthImageView addSubview:fingerImageView];
-    fingerImageView.frame = CGRectMake(320 - 30 - leftFiner.size.width, 195, leftFiner.size.width, leftFiner.size.height);
+    fingerImageView.frame = CGRectMake(320 - 30 - leftFiner.size.width, 250, leftFiner.size.width, leftFiner.size.height);
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(moveShareImageFinger) userInfo:nil repeats:NO];
     
     UIImageView *subImageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"help_4_picture_1.png"]];
@@ -595,6 +599,7 @@
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
     [subImageView1 addGestureRecognizer:pan];
     _subImageView1 = subImageView1;
+    [_fourthImageView bringSubviewToFront:fingerImageView];
 }
 
 - (void)moveShareImageFinger
@@ -659,16 +664,28 @@
 
 - (void)showSharingImageEffect
 {
+    UIView *blockView = [[UIView alloc] initWithFrame:CGRectMake(0, 284, 320 - 29 - 100, 150)];
+    blockView.backgroundColor = [UIColor colorWithRed:50.0 / 255.0 green:50.0 / 255.0 blue:50.0 / 255.0 alpha:1.0];
+    UIView *blockView1 = [[UIView alloc] initWithFrame:CGRectMake(320 - 29, 284, 30, 150)];
+    blockView1.backgroundColor = [UIColor colorWithRed:50.0 / 255.0 green:50.0 / 255.0 blue:50.0 / 255.0 alpha:1.0];
+    [_fourthImageView addSubview:blockView1];
+    [_fourthImageView addSubview:blockView];
+    [_fourthImageView bringSubviewToFront:_subImageView2];
+    
     [UIView animateWithDuration:1.0 animations:^{
         _subImageView2.frame = CGRectMake(29, 284, 100, 150);
     } completion:^(BOOL finished) {
         _subImageView1.frame = CGRectMake(320 - 29 - 100, 284, 100, 150);
+        
         UIImageView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"help_4_picture_2.png"]];
         view.frame = CGRectMake(320 - 29, 284, 100, 150);
         [_fourthImageView addSubview:view];
         [UIView animateWithDuration:1.0 animations:^{
             view.frame = CGRectMake(320 - 29 - 100, 284, 100, 150);
+            _subImageView1.frame = CGRectMake(320 - 29 - 200, 284, 100, 150);
         } completion:^(BOOL finished) {
+            [blockView removeFromSuperview];
+            [blockView1 removeFromSuperview];
             [_subImageView1 removeFromSuperview];
             [self performSelector:@selector(showButton) withObject:nil afterDelay:1.0];
         }];
