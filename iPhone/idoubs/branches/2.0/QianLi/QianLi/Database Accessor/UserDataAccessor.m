@@ -12,7 +12,7 @@
 
 + (NSString *)documentsPathForFileName:(NSString *)name
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [paths objectAtIndex:0];
     return [documentsPath stringByAppendingPathComponent:name];
 }
@@ -20,7 +20,7 @@
 
 + (UIImage *)getUserProfile
 {
-    NSString *filePath = [self documentsPathForFileName:@"Profile.jpeg"];
+    NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"Profile_%@.jpg", [self getUserRemoteParty]]];
     NSData *pngData = [NSData dataWithContentsOfFile:filePath];
     UIImage *image = [UIImage imageWithData:pngData];
     return image;
@@ -29,7 +29,7 @@
 + (BOOL)setUserProfile:(UIImage *)image
 {
     NSData *pngData = UIImageJPEGRepresentation(image, 0.5);
-    NSString *filePath = [self documentsPathForFileName:@"Profile.jpeg"];
+    NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"Profile_%@.jpg", [self getUserRemoteParty]]];
     return [pngData writeToFile:filePath atomically:YES];
 }
 
@@ -47,7 +47,7 @@
 
 + (UIImage *)getUserPhoneDispImage
 {
-    NSString *filePath = [self documentsPathForFileName:@"PhoneImage.jpeg"];
+    NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"PhoneImage_%@.jpg", [self getUserRemoteParty]]];
     NSData *pngData = [NSData dataWithContentsOfFile:filePath];
     UIImage *image = [UIImage imageWithData:pngData];
     return image;
@@ -56,7 +56,7 @@
 + (BOOL)setUserPhoneDispImage:(UIImage *)image
 {
     NSData *pngData = UIImageJPEGRepresentation(image, 0.5);
-    NSString *filePath = [self documentsPathForFileName:@"PhoneImage.jpeg"];
+    NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"PhoneImage_%@.jpg", [self getUserRemoteParty]]];
     return [pngData writeToFile:filePath atomically:YES];
 }
 
