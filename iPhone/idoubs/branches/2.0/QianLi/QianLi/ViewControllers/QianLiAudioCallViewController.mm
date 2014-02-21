@@ -255,7 +255,7 @@
 
 - (void)proximityChanged
 {
-    
+    //
 }
 
 - (void)handelAudioRouteChange
