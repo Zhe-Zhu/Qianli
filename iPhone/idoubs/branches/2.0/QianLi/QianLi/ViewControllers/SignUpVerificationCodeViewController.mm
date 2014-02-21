@@ -226,6 +226,9 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
         if (status == 1) {
             [captchaInput resignFirstResponder];
             [self deactivateButtonContinue];
+            if ([UserDataAccessor getUserRemoteParty] != nil) {
+                [UserDataAccessor deleteUserImages];
+            }
             [UserDataAccessor setUserRemoteParty:_number];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setBool:YES forKey:kSingUpKey];

@@ -17,7 +17,6 @@
     return [documentsPath stringByAppendingPathComponent:name];
 }
 
-
 + (UIImage *)getUserProfile
 {
     NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"Profile_%@.jpg", [self getUserRemoteParty]]];
@@ -31,6 +30,14 @@
     NSData *pngData = UIImageJPEGRepresentation(image, 0.5);
     NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"Profile_%@.jpg", [self getUserRemoteParty]]];
     return [pngData writeToFile:filePath atomically:YES];
+}
+
++ (void)deleteUserImages
+{
+    NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"Profile_%@.jpg", [self getUserRemoteParty]]];
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"PhoneImage_%@.jpg", [self getUserRemoteParty]]];
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 }
 
 + (NSString *)getUserRemoteParty
