@@ -12,12 +12,12 @@
 
 + (UIImage *)getUserProfile;
 + (BOOL)setUserProfile:(UIImage *)image;
++ (UIImage *)getUserPhoneDispImage;
++ (BOOL)setUserPhoneDispImage:(UIImage *)image;
++ (void)deleteUserImages;
 
 + (NSString *)getUserRemoteParty;
 + (void)setUserRemoteParty:(NSString *)remoteParty;
-
-+ (UIImage *)getUserPhoneDispImage;
-+ (BOOL)setUserPhoneDispImage:(UIImage *)image;
 
 + (NSString *)getUserName;
 + (void)setUserName:(NSString *)name;
