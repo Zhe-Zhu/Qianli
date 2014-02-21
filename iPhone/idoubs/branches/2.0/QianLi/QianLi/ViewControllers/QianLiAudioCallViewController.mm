@@ -173,19 +173,7 @@
             break;
         }
     }
-    
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    UIDevice *device = [UIDevice currentDevice];
-    
-    // Register for proximity notifications
-    [device setProximityMonitoringEnabled:YES];
-    
-    if ([device isProximityMonitoringEnabled]) {
-        [notificationCenter addObserver:self selector:@selector(proximityChanged) name:UIDeviceProximityStateDidChangeNotification object:nil];
-    } else {
-        NSLog(@"No Proximity Sensor");
-    }
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onInviteEvent:) name:kNgnInviteEventArgs_Name object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveIncomingGettingImageMessage:) name:@"receivedImageNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handelAudioRouteChange) name:AVAudioSessionRouteChangeNotification object:nil];
@@ -212,6 +200,16 @@
     if (_bigProfileImage.image == nil) {
         [self setBigDisplayImage];
     }
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    UIDevice *device = [UIDevice currentDevice];
+    // Register for proximity notifications
+    [device setProximityMonitoringEnabled:YES];
+    
+    if ([device isProximityMonitoringEnabled]) {
+        [notificationCenter addObserver:self selector:@selector(proximityChanged) name:UIDeviceProximityStateDidChangeNotification object:nil];
+    } else {
+        NSLog(@"No Proximity Sensor");
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -232,6 +230,7 @@
     [super viewWillDisappear:animated];
     [[SipStackUtils sharedInstance].soundService stopRingBackTone];
     [[SipStackUtils sharedInstance].soundService stopRingTone];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -252,7 +251,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
 }
 
 - (void)proximityChanged
