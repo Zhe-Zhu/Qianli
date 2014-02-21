@@ -174,6 +174,18 @@
         }
     }
     
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    UIDevice *device = [UIDevice currentDevice];
+    
+    // Register for proximity notifications
+    [device setProximityMonitoringEnabled:YES];
+    
+    if ([device isProximityMonitoringEnabled]) {
+        [notificationCenter addObserver:self selector:@selector(proximityChanged) name:UIDeviceProximityStateDidChangeNotification object:nil];
+    } else {
+        NSLog(@"No Proximity Sensor");
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onInviteEvent:) name:kNgnInviteEventArgs_Name object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveIncomingGettingImageMessage:) name:@"receivedImageNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handelAudioRouteChange) name:AVAudioSessionRouteChangeNotification object:nil];
@@ -240,6 +252,12 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+}
+
+- (void)proximityChanged
+{
+    
 }
 
 - (void)handelAudioRouteChange
