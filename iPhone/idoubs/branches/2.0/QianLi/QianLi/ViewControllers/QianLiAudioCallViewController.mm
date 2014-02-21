@@ -835,6 +835,9 @@
 
 - (void)selectVideo
 {
+    if (kIsCallingQianLiRobot) {
+        [[SipStackUtils sharedInstance].audioService sendDTMF:0];
+    }
     videoBeginTime = [[NSDate date] timeIntervalSince1970];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     _vedioVC = [storyboard instantiateViewControllerWithIdentifier:@"VideoViewController"];
