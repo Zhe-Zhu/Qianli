@@ -57,8 +57,8 @@
     if (_succeed) {
         
     }
-    [[WaitingListUtils sharedInstance] getWaitingStatus];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkWaitingStatus:) name:kCheckStatusNotification object:nil];
+    [[WaitingListUtils sharedInstance] getWaitingStatus];
 }
 
 - (void)viewWillAppear:(BOOL)animated
