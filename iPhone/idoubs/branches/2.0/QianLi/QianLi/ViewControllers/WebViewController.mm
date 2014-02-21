@@ -177,6 +177,7 @@
     if (kIsCallingQianLiRobot) {
         kQianLiRobotSharedWebNum++;
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSynWeb", nil),[_webView stringByEvaluatingJavaScriptFromString:@"document.title"]]];
+        [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(synSuccessed) userInfo:nil repeats:NO];
     }
     // 对网页内容进行同步
     //CODE_REVIEW:在iphone4S和iphone5上测试，不能同步。

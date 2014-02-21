@@ -320,6 +320,7 @@
     if (kIsCallingQianLiRobot) {
         kQianLiRobotSharedWebNum++;
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSynWeb", nil),[_webView stringByEvaluatingJavaScriptFromString:@"document.title"]]];
+        [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(synSuccessed) userInfo:nil repeats:NO];
     }
     // 对网页内容进行同步
     float offsetx = _webView.scrollView.contentOffset.x;
