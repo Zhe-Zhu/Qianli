@@ -55,6 +55,7 @@ const float kColorB = 73/100.0;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //[self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+    kIsCallingQianLiRobot = NO;
     _didJustLaunch = YES;
     didLaunch = YES;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

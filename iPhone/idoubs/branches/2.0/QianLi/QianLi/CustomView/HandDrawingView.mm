@@ -169,7 +169,7 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     drawingCount++;
-    if (drawingCount > 15 && !hasShownInfomation) {
+    if (drawingCount > 15 && !hasShownInfomation && kIsCallingQianLiRobot) {
         [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"QianLiRobotDrawingGood", nil)];
         hasShownInfomation = YES;
     }

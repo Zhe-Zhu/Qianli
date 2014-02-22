@@ -408,6 +408,9 @@
 
 -(void)cancel
 {
+    if (kIsCallingQianLiRobot) {
+        [[SipStackUtils sharedInstance].audioService sendDTMF:2];
+    }
     [self cancelMoviePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
     [[SipStackUtils sharedInstance].messageService sendMessage:kVideoPlayerCancel toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
