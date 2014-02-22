@@ -227,6 +227,7 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
             [captchaInput resignFirstResponder];
             [self deactivateButtonContinue];
             if ([UserDataAccessor getUserRemoteParty] != nil) {
+                // because server has deleted user's profile and big avatar
                 [UserDataAccessor deleteUserImages];
             }
             [UserDataAccessor setUserRemoteParty:_number];
