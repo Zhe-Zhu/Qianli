@@ -174,7 +174,7 @@
 "QianLiRobotPauseVideo" = "my video is paused";
 "QianLiRobotPlayVieo" = "My screen is displaying vieo: %@";
 "QianLiRobotSynWeb" = "My screen is displaying web: %@";
-"QianLiRobotEndCall" = "GoodBye! the call between last for %d mins %d seconds, you and I \n [*share %d photos; \n *complete %d drawings; \n *browse %d webs; \n *watch %d videos]";
+"QianLiRobotEndCall" = "GoodBye! the call lasted for %d mins %d seconds, you and I \n [*share %d photos; \n *complete %d drawings; \n *browse %d webs; \n *watch %d videos]";
 "QianLiRobotDrawingGood" = "You are good at drawing, do your parent know that?";
 "beforeText" = "Between Qianli and you, there are";
 "behindTextLabel" = "after you";
