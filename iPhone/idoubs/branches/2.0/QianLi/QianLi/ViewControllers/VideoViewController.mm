@@ -225,6 +225,11 @@
 
 -(void)playMovieStream:(NSURL *)movieFileURL
 {
+    // added by Xiangwen
+    // if calling QianLi Robot, stop the background music.
+    if (kIsCallingQianLiRobot) {
+        [[SipStackUtils sharedInstance].audioService sendDTMF:1];
+    }
     MoviePlayerViewController *player = [[MoviePlayerViewController alloc] init];
     //CODE_REVIEW:可以不用传递_videoThumbs，在MoviePlayer里不能截屏。
     player.thumbs = _vedioThumbs;
