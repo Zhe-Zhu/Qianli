@@ -277,6 +277,10 @@
 
 - (void)didFinishEditing:(UIImage *)profile
 {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if (![Utils checkInternetAndDispWarning:YES]) {
+        return;
+    }
     if (_isBigPhoto) {
         UIImage *smallProfile = [self reSizeImage:profile toSize:CGSizeMake(76, 104)];
         [UserDataTransUtils patchUserPhoneDispImage:profile number:[UserDataAccessor getUserRemoteParty] Completion:^(BOOL success) {
@@ -291,8 +295,6 @@
             [_avatar performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
         }];
     }
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
