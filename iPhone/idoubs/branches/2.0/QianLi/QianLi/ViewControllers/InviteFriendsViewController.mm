@@ -246,14 +246,15 @@
             ABPropertyID property = multiProperties[j];
             ABMultiValueRef valuesRef = ABRecordCopyValue(person, property);
             NSInteger valuesCount = 0;
-            if (valuesRef != nil) valuesCount = ABMultiValueGetCount(valuesRef);
-        
+            if (valuesRef != nil){
+                valuesCount = ABMultiValueGetCount(valuesRef);
+            }
+            NSMutableArray *telephone = [NSMutableArray array];
             for (NSInteger k = 0; k < valuesCount; k++) {
                 NSString *value = (__bridge_transfer NSString*)ABMultiValueCopyValueAtIndex(valuesRef, k);
                 switch (j) {
                     case 0: {// Phone number
-                        //addressBook.tel = (__bridge NSString*)value;
-                        [addressBook.telAarry addObject:value];
+                        [telephone addObject:value];
                         break;
                     }
                     case 1: {// Email
@@ -262,11 +263,13 @@
                     }
                 }
             }
+            if (j == 0) {
+                addressBook.telAarry = telephone;
+            }
             if (valuesRef != NULL) {
                 CFRelease(valuesRef);
             }
         }
-        
         if (addressBook.name) {
             [addressBookTemp addObject:addressBook];
         }

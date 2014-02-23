@@ -9,6 +9,7 @@
 #import "SettingChangeNameViewController.h"
 #import "UserDataTransUtils.h"
 #import "UserDataAccessor.h"
+#import "Utils.h"
 
 @interface SettingChangeNameViewController ()
 
@@ -53,12 +54,15 @@
     if ([self.delegate respondsToSelector:@selector(nameChanged:)]) {
         [self.delegate nameChanged:self.nameTextField.text];
     }
+    [self.navigationController popViewControllerAnimated:YES];
+    if (![Utils checkInternetAndDispWarning:YES]) {
+        return;
+    }
     [UserDataTransUtils patchUserName:self.nameTextField.text number:[UserDataAccessor getUserRemoteParty] Completion:^(BOOL success) {
         if (success) {
             [UserDataAccessor setUserName:self.nameTextField.text];
         }
     }];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
