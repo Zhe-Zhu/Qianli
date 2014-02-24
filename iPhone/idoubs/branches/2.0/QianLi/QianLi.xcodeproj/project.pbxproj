@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1801D0EE187FDFCF00D02065 /* hudSaveInAlbum@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1801D0ED187FDFCF00D02065 /* hudSaveInAlbum@2x.png */; };
-		18059AA918B5B107001FCA86 /* ringbacktone.wav in Resources */ = {isa = PBXBuildFile; fileRef = 18059AA818B5B107001FCA86 /* ringbacktone.wav */; };
 		18096A09187181B600198CD6 /* doodle_button_width_40_40@2x.psd in Resources */ = {isa = PBXBuildFile; fileRef = 180969E0187181B600198CD6 /* doodle_button_width_40_40@2x.psd */; };
 		18096A0A187181B600198CD6 /* doodle_color_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 180969E1187181B600198CD6 /* doodle_color_1@2x.png */; };
 		18096A0B187181B600198CD6 /* doodle_color_1_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 180969E2187181B600198CD6 /* doodle_color_1_selected@2x.png */; };
@@ -51,7 +50,7 @@
 		18096A30187181B600198CD6 /* doodle_width_4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18096A07187181B600198CD6 /* doodle_width_4@2x.png */; };
 		18096A31187181B600198CD6 /* doodle_width_4_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18096A08187181B600198CD6 /* doodle_width_4_selected@2x.png */; };
 		1830D5FC185B15CE009E5D19 /* QianLiImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830D5FB185B15CE009E5D19 /* QianLiImagePickerViewController.m */; };
-		1835EA4918B8AC03009B591E /* ringtone_new.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1835EA4818B8AC03009B591E /* ringtone_new.mp3 */; };
+		1835EA4918B8AC03009B591E /* ringtone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1835EA4818B8AC03009B591E /* ringtone.mp3 */; };
 		184EB7791851C91C00D70240 /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D76182C9E15001536CB /* libUMFeedback.a */; };
 		18DF837B18AC9C8F006CADD8 /* WaitingListUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DF837A18AC9C8F006CADD8 /* WaitingListUtils.m */; };
 		18E22AF318B444E400A6FBA3 /* WaitedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E22AF218B444E400A6FBA3 /* WaitedViewController.m */; };
@@ -100,6 +99,7 @@
 		18EA7DF1187CF1450098A824 /* help_quit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EA7DD4187CF1450098A824 /* help_quit@2x.png */; };
 		18F4126C18B20BCE00F27B1F /* WaitingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4126B18B20BCE00F27B1F /* WaitingViewController.m */; };
 		18F4128518B20DDE00F27B1F /* AddPartnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4128418B20DDE00F27B1F /* AddPartnerViewController.m */; };
+		18FAC78D18BADC13008BCE02 /* ringbacktone.wav in Resources */ = {isa = PBXBuildFile; fileRef = 18FAC78C18BADC13008BCE02 /* ringbacktone.wav */; };
 		18FD1E8B1884E1F4006D3D51 /* help_1_background_words_1136@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FD1E7C1884E1F4006D3D51 /* help_1_background_words_1136@2x.png */; };
 		18FD1E8C1884E1F4006D3D51 /* help_1_done_background_words_1136@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FD1E7D1884E1F4006D3D51 /* help_1_done_background_words_1136@2x.png */; };
 		18FD1E8D1884E1F4006D3D51 /* help_1_draged_background_words_1136@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FD1E7E1884E1F4006D3D51 /* help_1_draged_background_words_1136@2x.png */; };
@@ -188,7 +188,6 @@
 		502AA60717C721F400FA2F27 /* SipStackUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5050904217BDC93A0035A8AE /* SipStackUtils.mm */; };
 		502AA60817C721F400FA2F27 /* SoundService.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5050904417BDC93A0035A8AE /* SoundService.mm */; };
 		502AA60917C721F400FA2F27 /* Utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5050904617BDC93A0035A8AE /* Utils.mm */; };
-		503DCDDF18068CAB00514A33 /* ringtone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 503DCDDD18068CAB00514A33 /* ringtone.mp3 */; };
 		504802AC17B215D000DE830B /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 504802AB17B215D000DE830B /* CoreTelephony.framework */; };
 		505A076D17B094740053E1B7 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 505A076C17B094740053E1B7 /* MainStoryboard.storyboard */; };
 		505A076F17B09E520053E1B7 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 505A076E17B09E520053E1B7 /* AddressBookUI.framework */; };
@@ -557,7 +556,6 @@
 
 /* Begin PBXFileReference section */
 		1801D0ED187FDFCF00D02065 /* hudSaveInAlbum@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hudSaveInAlbum@2x.png"; sourceTree = "<group>"; };
-		18059AA818B5B107001FCA86 /* ringbacktone.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ringbacktone.wav; sourceTree = "<group>"; };
 		180969E0187181B600198CD6 /* doodle_button_width_40_40@2x.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = "doodle_button_width_40_40@2x.psd"; sourceTree = "<group>"; };
 		180969E1187181B600198CD6 /* doodle_color_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "doodle_color_1@2x.png"; sourceTree = "<group>"; };
 		180969E2187181B600198CD6 /* doodle_color_1_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "doodle_color_1_selected@2x.png"; sourceTree = "<group>"; };
@@ -601,7 +599,7 @@
 		18096A08187181B600198CD6 /* doodle_width_4_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "doodle_width_4_selected@2x.png"; sourceTree = "<group>"; };
 		1830D5FA185B15CE009E5D19 /* QianLiImagePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QianLiImagePickerViewController.h; sourceTree = "<group>"; };
 		1830D5FB185B15CE009E5D19 /* QianLiImagePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QianLiImagePickerViewController.m; sourceTree = "<group>"; };
-		1835EA4818B8AC03009B591E /* ringtone_new.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ringtone_new.mp3; sourceTree = "<group>"; };
+		1835EA4818B8AC03009B591E /* ringtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ringtone.mp3; sourceTree = "<group>"; };
 		18DF837918AC9C8F006CADD8 /* WaitingListUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitingListUtils.h; sourceTree = "<group>"; };
 		18DF837A18AC9C8F006CADD8 /* WaitingListUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitingListUtils.m; sourceTree = "<group>"; };
 		18E22AF118B444E400A6FBA3 /* WaitedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitedViewController.h; sourceTree = "<group>"; };
@@ -654,6 +652,7 @@
 		18F4126B18B20BCE00F27B1F /* WaitingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitingViewController.m; sourceTree = "<group>"; };
 		18F4128318B20DDE00F27B1F /* AddPartnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPartnerViewController.h; sourceTree = "<group>"; };
 		18F4128418B20DDE00F27B1F /* AddPartnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPartnerViewController.m; sourceTree = "<group>"; };
+		18FAC78C18BADC13008BCE02 /* ringbacktone.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ringbacktone.wav; sourceTree = "<group>"; };
 		18FD1E7C1884E1F4006D3D51 /* help_1_background_words_1136@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_1_background_words_1136@2x.png"; sourceTree = "<group>"; };
 		18FD1E7D1884E1F4006D3D51 /* help_1_done_background_words_1136@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_1_done_background_words_1136@2x.png"; sourceTree = "<group>"; };
 		18FD1E7E1884E1F4006D3D51 /* help_1_draged_background_words_1136@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_1_draged_background_words_1136@2x.png"; sourceTree = "<group>"; };
@@ -744,7 +743,6 @@
 		5029D48317E30049005368A1 /* VideoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoUtils.h; sourceTree = "<group>"; };
 		5029D48417E30049005368A1 /* VideoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoUtils.m; sourceTree = "<group>"; };
 		502AA5A717C71EAB00FA2F27 /* ios-ngn-stack.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "ios-ngn-stack.xcodeproj"; path = "../ios-ngn-stack/ios-ngn-stack.xcodeproj"; sourceTree = "<group>"; };
-		503DCDDD18068CAB00514A33 /* ringtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ringtone.mp3; sourceTree = "<group>"; };
 		504802AB17B215D000DE830B /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		50508FCA17BDC93A0035A8AE /* Global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		5050902E17BDC93A0035A8AE /* PictureManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PictureManager.h; sourceTree = "<group>"; };
@@ -1472,9 +1470,8 @@
 		503DCDDB18068CAB00514A33 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
-				1835EA4818B8AC03009B591E /* ringtone_new.mp3 */,
-				18059AA818B5B107001FCA86 /* ringbacktone.wav */,
-				503DCDDD18068CAB00514A33 /* ringtone.mp3 */,
+				18FAC78C18BADC13008BCE02 /* ringbacktone.wav */,
+				1835EA4818B8AC03009B591E /* ringtone.mp3 */,
 			);
 			path = Sound;
 			sourceTree = "<group>";
@@ -2078,6 +2075,7 @@
 				CE7CE9F617CF339B0042F057 /* requestLoading@2x.png in Resources */,
 				CE1E8D011843377A00A956A2 /* iOS6TabbarEmptySelected@2x.png in Resources */,
 				CE5D0D7B182CB2D7001536CB /* repliesCountBackground@2x.png in Resources */,
+				18FAC78D18BADC13008BCE02 /* ringbacktone.wav in Resources */,
 				18FD1E981884E1F4006D3D51 /* help_4_done_1136@2x.png in Resources */,
 				18EA7DE0187CF1450098A824 /* help_2_done_background_words@2x.png in Resources */,
 				18EA7DDA187CF1450098A824 /* help_1_draged_background_words@2x.png in Resources */,
@@ -2096,7 +2094,6 @@
 				CE1E8CF41843377A00A956A2 /* barButton@2x.png in Resources */,
 				18E36D79187807FC00D685EA /* help_1_background@2x.png in Resources */,
 				CE8A390917F97AB9002F651A /* helpButton@2x.png in Resources */,
-				503DCDDF18068CAB00514A33 /* ringtone.mp3 in Resources */,
 				CEBAFC45182200540021764A /* cameraTakePhoto2@2x.png in Resources */,
 				18096A2B187181B600198CD6 /* doodle_width_1_selected@2x.png in Resources */,
 				18FD1E8D1884E1F4006D3D51 /* help_1_draged_background_words_1136@2x.png in Resources */,
@@ -2151,7 +2148,6 @@
 				CE4E88F517DDAD330012D34E /* more@2x.png in Resources */,
 				CEB99B7D18210CE1000551E1 /* cameraFlashOn@2x.png in Resources */,
 				18EA7DF1187CF1450098A824 /* help_quit@2x.png in Resources */,
-				18059AA918B5B107001FCA86 /* ringbacktone.wav in Resources */,
 				CE758B5B1848370500541FA0 /* doodleClear@2x.png in Resources */,
 				CE345F6A17CB13FF009D52D4 /* callingIndicator.png in Resources */,
 				CE5ECA041805303400BDE0B0 /* videoPlay@2x.png in Resources */,
@@ -2175,7 +2171,7 @@
 				CE4E88FB17DDCE070012D34E /* photoCoverIphone5@2x.png in Resources */,
 				CE8A38EE17F95635002F651A /* helpImage1@2x.png in Resources */,
 				CE1E8D4A184462D900A956A2 /* callingIndicatorSpin@2x.png in Resources */,
-				1835EA4918B8AC03009B591E /* ringtone_new.mp3 in Resources */,
+				1835EA4918B8AC03009B591E /* ringtone.mp3 in Resources */,
 				18096A30187181B600198CD6 /* doodle_width_4@2x.png in Resources */,
 				18FD1E971884E1F4006D3D51 /* help_4_background_words_1136@2x.png in Resources */,
 				18EA7DED187CF1450098A824 /* help_5_background_words@2x.png in Resources */,
