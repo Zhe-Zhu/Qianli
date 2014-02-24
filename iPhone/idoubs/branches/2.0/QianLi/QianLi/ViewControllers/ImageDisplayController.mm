@@ -310,7 +310,22 @@
 {
     [self setIndicator];
     if (kIsCallingQianLiRobot) {
-        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSlidePhoto", nil),_currentPage]];
+        NSString *str;
+        switch (_currentPage) {
+            case 1:
+                str = @"st";
+                break;
+            case 2:
+                str = @"nd";
+                break;
+            case 3:
+                str = @"rd";
+                break;
+            default:
+                str = @"th";
+                break;
+        }
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSlidePhoto", nil), _currentPage, str]];
         //TODO: add or not
         return;
     }

@@ -101,6 +101,8 @@
     [self.view sendSubviewToBack:view];
     [self addCHangeWidthButtonToView:self.view];
     [self addCHangeEraseWidthButtonToView:self.view];
+    _clearAll.enabled = NO;
+    _undoButton.enabled = NO;
     
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     [cancelButton setImage:[UIImage imageNamed:@"arrowLeft.png"]];
@@ -503,31 +505,6 @@
     [self.drawings addObject:[Utils screenshot:_drawingView toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     UIImage *image = [_drawingView screenshot];
     UIImageWriteToSavedPhotosAlbum(image, NULL, NULL, NULL);
-    
-//    UIView *flashView = [[UIView alloc] initWithFrame:_drawingView.frame];
-//    flashView.backgroundColor = [UIColor whiteColor];
-//    [self.view addSubview:flashView];
-//    [UIView animateWithDuration:0.2 animations:^{
-//        flashView.alpha = 0.0;
-//    } completion:^(BOOL finished) {
-//        [flashView removeFromSuperview];
-//        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-//        imageView.frame = _drawingView.frame;
-//        [self.view addSubview:imageView];
-//        [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-//            CGAffineTransform scaleTransform = CGAffineTransformMakeScale(0.01, 0.01);
-//            CGAffineTransform translation;
-//            if (IS_IPHONE5) {
-//                translation = CGAffineTransformMakeTranslation(150.0, 258.0);
-//            }
-//            else{
-//                translation = CGAffineTransformMakeTranslation(150.0, 218.0);
-//            }
-//            imageView.transform = CGAffineTransformConcat(scaleTransform, translation);
-//        } completion:^(BOOL finished) {
-//             [imageView removeFromSuperview];
-//        }];
-//    }];
     [SVStatusHUD showWithImage:[UIImage imageNamed:@"hudSaveInAlbum.png"] status:NSLocalizedString(@"PhotoSaved", nil)];
 }
 
@@ -544,6 +521,9 @@
 
 - (void)cancelFromRemoteParty
 {
+    if (_clearAll.enabled) {
+        [self.drawings addObject:[Utils screenshot:_drawingView toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
+    }
     if ([_drawings count] > 0) {
         NSData *imageData = [NSKeyedArchiver archivedDataWithRootObject:_drawings];
         DetailHistEvent *imageEvent = [[DetailHistEvent alloc] init];
