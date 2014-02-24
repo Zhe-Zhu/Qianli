@@ -226,10 +226,6 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
         if (status == 1) {
             [captchaInput resignFirstResponder];
             [self deactivateButtonContinue];
-            if ([UserDataAccessor getUserRemoteParty] != nil) {
-                // because server has deleted user's profile and big avatar
-                [UserDataAccessor deleteUserImages];
-            }
             [UserDataAccessor setUserRemoteParty:_number];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setBool:YES forKey:kSingUpKey];
@@ -237,6 +233,18 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
             SignUpEditProfileViewController *editProfileCV = [storyboard instantiateViewControllerWithIdentifier:@"SignUpEditProfileViewController"];
             [self performSelectorOnMainThread:@selector(showViewController:) withObject:editProfileCV waitUntilDone:NO];
+            UIImage *avatar = [UserDataAccessor getUserProfile];
+            if (avatar) {
+                [UserDataTransUtils patchUserProfile:avatar number:_number Completion:nil];
+            }
+            UIImage *bigProfile = [UserDataAccessor getUserPhoneDispImage];
+            if (bigProfile) {
+                [UserDataTransUtils patchUserPhoneDispImage:bigProfile number:_number Completion:nil];
+            }
+            NSString *name = [UserDataAccessor getUserName];
+            if (name) {
+                [UserDataTransUtils patchUserName:name number:_number Completion:nil];
+            }
         }
         else if (status == 2){
             //waitinglist primary number

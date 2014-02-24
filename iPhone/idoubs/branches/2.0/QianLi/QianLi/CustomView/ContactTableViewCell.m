@@ -32,7 +32,7 @@ CGFloat cellHeight = 44;
 
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, cellHeight/2.0 - avatarDiameter/2.0, avatarDiameter, avatarDiameter)];
         _profileImageView = imageView;
-        imageView.layer.cornerRadius = avatarDiameter/2.0;
+        imageView.layer.cornerRadius = avatarDiameter / 2.0;
         imageView.clipsToBounds = YES;
         [self addSubview:_profileImageView];
         

@@ -665,6 +665,7 @@
     // 被叫者名字和"拨号中"指示文字
     UILabel *herName = [[UILabel alloc] initWithFrame:CGRectMake(160 - 200/2, 0, 200, 40)];
     NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:_remotePartyNumber];
+    herName.backgroundColor = [UIColor clearColor];
     if (name) {
         herName.text = name;
     }
