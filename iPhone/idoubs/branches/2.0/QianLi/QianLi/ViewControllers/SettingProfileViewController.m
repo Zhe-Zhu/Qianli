@@ -289,7 +289,7 @@
         }];
     }
     else {
-        UIImage *image = [self reSizeImage:profile toSize:CGSizeMake(88, 88)];
+        UIImage *image = [self reSizeImage:profile toSize:CGSizeMake(120, 120)];
         [UserDataTransUtils patchUserProfile:image number:[UserDataAccessor getUserRemoteParty] Completion:^(BOOL success) {
             [UserDataAccessor setUserProfile:image];
             [_avatar performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];

@@ -69,13 +69,13 @@
 
 + (NSString *)getUserName
 {
-    NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERNAME"];
+    NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"NAME_%@", [self getUserRemoteParty]]];
     return name;
 }
 
 + (void)setUserName:(NSString *)name
 {
-    [[NSUserDefaults standardUserDefaults] setObject:name forKey:@"USERNAME"];
+    [[NSUserDefaults standardUserDefaults] setObject:name forKey:[NSString stringWithFormat:@"NAME_%@", [self getUserRemoteParty]]];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

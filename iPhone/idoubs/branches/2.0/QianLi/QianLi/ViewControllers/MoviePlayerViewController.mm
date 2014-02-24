@@ -49,8 +49,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    NSTimer *progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(adjustProgress) userInfo:nil repeats:YES];
-     _progressTimer = progressTimer;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDuration) name:MPMovieDurationAvailableNotification object:nil];
 }
 
@@ -94,6 +92,14 @@
     [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
     if (![Utils isHeadsetPluggedIn]) {
         [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
+    }
+}
+
+- (void)setUpProgressTimer
+{
+    if (!_progressTimer) {
+        NSTimer *progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(adjustProgress) userInfo:nil repeats:YES];
+        _progressTimer = progressTimer;
     }
 }
 
@@ -143,6 +149,8 @@
         }
         _totalTimeLabel.text = str;
     }
+    [self adjustProgress];
+    [self setUpProgressTimer];
 }
 
 - (void)adjustProgress
@@ -287,11 +295,14 @@
         _controls.alpha = 0.0;
     } completion:^(BOOL finished) {
         _controlON = NO;
+        [_progressTimer invalidate];
     }];
 }
 
 - (void)showControls
 {
+    [self adjustProgress];
+    [self setUpProgressTimer];
     [UIView animateWithDuration:0.3 animations:^{
         _controls.alpha = 1.0;
     } completion:^(BOOL finished) {
