@@ -222,6 +222,7 @@
     if ([entry.remoteParty isEqualToString:QianLiRobotNumber]) {
         UIAlertView *QianLiRobotAlwaysAvailable= [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"QianLiRobotAlwaysAvailableTitle", nil) message:NSLocalizedString(@"QianLiRobotAlwaysAvailableMessage", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Confirm", nil) otherButtonTitles: nil];
         [QianLiRobotAlwaysAvailable show];
+        return;
     }
     
     // send some request
