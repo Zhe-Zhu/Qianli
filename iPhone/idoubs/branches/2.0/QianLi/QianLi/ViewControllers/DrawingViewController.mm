@@ -492,6 +492,7 @@
     [self hideChangeWidthButton:NO];
     [_drawingView clearAll];
     button.enabled = NO;
+    _undoButton.enabled = YES;
     if (kIsCallingQianLiRobot) {
         kQianLiRobotSharedDoodleNum++;
         [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"QianLiRobotClearDrawingView", nil)];
