@@ -273,7 +273,7 @@
     imageView.userInteractionEnabled = YES;
     
     //add finger
-    UIImage *fingerImage = [UIImage imageNamed:@"help_1_drag_right.png"];
+    UIImage *fingerImage = [UIImage imageNamed:@"help_drag_right.png"];
     UIImageView *fingerView = [[UIImageView alloc] initWithImage:fingerImage];
     fingerView.frame = CGRectMake(27, 282, fingerImage.size.width, fingerImage.size.height);
     [_firstImageView addSubview:fingerView];
