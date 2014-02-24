@@ -194,6 +194,7 @@
 "canUseQianli" = "Congratulation, you can use Qianli now";
 "partnerNumber" = "partner's number";
 "stillInQueue" = "still in queue";
+"BeginQianli" = "Get started";
 "voiceCaptchaIntro" = "press \"message\", Qianli will send you captcha code again through message. Press \"phone call\", Qianli will call you and tell you the captcha code!";
 "phoneCall" = "phone Call";
 "voiceCaptchaTitle" = "Hint";

@@ -49,6 +49,7 @@
     label.textColor = [UIColor grayColor];
     label.numberOfLines = 0;
     [self.view addSubview:label];
+    label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor colorWithRed:72 / 255.0 green:188 / 255.0 blue:205 / 255.0 alpha:1.0];
     
     UILabel *buttonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _startButton.frame.size.width, _startButton.frame.size.height)];

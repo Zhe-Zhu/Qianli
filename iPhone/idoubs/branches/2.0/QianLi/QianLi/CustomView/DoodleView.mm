@@ -225,7 +225,6 @@
 
 - (void)sendDoodleMessage:(NSString *)drawing
 {
-    //Send message to remotrparty TODO://change line width
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
     NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@%@%d%@%f", kDoodleImagePoints, kSeparator, drawing, kSeparator, _pointsMessage, kSeparator, 1, kSeparator, _lineWidth];
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];

@@ -169,7 +169,7 @@
         }
         else
         {
-            UIAlertView * warningView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"emailWarningTitle", nil) message:NSLocalizedString(@"emailWarningMessage", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"emailWarningOK", nil) otherButtonTitles:nil, nil];
+            UIAlertView * warningView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"emailWarningTitle", nil) message:NSLocalizedString(@"emailWarningMessage", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"emailWarningOK", nil) otherButtonTitles:nil, nil];
             [warningView show];
             [_activityIndicator stopAnimating];
         }
@@ -237,6 +237,7 @@
     }
     else if (buttonIndex == alertView.cancelButtonIndex){
         [_deleteAccount setSelected:NO animated:YES];
+        [_sendEmailCell setSelected:NO animated:YES];
     }
 }
 
