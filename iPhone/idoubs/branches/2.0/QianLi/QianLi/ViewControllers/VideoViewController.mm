@@ -135,7 +135,7 @@
             [self playMovieStream:[NSURL URLWithString:videoURL]];
             if (kIsCallingQianLiRobot) {
                 kQianLiRobotsharedVideoNum++;
-                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotPlayVieo", nil), @"Unknow"]];
+                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotPlayVieo", nil)]];
             }
             NSString *message = [NSString stringWithFormat:@"%@%@%@",kPlayVideo, kSeparator, videoURL];
             [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];

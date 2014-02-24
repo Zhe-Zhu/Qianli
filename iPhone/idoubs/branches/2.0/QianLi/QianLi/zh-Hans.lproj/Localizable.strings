@@ -181,7 +181,7 @@
 "QianLiRobotSlidePhoto" = "你滑动了照片, 目前我的屏幕正显示第%d张照片.";
 "QianLiRobotClearDrawingView" = "你清空了画布, 现在我的屏幕一片空白, 准备好再来一篇大作了嘛?";
 "QianLiRobotSynWeb" = "我屏幕上的网页目前是%@";
-"QianLiRobotPlayVieo" = "我的屏幕开始播放%@";
+"QianLiRobotPlayVieo" = "我的屏幕开始播放";
 "QianLiRobotPauseVideo" = "我的视频被暂停了";
 "QianLiRobotForwardBackVideo" = "现在视频是%d分%d秒";
 "QianLiRobotEndCall" = "再见! 我们的通话持续了%d 分钟 %d 秒, 你和我 \n [*分享了%d张照片; \n *完成了%d篇涂鸦; \n *浏览了%d个网页; \n *观看了%d个视频]";

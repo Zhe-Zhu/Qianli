@@ -172,7 +172,7 @@
 "QianLiRobotClearDrawingView" = "You cleared the drawing view, would you like to draw again?";
 "QianLiRobotForwardBackVideo" = "The video is at %d mins %d seconds";
 "QianLiRobotPauseVideo" = "my video is paused";
-"QianLiRobotPlayVieo" = "My screen is playing vieo: %@";
+"QianLiRobotPlayVieo" = "My screen is playing vieo";
 "QianLiRobotSynWeb" = "My screen is displaying web: %@";
 "QianLiRobotEndCall" = "GoodBye! the call lasted for %d mins %d seconds, you and I \n [*shared %d photos; \n *completed %d drawings; \n *browsed %d webs; \n *watched %d videos]";
 "QianLiRobotDrawingGood" = "You are good at drawing, do your parent know that?";
@@ -192,7 +192,7 @@
 "addPartnerErrorText" = "Please make sure the number is correct and then try again";
 "addPartnerErrorOK" = "OK";
 "canUseQianli" = "Congratulation, you can use Qianli now";
-"partnerNumber" = "partner's number";
+"partnerNumber" = "Number";
 "stillInQueue" = "still in queue";
 "BeginQianli" = "Get started";
 "voiceCaptchaIntro" = "press \"message\", Qianli will send you captcha code again through message. Press \"phone call\", Qianli will call you and tell you the captcha code!";
