@@ -52,7 +52,7 @@
    // [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     self.avatar.clipsToBounds = YES;
-    self.avatar.layer.cornerRadius = CGRectGetWidth(self.avatar.frame)/2.0;
+    self.avatar.layer.cornerRadius = 22;//CGRectGetWidth(self.avatar.frame)/2.0;
     
     NSString *name = [UserDataAccessor getUserName];
     if (!name || [name isEqualToString:@""]) {

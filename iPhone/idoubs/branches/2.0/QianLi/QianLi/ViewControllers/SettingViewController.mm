@@ -80,7 +80,8 @@
     // 读取用户的照片
     [self getNameAndAvatar];
     self.profilePhoto.clipsToBounds = YES;
-    self.profilePhoto.layer.cornerRadius = CGRectGetWidth(self.profilePhoto.bounds)/2.0;
+    CGFloat radius = 19;//CGRectGetWidth(self.profilePhoto.bounds) / 2.0;
+    self.profilePhoto.layer.cornerRadius = radius;
     self.profilePhoto.image = [UserDataAccessor getUserProfile];
     
     repliesCountNumber = [[NSUserDefaults standardUserDefaults] integerForKey:@"RepliesCount"];
@@ -104,6 +105,11 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
 }
 
 - (void)didReceiveMemoryWarning
