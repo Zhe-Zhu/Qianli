@@ -409,7 +409,9 @@
 -(void)cancel
 {
     if (kIsCallingQianLiRobot) {
-        [[SipStackUtils sharedInstance].audioService sendDTMF:2];
+        //[[SipStackUtils sharedInstance].audioService sendDTMF:2];
+        [[SipStackUtils sharedInstance].messageService sendMessage: @"make a appointment" toRemoteParty:QianLiRobotNumber];
+        
     }
     [self cancelMoviePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];

@@ -210,3 +210,5 @@
 "voiceCaptchaTitle" = "提示";
 "message" = "message";
 "phoneCall" = "电话";
+"QianLiRobotAlwaysAvailableTitle" = "千里机器人总是有空的";
+"QianLiRobotAlwaysAvailableMessage" = "千里机器人总是有空，请直接拨打。";

@@ -217,9 +217,14 @@
     if (![Utils checkInternetAndDispWarning:YES]) {
         return;
     }
-    // send some request
     NSIndexPath *indexPath = [_historyTableView indexPathForCell:historyMainCell];
     MainHistoryEntry *entry = (MainHistoryEntry *)[_historyRecords objectAtIndex:indexPath.row];
+    if ([entry.remoteParty isEqualToString:QianLiRobotNumber]) {
+        UIAlertView *QianLiRobotAlwaysAvailable= [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"QianLiRobotAlwaysAvailableTitle", nil) message:NSLocalizedString(@"QianLiRobotAlwaysAvailableMessage", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Confirm", nil) otherButtonTitles: nil];
+        [QianLiRobotAlwaysAvailable show];
+    }
+    
+    // send some request
     NSString *message = [NSString stringWithFormat:@"%@%@%@", kAppointment,kSeparator,[UserDataAccessor getUserRemoteParty]];
     [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:entry.remoteParty];
     
