@@ -308,6 +308,10 @@
     if (![Utils checkInternetAndDispWarning:YES]) {
         return;
     }
+    if ([_remotePartyPhoneNumber isEqualToString:QianLiRobotNumber]) {
+        UIAlertView *QianLiRobotAlwaysAvailable= [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"QianLiRobotAlwaysAvailableTitle", nil) message:NSLocalizedString(@"QianLiRobotAlwaysAvailableMessage", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Confirm", nil) otherButtonTitles: nil];
+        [QianLiRobotAlwaysAvailable show];
+    }
     
     NSString *message = [NSString stringWithFormat:@"%@%@%@", kAppointment,kSeparator,[UserDataAccessor getUserRemoteParty]];
     [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:_remotePartyPhoneNumber];

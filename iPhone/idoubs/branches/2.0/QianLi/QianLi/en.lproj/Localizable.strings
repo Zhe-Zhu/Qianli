@@ -198,3 +198,5 @@
 "voiceCaptchaIntro" = "press \"message\", Qianli will send you captcha code again through message. Press \"phone call\", Qianli will call you and tell you the captcha code!";
 "phoneCall" = "phone Call";
 "voiceCaptchaTitle" = "Hint";
+"QianLiRobotAlwaysAvailableTitle" = "QianLi robot is always available";
+"QianLiRobotAlwaysAvailableMessage" = "QianLi robot is always available, please just call her.";
