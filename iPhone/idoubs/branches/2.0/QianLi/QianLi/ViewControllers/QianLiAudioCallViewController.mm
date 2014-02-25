@@ -756,16 +756,16 @@
             // 因为目前无法检测网络状态,所以不加入此功能
             //    [self addNetworkIndicator];
             
-            [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+            [[SipStackUtils sharedInstance].soundService stopRingTone];
+            [[SipStackUtils sharedInstance].soundService performSelector:@selector(enableBackgroundSound) withObject:nil afterDelay:0.5];
         }
         else{
             
         }
     }
     else{
-       
+       [[SipStackUtils sharedInstance].soundService stopRingTone];
     }
-    [[SipStackUtils sharedInstance].soundService stopRingTone];
 }
 
 #pragma mark QianLiUIMenuBar delegate Method
