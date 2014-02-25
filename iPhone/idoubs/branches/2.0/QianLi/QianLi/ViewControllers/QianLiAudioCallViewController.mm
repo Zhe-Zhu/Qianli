@@ -1553,6 +1553,10 @@
     else if ([message isEqualToString:kHangUpcall]){
         [self hangUpCallFromRemoteParty];
     }
+    else if ([message isEqualToString:kInCall]){
+        [[SipStackUtils sharedInstance].soundService performSelector:@selector(stopRingBackTone) withObject:nil afterDelay:5.0];
+        [[SipStackUtils sharedInstance].soundService performSelector:@selector(playInCallSound) withObject:nil afterDelay:5.5];
+    }
 }
 
 - (void)hangUpCallFromRemoteParty
