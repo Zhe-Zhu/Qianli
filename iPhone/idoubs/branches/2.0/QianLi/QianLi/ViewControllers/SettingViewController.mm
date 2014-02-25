@@ -261,6 +261,8 @@
 //    }];
     
     // 返回到注册界面
+    [[MainHistoryDataAccessor sharedInstance] deleteAllObjects];
+    [[DetailHistoryAccessor sharedInstance] deleteAllHistory];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     UINavigationController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
     [[UIApplication sharedApplication] delegate].window.rootViewController = signUpEditProfileViewController;

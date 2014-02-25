@@ -37,7 +37,7 @@
     _numberLabel.textColor = [UIColor colorWithRed:137 / 255.0 green:137 / 255.0 blue:137 / 255.0 alpha:1.0];
     _queueLabel.textColor = [UIColor colorWithRed:137 / 255.0 green:137 / 255.0 blue:137 / 255.0 alpha:1.0];
     
-    _numberLabel.text = [NSString stringWithFormat:@"%d", _totalWaitingPeople];
+    _numberLabel.text = [NSString stringWithFormat:@"%d%@", _totalWaitingPeople, NSLocalizedString(@"people", nil)];
     NSString *str = NSLocalizedString(@"canUseQianli", nil);
     CGSize constraintSize;
     constraintSize.width = 240;

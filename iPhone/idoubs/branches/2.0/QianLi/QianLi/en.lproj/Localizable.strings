@@ -12,9 +12,10 @@
 "PUSHCALLING" = "%@: incoming call";
 "LOCALMESSAGE" = "%@ is sharing fun things with you";
 "PUSHACTIONKEY" = "answer";
-"APPOINTMENT" ="%@ wants to talk with you";
+"APPOINTMENT" ="call me using Qianli at your convenience: %@";
 "APPOINTMENTACTIONKEY" = "OK";
 "MISSEDCALL" = "%@: missed call";
+"MISSEDCALLACTIONKEY" = "Details";
 "missedcallactionkey" = "see details";
 "contactTitle" = "Contacts";
 "recentCalls" = "Recents";
@@ -148,7 +149,7 @@
 "labelAbout" = "About Qianli";
 
 //Local notification
-"IncomingCallWithOutName" = "you have a call now, tap to answer";
+"IncomingCallWithOutName" = "you have a call, tap to answer";
 "micOn" = "MIC ON";
 "micOff" = "MIC OFF";
 "speakerOff" = "Speaker OFF";
@@ -175,8 +176,8 @@
 "QianLiRobotPlayVieo" = "My screen is playing vieo";
 "QianLiRobotSynWeb" = "My screen is displaying web: %@";
 "QianLiRobotEndCall" = "GoodBye! the call lasted for %d mins %d seconds, you and I \n [*shared %d photos; \n *completed %d drawings; \n *browsed %d webs; \n *watched %d videos]";
-"QianLiRobotDrawingGood" = "You are good at drawing, do your parent know that?";
-"beforeText" = "Between Qianli and you, there are";
+"QianLiRobotDrawingGood" = "Wow, you are good at drawing.";
+"beforeText" = "People who are queuing before you are";
 "behindTextLabel" = "after you";
 "addPartnerIntro" = "Please provide us a partner number, your partner can enjoy our service as soon as you become an offical user of Qianli";
 "partnerVerifiedText" = "your partner's number is %@. You can inform your partner by text or email";
@@ -201,3 +202,5 @@
 "voiceCaptchaTitle" = "Hint";
 "QianLiRobotAlwaysAvailableTitle" = "QianLi robot is always available";
 "QianLiRobotAlwaysAvailableMessage" = "QianLi robot is always available, please just call her.";
+"people" = "";
+"RobotName" = "Qianli";

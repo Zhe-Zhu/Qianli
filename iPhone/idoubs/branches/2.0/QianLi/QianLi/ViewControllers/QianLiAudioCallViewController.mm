@@ -272,6 +272,7 @@
 
 - (void)setBigDisplayImage
 {
+    //TODO: how to set qianli's big photo
     [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
     UIImageView *imageView = _bigProfileImage;
     [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {

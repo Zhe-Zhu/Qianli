@@ -108,7 +108,6 @@
          forState:UIControlStateDisabled
          barMetrics:UIBarMetricsDefault];
     }
-
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -12,11 +12,10 @@
 "PUSHCALLING" = "[%@]正在呼叫你，点击接听";
 "LOCALMESSAGE" = "%@ 正分享给你有趣的事";
 "PUSHACTIONKEY" = "接听";
-"APPOINTMENT" ="有空的话给我回个电话吧? - %@";
+"APPOINTMENT" ="有空用千里给我回个电话吧? - %@";
 "APPOINTMENTACTIONKEY" = "好的";
 "MISSEDCALL" = "您有一个来自[%@]的未接来电";
-"missedcallactionkey" = "查看细节";
-
+"MISSEDCALLACTIONKEY" = "查看细节";
 // AppDelegate.mm
 "contactTitle" = "联系人";
 "setting" = "设置";
@@ -212,3 +211,5 @@
 "phoneCall" = "电话";
 "QianLiRobotAlwaysAvailableTitle" = "千里机器人总是有空的";
 "QianLiRobotAlwaysAvailableMessage" = "千里机器人总是有空，请直接拨打。";
+"people" = "人";
+"RobotName" = "千里";

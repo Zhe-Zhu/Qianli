@@ -107,8 +107,8 @@
         // have to wait longer
         NSInteger numOfBeforeUser = [[jsonDict valueForKey:@"before"] integerValue];
         NSInteger numOfBehindUser = [[jsonDict valueForKey:@"behind"] integerValue];
-        _beforeNumberLabel.text = [NSString stringWithFormat:@"%d", numOfBeforeUser];
-        _behindNumberLabel.text = [NSString stringWithFormat:@"%d", numOfBehindUser];
+        _beforeNumberLabel.text = [NSString stringWithFormat:@"%d%@", numOfBeforeUser, NSLocalizedString(@"people", nil)];
+        _behindNumberLabel.text = [NSString stringWithFormat:@"%d%@", numOfBehindUser, NSLocalizedString(@"people", nil)];
         NSString *partnerNumber = [jsonDict valueForKey:@"partner"];
         if ((![partnerNumber isEqualToString:[UserDataAccessor getUserPartnerNumber]]) && (![partnerNumber isEqualToString:@""])) {
             [UserDataAccessor setUserPartnerNumber:partnerNumber];
