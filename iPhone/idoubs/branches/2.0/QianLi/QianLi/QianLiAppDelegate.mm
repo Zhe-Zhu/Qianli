@@ -48,9 +48,9 @@
 @synthesize tabController = _tabController;
 
 // 最近通话 联系人 设置界面的Navigation Bar颜色
-const float kColorH = 187/360.0;
-const float kColorS = 86/100.0;
-const float kColorB = 73/100.0;
+const float kColorH = 156/360.0;
+const float kColorS = 98/100.0;
+const float kColorB = 75/100.0;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -206,7 +206,7 @@ const float kColorB = 73/100.0;
         
         NSArray *controllers = @[histroyNaviCV, contactNavigationVC, settingNavigationController];
         _tabController.viewControllers = controllers;
-        [_tabController.tabBar setTintColor:[UIColor colorWithRed:56/255.0 green:181/255.0 blue:199/255.0 alpha:1.0]];
+        [_tabController.tabBar setTintColor:[UIColor colorWithRed:4/255.0 green:190/255.0 blue:117/255.0 alpha:1.0]];
         if ([_tabController.tabBar respondsToSelector:@selector(setTranslucent:)]) {
             [_tabController.tabBar setTranslucent:YES];
         }
