@@ -363,6 +363,7 @@ static SipStackUtils * sipStackUtilsInstance;
                 if ([SipCallManager SharedInstance].audioVC) {
                     if (![[SipCallManager SharedInstance].audioVC.remotePartyNumber isEqualToString:[self getRemoteParty:remotePartyUri]]) {
                         //refuse other people's call when you are in a call
+                        [self.messageService sendMessage:kInCall toRemoteParty:remotePartyUri];
                         return;
                     }
                     else{

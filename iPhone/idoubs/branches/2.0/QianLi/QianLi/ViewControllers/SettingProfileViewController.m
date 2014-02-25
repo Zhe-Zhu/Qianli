@@ -307,8 +307,7 @@
 
 - (void)nameChanged:(NSString *)newName
 {
-    [UserDataAccessor setUserName:newName];
-    self.name.text = [UserDataAccessor getUserName];
+    [self.name performSelectorOnMainThread:@selector(setText:) withObject:[UserDataAccessor getUserName] waitUntilDone:NO];
 }
 
 @end

@@ -197,7 +197,7 @@
         [self setMoviePlayerController:player];
         [player setContentURL:movieURL];
         [player setMovieSourceType:sourceType];
-        [player setRepeatMode: MPMovieRepeatModeOne];
+        [player setRepeatMode: MPMovieRepeatModeNone];
         player.controlStyle = MPMovieControlStyleNone;
         player.scalingMode = MPMovieScalingModeAspectFit;
        // player.useApplicationAudioSession = YES;
