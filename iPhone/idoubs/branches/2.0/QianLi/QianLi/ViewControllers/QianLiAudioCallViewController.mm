@@ -616,6 +616,8 @@
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotEndCall", nil),((int)time) / 60,((int)time) % 60, kQianLiRobotSharedPhotoNum, kQianLiRobotSharedDoodleNum, kQianLiRobotSharedWebNum, kQianLiRobotsharedVideoNum]];
     }
     //[[SipStackUtils sharedInstance].audioService hangUpCall];
+    [[SipStackUtils sharedInstance].soundService stopInCallSound];
+    self.viewState = None;
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [_timer invalidate]; // 停止计时并从Runloop中释放

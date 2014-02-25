@@ -136,6 +136,9 @@
 
 - (void)playInCallSound
 {
+    if (![SipCallManager SharedInstance].audioVC || [SipCallManager SharedInstance].audioVC.viewState == None) {
+        return;
+    }
     NSString *path = [[NSBundle mainBundle] pathForResource:@"CallLater" ofType:@"wav"];
     NSURL *url = [NSURL fileURLWithPath: path];
 	NSError *error;
@@ -147,6 +150,12 @@
 		return;
 	}
     [player play];
+}
+
+- (void)stopInCallSound
+{
+    [self.inCallPlayer stop];
+    self.inCallPlayer = nil;
 }
 
 - (void)playDtmf:(int)tag
