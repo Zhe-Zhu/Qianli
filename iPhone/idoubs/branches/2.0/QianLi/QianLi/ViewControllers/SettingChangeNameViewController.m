@@ -51,9 +51,6 @@
 
 - (void)finishButtonPressed
 {
-    if ([self.delegate respondsToSelector:@selector(nameChanged:)]) {
-        [self.delegate nameChanged:self.nameTextField.text];
-    }
     [self.navigationController popViewControllerAnimated:YES];
     if (![Utils checkInternetAndDispWarning:YES]) {
         return;
@@ -61,6 +58,9 @@
     [UserDataTransUtils patchUserName:self.nameTextField.text number:[UserDataAccessor getUserRemoteParty] Completion:^(BOOL success) {
         if (success) {
             [UserDataAccessor setUserName:self.nameTextField.text];
+            if ([self.delegate respondsToSelector:@selector(nameChanged:)]) {
+                [self.delegate nameChanged:self.nameTextField.text];
+            }
         }
     }];
 }

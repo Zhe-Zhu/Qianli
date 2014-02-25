@@ -70,6 +70,7 @@ nil]
 #define kBaseURL @"http://112.124.36.134:8080"
 #define kSemiModalAnimationDuration 0.3f
 
+#define kInCall @"UserInCall"
 #define PageWidth 340
 
 #define kImagePath @"IMAGEPATH"
