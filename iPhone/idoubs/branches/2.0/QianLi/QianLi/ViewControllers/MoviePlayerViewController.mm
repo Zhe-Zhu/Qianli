@@ -149,7 +149,7 @@
         }
         _totalTimeLabel.text = str;
     }
-    [self adjustProgress];
+    [self setProgress];
     [self setUpProgressTimer];
 }
 
@@ -177,7 +177,44 @@
         }
         _currentTimeLabel.text = str;
     }
-    
+    if (currentTime > totalDuration) {
+        currentTime = totalDuration;
+    }
+    CGFloat length = totalDurationLength * currentTime / totalDuration;
+    CGRect frame = _playingProgress.frame;
+    frame = CGRectMake(frame.origin.x, frame.origin.y, length, frame.size.height);
+    [UIView animateWithDuration:1.0 animations:^{
+        _playingProgress.frame = frame;
+    }];
+}
+
+- (void)setProgress
+{
+    CGFloat currentTime = floorf(_moviePlayerController.currentPlaybackTime);
+    NSInteger minute = floorf(currentTime / 60);
+    if (minute < 10) {
+        NSString *str;
+        if (int(currentTime - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"0%d:%d", minute, int(currentTime - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"0%d:0%d", minute, int(currentTime - minute * 60)];
+        }
+        _currentTimeLabel.text = str;
+    }
+    else{
+        NSString *str;
+        if (int(currentTime - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"%d:%d", minute, int(currentTime - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"%d:0%d", minute, int(currentTime - minute * 60)];
+        }
+        _currentTimeLabel.text = str;
+    }
+    if (currentTime > totalDuration) {
+        currentTime = totalDuration;
+    }
     CGFloat length = totalDurationLength * currentTime / totalDuration;
     CGRect frame = _playingProgress.frame;
     frame = CGRectMake(frame.origin.x, frame.origin.y, length, frame.size.height);
@@ -301,7 +338,7 @@
 
 - (void)showControls
 {
-    [self adjustProgress];
+    [self setProgress];
     [self setUpProgressTimer];
     [UIView animateWithDuration:0.3 animations:^{
         _controls.alpha = 1.0;
