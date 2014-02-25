@@ -97,6 +97,7 @@
 		18EA7DEF187CF1450098A824 /* help_drag_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EA7DD2187CF1450098A824 /* help_drag_left@2x.png */; };
 		18EA7DF0187CF1450098A824 /* help_drag_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EA7DD3187CF1450098A824 /* help_drag_right@2x.png */; };
 		18EA7DF1187CF1450098A824 /* help_quit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EA7DD4187CF1450098A824 /* help_quit@2x.png */; };
+		18F2761A18BC857400CD83D8 /* CallLater.wav in Resources */ = {isa = PBXBuildFile; fileRef = 18F2761918BC857400CD83D8 /* CallLater.wav */; };
 		18F4126C18B20BCE00F27B1F /* WaitingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4126B18B20BCE00F27B1F /* WaitingViewController.m */; };
 		18F4128518B20DDE00F27B1F /* AddPartnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4128418B20DDE00F27B1F /* AddPartnerViewController.m */; };
 		18FAC78D18BADC13008BCE02 /* ringbacktone.wav in Resources */ = {isa = PBXBuildFile; fileRef = 18FAC78C18BADC13008BCE02 /* ringbacktone.wav */; };
@@ -375,7 +376,7 @@
 		CE8A390D17F981CA002F651A /* helpImage4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE8A390A17F981CA002F651A /* helpImage4@2x.png */; };
 		CE8A390E17F981CA002F651A /* helpImage3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE8A390B17F981CA002F651A /* helpImage3@2x.png */; };
 		CE8A390F17F981CA002F651A /* helpImage2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE8A390C17F981CA002F651A /* helpImage2@2x.png */; };
-		CEB99B5C18210199000551E1 /* icon120.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB99B5918210199000551E1 /* icon120.png */; };
+		CEB99B5C18210199000551E1 /* icon120@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB99B5918210199000551E1 /* icon120@2x.png */; };
 		CEB99B5D18210199000551E1 /* icon114.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB99B5A18210199000551E1 /* icon114.png */; };
 		CEB99B5E18210199000551E1 /* icon57.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB99B5B18210199000551E1 /* icon57.png */; };
 		CEB99B7B18210CE1000551E1 /* cameraRotation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB99B7818210CE1000551E1 /* cameraRotation@2x.png */; };
@@ -648,6 +649,7 @@
 		18EA7DD2187CF1450098A824 /* help_drag_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_drag_left@2x.png"; sourceTree = "<group>"; };
 		18EA7DD3187CF1450098A824 /* help_drag_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_drag_right@2x.png"; sourceTree = "<group>"; };
 		18EA7DD4187CF1450098A824 /* help_quit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_quit@2x.png"; sourceTree = "<group>"; };
+		18F2761918BC857400CD83D8 /* CallLater.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = CallLater.wav; sourceTree = "<group>"; };
 		18F4126A18B20BCE00F27B1F /* WaitingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitingViewController.h; sourceTree = "<group>"; };
 		18F4126B18B20BCE00F27B1F /* WaitingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitingViewController.m; sourceTree = "<group>"; };
 		18F4128318B20DDE00F27B1F /* AddPartnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPartnerViewController.h; sourceTree = "<group>"; };
@@ -1003,7 +1005,7 @@
 		CE8A390A17F981CA002F651A /* helpImage4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "helpImage4@2x.png"; sourceTree = "<group>"; };
 		CE8A390B17F981CA002F651A /* helpImage3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "helpImage3@2x.png"; sourceTree = "<group>"; };
 		CE8A390C17F981CA002F651A /* helpImage2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "helpImage2@2x.png"; sourceTree = "<group>"; };
-		CEB99B5918210199000551E1 /* icon120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon120.png; sourceTree = "<group>"; };
+		CEB99B5918210199000551E1 /* icon120@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon120@2x.png"; sourceTree = "<group>"; };
 		CEB99B5A18210199000551E1 /* icon114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon114.png; sourceTree = "<group>"; };
 		CEB99B5B18210199000551E1 /* icon57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon57.png; sourceTree = "<group>"; };
 		CEB99B7818210CE1000551E1 /* cameraRotation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cameraRotation@2x.png"; sourceTree = "<group>"; };
@@ -1470,6 +1472,7 @@
 		503DCDDB18068CAB00514A33 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				18F2761918BC857400CD83D8 /* CallLater.wav */,
 				18FAC78C18BADC13008BCE02 /* ringbacktone.wav */,
 				1835EA4818B8AC03009B591E /* ringtone.mp3 */,
 			);
@@ -1617,7 +1620,7 @@
 				CEB99B7818210CE1000551E1 /* cameraRotation@2x.png */,
 				CEB99B7918210CE1000551E1 /* cameraFlashOff@2x.png */,
 				CEB99B7A18210CE1000551E1 /* cameraFlashOn@2x.png */,
-				CEB99B5918210199000551E1 /* icon120.png */,
+				CEB99B5918210199000551E1 /* icon120@2x.png */,
 				CEB99B5A18210199000551E1 /* icon114.png */,
 				CEB99B5B18210199000551E1 /* icon57.png */,
 				CE688EB2180BE73300CDF37B /* choosingImagesShort@2x.png */,
@@ -2048,7 +2051,7 @@
 				CE345F7F17CB13FF009D52D4 /* networkIndicatorMedium@2x.png in Resources */,
 				CE17DA4E17CDEDC200E40227 /* CheckmarkWhite@2x.png in Resources */,
 				18096A25187181B600198CD6 /* doodle_pen_6_selected@2x.png in Resources */,
-				CEB99B5C18210199000551E1 /* icon120.png in Resources */,
+				CEB99B5C18210199000551E1 /* icon120@2x.png in Resources */,
 				18E36D7A187807FC00D685EA /* help_1_background_words@2x.png in Resources */,
 				18096A17187181B600198CD6 /* doodle_download_disable@2x.png in Resources */,
 				CE8027B117DF179C00E84BC9 /* settingPhone@2x.png in Resources */,
@@ -2283,6 +2286,7 @@
 				CE345F8517CB13FF009D52D4 /* speaker@2x.png in Resources */,
 				505A078F17B0A9430053E1B7 /* uncheckBox@2x.png in Resources */,
 				18096A09187181B600198CD6 /* doodle_button_width_40_40@2x.psd in Resources */,
+				18F2761A18BC857400CD83D8 /* CallLater.wav in Resources */,
 				50028A3817B37E2300029312 /* baloon_out.png in Resources */,
 				CEBAFC1B1821FAE10021764A /* cameraTakePhotoBackground@2x.png in Resources */,
 				CEB99B7B18210CE1000551E1 /* cameraRotation@2x.png in Resources */,
