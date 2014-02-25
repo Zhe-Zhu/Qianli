@@ -22,12 +22,13 @@
 - (BOOL)configureSpeakerEnabled:(BOOL)speakerEnabled;
 
 - (void)playRingTone;
-- (void)playInCallSound;
 - (void)stopRingTone;
 
 - (void)playRingBackTone;
-
 - (void)stopRingBackTone;
+
+- (void)playInCallSound;
+- (void)stopInCallSound;
 
 - (void)playDtmf:(int)tag;
 

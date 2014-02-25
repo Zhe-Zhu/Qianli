@@ -33,7 +33,7 @@ static QianLiContactsAccessor *contactsAccessor;
         NSUserDefaults *userData = [NSUserDefaults standardUserDefaults];
         if (![userData boolForKey:HaveAccessedID]) {
             [userData setBool:YES forKey:HaveAccessedID];
-            [contactsAccessor insertNewObject:NSLocalizedString(@"RobotName", nil) Email:@"no" Profile:[UIImage imageNamed:@"icon120.png"] Numbers:QianLiRobotNumber UpdateCounter:1];
+            [contactsAccessor insertNewObject:NSLocalizedString(@"RobotName", nil) Email:@"no" Profile:[UIImage imageNamed:@"robot_avatar.png"] Numbers:QianLiRobotNumber UpdateCounter:1];
         }
     }
     return contactsAccessor;
