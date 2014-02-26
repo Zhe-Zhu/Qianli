@@ -192,7 +192,7 @@
 "addPartnerErrorTitle" = "Error";
 "addPartnerErrorText" = "Please make sure the number is correct and then try again";
 "addPartnerErrorOK" = "OK";
-"canUseQianli" = "Congratulation, you can use Qianli now";
+"canUseQianli" = "Congratulations, you can use Qianli now";
 "partnerNumber" = "Number";
 "stillInQueue" = "still in queue";
 "BeginQianli" = "Get Started";
@@ -206,3 +206,7 @@
 "RobotName" = "Qianli";
 "Appointment" = "Appointment";
 "QianliCall" = "Qianli Call";
+"inviteMessage" = "SMS";
+"inviteEmail" = "Email";
+"doneBinding" = "Done";
+"waitNote" = "*We will send SMS automatically when you can enter Qianli";
