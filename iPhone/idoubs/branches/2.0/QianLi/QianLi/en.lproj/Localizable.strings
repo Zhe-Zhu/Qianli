@@ -196,10 +196,10 @@
 "partnerNumber" = "Number";
 "stillInQueue" = "still in queue";
 "BeginQianli" = "Get started";
-"voiceCaptchaIntro" = "press \"message\", Qianli will send you captcha code again through message. Press \"phone call\", Qianli will call you and tell you the captcha code!";
+"voiceCaptchaIntro" = "Please choose how to resend the captcha";
 "phoneCall" = "Phone Call";
 "message" = "Message";
-"voiceCaptchaTitle" = "Hint";
+"voiceCaptchaTitle" = "Resend Captcha";
 "QianLiRobotAlwaysAvailableTitle" = "QianLi robot is always available";
 "QianLiRobotAlwaysAvailableMessage" = "QianLi robot is always available, please just call her.";
 "people" = "";
