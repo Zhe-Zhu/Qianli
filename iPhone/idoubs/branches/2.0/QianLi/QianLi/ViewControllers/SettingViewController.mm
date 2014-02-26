@@ -249,26 +249,15 @@
 
 - (void)removeAccount
 {
-    //TODO:
-//    [UserDataTransUtils deleteAccount:[UserDataAccessor getUserRemoteParty] Completion:^(BOOL updateTime) {
-//        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//        [userDefaults setBool:NO forKey:@"SignedUp"];
-//        [userDefaults synchronize];
-//        [[MainHistoryDataAccessor sharedInstance] deleteAllObjects];
-//        [[SipStackUtils sharedInstance].historyService deleteAllObjects];
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Successfully deleted account" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-//    }];
-    
-    // 返回到注册界面
-    [[MainHistoryDataAccessor sharedInstance] deleteAllObjects];
-    [[DetailHistoryAccessor sharedInstance] deleteAllHistory];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    UINavigationController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
-    [[UIApplication sharedApplication] delegate].window.rootViewController = signUpEditProfileViewController;
+    [UserDataTransUtils deleteAccount:[UserDataAccessor getUserRemoteParty] Completion:nil];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:NO forKey:kSingUpKey];
     [userDefaults synchronize];
+    [UserDataAccessor setUserName:@""];
+    [UserDataAccessor deleteUserImages];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    UINavigationController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
+    [[UIApplication sharedApplication] delegate].window.rootViewController = signUpEditProfileViewController;
 }
 
 # pragma mark -- Umeng Feedback
