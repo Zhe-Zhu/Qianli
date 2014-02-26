@@ -17,6 +17,7 @@
 {
     CGFloat totalDurationLength;
     CGFloat totalDuration;
+    BOOL firstTimeHideControls;
 }
 
 @property (weak, nonatomic) UIView *movieView;
@@ -50,6 +51,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDuration) name:MPMovieDurationAvailableNotification object:nil];
+    firstTimeHideControls = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -302,7 +304,7 @@
         [_pauseButton addTarget:self action:@selector(pause) forControlEvents:UIControlEventTouchUpInside];
         _pauseButton.frame = CGRectMake(winSize.height * 2 / 4.0, 20, 60, 40);
         [view addSubview:_pauseButton];
-        _hideControlsTimer = [NSTimer scheduledTimerWithTimeInterval:kVideoHideControls target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
+        _hideControlsTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
         [player.view addSubview:view];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
@@ -328,6 +330,13 @@
 
 - (void)hideControls
 {
+    if (firstTimeHideControls) {
+        firstTimeHideControls = NO;
+        CGFloat currentTime = _moviePlayerController.currentPlaybackTime;
+        if ( currentTime < 0.5) {
+            [self playVideoUsingAnotherURL];
+        }
+    }
     [UIView animateWithDuration:0.5 animations:^{
         _controls.alpha = 0.0;
     } completion:^(BOOL finished) {
@@ -353,6 +362,12 @@
 {
     [_hideControlsTimer invalidate];
     _hideControlsTimer = [NSTimer scheduledTimerWithTimeInterval:kVideoHideControls target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
+}
+
+- (void)playVideoUsingAnotherURL
+{
+    NSString *str = [NSString stringWithFormat:@"http://v.youku.com/player/getRealM3U8/vid/%@/type/mp4/v.m3u8", self.videoID];
+    [self playMovieStream:[NSURL URLWithString:str]];
 }
 
 - (void)forwardFromRemote:(float)currentTime
@@ -482,6 +497,7 @@
     [_moviePlayerController pause];
     [_moviePlayerController stop];
     [_progressTimer invalidate];
+    [_hideControlsTimer invalidate];
 }
 
 @end

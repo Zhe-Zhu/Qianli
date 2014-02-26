@@ -177,7 +177,7 @@
 "QianLiRobotSynWeb" = "My screen is displaying web: %@";
 "QianLiRobotEndCall" = "GoodBye! the call lasted for %d mins %d seconds, you and I \n [*shared %d photos; \n *completed %d drawings; \n *browsed %d webs; \n *watched %d videos]";
 "QianLiRobotDrawingGood" = "Wow, you are good at drawing.";
-"beforeText" = "People who are queuing before you are";
+"beforeText" = "People queuing before you are";
 "behindTextLabel" = "after you";
 "addPartnerIntro" = "Please provide us a partner number, your partner can enjoy our service as soon as you become an offical user of Qianli";
 "partnerVerifiedText" = "your partner's number is %@. You can inform your partner by text or email";
@@ -195,7 +195,7 @@
 "canUseQianli" = "Congratulation, you can use Qianli now";
 "partnerNumber" = "Number";
 "stillInQueue" = "still in queue";
-"BeginQianli" = "Get started";
+"BeginQianli" = "Get Started";
 "voiceCaptchaIntro" = "Please choose how to resend the captcha";
 "phoneCall" = "Phone Call";
 "message" = "Message";

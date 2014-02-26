@@ -16,6 +16,7 @@
 @interface SignUpViewController ()
 {
     NSString *oldPhoneNumber; // 存储旧号码,如果用户未更改过号码则不弹出确认AlertView
+    BOOL didPressCancel;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *phoneNumber;
@@ -79,6 +80,7 @@
     self.navigationItem.title = NSLocalizedString(@"welcome", nil);
     [_buttonContinue setTitle:NSLocalizedString(@"continue", nil) forState:UIControlStateNormal];
     [self.navigationItem.backBarButtonItem setTitle:NSLocalizedString(@"back", nil)];
+    didPressCancel = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -135,7 +137,12 @@
     NSString *confirmationMessage = [NSString stringWithFormat:NSLocalizedString(@"numberConfirmation", nil), [self stripCountryName], _phoneNumber.text];
     UIAlertView *confirmation = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"numberConfirmationTitle", nil) message:confirmationMessage delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Confirm", nil), nil];
     if ([_phoneNumber.text isEqualToString:oldPhoneNumber]) {
-        [self tryToRegisterTheNumber];
+        if (!didPressCancel) {
+            [self tryToRegisterTheNumber];
+        }
+        else{
+            [confirmation show];
+        }
     }
     else {
         oldPhoneNumber = _phoneNumber.text;
@@ -266,10 +273,11 @@
 # pragma mark - UIAlertView delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
-        NSLog(@"user pressed Cancel");
+        didPressCancel = YES;
     }
     else {
         [self tryToRegisterTheNumber];
+        didPressCancel = NO;
     }
 }
 
