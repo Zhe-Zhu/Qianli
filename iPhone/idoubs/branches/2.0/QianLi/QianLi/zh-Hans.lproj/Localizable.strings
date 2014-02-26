@@ -209,8 +209,8 @@
 "voiceCaptchaTitle" = "重发验证码";
 "message" = "短信发送";
 "phoneCall" = "电话通知";
-"QianLiRobotAlwaysAvailableTitle" = "千里机器人总是有空的";
-"QianLiRobotAlwaysAvailableMessage" = "千里机器人总是有空，请直接拨打。";
+"QianLiRobotAlwaysAvailableTitle" = "请直接拨打";
+"QianLiRobotAlwaysAvailableMessage" = "千里永远欢迎你，不用预约，请直接拨打语音电话。";
 "people" = "人";
 "RobotName" = "千里";
 "Appointment" = "预约通话";
