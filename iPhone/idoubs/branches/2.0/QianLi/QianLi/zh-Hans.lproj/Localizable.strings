@@ -213,3 +213,5 @@
 "QianLiRobotAlwaysAvailableMessage" = "千里机器人总是有空，请直接拨打。";
 "people" = "人";
 "RobotName" = "千里";
+"Appointment" = "预约通话";
+"QianliCall" = "进行通话";

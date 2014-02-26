@@ -152,7 +152,7 @@
 {
     if (!_phoneText) {
         _phoneText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, CGRectGetHeight(self.contentView.frame))];
-        _phoneText.text = @"进行通话";
+        _phoneText.text = NSLocalizedString(@"QianliCall", nil);
         _phoneText.textColor = [UIColor whiteColor];
         _phoneText.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:16.0f];
         _phoneText.textAlignment = NSTextAlignmentLeft;
@@ -165,8 +165,8 @@
 - (UILabel *)requestText
 {
     if (!_requestText) {
-        _requestText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, CGRectGetHeight(self.contentView.frame))];
-        _requestText.text = @"预约通话";
+        _requestText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 130, CGRectGetHeight(self.contentView.frame))];
+        _requestText.text = NSLocalizedString(@"Appointment", nil);//@"预约通话";
         _requestText.textColor = [UIColor whiteColor];
         _requestText.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:16.0f];
         _requestText.textAlignment = NSTextAlignmentRight;
