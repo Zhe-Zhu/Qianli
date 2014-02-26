@@ -214,7 +214,7 @@
             [userDefaults setBool:YES forKey:@"isPartner"];
             [self performSelectorOnMainThread:@selector(showVC:) withObject:waitingCV waitUntilDone:NO];
         }
-        else if ( status == 5){
+        else if (status == 5){
             // waited list
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
             WaitingViewController *waitingCV = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];

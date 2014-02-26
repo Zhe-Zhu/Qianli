@@ -42,12 +42,13 @@
     CGSize constraintSize;
     constraintSize.width = 240;
     constraintSize.height = MAXFLOAT;
-    CGSize contentSize = [str sizeWithFont:[UIFont fontWithName:@"ArialHebrew" size:25] constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize contentSize = [str sizeWithFont:[UIFont fontWithName:@"STHeitiSC-Medium" size:24] constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((320 - contentSize.width) / 2.0, 120, contentSize.width, contentSize.height)];
     label.text = str;
-    label.font = [UIFont fontWithName:@"ArialHebrew" size:24];
+    label.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:24];
     label.textColor = [UIColor grayColor];
     label.numberOfLines = 0;
+    label.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:label];
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor colorWithRed:72 / 255.0 green:188 / 255.0 blue:205 / 255.0 alpha:1.0];
@@ -57,7 +58,7 @@
     buttonLabel.backgroundColor = [UIColor clearColor];
     buttonLabel.textColor = [UIColor whiteColor];
     buttonLabel.text = NSLocalizedString(@"BeginQianli", nil);
-    buttonLabel.font = [UIFont fontWithName:@"ArialHebrew" size:25];
+    buttonLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:18];
     [_startButton addSubview:buttonLabel];
 }
 

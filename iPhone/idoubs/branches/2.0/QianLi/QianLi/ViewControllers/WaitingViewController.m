@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *addPartnerButton;
 @property (weak, nonatomic) IBOutlet UILabel *partnerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *partnerNumberLabel;
+@property (weak, nonatomic) IBOutlet UILabel *noteLabel;
 
 @property (strong, nonatomic) WaitedViewController *waitedVC;
 - (IBAction)addPartner:(id)sender;
@@ -43,7 +44,7 @@
     _beforeLabel.textColor = [UIColor colorWithRed:137 / 255.0 green:137 / 255.0 blue:137 / 255.0 alpha:1.0];
     _behindTextLabel.textColor = [UIColor colorWithRed:137 / 255.0 green:137 / 255.0 blue:137 / 255.0 alpha:1.0];
     _behindNumberLabel.textColor = [UIColor colorWithRed:137 / 255.0 green:137 / 255.0 blue:137 / 255.0 alpha:1.0];
-    _partnerLabel.textColor = [UIColor colorWithRed:137 / 255.0 green:137 / 255.0 blue:137 / 255.0 alpha:1.0];
+    _partnerLabel.textColor = [UIColor colorWithRed:89 / 255.0 green:89 / 255.0 blue:89 / 255.0 alpha:1.0];
     _beforeNumberLabel.textColor = [UIColor colorWithRed:72 / 255.0 green:188 / 255.0 blue:205 / 255.0 alpha:1.0];
     _partnerNumberLabel.textColor = [UIColor colorWithRed:185 / 255.0 green:185 / 255.0 blue:185 / 255.0 alpha:1.0];
     
@@ -72,7 +73,12 @@
     
     self.navigationController.navigationBarHidden = YES;
     NSString *partnerNumber = [UserDataAccessor getUserPartnerNumber];
+    // 优化中国地区号码的显示 by ZZ
+    if ([[partnerNumber substringToIndex:4] isEqualToString:@"0086"]) {
+        partnerNumber = [partnerNumber substringFromIndex:4];
+    }
     _partnerNumberLabel.text = partnerNumber;
+    _noteLabel.text = NSLocalizedString(@"waitNote", nil);
 }
 
 - (void)viewDidLayoutSubviews
@@ -84,6 +90,16 @@
             frame =CGRectMake(frame.origin.x, frame.origin.y - 20, frame.size.width, frame.size.height);
             view.frame = frame;
         }
+    }
+    if (IS_IPHONE5) {
+        // 优化在长屏下的显示 by ZZ
+        _partnerLabel.frame = CGRectMake(_partnerLabel.frame.origin.x, _partnerLabel.frame.origin.y+78, _partnerLabel.frame.size.width, _partnerLabel.frame.size.height);
+        _partnerNumberLabel.frame = CGRectMake(_partnerNumberLabel.frame.origin.x, _partnerNumberLabel.frame.origin.y+78, _partnerNumberLabel.frame.size.width, _partnerNumberLabel.frame.size.height);
+        _addPartnerButton.frame = CGRectMake(_addPartnerButton.frame.origin.x, _addPartnerButton.frame.origin.y+78, _addPartnerButton.frame.size.width, _addPartnerButton.frame.size.height);
+        _behindTextLabel.frame = CGRectMake(_behindTextLabel.frame.origin.x, _behindTextLabel.frame.origin.y+40, _behindTextLabel.frame.size.width, _behindTextLabel.frame.size.height);
+        _behindNumberLabel.frame = CGRectMake(_behindNumberLabel.frame.origin.x, _behindNumberLabel.frame.origin.y+40, _behindNumberLabel.frame.size.width, _behindNumberLabel.frame.size.height);
+        _beforeNumberLabel.frame = CGRectMake(_beforeNumberLabel.frame.origin.x, _beforeNumberLabel.frame.origin.y+20, _beforeNumberLabel.frame.size.width, _beforeNumberLabel.frame.size.height);
+        _noteLabel.frame = CGRectMake(_noteLabel.frame.origin.x, _noteLabel.frame.origin.y+40, _noteLabel.frame.size.width, _noteLabel.frame.size.height);
     }
 }
 
