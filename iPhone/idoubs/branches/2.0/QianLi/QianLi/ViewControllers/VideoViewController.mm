@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (weak, nonatomic) MoviePlayerViewController *moviePlayer;
 @property (strong, nonatomic) NSMutableArray *vedioThumbs;
+@property (strong, nonatomic) NSString *currentVideoID;
 
 @end
 
@@ -131,7 +132,8 @@
         if ([[words objectAtIndex:i] isEqualToString:@"v_show"]){
             NSArray *array = [[words objectAtIndex:i + 1] componentsSeparatedByString:@"."];
             NSString *videoID = [[array objectAtIndex:0] substringFromIndex:3];
-            NSString *videoURL = [self getVedioURL:videoID];
+            NSString *videoURL = [self getVideoURL:videoID];
+            self.currentVideoID = videoID;
             [self playMovieStream:[NSURL URLWithString:videoURL]];
             if (kIsCallingQianLiRobot) {
                 kQianLiRobotsharedVideoNum++;
@@ -163,9 +165,10 @@
     [_webView loadRequest:request];
 }
 
-- (NSString *)getVedioURL:(NSString *)vedioID
+- (NSString *)getVideoURL:(NSString *)videoID
 {
-    NSString *str = [NSString stringWithFormat:@"http://v.youku.com/player/getRealM3U8/vid/%@/type//video.m3u8", vedioID];
+    //NSString *str = [NSString stringWithFormat:@"http://v.youku.com/player/getRealM3U8/vid/%@/type/mp4/v.m3u8", videoID];
+    NSString *str = [NSString stringWithFormat:@"http://v.youku.com/player/getRealM3U8/vid/%@/type//video.m3u8", videoID];
     return str;
 }
 
@@ -230,11 +233,13 @@
     if (kIsCallingQianLiRobot) {
         [[SipStackUtils sharedInstance].audioService sendDTMF:1];
     }
+    
     MoviePlayerViewController *player = [[MoviePlayerViewController alloc] init];
     //CODE_REVIEW:可以不用传递_videoThumbs，在MoviePlayer里不能截屏。
     player.thumbs = _vedioThumbs;
-    _moviePlayer = player;
-   [self presentViewController:player animated:YES completion: nil];
+    self.moviePlayer = player;
+    player.videoID = self.currentVideoID;
+    [self presentViewController:player animated:YES completion: nil];
     [_moviePlayer playMovieStream:movieFileURL];
 }
 
