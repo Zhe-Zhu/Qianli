@@ -204,3 +204,5 @@
 "QianLiRobotAlwaysAvailableMessage" = "QianLi robot is always available, please just call her.";
 "people" = "";
 "RobotName" = "Qianli";
+"Appointment" = "Appointment";
+"QianliCall" = "Qianli Call";
