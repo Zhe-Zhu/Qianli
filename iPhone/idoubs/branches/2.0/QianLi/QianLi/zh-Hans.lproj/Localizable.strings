@@ -196,7 +196,7 @@
 "alreadyHavePartnerOK" = "好的";
 "bindPartnerSuccessfully" = "绑定成功";
 "notChangePartnerTitle" = "提示";
-"notChangePartnerText" = "亲，你已近绑定了一个号码，不能再绑定其他号码了";
+"notChangePartnerText" = "亲，你已经绑定了一个号码，不能再绑定其他号码了";
 "notChangePartnerOK" = "好的";
 "addPartnerErrorTitle" = "错误";
 "addPartnerErrorText" = "号码有误，请重新填写";
