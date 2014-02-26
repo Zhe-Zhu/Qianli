@@ -79,7 +79,7 @@
 "emailWarningTitle" = "Can't send email";
 "emailWarningMessage" = "We can't send out email. Please check your email setting.";
 "emailWarningOK" = "OK";
-"signOutBody" = "This action will remove all your data from our server, are you sure you want to countinue?";
+"signOutBody" = "This action will remove all your local data and data from our server, are you sure you want to countinue?";
 "signOutTitle" = "Watch out";
 "signOutConfirm" = "Sign out";
 "numberConfirmation" = "Is the number correct? \n\n  %@ %@  \n\nThe captcha would be sent to this number.";
