@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *messageButton;
 @property (weak, nonatomic) IBOutlet UIButton *emailButton;
 @property (weak, nonatomic) UILabel *buttonLabel;
+@property (weak, nonatomic) IBOutlet UILabel *inviteMessageLabel;
+@property (weak, nonatomic) IBOutlet UILabel *inviteEmailLabel;
 
 - (IBAction)done:(id)sender;
 - (IBAction)sendMessage:(id)sender;
@@ -46,12 +48,13 @@
     self.navigationController.navigationBarHidden = NO;
     NSString *str = NSLocalizedString(@"addPartnerIntro", nil);
     CGSize constraintSize;
-    constraintSize.width = 240;
+    constraintSize.width = 260;
     constraintSize.height = MAXFLOAT;
     CGSize contentSize = [str sizeWithFont:[UIFont fontWithName:@"ArialHebrew" size:17] constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((320 - contentSize.width) / 2.0, 81, contentSize.width, contentSize.height)];
     label.text = str;
-    label.font = [UIFont fontWithName:@"ArialHebrew" size:16];
+    label.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:15];
+    label.textAlignment = NSTextAlignmentCenter;
     label.textColor = [UIColor colorWithRed:137 / 255.0 green:137 / 255.0 blue:137 / 255.0 alpha:1.0];
     label.numberOfLines = 0;
     label.backgroundColor = [UIColor clearColor];
@@ -63,6 +66,18 @@
     if (!partnerNumber) {
         _messageButton.alpha = 0.0;
         _emailButton.alpha = 0.0;
+        _inviteMessageLabel.alpha = 0.0;
+        _inviteEmailLabel.alpha = 0.0;
+    }
+    else {
+        if ([[partnerNumber substringToIndex:4]isEqualToString:@"0086"]) {
+            _numberField.text = [partnerNumber substringFromIndex:4];
+        }
+        else {
+            _numberField.text = partnerNumber;
+        }
+        _numberField.enabled = NO;
+        _doneButton.enabled = NO;
     }
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"partner_verified"]) {
         _partnerLabel.alpha = 0.0;
@@ -75,11 +90,20 @@
     buttonLabel.textAlignment = NSTextAlignmentCenter;
     buttonLabel.backgroundColor = [UIColor clearColor];
     buttonLabel.textColor = [UIColor whiteColor];
-    buttonLabel.text = NSLocalizedString(@"addPartnerOK", nil);
-    buttonLabel.font = [UIFont fontWithName:@"ArialHebrew" size:20];
+    if (!partnerNumber) {
+        buttonLabel.text = NSLocalizedString(@"addPartnerOK", nil);
+    }
+    else {
+        buttonLabel.text = NSLocalizedString(@"bindPartnerSuccessfully", nil);
+    }
+    
+    buttonLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:18];
     [_doneButton addSubview:buttonLabel];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addPartner:) name:kAddPartnerNotification object:nil];
+    
+    _inviteMessageLabel.text = NSLocalizedString(@"inviteMessage", nil);
+    _inviteEmailLabel.text = NSLocalizedString(@"inviteEmail", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -93,6 +117,18 @@
     //added by Xiangwen
     //localized partnerLabel;
     _partnerLabel.text = NSLocalizedString(@"partnerNumber", nil);
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    if (!IS_OS_7_OR_LATER) {
+        for (UIView *view in self.view.subviews) {
+            CGRect frame = view.frame;
+            frame =CGRectMake(frame.origin.x, frame.origin.y - 40, frame.size.width, frame.size.height);
+            view.frame = frame;
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -121,11 +157,14 @@
         // first time add partner successfully
         _buttonLabel.text = NSLocalizedString(@"bindPartnerSuccessfully", nil);
         [UserDataAccessor setUserPartnerNumber:_partnerNumber];
+        _doneButton.enabled = NO;
+        _numberField.enabled = NO;
         [UIView animateWithDuration:1.0 animations:^{
             _emailButton.alpha = 1.0;
             _messageButton.alpha = 1.0;
+            _inviteMessageLabel.alpha = 1.0;
+            _inviteEmailLabel.alpha = 1.0;
         } completion:^(BOOL finished) {
-            
         }];
     }
     else if (result == 2){

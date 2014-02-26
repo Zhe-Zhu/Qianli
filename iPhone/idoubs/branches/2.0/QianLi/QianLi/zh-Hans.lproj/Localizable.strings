@@ -201,7 +201,7 @@
 "addPartnerErrorTitle" = "错误";
 "addPartnerErrorText" = "号码有误，请重新填写";
 "addPartnerErrorOK" = "好的";
-"canUseQianli" = "恭喜你，你现在可以使用千里提供的服务了。";
+"canUseQianli" = "恭喜你，你现在可以使用千里提供的服务了";
 "BeginQianli" = "开始千里";
 "partnerNumber" = "亲友号码";
 "stillInQueue" = "仍在排队";
@@ -213,3 +213,8 @@
 "QianLiRobotAlwaysAvailableMessage" = "千里机器人总是有空，请直接拨打。";
 "people" = "人";
 "RobotName" = "千里";
+"inviteMessage" = "短信邀请";
+"inviteEmail" = "邮件邀请";
+"doneBiding" = "绑定成功";
+"doneBinding" = "绑定成功";
+"waitNote" = "*排队成功后会自动发送短信通知";
