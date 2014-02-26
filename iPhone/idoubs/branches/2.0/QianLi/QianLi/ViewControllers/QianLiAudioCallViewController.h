@@ -47,4 +47,5 @@ typedef enum
 
 @property(nonatomic, strong) DetailHistEvent *activeEvent;
 
+@property(nonatomic, assign) BOOL didPressEndCall;
 @end

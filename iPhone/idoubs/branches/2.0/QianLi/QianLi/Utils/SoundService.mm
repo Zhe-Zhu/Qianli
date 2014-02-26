@@ -136,7 +136,7 @@
 
 - (void)playInCallSound
 {
-    if (![SipCallManager SharedInstance].audioVC || [SipCallManager SharedInstance].audioVC.viewState == None) {
+    if (![SipCallManager SharedInstance].audioVC || [SipCallManager SharedInstance].audioVC.didPressEndCall == YES) {
         return;
     }
     NSString *path = [[NSBundle mainBundle] pathForResource:@"CallLater" ofType:@"wav"];

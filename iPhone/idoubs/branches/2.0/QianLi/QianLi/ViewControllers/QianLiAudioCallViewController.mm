@@ -184,6 +184,8 @@
     videoBeginTime = 0;
     _didEndCallBySelf = NO;
     didEndCall = NO;
+    _didPressEndCall = NO;
+    
     callBeginTime = [[NSDate alloc] init];
     
     if (!IS_OS_7_OR_LATER) {
@@ -616,8 +618,8 @@
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotEndCall", nil),((int)time) / 60,((int)time) % 60, kQianLiRobotSharedPhotoNum, kQianLiRobotSharedDoodleNum, kQianLiRobotSharedWebNum, kQianLiRobotsharedVideoNum]];
     }
     //[[SipStackUtils sharedInstance].audioService hangUpCall];
+    _didPressEndCall = YES;
     [[SipStackUtils sharedInstance].soundService stopInCallSound];
-    self.viewState = None;
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [_timer invalidate]; // 停止计时并从Runloop中释放
