@@ -16,6 +16,8 @@
 "APPOINTMENTACTIONKEY" = "好的";
 "MISSEDCALL" = "您有一个来自[%@]的未接来电";
 "MISSEDCALLACTIONKEY" = "查看细节";
+"YOURTURNACTIONKY" = "试试";
+"YOURTURN" = "恭喜，你现在可以使用千里的服务了，谢谢你的耐心等待";
 // AppDelegate.mm
 "contactTitle" = "联系人";
 "setting" = "设置";

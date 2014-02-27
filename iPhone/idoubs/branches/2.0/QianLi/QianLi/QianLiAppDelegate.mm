@@ -593,6 +593,11 @@ const float kColorB = 75/100.0;
     else{
         handler(UIBackgroundFetchResultNoData);
     }
+    if ([type isEqualToString:@"YOURTURN"]) {
+        if (application.applicationState == UIApplicationStateActive) {
+            [[WaitingListUtils sharedInstance] getWaitingStatus];
+        }
+    }
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -604,6 +609,9 @@ const float kColorB = 75/100.0;
         NSString *type = [dic objectForKey:@"loc-key"];
         if ([type isEqualToString:@"PUSHCALLING"]) {
             [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+        }
+        if ([type isEqualToString:@"YOURTURN"]) {
+            [[WaitingListUtils sharedInstance] getWaitingStatus];
         }
     }
 }
