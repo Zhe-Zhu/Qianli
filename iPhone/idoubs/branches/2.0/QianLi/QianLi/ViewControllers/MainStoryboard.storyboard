@@ -1067,25 +1067,35 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="waiting_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="ddQ-si-ccN">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waiting_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="ddQ-si-ccN">
                                 <rect key="frame" x="122" y="47" width="75" height="75"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="75" id="Q0F-8m-82c"/>
+                                    <constraint firstAttribute="width" constant="75" id="ejC-RA-4G7"/>
+                                </constraints>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4uK-uw-FoT">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4uK-uw-FoT">
                                 <rect key="frame" x="20" y="208" width="280" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="iWn-M3-Vdd"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="22"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="仍在排队" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zAD-he-mIZ">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="仍在排队" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zAD-he-mIZ">
                                 <rect key="frame" x="44" y="249" width="232" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="0jU-Ni-H2p"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="22"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sRu-Ja-h4P">
-                                <rect key="frame" x="36" y="328" width="248" height="44"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sRu-Ja-h4P">
+                                <rect key="frame" x="36" y="328" width="248" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="31"/>
                                 <state key="normal" image="waiting_begin_button.png">
@@ -1097,6 +1107,18 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="sRu-Ja-h4P" firstAttribute="top" secondItem="zAD-he-mIZ" secondAttribute="bottom" constant="48" id="3XY-e7-RRQ"/>
+                            <constraint firstItem="4uK-uw-FoT" firstAttribute="centerX" secondItem="sRu-Ja-h4P" secondAttribute="centerX" id="MBV-vm-Udq"/>
+                            <constraint firstItem="ddQ-si-ccN" firstAttribute="top" secondItem="X8Q-Nu-y9G" secondAttribute="bottom" constant="27" id="Y1j-ch-HWC"/>
+                            <constraint firstItem="4uK-uw-FoT" firstAttribute="top" secondItem="ddQ-si-ccN" secondAttribute="bottom" constant="86" id="cVf-os-OSN"/>
+                            <constraint firstItem="zAD-he-mIZ" firstAttribute="leading" secondItem="Kc0-hK-rr4" secondAttribute="leading" constant="44" id="dIx-Uj-qFa"/>
+                            <constraint firstItem="4uK-uw-FoT" firstAttribute="leading" secondItem="Kc0-hK-rr4" secondAttribute="leading" constant="20" symbolic="YES" id="gRd-sf-tFF"/>
+                            <constraint firstAttribute="trailing" secondItem="4uK-uw-FoT" secondAttribute="trailing" constant="20" symbolic="YES" id="kj6-Z1-Wwi"/>
+                            <constraint firstItem="ddQ-si-ccN" firstAttribute="leading" secondItem="Kc0-hK-rr4" secondAttribute="leading" constant="122" id="koN-Mw-DBE"/>
+                            <constraint firstItem="4uK-uw-FoT" firstAttribute="centerX" secondItem="zAD-he-mIZ" secondAttribute="centerX" id="oyf-He-2p2"/>
+                            <constraint firstItem="sRu-Ja-h4P" firstAttribute="top" secondItem="4uK-uw-FoT" secondAttribute="bottom" constant="70" id="x80-js-6Tc"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="imageView" destination="ddQ-si-ccN" id="29b-xU-WUW"/>
