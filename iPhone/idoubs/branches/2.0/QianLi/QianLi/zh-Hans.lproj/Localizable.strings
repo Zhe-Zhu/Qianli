@@ -12,18 +12,18 @@
 "PUSHCALLING" = "[%@]正在呼叫你，点击接听";
 "LOCALMESSAGE" = "%@ 正分享给你有趣的事";
 "PUSHACTIONKEY" = "接听";
-"APPOINTMENT" ="有空用千里给我回个电话吧? - %@";
+"APPOINTMENT" ="有空用千里给我回个电话吧?[%@]";
 "APPOINTMENTACTIONKEY" = "好的";
-"MISSEDCALL" = "您有一个来自[%@]的未接来电";
+"MISSEDCALL" = "你有一个来自[%@]的未接来电";
 "MISSEDCALLACTIONKEY" = "查看细节";
 "YOURTURNACTIONKY" = "试试";
-"YOURTURN" = "恭喜，你现在可以使用千里的服务了，谢谢你的耐心等待";
+"YOURTURN" = "恭喜，您现在可以使用千里的服务了，谢谢您的耐心等待";
 // AppDelegate.mm
 "contactTitle" = "联系人";
 "setting" = "设置";
 "recentCalls" = "最近通话";
-"alertNotificationTitle" = "通知关闭";
-"alertNotificationBody" = "为了避免错过朋友打来的电话，请允许千里接受通知。方法为: 设置->通知中心, 找到千里, 然后打开通知.";
+"alertNotificationTitle" = "新消息通知被关闭";
+"alertNotificationBody" = "为了避免错过朋友打来的电话，请允许千里接受通知。请找到系统[设置]->[通知中心]->[千里], 然后开启通知。";
 "alertNotificationButton" = "知道了";
 
 // History Main Viewcontroller
@@ -48,15 +48,15 @@
 // Helpview Controller
 "beginToUse" = "开始使用";
 "helpViewOneTitle" = "欢迎使用千里";
-"helpViewOneDescription" = "千里是一款通话软件, 当你和好友手机上都安装千里时,你们可以通过wifi网络通话,享受更清晰和稳定的通话质量";
+"helpViewOneDescription" = "千里是一款通话软件,当你和好友手机上都安装千里时,你们就可以通过无线网络通话,享受清晰和稳定的通话质量";
 "helpViewTwoTitle" = "更好的交流";
 "helpViewTwoQuote" = "除了声音以外我们还可以有更多的方式表达心中所想";
 "helpViewTwoDescription" = "通话过程中你可以给对方发送图片,网页链接等有意思的信息,让通话变得更有趣!";
 "helpViewThreeTitle" = "同步的感觉";
-"helpViewThreeQuote" = "回想一下当对方在身边和你分享快乐的感觉";
-"helpViewThreeDescription" = "在分享图片或观看视频时,千里可以同步你们的操作和屏幕显示,让分享变得更直接";
+"helpViewThreeQuote" = "不一样的分享体验";
+"helpViewThreeDescription" = "在分享图片或观看视频时,千里会同步你们的操作和屏幕显示,让快乐的分享更直接";
 "helpViewFourTitle" = "对方现在是否有空?";
-"helpViewFourDescription" = "在最近通话界面中右滑, 可以向对方发起预约, 如果对方有空就会回复你哦";
+"helpViewFourDescription" = "在最近通话界面中右滑,可以向对方发起通话预约,如果对方有空就会回复你哦";
 "unset" = "未设置";
 "send" = "发送";
 "addMore" = "继续添加";
@@ -83,35 +83,35 @@
 "callingRingingText" = "响铃中...";
 "Quit" = "退出";
 "emailSubject" = "邀请加入千里";
-"emailBody" = "千里是一款很酷的语音通信软件,它可以让您在和朋友聊天的同时发送图片,网址甚至视频等有意思的信息.了解更多和如何下载千里, 请点击 https://www.qianliapp.cn";
+"emailBody" = "千里是一款很酷的语音通信软件,它可以让您在和朋友语音的同时以更有趣的方式分享图片和网址链接。了解更多和下载千里,请点击http://www.qianliapp.cn";
 "emailWarningTitle" = "无法发送邮件";
-"emailWarningMessage" = "我们无法发出邮件, 请您检查下您的邮件设置.";
-"emailWarningOK" = "知道了,马上去";
+"emailWarningMessage" = "千里不能发出邮件,请您检查下您的邮件设置。";
+"emailWarningOK" = "知道了哦,马上去";
 "signOutTitle" = "小心哦";
 "signOutBody" = "此操作会删除掉此账户信息以及历史记录,确定要进行么?";
 "signOutConfirm" = "注销账户";
-"numberConfirmation" = "这是你的正确号码吗? \n\n  %@ %@  \n\n验证码短信将会发送到此号码.";
+"numberConfirmation" = "这是您的正确号码吗? \n\n  %@ %@  \n\n验证码短信将会发送到此号码。";
 "numberConfirmationTitle" = "请确认您的号码";
 "Confirm" = "确定";
 "countryCode" = "选择国家代码";
 "registerErrorTitle" = "发生错误了";
-"registerErrorMessage" = "千里在尝试注册时发生了错误, 请再尝试注册一次.";
-"noNetworkTitle" = "请确认您是否连接到网络";
-"noNetworkMessage" = "未检测到网络连接. 使用千里需要连接Internet, 请检查是否已连入网络, 然后重试.";
-"noCaptcha" = "无代码";
+"registerErrorMessage" = "千里在尝试注册时发生了错误，请再尝试注册一次。";
+"noNetworkTitle" = "未检测到网络连接";
+"noNetworkMessage" = "千里需要连接到网络才能正常使用，请检查是否已连入网络，然后重试。";
+"noCaptcha" = "未收到";
 "captchaErrorTitle" = "验证码错误";
-"captchaErrorMessage" = "验证失败,请检查输入是否和短信内的4位验证码一致.";
+"captchaErrorMessage" = "验证失败,请检查输入代码是否和短信内的4位验证码一致。";
 "captchaErrorButton" = "重新输入";
 "sendAgain" = "\n请检查此号码是否正确\n\n %@ \n\n如果要重新发送验证码请点击[确定]";
-"sendAgainAgain" = "短信发送有时需要十分钟左右时间,请耐心等待. 如果还是有问题,您可以直接联系我们:\n theashstudio@gmail.com";
+"sendAgainAgain" = "短信发送有时需要十分钟左右时间,请耐心等待。如果还是有问题,您可以直接联系我们:\n theashstudio@gmail.com";
 "sendAgainAgainTitle" = "仍未收到短信";
 "sendAgainTitle" = "未收到短信";
 "inviteFriend" = "邀请朋友";
 "noContact" = "无联系人";
 "noContactBody" = "点击上方的按钮邀请您的朋友";
 "noContactBody2" = "一起加入千里吧!";
-"contactAlertTitle" = "读取通讯录";
-"contactAlertBody" = "请在设置中允许千里读取您的通讯录,这样您才可以用千里拨打电话给也在使用千里的朋友,我们保证不会在其他地方未经允许使用您的通信录数据";
+"contactAlertTitle" = "无法读取通讯录";
+"contactAlertBody" = "请在系统[设置]-[隐私]-[通讯录]中允许千里读取您的通讯录,这样千里才能检测到您的千里好友,我们保证不会在其他地方使用您的通讯录数据";
 "iknow" = "知道了";
 "labelProfile" = "个人资料";
 "labelSMS" = "短信邀请好友";
@@ -149,17 +149,16 @@
 "thursday" = "星期四";
 "friday" = "星期五";
 "saturday" = "星期六";
-"sunday" = "星期天";
+"sunday" = "星期日";
 "PM" = "下午";
 "AM" = "上午";
 
 "version" = "版本";
 "labelAbout" = "关于千里";
 
-
 //Local notification
 "IncomingCallWithOutName" = "你有一个电话，点击接听";
-"micOn" = "麦克风已开启";
+"micOn" = "麦克风开启";
 "micOff" = "麦克风关闭";
 "speakerOff" = "扬声器关闭";
 "speakerOn" = "扬声器开启";
@@ -168,40 +167,39 @@
 "cancelDoodle" = "退出涂鸦";
 
 "Notice" = "通知";
-"TerminateCall" = "你的网络连接断开了，导致千里挂断了电话，请连接网络后在拨打千里电话！";
+"TerminateCall" = "网络连接断开，导致千里通话被中断，请在连接网络后再尝试拨打";
 "Photos" = "张照片";
 
 
 "alertRecordingTitle" = "麦克风被禁止";
-"alertRecordingBody" = "与好友进行通话需要允许千里使用麦克风，请在设置里面设置";
+"alertRecordingBody" = "与好友通话需要允许千里使用麦克风，请到系统[设置]-[隐私]-[麦克风]-[千里]开启。";
 
-"PhotoSaved" = "照片已经存入相册";
-"CallQianLiRobotSucessfully" = "通话已经接通了! 赶快试下千里在通话中都有哪些功能吧!";
-"CallQianLiRobotNetworkFailed" = "通话暂时未能接通, 也许是网络的问题, 请检查你的网络是否连接并过会儿再试试. ";
+"PhotoSaved" = "已存入相册";
+"CallQianLiRobotNetworkFailed" = "通话暂时未能接通，也许是网络的问题，请检查你的网络连接并过会儿再试试。";
 "QianLiRobotReceiveImages" = "太棒了! 我收到了你发给我的%d张照片!";
 "QianLiRobotSlidePhoto" = "你滑动了照片, 目前我的屏幕正显示第%d张照片.";
 "QianLiRobotClearDrawingView" = "你清空了画布, 现在我的屏幕一片空白, 准备好再来一篇大作了嘛?";
 "QianLiRobotSynWeb" = "我屏幕上的网页目前是%@";
-"QianLiRobotPlayVieo" = "我的屏幕开始播放";
+"QianLiRobotPlayVieo" = "我的视频开始播放";
 "QianLiRobotPauseVideo" = "我的视频被暂停了";
 "QianLiRobotForwardBackVideo" = "现在视频是%d分%d秒";
 "QianLiRobotEndCall" = "再见! 我们的通话持续了%d 分钟 %d 秒, 你和我 \n [*分享了%d张照片; \n *完成了%d篇涂鸦; \n *浏览了%d个网页; \n *观看了%d个视频]";
-"QianLiRobotDrawingGood" = "你画的那么好, 你父母知道吗?";
-"CallQianLiRobotSuccessfully" = "通话已经接通了! 赶快试下千里在通话中都有哪些功能吧!";
+"QianLiRobotDrawingGood" = "你画得那么好, 你父母知道吗?";
+"CallQianLiRobotSuccessfully" = "通话已经接通了，赶快试下千里都有哪些功能吧!";
 "beforeText" = "你离千里还有";
 "behindTextLabel" = "排在你后面";
-"addPartnerIntro" = "输入一个亲友号码，当你获得千里使用资格后，我们会同时激活该号码";
-"partnerVerifiedText" = "你的亲友号码是:%@。你可以短信或邮件告诉你的好友。";
+"addPartnerIntro" = "你可以输入一个亲友号码，当你获得千里使用资格后，我们会同时激活该号码";
+"partnerVerifiedText" = "你的亲友号码是:%@。你可以发送短信或邮件告知你的好友。";
 "addPartnerOK" = "确定";
 "alreadyHavePartnerTitle" = "提示";
-"alreadyHavePartnerText" = "亲，你想要绑定的号码已经在千里系统中，请选择其他号码";
+"alreadyHavePartnerText" = "亲，你输入的号码已经在千里系统中了哦，不出意外的话他会比你更快加入千里，试试别的号码吧";
 "alreadyHavePartnerOK" = "好的";
-"bindPartnerSuccessfully" = "绑定成功";
+"bindPartnerSuccessfully" = "已记录";
 "notChangePartnerTitle" = "提示";
-"notChangePartnerText" = "亲，你已经绑定了一个号码，不能再绑定其他号码了";
+"notChangePartnerText" = "亲，你已经输入了一个亲友号码，不能再输入其他号码了";
 "notChangePartnerOK" = "好的";
 "addPartnerErrorTitle" = "格式错误";
-"addPartnerErrorText" = "号码格式有误，请重新填写";
+"addPartnerErrorText" = "输入号码的格式有误，请重新填写";
 "addPartnerErrorOK" = "好的";
 "canUseQianli" = "恭喜你，你现在可以使用千里提供的服务了";
 "BeginQianli" = "开始千里";
@@ -211,7 +209,7 @@
 "voiceCaptchaTitle" = "重发验证码";
 "message" = "短信发送";
 "phoneCall" = "电话通知";
-"QianLiRobotAlwaysAvailableTitle" = "请直接拨打";
+"QianLiRobotAlwaysAvailableTitle" = "千里永远在线";
 "QianLiRobotAlwaysAvailableMessage" = "千里永远欢迎你，不用预约，请直接拨打语音电话。";
 "people" = "人";
 "RobotName" = "千里";
@@ -219,6 +217,4 @@
 "QianliCall" = "进行通话";
 "inviteMessage" = "短信邀请";
 "inviteEmail" = "邮件邀请";
-"doneBiding" = "绑定成功";
-"doneBinding" = "绑定成功";
 "waitNote" = "*排队成功后会自动发送短信通知";
