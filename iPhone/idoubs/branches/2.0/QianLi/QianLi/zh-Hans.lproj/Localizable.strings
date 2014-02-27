@@ -198,8 +198,8 @@
 "notChangePartnerTitle" = "提示";
 "notChangePartnerText" = "亲，你已经绑定了一个号码，不能再绑定其他号码了";
 "notChangePartnerOK" = "好的";
-"addPartnerErrorTitle" = "错误";
-"addPartnerErrorText" = "号码有误，请重新填写";
+"addPartnerErrorTitle" = "格式错误";
+"addPartnerErrorText" = "号码格式有误，请重新填写";
 "addPartnerErrorOK" = "好的";
 "canUseQianli" = "恭喜你，你现在可以使用千里提供的服务了";
 "BeginQianli" = "开始千里";

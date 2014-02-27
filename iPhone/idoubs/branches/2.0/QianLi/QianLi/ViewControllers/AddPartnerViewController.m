@@ -9,6 +9,9 @@
 #import "AddPartnerViewController.h"
 
 @interface AddPartnerViewController ()
+{
+    BOOL isFirstEnter;
+}
 
 @property (weak, nonatomic) IBOutlet UITextField *numberField;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
@@ -19,6 +22,7 @@
 @property (weak, nonatomic) UILabel *buttonLabel;
 @property (weak, nonatomic) IBOutlet UILabel *inviteMessageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *inviteEmailLabel;
+@property (weak, nonatomic) UILabel *noteLabel;
 
 - (IBAction)done:(id)sender;
 - (IBAction)sendMessage:(id)sender;
@@ -59,6 +63,7 @@
     label.numberOfLines = 0;
     label.backgroundColor = [UIColor clearColor];
     [self.view addSubview:label];
+    _noteLabel = label;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [self.view addGestureRecognizer:tap];
@@ -117,6 +122,8 @@
     //added by Xiangwen
     //localized partnerLabel;
     _partnerLabel.text = NSLocalizedString(@"partnerNumber", nil);
+    
+    isFirstEnter = YES;
 }
 
 - (void)viewDidLayoutSubviews
@@ -124,10 +131,15 @@
     [super viewDidLayoutSubviews];
     if (!IS_OS_7_OR_LATER) {
         for (UIView *view in self.view.subviews) {
+            if (view == _noteLabel && !isFirstEnter) {
+                continue;
+                // 为了防止ios6中便签不停上移
+            }
             CGRect frame = view.frame;
             frame =CGRectMake(frame.origin.x, frame.origin.y - 40, frame.size.width, frame.size.height);
             view.frame = frame;
         }
+        isFirstEnter = NO;
     }
 }
 

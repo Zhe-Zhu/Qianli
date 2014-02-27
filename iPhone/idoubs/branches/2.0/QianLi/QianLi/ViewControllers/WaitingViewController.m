@@ -50,8 +50,8 @@
     
     self.navigationController.navigationBarHidden = YES;
     NSUserDefaults *userData = [NSUserDefaults standardUserDefaults];
-    _beforeNumberLabel.text = [NSString stringWithFormat:@"%d", [userData integerForKey:@"before"]];
-    _behindNumberLabel.text = [NSString stringWithFormat:@"%d", [userData integerForKey:@"behind"]];
+    _beforeNumberLabel.text = [NSString stringWithFormat:@"%d%@", [userData integerForKey:@"before"], NSLocalizedString(@"people", nil)];
+    _behindNumberLabel.text = [NSString stringWithFormat:@"%d%@", [userData integerForKey:@"behind"], NSLocalizedString(@"people", nil)];
     if (_isPartner) {
         _addPartnerButton.hidden = YES;
     }
