@@ -34,11 +34,9 @@
     self.navigationItem.rightBarButtonItem = finishButton;
     [self.nameTextField becomeFirstResponder];
     self.nameTextField.delegate = self;
+    self.nameTextField.placeholder = NSLocalizedString(@"inputName", nil);
     NSString *name = [UserDataAccessor getUserName];
-    if (!name) {
-        self.nameTextField.placeholder = NSLocalizedString(@"inputName", nil);
-    }
-    else{
+    if (name != nil) {
         self.nameTextField.text = name;
     }
 }
