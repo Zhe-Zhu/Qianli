@@ -51,10 +51,10 @@ static SipCallManager *callManager = nil;
     }
     
     if (![Utils checkInternetAndDispWarning:YES]) {
-        if (kIsCallingQianLiRobot) {
-            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"CallQianLiRobotNetworkFailed", nil)];
-            return;
-        }
+        //if (kIsCallingQianLiRobot) {
+            //[SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"CallQianLiRobotNetworkFailed", nil)];
+          //  return;
+        //}
         return;
     }
     
