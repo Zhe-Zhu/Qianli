@@ -186,7 +186,6 @@
     didEndCall = NO;
     _didPressEndCall = NO;
     
-    callBeginTime = [[NSDate alloc] init];
     
     if (!IS_OS_7_OR_LATER) {
         [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forBarMetrics:UIBarMetricsDefault];
@@ -309,6 +308,7 @@
     [_buttonAdd setEnabled:YES];
     [_buttonAdd setTintColor:activeButtonTintColor];
     // Add Time Label
+    callBeginTime = [[NSDate alloc] init];
     [self addTimeLabel];
     
     _viewState = InCall;
