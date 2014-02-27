@@ -445,6 +445,7 @@
     [_firstImageView addSubview:label];
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
+    label.backgroundColor = [UIColor clearColor];
     
     NSString *str1;
     if (isChineseSystem) {
