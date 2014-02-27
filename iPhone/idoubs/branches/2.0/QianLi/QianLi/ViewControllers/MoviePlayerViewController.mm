@@ -257,18 +257,18 @@
         lineView.backgroundColor = [UIColor colorWithRed:99 / 255.0 green:99 / 255.0 blue:99 / 255.0 alpha:1.0];
         [view addSubview:lineView];
         
-        UILabel *totalTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(totalDurationLength + 80 + 5, 7, 70, 15)];
+        UILabel *totalTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(totalDurationLength + 80 + 7, 6, 70, 15)];
         totalTimeLabel.backgroundColor = [UIColor clearColor];
         _totalTimeLabel = totalTimeLabel;
         totalTimeLabel.textColor = [UIColor whiteColor];
-        totalTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
+        totalTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
         [view addSubview:totalTimeLabel];
         
-        UILabel *totalTimeLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(30, 7, 70, 15)];
+        UILabel *totalTimeLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(41, 6, 70, 15)];
         totalTimeLabel1.backgroundColor = [UIColor clearColor];
         _currentTimeLabel = totalTimeLabel1;
         totalTimeLabel1.textColor = [UIColor whiteColor];
-        totalTimeLabel1.font = [UIFont fontWithName:@"Helvetica" size:17];
+        totalTimeLabel1.font = [UIFont fontWithName:@"Helvetica" size:13];
         [view addSubview:totalTimeLabel1];
         
 //        UIView *availableProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 12, 0, 3)];
