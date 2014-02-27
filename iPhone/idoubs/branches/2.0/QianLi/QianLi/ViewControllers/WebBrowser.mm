@@ -511,9 +511,6 @@
         _toolbar.center = CGPointMake(160, winSize.size.height - _toolbar.frame.size.height / 2.0);
         _webView.frame = CGRectMake(0, 62, 320, winSize.size.height - 62);
         _goButton.center = CGPointMake(_goButton.center.x, 41);
-        if (!IS_OS_7_OR_LATER) {
-            _toolbar.center = CGPointMake(160, winSize.size.height - _toolbar.frame.size.height / 2.0 - 20);
-        }
     } completion:^(BOOL finished) {
         
     }];
