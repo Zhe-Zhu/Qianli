@@ -55,6 +55,9 @@ const float kColorB = 75/100.0;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //[self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+    if (!IS_OS_7_OR_LATER) {
+        [UIApplication sharedApplication].statusBarHidden = NO;
+    }
     kIsCallingQianLiRobot = NO;
     _didJustLaunch = YES;
     didLaunch = YES;
@@ -103,6 +106,7 @@ const float kColorB = 75/100.0;
     [UMFeedback checkWithAppkey:kUmengSDKKey];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(umCheck:) name:UMFBCheckFinishedNotification object:nil];
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNetworkEvent:) name:kNgnNetworkEventArgs_Name object:nil];
+    
     return YES;
 }
 
