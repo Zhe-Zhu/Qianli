@@ -16,6 +16,8 @@
 "APPOINTMENTACTIONKEY" = "OK";
 "MISSEDCALL" = "%@: missed call";
 "MISSEDCALLACTIONKEY" = "Details";
+"YOURTURNACTIONKY" = "try now";
+"YOURTURN" = "Congratulations, you can enjoy Qianli server now. Thanks for your patience";
 "missedcallactionkey" = "see details";
 "contactTitle" = "Contacts";
 "recentCalls" = "Recents";
