@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3OY-Nm-vgF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3OY-Nm-vgF">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
         <!--History Records Main View Controller-->
@@ -435,7 +435,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="uaQ-ez-WWf">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waiting_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="uaQ-ez-WWf">
                                 <rect key="frame" x="125" y="117" width="70" height="70"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <constraints>
@@ -443,8 +443,8 @@
                                     <constraint firstAttribute="width" constant="70" id="Otn-bQ-bJa"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Version" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pBp-Mh-qqv">
-                                <rect key="frame" x="52" y="222" width="217" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pBp-Mh-qqv">
+                                <rect key="frame" x="131" y="222" width="58" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" red="0.5490196078431373" green="0.5490196078431373" blue="0.5490196078431373" alpha="1" colorSpace="calibratedRGB"/>
@@ -452,6 +452,12 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="uaQ-ez-WWf" firstAttribute="centerX" secondItem="oda-LP-ahd" secondAttribute="centerX" id="0If-yQ-EAv"/>
+                            <constraint firstItem="pBp-Mh-qqv" firstAttribute="top" secondItem="uaQ-ez-WWf" secondAttribute="bottom" constant="35" id="KJa-Ar-GE4"/>
+                            <constraint firstItem="uaQ-ez-WWf" firstAttribute="top" secondItem="4Xf-t2-9XC" secondAttribute="bottom" constant="97" id="Wlc-iu-w79"/>
+                            <constraint firstItem="uaQ-ez-WWf" firstAttribute="centerX" secondItem="pBp-Mh-qqv" secondAttribute="centerX" id="nor-BT-mjp"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="QJR-yv-Suc"/>
                     <connections>
@@ -480,18 +486,21 @@
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="头像" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oF8-ai-VI4">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="头像" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oF8-ai-VI4">
                                                     <rect key="frame" x="63" y="22" width="65" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="65" id="O6V-Md-jpg"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="17"/>
                                                     <color key="textColor" red="0.31372549020000001" green="0.31372549020000001" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="settingAvatar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Vz9-Nl-m3W">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settingAvatar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Vz9-Nl-m3W">
                                                     <rect key="frame" x="3" y="9" width="38" height="38"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H6m-Hq-UmH">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="H6m-Hq-UmH">
                                                     <rect key="frame" x="230" y="8" width="44" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <constraints>
@@ -500,6 +509,14 @@
                                                     </constraints>
                                                 </imageView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="H6m-Hq-UmH" secondAttribute="trailing" constant="13" id="0xu-nT-xej"/>
+                                                <constraint firstItem="Vz9-Nl-m3W" firstAttribute="top" secondItem="J3Q-EV-eGh" secondAttribute="top" constant="9" id="Fho-6g-in3"/>
+                                                <constraint firstItem="H6m-Hq-UmH" firstAttribute="top" secondItem="J3Q-EV-eGh" secondAttribute="top" constant="8" id="mx6-e5-SfY"/>
+                                                <constraint firstItem="H6m-Hq-UmH" firstAttribute="centerY" secondItem="oF8-ai-VI4" secondAttribute="centerY" id="oFs-dT-R22"/>
+                                                <constraint firstItem="oF8-ai-VI4" firstAttribute="leading" secondItem="J3Q-EV-eGh" secondAttribute="leading" constant="63" id="sh0-dq-9WW"/>
+                                                <constraint firstItem="oF8-ai-VI4" firstAttribute="leading" secondItem="Vz9-Nl-m3W" secondAttribute="trailing" constant="22" id="um5-uq-KyA"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="h3Y-HL-60p">
@@ -1833,9 +1850,14 @@
         <image name="browserForward.png" width="35" height="35"/>
         <image name="browserHistory.png" width="35" height="35"/>
         <image name="buttonContinueBackground.png" width="280" height="44"/>
+        <image name="buttonContinueBackground.png" width="280" height="44"/>
+        <image name="buttonContinueBackground.png" width="280" height="44"/>
+        <image name="captchaCover.png" width="40" height="40"/>
+        <image name="captchaCover.png" width="40" height="40"/>
+        <image name="captchaCover.png" width="40" height="40"/>
         <image name="captchaCover.png" width="40" height="40"/>
         <image name="edit.png" width="27" height="26"/>
-        <image name="icon.png" width="140" height="140"/>
+        <image name="edit.png" width="27" height="26"/>
         <image name="profileButtonCancel.png" width="40" height="40"/>
         <image name="profileButtonDone.png" width="40" height="40"/>
         <image name="profilePhoto.png" width="105" height="105"/>
@@ -1855,6 +1877,8 @@
         <image name="waiting_done_button.png" width="248" height="60"/>
         <image name="waiting_done_disable_button.png" width="248" height="60"/>
         <image name="waiting_email_button.png" width="53" height="53"/>
+        <image name="waiting_logo.png" width="75" height="75"/>
+        <image name="waiting_logo.png" width="75" height="75"/>
         <image name="waiting_logo.png" width="75" height="75"/>
         <image name="waiting_partner_button.png" width="53" height="53"/>
         <image name="waiting_sms_button.png" width="53" height="53"/>
