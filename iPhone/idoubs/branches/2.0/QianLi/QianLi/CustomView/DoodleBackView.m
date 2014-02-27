@@ -11,6 +11,7 @@
 @interface DoodleBackView ()
 
 @property(nonatomic) BOOL isDrawing;
+@property(weak, nonatomic) UIImageView *backImageView;
 
 @end
 
@@ -29,9 +30,15 @@
 
 - (void)setImageView:(CGRect)frame
 {
-    UIImageView *backGroundView = [[UIImageView alloc] initWithFrame:frame];
-    backGroundView.image = _image;
-    [self addSubview:backGroundView];
+    if (!_backImageView) {
+        UIImageView *backGroundView = [[UIImageView alloc] initWithFrame:frame];
+        self.backImageView = backGroundView;
+        backGroundView.image = _image;
+        [self addSubview:backGroundView];
+    }
+    else{
+        _backImageView.frame = frame;
+    }
 }
 
 
