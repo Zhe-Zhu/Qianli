@@ -21,7 +21,7 @@
 - (void)loadWebSite;
 - (void)cancelFromRemote;
 - (void)cancelPlayerFromRemote;
-- (void)playMovieStream:(NSURL *)movieFileURL;
+- (void)playMovieStream:(NSString *)videoID;
 - (void)pauseFromRemote:(BOOL)paused;
 - (void)backwardFromRemote:(float)currentTime;
 - (void)forwardFromRemote:(float)currentTime;

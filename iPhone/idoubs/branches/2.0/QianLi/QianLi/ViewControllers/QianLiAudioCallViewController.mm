@@ -1403,8 +1403,8 @@
     
     else if ([message isEqualToString:kPlayVideo]){
         if ([words count] == 2) {
-            _vedioVC.url = [words objectAtIndex:1];
-            [_vedioVC playMovieStream:[NSURL URLWithString:[words objectAtIndex:1]]];
+            //_vedioVC.url = [words objectAtIndex:1];
+            [_vedioVC playMovieStream:[words objectAtIndex:1]];
         }
     }
     else if ([message isEqualToString:kVideoPlayerCancel]){
