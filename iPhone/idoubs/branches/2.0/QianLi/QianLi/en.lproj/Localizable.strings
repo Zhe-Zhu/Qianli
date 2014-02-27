@@ -195,7 +195,7 @@
 "addPartnerErrorText" = "Please make sure the number is correct and then try again";
 "addPartnerErrorOK" = "OK";
 "canUseQianli" = "Congratulations, you can use Qianli now";
-"partnerNumber" = "Number";
+"partnerNumber" = "Parner Number";
 "stillInQueue" = "still in queue";
 "BeginQianli" = "Get Started";
 "voiceCaptchaIntro" = "Please choose how to resend the captcha";

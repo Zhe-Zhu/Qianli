@@ -116,7 +116,7 @@ const float kColorB = 75/100.0;
             CGRect oldFrame = _tabController.tabBar.frame;
             [_tabController.tabBar setFrame:CGRectMake(CGRectGetMinX(oldFrame), [[UIScreen mainScreen]bounds].size.height - 49, CGRectGetWidth(oldFrame), 49)];
             [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"iOS6TabbarEmptySelected.png"]];
-            UIColor *titleHighlightedColor = [UIColor colorWithRed:94/255.0 green:201/255.0 blue:217/255.0 alpha:1.0];
+            UIColor *titleHighlightedColor = [UIColor colorWithRed:4/255.0 green:190/255.0 blue:117/255.0 alpha:1.0];
             [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                titleHighlightedColor, UITextAttributeTextColor,
                                                                nil] forState:UIControlStateHighlighted];
