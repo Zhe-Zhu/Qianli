@@ -132,14 +132,12 @@
         if ([[words objectAtIndex:i] isEqualToString:@"v_show"]){
             NSArray *array = [[words objectAtIndex:i + 1] componentsSeparatedByString:@"."];
             NSString *videoID = [[array objectAtIndex:0] substringFromIndex:3];
-            NSString *videoURL = [self getVideoURL:videoID];
-            self.currentVideoID = videoID;
-            [self playMovieStream:[NSURL URLWithString:videoURL]];
+            [self playMovieStream:videoID];
             if (kIsCallingQianLiRobot) {
                 kQianLiRobotsharedVideoNum++;
                 [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotPlayVieo", nil)]];
             }
-            NSString *message = [NSString stringWithFormat:@"%@%@%@",kPlayVideo, kSeparator, videoURL];
+            NSString *message = [NSString stringWithFormat:@"%@%@%@",kPlayVideo, kSeparator, videoID];
             [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
             [self getHistoryImage];
             return NO;
@@ -226,14 +224,15 @@
     }
 }
 
--(void)playMovieStream:(NSURL *)movieFileURL
+-(void)playMovieStream:(NSString *)videoID
 {
     // added by Xiangwen
     // if calling QianLi Robot, stop the background music.
     if (kIsCallingQianLiRobot) {
         [[SipStackUtils sharedInstance].audioService sendDTMF:1];
     }
-    
+    self.currentVideoID = videoID;
+    NSURL *movieFileURL = [NSURL URLWithString:[self getVideoURL:videoID]];
     MoviePlayerViewController *player = [[MoviePlayerViewController alloc] init];
     //CODE_REVIEW:可以不用传递_videoThumbs，在MoviePlayer里不能截屏。
     player.thumbs = _vedioThumbs;

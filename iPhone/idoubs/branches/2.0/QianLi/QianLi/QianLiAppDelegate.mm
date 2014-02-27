@@ -83,6 +83,7 @@ const float kColorB = 75/100.0;
         UINavigationController *naviVC = [[UINavigationController alloc] init];
         naviVC.viewControllers = @[waitingVC];
         self.window.rootViewController = naviVC;
+        [self registerAPNS];
     }
     else{
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -246,75 +247,83 @@ const float kColorB = 75/100.0;
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    
-    backgroundTaskID = [application beginBackgroundTaskWithExpirationHandler:^{
-        [application endBackgroundTask:backgroundTaskID];
-        backgroundTaskID = UIBackgroundTaskInvalid;
-    }];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-        [application setKeepAliveTimeout:600 handler:^{
-            backgroundKeepAliveID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                [[UIApplication sharedApplication] endBackgroundTask:backgroundKeepAliveID];
-                backgroundKeepAliveID = UIBackgroundTaskInvalid;
-            }];
-            [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults boolForKey:kSingUpKey]) {
+        backgroundTaskID = [application beginBackgroundTaskWithExpirationHandler:^{
+            [application endBackgroundTask:backgroundTaskID];
+            backgroundTaskID = UIBackgroundTaskInvalid;
         }];
         
-        [_contactViewController clearContacts];
-        [_historyMainController clearHistory];
-        [_settingViewController clearImages];
-        if ([SipCallManager SharedInstance].audioVC == nil) {
-            [self clearManagedObjects];
-            [[SipStackUtils sharedInstance].soundService disableAudioSession];
-            [Utils clearAllSharedInstance];
-        }
-        [application endBackgroundTask:backgroundTaskID];
-        backgroundTaskID = UIBackgroundTaskInvalid;
-    });
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+            [application setKeepAliveTimeout:600 handler:^{
+                backgroundKeepAliveID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                    [[UIApplication sharedApplication] endBackgroundTask:backgroundKeepAliveID];
+                    backgroundKeepAliveID = UIBackgroundTaskInvalid;
+                }];
+                [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+            }];
+            
+            [_contactViewController clearContacts];
+            [_historyMainController clearHistory];
+            [_settingViewController clearImages];
+            if ([SipCallManager SharedInstance].audioVC == nil) {
+                [self clearManagedObjects];
+                [[SipStackUtils sharedInstance].soundService disableAudioSession];
+                [Utils clearAllSharedInstance];
+            }
+            [application endBackgroundTask:backgroundTaskID];
+            backgroundTaskID = UIBackgroundTaskInvalid;
+        });
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    if (_window.rootViewController == nil) {
-        _window.rootViewController = self.tabController;
-    }
-    if ([SipCallManager SharedInstance].audioVC == nil) {
-        [[SipStackUtils sharedInstance].soundService startAudioSession];
-    }
-    [[HistoryTransUtils sharedInstance] getHistoryInBackground:NO];
-    [application clearKeepAliveTimeout];
-    switch (_tabController.selectedIndex) {
-        case 0:
-            [_historyMainController restoreHistory];
-            break;
-        case 1:
-            [_contactViewController restoreContacts];
-            break;
-        case 2:
-            [_settingViewController restoreImages];
-            break;
-        default:
-            break;
-    }
-    
-    if (!didLaunch) {
-        ConnectionState_t registrationState = [[NgnEngine sharedInstance].sipService getRegistrationState];
-        switch (registrationState) {
-            case CONN_STATE_CONNECTING:
-            case CONN_STATE_CONNECTED:
-                break;
-            default:
-                [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-                break;
-        }
-    }
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults boolForKey:kSingUpKey]) {
+        if (_window.rootViewController == nil) {
+            _window.rootViewController = self.tabController;
+        }
+        if ([SipCallManager SharedInstance].audioVC == nil) {
+            [[SipStackUtils sharedInstance].soundService startAudioSession];
+        }
+        [[HistoryTransUtils sharedInstance] getHistoryInBackground:NO];
+        [application clearKeepAliveTimeout];
+        switch (_tabController.selectedIndex) {
+            case 0:
+                [_historyMainController restoreHistory];
+                break;
+            case 1:
+                [_contactViewController restoreContacts];
+                break;
+            case 2:
+                [_settingViewController restoreImages];
+                break;
+            default:
+                break;
+        }
+        
+        if (!didLaunch) {
+            ConnectionState_t registrationState = [[NgnEngine sharedInstance].sipService getRegistrationState];
+            switch (registrationState) {
+                case CONN_STATE_CONNECTING:
+                case CONN_STATE_CONNECTED:
+                    break;
+                default:
+                    [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+                    break;
+            }
+        }
+
         [self displayNoPushNotificationWarning];
         [self displayNoRecordingWarning];
+    }
+    else if ([userDefaults boolForKey:kWaitingKey]){
+        if (!didLaunch) {
+            [[WaitingListUtils sharedInstance] getWaitingStatus];
+        }
     }
 }
 
