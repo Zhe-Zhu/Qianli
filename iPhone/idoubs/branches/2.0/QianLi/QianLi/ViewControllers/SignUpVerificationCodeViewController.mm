@@ -322,12 +322,17 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
         // send the verification code again
         NSString *udid = [Utils getDeviceUDID];
         [PictureManager registerWithUDID:udid Password:_number Name:_number PhoneNumber:_number Email:@"" OS:@"i" Avatar:nil Success:nil];
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"AlreadySent", nil) message:NSLocalizedString(@"SendCodeMessage", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"SendOK", nil) otherButtonTitles:nil];
+        [alertView show];
     }
     else {
         //make auido call to tell user the verification code
         [PictureManager getVerificationCodeByAudio:_number Success:^(int status) {
             if (status == 1) {
                 // the right
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"AlreadyCall", nil) message:NSLocalizedString(@"AudioCodeMessage", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"SendOK", nil) otherButtonTitles:nil];
+                [alertView show];
             }
             else{
                 //error

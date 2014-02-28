@@ -74,8 +74,10 @@
     self.navigationController.navigationBarHidden = YES;
     NSString *partnerNumber = [UserDataAccessor getUserPartnerNumber];
     // 优化中国地区号码的显示 by ZZ
-    if ([[partnerNumber substringToIndex:4] isEqualToString:@"0086"]) {
-        partnerNumber = [partnerNumber substringFromIndex:4];
+    if ([partnerNumber length] > 4) {
+        if ([[partnerNumber substringToIndex:4] isEqualToString:@"0086"]) {
+            partnerNumber = [partnerNumber substringFromIndex:4];
+        }
     }
     _partnerNumberLabel.text = partnerNumber;
     _noteLabel.text = NSLocalizedString(@"waitNote", nil);

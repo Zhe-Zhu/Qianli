@@ -218,3 +218,14 @@
 "inviteMessage" = "短信邀请";
 "inviteEmail" = "邮件邀请";
 "waitNote" = "*排队成功后会自动发送短信通知";
+
+"AlreadySent" = "已发送";
+"SendCodeMessage" = "已经再次向你发送验证码，谢谢您的耐心等待。";
+"SendOK" = "好的";
+"AlreadyCall" = "打电话";
+"AudioCodeMessage" = "千里会马上打电话给您，请接听电话并获得验证码，谢谢使用千里。";
+"PartnerNumber" = "亲友号码";
+"PartnerNumberText"= "你的亲友号码是%@, 请确认您输入的亲友号码是正确的。亲友号经过确认后将不能修改";
+"PartnerNumberOK" = "确认";
+"PartnerNumberCancel" = "取消";
+
