@@ -68,15 +68,17 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [self.view addGestureRecognizer:tap];
     NSString *partnerNumber = [UserDataAccessor getUserPartnerNumber];
-    if (!partnerNumber) {
+    if (!partnerNumber || [partnerNumber isEqualToString:@""]) {
         _messageButton.alpha = 0.0;
         _emailButton.alpha = 0.0;
         _inviteMessageLabel.alpha = 0.0;
         _inviteEmailLabel.alpha = 0.0;
     }
     else {
-        if ([[partnerNumber substringToIndex:4]isEqualToString:@"0086"]) {
-            _numberField.text = [partnerNumber substringFromIndex:4];
+        if ([partnerNumber length] > 4) {
+            if ([[partnerNumber substringToIndex:4] isEqualToString:@"0086"]) {
+                _numberField.text = [partnerNumber substringFromIndex:4];
+            }
         }
         else {
             _numberField.text = partnerNumber;
@@ -95,7 +97,7 @@
     buttonLabel.textAlignment = NSTextAlignmentCenter;
     buttonLabel.backgroundColor = [UIColor clearColor];
     buttonLabel.textColor = [UIColor whiteColor];
-    if (!partnerNumber) {
+    if (!partnerNumber || [partnerNumber isEqualToString:@""]) {
         buttonLabel.text = NSLocalizedString(@"addPartnerOK", nil);
     }
     else {
@@ -211,6 +213,16 @@
         return;
     }
     
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"PartnerNumber", nil) message:[NSString stringWithFormat:NSLocalizedString(@"PartnerNumberText", nil), _numberField.text] delegate:self cancelButtonTitle:NSLocalizedString(@"PartnerNumberCancel", nil) otherButtonTitles: NSLocalizedString(@"PartnerNumberOK", nil), nil];
+    [alertView show];
+}
+
+- (void)sendPartnerNumberToServer
+{
+    NSString *numStr = _numberField.text;
+    NSCharacterSet* phoneChars = [NSCharacterSet characterSetWithCharactersInString:@"+0123456789"];
+    NSArray* words = [numStr componentsSeparatedByCharactersInSet :[phoneChars invertedSet]];
+    NSString* strippedNumber = [words componentsJoinedByString:@""];
     if (![[strippedNumber substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"+"]) {
         if (![[strippedNumber substringWithRange:NSMakeRange(0, 2)] isEqualToString:@"00"]) {
             strippedNumber = [NSString stringWithFormat:@"00%@%@",@"86",strippedNumber];
@@ -223,13 +235,18 @@
     }
     _partnerNumber = strippedNumber;
     [[WaitingListUtils sharedInstance] addPartner:strippedNumber];
+
 }
 
 - (IBAction)sendMessage:(id)sender
 {
     if ([MFMessageComposeViewController canSendText]) {
         MFMessageComposeViewController *messageComposer = [[MFMessageComposeViewController alloc] init];
-        messageComposer.recipients = @[[UserDataAccessor getUserPartnerNumber]];
+        NSString *number;
+        if ([[UserDataAccessor getUserPartnerNumber] length] > 4) {
+            number = [[UserDataAccessor getUserPartnerNumber] substringFromIndex:4];
+        }
+        messageComposer.recipients = @[number];
         NSString *message = NSLocalizedString(@"emailBody", nil);
         [messageComposer setBody:message];
         if (IS_OS_7_OR_LATER) {
@@ -281,6 +298,17 @@
 {
     [_numberField resignFirstResponder];
     return YES;
+}
+
+# pragma mark - UIAlertView delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        
+    }
+    else {
+        [self sendPartnerNumberToServer];
+    }
 }
 
 @end

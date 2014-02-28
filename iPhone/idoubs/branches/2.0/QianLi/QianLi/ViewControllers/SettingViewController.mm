@@ -17,6 +17,8 @@
 #import "Utils.h"
 #import "UserDataTransUtils.h"
 #import "UMFeedback.h"
+#import "DetailHistoryAccessor.h"
+#import "WebHistoryDataAccessor.h"
 
 @interface SettingViewController (){
     int repliesCountNumber;
@@ -254,7 +256,13 @@
     [userDefaults setBool:NO forKey:kSingUpKey];
     [userDefaults synchronize];
     [UserDataAccessor setUserName:@""];
+    [UserDataAccessor setUserPartnerNumber:@""];
     [UserDataAccessor deleteUserImages];
+    [[MainHistoryDataAccessor sharedInstance] deleteAllObjects];
+    [[DetailHistoryAccessor sharedInstance] deleteAllHistory];
+    [[WebHistoryDataAccessor sharedInstance] deleteObjectForType:@"HISTORY"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"partner_verified"];
+    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     UINavigationController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
     [[UIApplication sharedApplication] delegate].window.rootViewController = signUpEditProfileViewController;
