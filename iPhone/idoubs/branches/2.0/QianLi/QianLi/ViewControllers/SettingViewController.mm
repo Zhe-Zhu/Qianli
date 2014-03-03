@@ -40,6 +40,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelFeedback;
 @property (weak, nonatomic) IBOutlet UILabel *labelSignout;
 @property (weak, nonatomic) IBOutlet UILabel *labelAbout;
+@property (weak, nonatomic) IBOutlet UILabel *rateUsLabel;
 
 
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
@@ -75,6 +76,7 @@
     _labelFeedback.text = NSLocalizedString(@"labelFeedback", nil);
     _labelSignout.text = NSLocalizedString(@"labelSignout", nil);
     _labelAbout.text = NSLocalizedString(@"labelAbout", nil);
+    _rateUsLabel.text = NSLocalizedString(@"RateUs", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
