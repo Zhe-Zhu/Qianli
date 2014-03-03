@@ -606,7 +606,7 @@ const float kColorB = 75/100.0;
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    // when app is runing in forground, this method is called. TODO:copy the above method to this method for ios6
+    // when app is runing in forground, this method is called.
     if (application.applicationState == UIApplicationStateActive) {
         NSDictionary *aps = [userInfo objectForKey:@"aps"];
         NSDictionary *dic = [aps objectForKey:@"alert"];
