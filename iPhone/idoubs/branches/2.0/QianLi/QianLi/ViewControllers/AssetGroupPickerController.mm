@@ -56,7 +56,7 @@
         if (group) {
             if ([[group valueForProperty:ALAssetsGroupPropertyType] integerValue] != ALAssetsGroupPhotoStream) {
                 // 不加入照片流的图片
-                // TODO 考虑如何加入照片流的图片
+                // future 考虑如何加入照片流的图片
                 [_groups addObject:group];
             }
         } else {

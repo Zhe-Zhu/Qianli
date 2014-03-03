@@ -810,10 +810,10 @@
     }
     else{
         NSLog(@"no country code");
-        // TODO:LLGG just for simulator
-        [self getAddressBookPermission];
-        _finished = NO;
-        [self sendContactsToServer];
+        // LLGG just for simulator
+//        [self getAddressBookPermission];
+//        _finished = NO;
+//        [self sendContactsToServer];
     }
 }
 
