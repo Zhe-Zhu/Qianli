@@ -353,7 +353,6 @@
                 break;
         }
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSlidePhoto", nil), _currentPage, str]];
-        //TODO: add or not
         return;
     }
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];

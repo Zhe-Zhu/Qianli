@@ -77,7 +77,7 @@
 "callingRingingText" = "ringing...";
 "Quit" = "Cancel";
 "emailSubject" = "Join Qianli with me!";
-"emailBody" = "Qianli is a free VOIP app, which allows you to share pictures, url links or even videos with others while talking. To know more and how to download Qianli, please click: https://www.qianliapp.cn";
+"emailBody" = "Qianli is a free VOIP app, which allows you to share pictures, url links or even videos with others while talking. To know more, please click: https://www.qianliapp.cn. Download Qianli: https://itunes.apple.com/cn/app/xuan-yi-ge/id830277724?mt=8";
 "emailWarningTitle" = "Can't send email";
 "emailWarningMessage" = "We can't send out email. Please check your email setting.";
 "emailWarningOK" = "OK";
