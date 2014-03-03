@@ -83,7 +83,7 @@
 "callingRingingText" = "响铃中...";
 "Quit" = "退出";
 "emailSubject" = "邀请加入千里";
-"emailBody" = "千里是一款很酷的语音通信软件,它可以让您在和朋友语音的同时以更有趣的方式分享图片和网址链接。了解更多,请点击http://www.qianliapp.cn。 下载点击：https://itunes.apple.com/cn/app/xuan-yi-ge/id830277724?mt=8";
+"emailBody" = "千里是一款很酷的语音通信软件,它可以让您在和朋友语音的同时以更有趣的方式分享图片和网址链接。了解更多和下载请点击：http://itunes.apple.com/cn/app/qianli/id830277724?mt=8";
 "emailWarningTitle" = "无法发送邮件";
 "emailWarningMessage" = "千里不能发出邮件,请您检查下您的邮件设置。";
 "emailWarningOK" = "知道了哦,马上去";
