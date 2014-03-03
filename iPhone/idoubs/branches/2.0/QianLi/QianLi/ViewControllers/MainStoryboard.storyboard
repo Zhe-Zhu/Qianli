@@ -1836,6 +1836,7 @@
                         <outlet property="labelSignout" destination="A2W-rk-dqM" id="iV0-DA-i44"/>
                         <outlet property="profilePhoto" destination="M54-Vo-XQ1" id="Ink-03-T2A"/>
                         <outlet property="rateUs" destination="1ab-GD-b3h" id="DcQ-GH-uel"/>
+                        <outlet property="rateUsLabel" destination="4Qy-vq-NhH" id="Hzd-cf-c6X"/>
                         <outlet property="repliesCount" destination="C91-tq-NnQ" id="XCk-6I-Tcz"/>
                         <outlet property="repliesCountBackground" destination="kGy-4r-kw7" id="upW-Zo-dmR"/>
                         <outlet property="sendEmailCell" destination="Bj6-yl-NLk" id="l2u-lm-pW4"/>
