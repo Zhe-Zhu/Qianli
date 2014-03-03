@@ -130,6 +130,7 @@
 		18F2762118BCA41F00CD83D8 /* robot_avatar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F2761D18BCA41F00CD83D8 /* robot_avatar@2x.png */; };
 		18F4126C18B20BCE00F27B1F /* WaitingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4126B18B20BCE00F27B1F /* WaitingViewController.m */; };
 		18F4128518B20DDE00F27B1F /* AddPartnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4128418B20DDE00F27B1F /* AddPartnerViewController.m */; };
+		18F8010D18C459650021D941 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F8010C18C459650021D941 /* StoreKit.framework */; };
 		18FAC78D18BADC13008BCE02 /* ringbacktone.wav in Resources */ = {isa = PBXBuildFile; fileRef = 18FAC78C18BADC13008BCE02 /* ringbacktone.wav */; };
 		18FD1E8B1884E1F4006D3D51 /* help_1_background_words_1136@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FD1E7C1884E1F4006D3D51 /* help_1_background_words_1136@2x.png */; };
 		18FD1E8C1884E1F4006D3D51 /* help_1_done_background_words_1136@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FD1E7D1884E1F4006D3D51 /* help_1_done_background_words_1136@2x.png */; };
@@ -714,6 +715,7 @@
 		18F4126B18B20BCE00F27B1F /* WaitingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitingViewController.m; sourceTree = "<group>"; };
 		18F4128318B20DDE00F27B1F /* AddPartnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPartnerViewController.h; sourceTree = "<group>"; };
 		18F4128418B20DDE00F27B1F /* AddPartnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPartnerViewController.m; sourceTree = "<group>"; };
+		18F8010C18C459650021D941 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		18FAC78C18BADC13008BCE02 /* ringbacktone.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ringbacktone.wav; sourceTree = "<group>"; };
 		18FD1E7C1884E1F4006D3D51 /* help_1_background_words_1136@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_1_background_words_1136@2x.png"; sourceTree = "<group>"; };
 		18FD1E7D1884E1F4006D3D51 /* help_1_done_background_words_1136@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_1_done_background_words_1136@2x.png"; sourceTree = "<group>"; };
@@ -1101,6 +1103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18F8010D18C459650021D941 /* StoreKit.framework in Frameworks */,
 				505A078117B0A6720053E1B7 /* QuartzCore.framework in Frameworks */,
 				2F6F0A0A1876A6B1004769A2 /* libMobClickLibrary.a in Frameworks */,
 				184EB7791851C91C00D70240 /* libUMFeedback.a in Frameworks */,
@@ -1343,6 +1346,7 @@
 		2F81372F17AFB54500DB23F2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18F8010C18C459650021D941 /* StoreKit.framework */,
 				CE1E8CAD1842F61D00A956A2 /* libPods.a */,
 				CE5D0D73182C8B38001536CB /* libz.dylib */,
 				5096C7C0180C475A00931C69 /* CoreFoundation.framework */,

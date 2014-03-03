@@ -217,7 +217,12 @@
     else if ([indexPath isEqual:[tableView indexPathForCell:_rateUs]]) {
         // rate us
         // add here
-        
+        int appId = 830277724;//830277724; //595247165
+        SKStoreProductViewController *storeViewController = [[SKStoreProductViewController alloc] init];
+        NSDictionary *parameters = @{SKStoreProductParameterITunesItemIdentifier:[NSNumber numberWithInteger: appId]};
+        [storeViewController loadProductWithParameters:parameters completionBlock:nil];
+        storeViewController.delegate = self;
+        [self presentViewController:storeViewController animated:YES completion:nil];
     }
 }
 
@@ -272,6 +277,12 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     UINavigationController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
     [[UIApplication sharedApplication] delegate].window.rootViewController = signUpEditProfileViewController;
+}
+
+#pragma mark  --SKStoreProductViewControllerDelegate Method--
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController{
+    //
+    [viewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 # pragma mark -- Umeng Feedback
