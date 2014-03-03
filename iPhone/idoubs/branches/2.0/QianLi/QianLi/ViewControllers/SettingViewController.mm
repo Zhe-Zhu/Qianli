@@ -32,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *repliesCount;
 @property (weak, nonatomic) IBOutlet UIImageView *repliesCountBackground;
 @property (weak, nonatomic) IBOutlet UITableViewCell *aboutQianli;
+@property (weak, nonatomic) IBOutlet UITableViewCell *rateUs;
 
 @property (weak, nonatomic) IBOutlet UILabel *labelProfile;
 @property (weak, nonatomic) IBOutlet UILabel *labelSMS;
@@ -212,6 +213,11 @@
     else if ([indexPath isEqual:[tableView indexPathForCell:_feedback]]){
         [UMFeedback showFeedback:self withAppkey:kUmengSDKKey];
         [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"RepliesCount"];
+    }
+    else if ([indexPath isEqual:[tableView indexPathForCell:_rateUs]]) {
+        // rate us
+        // add here
+        
     }
 }
 
