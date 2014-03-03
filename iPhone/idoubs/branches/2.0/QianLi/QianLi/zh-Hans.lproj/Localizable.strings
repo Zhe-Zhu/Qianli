@@ -183,7 +183,7 @@
 "QianLiRobotPlayVieo" = "我的视频开始播放";
 "QianLiRobotPauseVideo" = "我的视频被暂停了";
 "QianLiRobotForwardBackVideo" = "现在视频是%d分%d秒";
-"QianLiRobotEndCall" = "再见! 我们的通话持续了%d 分钟 %d 秒, 你和我 \n [*分享了%d张照片; \n *完成了%d篇涂鸦; \n *浏览了%d个网页; \n *观看了%d个视频]";
+"QianLiRobotEndCall" = "再见! 我们的通话持续了%d 分钟 %d 秒, 你和我 \n [分享了%d张照片; \n 完成了%d篇涂鸦; \n 浏览了%d个网页; \n 观看了%d个视频]";
 "QianLiRobotDrawingGood" = "你画得那么好, 你父母知道吗?";
 "CallQianLiRobotSuccessfully" = "通话已经接通了，赶快试下千里都有哪些功能吧!";
 "beforeText" = "你离千里还有";
