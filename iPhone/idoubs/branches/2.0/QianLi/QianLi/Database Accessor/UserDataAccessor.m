@@ -12,15 +12,14 @@
 
 + (NSString *)documentsPathForFileName:(NSString *)name
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [paths objectAtIndex:0];
     return [documentsPath stringByAppendingPathComponent:name];
 }
 
-
 + (UIImage *)getUserProfile
 {
-    NSString *filePath = [self documentsPathForFileName:@"Profile.jpeg"];
+    NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"Profile_%@.jpg", [self getUserRemoteParty]]];
     NSData *pngData = [NSData dataWithContentsOfFile:filePath];
     UIImage *image = [UIImage imageWithData:pngData];
     return image;
@@ -29,8 +28,16 @@
 + (BOOL)setUserProfile:(UIImage *)image
 {
     NSData *pngData = UIImageJPEGRepresentation(image, 0.5);
-    NSString *filePath = [self documentsPathForFileName:@"Profile.jpeg"];
+    NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"Profile_%@.jpg", [self getUserRemoteParty]]];
     return [pngData writeToFile:filePath atomically:YES];
+}
+
++ (void)deleteUserImages
+{
+    NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"Profile_%@.jpg", [self getUserRemoteParty]]];
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"PhoneImage_%@.jpg", [self getUserRemoteParty]]];
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 }
 
 + (NSString *)getUserRemoteParty
@@ -47,7 +54,7 @@
 
 + (UIImage *)getUserPhoneDispImage
 {
-    NSString *filePath = [self documentsPathForFileName:@"PhoneImage.jpeg"];
+    NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"PhoneImage_%@.jpg", [self getUserRemoteParty]]];
     NSData *pngData = [NSData dataWithContentsOfFile:filePath];
     UIImage *image = [UIImage imageWithData:pngData];
     return image;
@@ -56,19 +63,43 @@
 + (BOOL)setUserPhoneDispImage:(UIImage *)image
 {
     NSData *pngData = UIImageJPEGRepresentation(image, 0.5);
-    NSString *filePath = [self documentsPathForFileName:@"PhoneImage.jpeg"];
+    NSString *filePath = [self documentsPathForFileName:[NSString stringWithFormat:@"PhoneImage_%@.jpg", [self getUserRemoteParty]]];
     return [pngData writeToFile:filePath atomically:YES];
 }
 
 + (NSString *)getUserName
 {
-    NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERNAME"];
+    NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"NAME_%@", [self getUserRemoteParty]]];
     return name;
 }
 
 + (void)setUserName:(NSString *)name
 {
-    [[NSUserDefaults standardUserDefaults] setObject:name forKey:@"USERNAME"];
+    [[NSUserDefaults standardUserDefaults] setObject:name forKey:[NSString stringWithFormat:@"NAME_%@", [self getUserRemoteParty]]];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)getUserWaitingNumber
+{
+    NSString *number = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERWAITNUM"];
+    return number;
+}
+
++ (void)setUserWaitingNumber:(NSString *)number
+{
+    [[NSUserDefaults standardUserDefaults] setObject:number forKey:@"USERWAITNUM"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)getUserPartnerNumber
+{
+    NSString *number = [[NSUserDefaults standardUserDefaults] objectForKey:@"PARTNERNUM"];
+    return number;
+}
+
++ (void)setUserPartnerNumber:(NSString *)number
+{
+    [[NSUserDefaults standardUserDefaults] setObject:number forKey:@"PARTNERNUM"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

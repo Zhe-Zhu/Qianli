@@ -45,7 +45,7 @@
     horizonalLineTop.backgroundColor = [UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0f];
     
     UIImageView *horizonalLineHeader = [[UIImageView alloc] initWithFrame:CGRectMake(0, -4, of.size.width, 4)];
-    horizonalLineHeader.backgroundColor = [UIColor colorWithRed:72/255.0 green:176/255.0 blue:191/255.0 alpha:1.0f];
+    horizonalLineHeader.backgroundColor = [UIColor colorWithRed:4/255.0 green:173/255.0 blue:107/255.0 alpha:1.0f];
     
 
     [self addSubview:horizonalLineTop];

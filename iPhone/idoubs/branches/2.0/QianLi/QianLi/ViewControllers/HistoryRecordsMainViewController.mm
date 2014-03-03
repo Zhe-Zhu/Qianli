@@ -123,7 +123,7 @@
         entry.time = [[object valueForKey:@"time"] doubleValue];
         entry.type = [object valueForKey:@"type"];
         entry.name = [object valueForKey:@"name"];
-        if (!entry.name) {
+        if (!entry.name || [entry.name isEqualToString:@""]) {
             [UserDataTransUtils getUserData:entry.remoteParty Completion:^(NSString *name, NSString *avatarURL) {
                 entry.name = name;
                 [[MainHistoryDataAccessor sharedInstance] updateNameForRemotyParty:entry.remoteParty withName:name];
@@ -217,9 +217,15 @@
     if (![Utils checkInternetAndDispWarning:YES]) {
         return;
     }
-    // send some request
     NSIndexPath *indexPath = [_historyTableView indexPathForCell:historyMainCell];
     MainHistoryEntry *entry = (MainHistoryEntry *)[_historyRecords objectAtIndex:indexPath.row];
+    if ([entry.remoteParty isEqualToString:QianLiRobotNumber]) {
+        UIAlertView *QianLiRobotAlwaysAvailable= [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"QianLiRobotAlwaysAvailableTitle", nil) message:NSLocalizedString(@"QianLiRobotAlwaysAvailableMessage", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Confirm", nil) otherButtonTitles: nil];
+        [QianLiRobotAlwaysAvailable show];
+        return;
+    }
+    
+    // send some request
     NSString *message = [NSString stringWithFormat:@"%@%@%@", kAppointment,kSeparator,[UserDataAccessor getUserRemoteParty]];
     [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:entry.remoteParty];
     

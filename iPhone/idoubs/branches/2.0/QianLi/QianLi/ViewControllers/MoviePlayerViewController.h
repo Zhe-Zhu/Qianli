@@ -14,6 +14,7 @@
 @interface MoviePlayerViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property(weak, nonatomic) NSMutableArray *thumbs;
+@property(strong, nonatomic) NSString *videoID;
 
 - (void)playMovieStream:(NSURL *)movieFileURL;
 - (void)forwardFromRemote:(float)currentTime;

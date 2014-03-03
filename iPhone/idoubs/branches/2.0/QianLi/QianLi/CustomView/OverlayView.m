@@ -42,6 +42,7 @@
         [_doneButton setFrame:CGRectMake(width-40-10, frame.size.height - 50, 40, 40)];
         [_doneButton addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_doneButton];
+        _doneButton.enabled = NO;
         
         _switchCameraButton= [UIButton buttonWithType:UIButtonTypeCustom];
         UIImage *switchCameraIcon=[UIImage imageNamed:@"cameraRotation.png"];
@@ -96,6 +97,7 @@
 -(void)takePhoto:(id)sender
 {
     [_delegate takePhoto:sender];
+    _doneButton.enabled = YES;
 }
 
 -(void)cancel:(id)sender

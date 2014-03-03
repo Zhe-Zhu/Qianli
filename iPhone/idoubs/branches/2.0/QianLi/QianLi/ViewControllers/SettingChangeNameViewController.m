@@ -9,6 +9,7 @@
 #import "SettingChangeNameViewController.h"
 #import "UserDataTransUtils.h"
 #import "UserDataAccessor.h"
+#import "Utils.h"
 
 @interface SettingChangeNameViewController ()
 
@@ -33,11 +34,9 @@
     self.navigationItem.rightBarButtonItem = finishButton;
     [self.nameTextField becomeFirstResponder];
     self.nameTextField.delegate = self;
+    self.nameTextField.placeholder = NSLocalizedString(@"inputName", nil);
     NSString *name = [UserDataAccessor getUserName];
-    if (!name) {
-        self.nameTextField.placeholder = NSLocalizedString(@"inputName", nil);
-    }
-    else{
+    if (name != nil) {
         self.nameTextField.text = name;
     }
 }
@@ -50,15 +49,18 @@
 
 - (void)finishButtonPressed
 {
-    if ([self.delegate respondsToSelector:@selector(nameChanged:)]) {
-        [self.delegate nameChanged:self.nameTextField.text];
+    [self.navigationController popViewControllerAnimated:YES];
+    if (![Utils checkInternetAndDispWarning:YES]) {
+        return;
     }
     [UserDataTransUtils patchUserName:self.nameTextField.text number:[UserDataAccessor getUserRemoteParty] Completion:^(BOOL success) {
         if (success) {
             [UserDataAccessor setUserName:self.nameTextField.text];
+            if ([self.delegate respondsToSelector:@selector(nameChanged:)]) {
+                [self.delegate nameChanged:self.nameTextField.text];
+            }
         }
     }];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

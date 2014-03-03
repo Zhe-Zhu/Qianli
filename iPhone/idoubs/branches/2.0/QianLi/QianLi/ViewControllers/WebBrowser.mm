@@ -156,6 +156,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    _webView.delegate = nil;
+}
+
 #pragma mark --UITextFieldDelegate--
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -230,7 +235,6 @@
 #pragma mark  -- UIWebViewDelegate --
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    //TODO:
     if (_urlInput.text && isUserInput) {
         NSURL *url =  [NSURL URLWithString: [NSString stringWithFormat:@"http://www.google.com/search?q=%@", _urlInput.text]];
         [_webView loadRequest:[NSURLRequest requestWithURL:url]];
@@ -243,7 +247,10 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    self.currentURL = [request.URL absoluteString];
+    NSString *url = [request.URL absoluteString];
+    if (![url isEqualToString:@"about:blank"]) {
+        self.currentURL = url;
+    }
     return YES;
 }
 
@@ -280,6 +287,11 @@
     }
     
     _urlInput.text = [[webView.request URL] absoluteString];
+    
+    NSString *str = [webView.request.URL absoluteString];
+    if (![_currentURL isEqualToString:str]) {
+        self.currentURL = str;
+    }
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
@@ -298,9 +310,9 @@
 - (void)setOffset:(CGPoint)offset
 {
     _webView.scrollView.scrollEnabled = TRUE;
-//    [_webView.scrollView setContentOffset:offset animated:YES];
-    NSString *scrollString = [NSString stringWithFormat:@"window.scrollTo(%d, %d);", int(offset.x), int(offset.y)];
-    [_webView stringByEvaluatingJavaScriptFromString:scrollString];
+    [_webView.scrollView setContentOffset:offset animated:YES];
+//    NSString *scrollString = [NSString stringWithFormat:@"window.scrollTo(%d, %d);", int(offset.x), int(offset.y)];
+  //  [_webView stringByEvaluatingJavaScriptFromString:scrollString];
     //  it seems to work
 }
 
@@ -308,6 +320,7 @@
     if (kIsCallingQianLiRobot) {
         kQianLiRobotSharedWebNum++;
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSynWeb", nil),[_webView stringByEvaluatingJavaScriptFromString:@"document.title"]]];
+        [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(synSuccessed) userInfo:nil repeats:NO];
     }
     // 对网页内容进行同步
     float offsetx = _webView.scrollView.contentOffset.x;
@@ -498,9 +511,6 @@
         _toolbar.center = CGPointMake(160, winSize.size.height - _toolbar.frame.size.height / 2.0);
         _webView.frame = CGRectMake(0, 62, 320, winSize.size.height - 62);
         _goButton.center = CGPointMake(_goButton.center.x, 41);
-        if (!IS_OS_7_OR_LATER) {
-            _toolbar.center = CGPointMake(160, winSize.size.height - _toolbar.frame.size.height / 2.0 - 20);
-        }
     } completion:^(BOOL finished) {
         
     }];

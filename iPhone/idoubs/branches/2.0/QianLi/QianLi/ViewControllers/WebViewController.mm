@@ -155,6 +155,11 @@
     [_synImages removeAllObjects];
 }
 
+- (void)dealloc
+{
+    _webView.delegate = nil;
+}
+
 - (void)loadWebWithURL:(NSString *)url
 {
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
@@ -172,6 +177,7 @@
     if (kIsCallingQianLiRobot) {
         kQianLiRobotSharedWebNum++;
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSynWeb", nil),[_webView stringByEvaluatingJavaScriptFromString:@"document.title"]]];
+        [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(synSuccessed) userInfo:nil repeats:NO];
     }
     // 对网页内容进行同步
     //CODE_REVIEW:在iphone4S和iphone5上测试，不能同步。
@@ -279,9 +285,9 @@
 
 - (void)setOffset:(CGPoint)offset
 {
-//    [_webView.scrollView setContentOffset:offset animated:YES];
-    NSString *scrollString = [NSString stringWithFormat:@"window.scrollTo(%d, %d);", int(offset.x), int(offset.y)];
-    [_webView stringByEvaluatingJavaScriptFromString:scrollString];
+    [_webView.scrollView setContentOffset:offset animated:YES];
+//    NSString *scrollString = [NSString stringWithFormat:@"window.scrollTo(%d, %d);", int(offset.x), int(offset.y)];
+  //  [_webView stringByEvaluatingJavaScriptFromString:scrollString];
 //  it seems to work
 }
 
@@ -314,6 +320,11 @@
             _webView.scrollView.scrollEnabled = TRUE;
             [self setOffset:_remoteOffset];
         }
+    }
+    
+    NSString *str = [webView.request.URL absoluteString];
+    if (![_request isEqualToString:str]) {
+        self.request = str;
     }
 }
 

@@ -19,4 +19,5 @@
 - (void)addEventWithRemoteParty:(NSString *)remote start:(double)startT end:(double)endT status:(NSString *)status type:(NSString *)type content:(NSData *)content;
 - (void)addHistEntry:(DetailHistEvent *)entry;
 - (void)deleteHistoryForRemoteParty:(NSString *)remoteParty;
+- (void)deleteAllHistory;
 @end

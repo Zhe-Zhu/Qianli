@@ -36,7 +36,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     [_editProfilePhotoButton addTarget:self action:@selector(editProfilePhotoButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    _editProfilePhotoButton.layer.cornerRadius = _editProfilePhotoButton.frame.size.width / 2.0;
+    _editProfilePhotoButton.layer.cornerRadius = 53.5;//_editProfilePhotoButton.frame.size.width / 2.0;
     _editProfilePhotoButton.clipsToBounds = YES;
     
     [_editNameButton addTarget:self action:@selector(editNameButtonPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -54,6 +54,16 @@
     [self.navigationItem setHidesBackButton:YES];
     _inputName.placeholder = NSLocalizedString(@"inputName", nil);
     [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"done", nil)];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    _inputName.text = [UserDataAccessor getUserName];
+    UIImage *avatar = [UserDataAccessor getUserProfile];
+    if (avatar) {
+        [_editProfilePhotoButton setImage:avatar forState:UIControlStateNormal];
+    }
 }
 
 - (void)editNameButtonPressed
@@ -160,13 +170,14 @@
 
 - (void)didFinishEditing:(UIImage *)profile
 {
-    [_editProfilePhotoButton setImage:profile forState:UIControlStateNormal];
     [self dismissViewControllerAnimated:YES completion:nil];
-    BOOL success = [UserDataAccessor setUserProfile:[profile imageByResizing:CGSizeMake(avatarDiameter * 2, avatarDiameter * 2)]];
+    [_editProfilePhotoButton setImage:profile forState:UIControlStateNormal];
+    UIImage *image = [profile imageByResizing:CGSizeMake(120, 120)];
+    BOOL success = [UserDataAccessor setUserProfile:image];
     if (!success) {
         NSLog(@"save profile error!");
     }
-    [UserDataTransUtils patchUserProfile:[profile imageByResizing:CGSizeMake(avatarDiameter * 2, avatarDiameter * 2)] number:[UserDataAccessor getUserRemoteParty] Completion:nil];
+    [UserDataTransUtils patchUserProfile:image number:[UserDataAccessor getUserRemoteParty] Completion:nil];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

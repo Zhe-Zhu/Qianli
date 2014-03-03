@@ -33,8 +33,8 @@ static SipStackUtils * sipStackUtilsInstance;
     AudioService * _audioService;
     SoundService * _soundService;
     MessageService * _messageService;
-    BOOL nativeABChangedWhileInBackground; //TODO: what is this var used for
-	BOOL scheduleRegistration; //TODO: what is this var used for
+    BOOL nativeABChangedWhileInBackground;
+	BOOL scheduleRegistration;
     long _sessionID;
     NSString *_remoteParty;
     
@@ -348,7 +348,6 @@ static SipStackUtils * sipStackUtilsInstance;
 	}
 }
 
-
 //== INVITE (audio/video, file transfer, chat, ...) events == //
 - (void)onInviteEvent:(NSNotification*)notification {
 	NgnInviteEventArgs* eargs = [notification object];
@@ -364,10 +363,11 @@ static SipStackUtils * sipStackUtilsInstance;
                 if ([SipCallManager SharedInstance].audioVC) {
                     if (![[SipCallManager SharedInstance].audioVC.remotePartyNumber isEqualToString:[self getRemoteParty:remotePartyUri]]) {
                         //refuse other people's call when you are in a call
+                        [self.messageService sendMessage:kInCall toRemoteParty:remotePartyUri];
                         return;
                     }
                     else{
-                        //resume call is network changed of call is interrupted
+                        //resume previous call if the call is interrupted
                         if ([SipCallManager SharedInstance].audioVC && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
                             [[SipCallManager SharedInstance] resumeCallWithID:eargs.sessionId];
                             return;
@@ -411,7 +411,6 @@ static SipStackUtils * sipStackUtilsInstance;
                 NSString *remotePartyUri = [session getRemotePartyUri];
                 self.remoteParty = [self getRemoteParty:remotePartyUri];
 			}
-            //TODO: verify what is going on here.
 			//[NgnAVSession releaseSession:&session];
 			break;
 		}

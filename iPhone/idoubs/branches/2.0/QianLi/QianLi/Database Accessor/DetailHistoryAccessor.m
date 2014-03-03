@@ -145,6 +145,30 @@ static DetailHistoryAccessor *detailHistAccessor = nil;
     [self.managedObjectContext unlock];
 }
 
+- (void)deleteAllHistory
+{
+    [self.managedObjectContext lock];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"DetailHistory"];
+    fetchRequest.includesPropertyValues = NO;
+    fetchRequest.includesSubentities = NO;
+    
+    NSError *error;
+    NSArray *items = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if (!error) {
+        for (NSManagedObject *managedObject in items) {
+            [_managedObjectContext deleteObject:managedObject];
+        }
+    }
+    else{
+        NSLog(@"fetch error");
+    }
+    NSError *saveError;
+    if (![self.managedObjectContext save:&saveError]) {
+        NSLog(@"saving error during updating");
+    }
+    [self.managedObjectContext unlock];
+}
+
 - (void)clearSharedInstance
 {
     detailHistAccessor = nil;

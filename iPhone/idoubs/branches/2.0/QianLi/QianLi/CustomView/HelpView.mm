@@ -19,7 +19,7 @@
     BOOL didShowReleaseText;
     BOOL didSecondPageShowGoonText;
     BOOL didSecondPageShowReleaseText;
-    
+    BOOL isChineseSystem;
     CGPoint prePoint;
     CGPoint firstPoint;
 }
@@ -31,20 +31,17 @@
 @property(weak, nonatomic) UIImageView *fourthImageView;
 @property(weak, nonatomic) UIImageView *fifthImageView;
 @property(weak, nonatomic) UIPageControl *pageControl;
-
 @property(weak, nonatomic) UIImageView *subImageView1;
 @property(weak, nonatomic) UIImageView *subImageView2;
-
 @property(weak, nonatomic) UIImageView *fingerView;
 @property(weak, nonatomic) UIImageView *leftFingerView;
 @property(weak, nonatomic) UIImageView *shareFinerView;
-
 @property(weak, nonatomic) UITableViewCell *partnerCell;
 @property(weak, nonatomic) UILabel *label;
-
 @property(weak, nonatomic) HistoryMainCell* fisrtPageCell;
 @property(weak, nonatomic) HistoryMainCell* secondPageCell;
 @property(weak, nonatomic) HistoryMainCell* thirdPageCell;
+
 @end
 
 @implementation HelpView
@@ -94,7 +91,8 @@
         didShowReleaseText = NO;
         didSecondPageShowGoonText = NO;
         didSecondPageShowReleaseText = NO;
-        //
+        isChineseSystem = [Utils isChineseSystem];
+        
         [self setFirstView];
         [self setSecondPage];
         [self setThirdPage];
@@ -124,10 +122,20 @@
             didShowGoonText = YES;
             UIImage *image;
             if (IS_IPHONE5) {
-                image = [UIImage imageNamed:@"help_1_dragging_background_words_1136.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_1_dragging_background_words_1136.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_1_dragging_background_words_1136_en.png"];
+                }
             }
             else{
-                image = [UIImage imageNamed:@"help_1_dragging_background_words.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_1_dragging_background_words.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_1_dragging_background_words_en.png"];
+                }
             }
             _firstImageView.image = image;
         }
@@ -135,10 +143,20 @@
             didShowReleaseText = YES;
             UIImage *image;
             if (IS_IPHONE5) {
-                image = [UIImage imageNamed:@"help_1_draged_background_words_1136.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_1_draged_background_words_1136.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_1_draged_background_words_1136_en.png"];
+                }
             }
             else{
-                image = [UIImage imageNamed:@"help_1_draged_background_words.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_1_draged_background_words.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_1_draged_background_words_en.png"];
+                }
             }
             _firstImageView.image = image;
         }
@@ -146,10 +164,20 @@
             didShowReleaseText = NO;
             UIImage *image;
             if (IS_IPHONE5) {
-                image = [UIImage imageNamed:@"help_1_dragging_background_words_1136.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_1_dragging_background_words_1136.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_1_dragging_background_words_1136_en.png"];
+                }
             }
             else{
-                image = [UIImage imageNamed:@"help_1_dragging_background_words.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_1_dragging_background_words.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_1_dragging_background_words_en.png"];
+                }
             }
             _firstImageView.image = image;
         }
@@ -162,10 +190,20 @@
             didSecondPageShowGoonText = YES;
             UIImage *image;
             if (IS_IPHONE5) {
-                image = [UIImage imageNamed:@"help_2_dragging_background_words_1136.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_2_dragging_background_words_1136.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_2_dragging_background_words_1136_en.png"];
+                }
             }
             else{
-                image = [UIImage imageNamed:@"help_2_dragging_background_words.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_2_dragging_background_words.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_2_dragging_background_words_en.png"];
+                }
             }
             _secondImageView.image = image;
         }
@@ -173,10 +211,20 @@
             didSecondPageShowReleaseText = YES;
             UIImage *image;
             if (IS_IPHONE5) {
-                image = [UIImage imageNamed:@"help_2_draged_background_words_1136.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_2_draged_background_words_1136.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_2_draged_background_words_1136_en.png"];
+                }
             }
             else{
-                image = [UIImage imageNamed:@"help_2_draged_background_words.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_2_draged_background_words.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_2_draged_background_words_en.png"];
+                }
             }
             _secondImageView.image = image;
         }
@@ -184,10 +232,20 @@
             didSecondPageShowReleaseText = NO;
             UIImage *image;
             if (IS_IPHONE5) {
-                image = [UIImage imageNamed:@"help_2_dragging_background_words_1136.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_2_dragging_background_words_1136.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_2_dragging_background_words_1136_en.png"];
+                }
             }
             else{
-                image = [UIImage imageNamed:@"help_2_dragging_background_words.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_2_dragging_background_words.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_2_dragging_background_words_en.png"];
+                }
             }
             _secondImageView.image = image;
         }
@@ -202,10 +260,20 @@
             didShowReleaseText = NO;
             UIImage *image;
             if (IS_IPHONE5) {
-                image = [UIImage imageNamed:@"help_1_done_background_words_1136.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_1_done_background_words_1136.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_1_done_background_words_1136_en.png"];
+                }
             }
             else{
-                image = [UIImage imageNamed:@"help_1_done_background_words.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_1_done_background_words.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_1_done_background_words_en.png"];
+                }
             }
             _firstImageView.image = image;
             [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(showPartnerView) userInfo:nil repeats:NO];
@@ -213,10 +281,20 @@
         else{
             UIImage *image;
             if (IS_IPHONE5) {
-                image = [UIImage imageNamed:@"help_1_background_words_1136.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_1_background_words_1136.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_1_background_words_1136_en.png"];
+                }
             }
             else{
-                image = [UIImage imageNamed:@"help_1_background_words.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_1_background_words.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_1_background_words_en.png"];
+                }
             }
             _firstImageView.image = image;
         }
@@ -230,10 +308,20 @@
         else{
             UIImage *image;
             if (IS_IPHONE5) {
-                image = [UIImage imageNamed:@"help_2_background_words_1136.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_2_background_words_1136.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_2_background_words_1136_en.png"];
+                }
             }
             else{
-                image = [UIImage imageNamed:@"help_2_background_words.png"];
+                if (isChineseSystem) {
+                    image = [UIImage imageNamed:@"help_2_background_words.png"];
+                }
+                else{
+                    image = [UIImage imageNamed:@"help_2_background_words_en.png"];
+                }
             }
             _secondImageView.image = image;
         }
@@ -261,10 +349,20 @@
 {
     UIImage *image;
     if (IS_IPHONE5) {
-        image = [UIImage imageNamed:@"help_1_background_words_1136.png"];
+        if (isChineseSystem) {
+            image = [UIImage imageNamed:@"help_1_background_words_1136.png"];
+        }
+        else{
+            image = [UIImage imageNamed:@"help_1_background_words_1136_en.png"];
+        }
     }
     else{
-        image = [UIImage imageNamed:@"help_1_background_words.png"];
+        if (isChineseSystem) {
+            image = [UIImage imageNamed:@"help_1_background_words.png"];
+        }
+        else{
+            image = [UIImage imageNamed:@"help_1_background_words_en.png"];
+        }
     }
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     _firstImageView = imageView;
@@ -273,9 +371,9 @@
     imageView.userInteractionEnabled = YES;
     
     //add finger
-    UIImage *fingerImage = [UIImage imageNamed:@"help_1_drag_right.png"];
+    UIImage *fingerImage = [UIImage imageNamed:@"help_drag_right.png"];
     UIImageView *fingerView = [[UIImageView alloc] initWithImage:fingerImage];
-    fingerView.frame = CGRectMake(27, 319, fingerImage.size.width, fingerImage.size.height);
+    fingerView.frame = CGRectMake(27, 282, fingerImage.size.width, fingerImage.size.height);
     [_firstImageView addSubview:fingerView];
     _fingerView = fingerView;
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(moveFinger:) userInfo:nil repeats:NO];
@@ -290,11 +388,20 @@
     UIImage *avatar = [UIImage imageNamed:@"arwen_avatar.png"];
     NSString *name = @"Arwen Undomiel";
     
+    NSString *str;
+    if (isChineseSystem) {
+        str = @"发起电话预约";
+    }
+    else{
+        str = @"make an appointment";
+    }
     NSDate *date = [NSDate date];
-    [historyCell setHistoryMainCell:@"lg" avatar:avatar Name:name Time:[Utils readableTimeFromSecondsSince1970LikeWeixin:[date timeIntervalSince1970]] Content:@"发起电话预约"];
+    [historyCell setHistoryMainCell:@"lg" avatar:avatar Name:name Time:[Utils readableTimeFromSecondsSince1970LikeWeixin:[date timeIntervalSince1970]] Content:str];
     historyCell.frame = CGRectMake(0, 223, historyCell.frame.size.width, historyCell.frame.size.height);
     historyCell.shouldAnimateCellReset = YES;
     [imageView addSubview:historyCell];
+    
+    [_firstImageView bringSubviewToFront:fingerView];
 }
 
 - (void)changeBackground
@@ -315,18 +422,39 @@
     NSString *name = @"Aragorn";
     _partnerCell = historyCell;
     NSDate *date = [NSDate date];
-    [historyCell setHistoryMainCell:@"lg" avatar:avatar Name:name Time:[Utils readableTimeFromSecondsSince1970LikeWeixin:[date timeIntervalSince1970]] Content:@"收到预约电话"];
+    
+    NSString *str;
+    if (isChineseSystem) {
+        str = @"收到预约电话";
+    }
+    else{
+        str = @"received an appointment";
+    }
+    
+    [historyCell setHistoryMainCell:@"lg" avatar:avatar Name:name Time:[Utils readableTimeFromSecondsSince1970LikeWeixin:[date timeIntervalSince1970]] Content:str];
     CGRect frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height, historyCell.frame.size.width, historyCell.frame.size.height);
     historyCell.frame = frame;
     historyCell.shouldAnimateCellReset = YES;
     [_firstImageView addSubview:historyCell];
-    [NSTimer scheduledTimerWithTimeInterval:9.0 target:self selector:@selector(changeBackground) userInfo:nil repeats:NO];
     
-    CGFloat width = 80;
+    // partner view will display for 3 seconds
+    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(changeBackground) userInfo:nil repeats:NO];
+    
+    CGFloat width = 200;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((320 - width) / 2.0, 326.5, width, 20)];
     [_firstImageView addSubview:label];
     label.textColor = [UIColor whiteColor];
-    label.text = @"对方屏幕";
+    label.textAlignment = NSTextAlignmentCenter;
+    label.backgroundColor = [UIColor clearColor];
+    
+    NSString *str1;
+    if (isChineseSystem) {
+        str1 = @"对方屏幕";
+    }
+    else{
+        str1 = @"partner's screen";
+    }
+    label.text = str1;
     _label = label;
     label.alpha = 0.0;
     
@@ -371,10 +499,20 @@
 {
     UIImage *image;
     if (IS_IPHONE5) {
-        image = [UIImage imageNamed:@"help_2_background_words_1136.png"];
+        if (isChineseSystem) {
+            image = [UIImage imageNamed:@"help_2_background_words_1136.png"];
+        }
+        else{
+            image = [UIImage imageNamed:@"help_2_background_words_1136_en.png"];
+        }
     }
     else{
-        image = [UIImage imageNamed:@"help_2_background_words.png"];
+        if (isChineseSystem) {
+            image = [UIImage imageNamed:@"help_2_background_words.png"];
+        }
+        else{
+            image = [UIImage imageNamed:@"help_2_background_words_en.png"];
+        }
     }
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     _secondImageView = imageView;
@@ -391,8 +529,15 @@
     UIImage *avatar = [UIImage imageNamed:@"aragon_avatar.png"];
     NSString *name = @"Aragorn";
     
+    NSString *content;
+    if (isChineseSystem) {
+        content = @"拨打千里电话";
+    }
+    else{
+        content = @"making a Qianli call";
+    }
     NSDate *date = [NSDate date];
-    [historyCell setHistoryMainCell:@"lg" avatar:avatar Name:name Time:[Utils readableTimeFromSecondsSince1970LikeWeixin:[date timeIntervalSince1970]] Content:@"拨打千里电话"];
+    [historyCell setHistoryMainCell:@"lg" avatar:avatar Name:name Time:[Utils readableTimeFromSecondsSince1970LikeWeixin:[date timeIntervalSince1970]] Content:content];
     historyCell.frame = CGRectMake(0, 223, historyCell.frame.size.width, historyCell.frame.size.height);
     historyCell.shouldAnimateCellReset = YES;
     [imageView addSubview:historyCell];
@@ -400,7 +545,7 @@
     //add finger
     UIImage *fingerImage = [UIImage imageNamed:@"help_drag_left.png"];
     UIImageView *fingerView = [[UIImageView alloc] initWithImage:fingerImage];
-    fingerView.frame = CGRectMake(240, 319, fingerImage.size.width, fingerImage.size.height);
+    fingerView.frame = CGRectMake(240, 282, fingerImage.size.width, fingerImage.size.height);
     [_secondImageView addSubview:fingerView];
     _leftFingerView = fingerView;
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(moveLeftFinger) userInfo:nil repeats:NO];
@@ -438,7 +583,7 @@
     [UIView animateWithDuration:0.4 animations:^{
         callImageview.frame = [UIScreen mainScreen].bounds;
     } completion:^(BOOL finished) {
-        [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(doneMakeingCall:) userInfo:callImageview repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(doneMakeingCall:) userInfo:callImageview repeats:NO];
     }];
 }
 
@@ -446,10 +591,20 @@
 {
      UIImage *doneCallImage;
     if (IS_IPHONE5) {
-        doneCallImage = [UIImage imageNamed:@"help_2_done_background_words_1136.png"];
+        if (isChineseSystem) {
+            doneCallImage = [UIImage imageNamed:@"help_2_done_background_words_1136.png"];
+        }
+        else{
+            doneCallImage = [UIImage imageNamed:@"help_2_done_background_words_1136_en.png"];
+        }
     }
     else{
-        doneCallImage = [UIImage imageNamed:@"help_2_done_background_words.png"];
+        if (isChineseSystem) {
+            doneCallImage = [UIImage imageNamed:@"help_2_done_background_words.png"];
+        }
+        else{
+            doneCallImage = [UIImage imageNamed:@"help_2_done_background_words_en.png"];
+        }
     }
     UIImageView *doneCallImageView = [[UIImageView alloc] initWithImage:doneCallImage];
     doneCallImageView.userInteractionEnabled = YES;
@@ -457,7 +612,13 @@
     [_scrollView addSubview:doneCallImageView];
     [_secondImageView removeFromSuperview];
     
-    UIImage *doneButtonImage = [UIImage imageNamed:@"help_2_button.png"];
+    UIImage *doneButtonImage;
+    if (isChineseSystem) {
+        doneButtonImage = [UIImage imageNamed:@"help_2_button.png"];
+    }
+    else{
+        doneButtonImage = [UIImage imageNamed:@"help_2_button_en.png"];
+    }
     UIButton *nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [nextButton setImage:doneButtonImage forState:UIControlStateNormal];
     [doneCallImageView addSubview:nextButton];
@@ -483,10 +644,20 @@
 {
     UIImage *image;
     if (IS_IPHONE5) {
-        image = [UIImage imageNamed:@"help_3_background_words_1136.png"];
+        if (isChineseSystem) {
+            image = [UIImage imageNamed:@"help_3_background_words_1136.png"];
+        }
+        else{
+            image = [UIImage imageNamed:@"help_3_background_words_1136_en.png"];
+        }
     }
     else{
-        image = [UIImage imageNamed:@"help_3_background_words.png"];
+        if (isChineseSystem) {
+            image = [UIImage imageNamed:@"help_3_background_words.png"];
+        }
+        else{
+            image = [UIImage imageNamed:@"help_3_background_words_en.png"];
+        }
     }
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     _thirdImageView = imageView;
@@ -523,10 +694,20 @@
     
     UIImage *shareBar;
     if (IS_IPHONE5) {
-        shareBar = [UIImage imageNamed:@"help_3_menu_view.png"];
+        if (isChineseSystem) {
+            shareBar = [UIImage imageNamed:@"help_3_menu_view.png"];
+        }
+        else{
+            shareBar = [UIImage imageNamed:@"help_3_menu_view_en.png"];
+        }
     }
     else{
-        shareBar = [UIImage imageNamed:@"help_3_menu_view.png"];
+        if (isChineseSystem) {
+            shareBar = [UIImage imageNamed:@"help_3_menu_view.png"];
+        }
+        else{
+            shareBar = [UIImage imageNamed:@"help_3_menu_view_en.png"];
+        }
     }
     UIImageView *barView = [[UIImageView alloc] initWithImage:shareBar];
     barView.frame = CGRectMake(0, self.frame.size.height, 320, shareBar.size.height);
@@ -536,10 +717,20 @@
     } completion:^(BOOL finished) {
         UIImage *shadeImage;
         if (IS_IPHONE5) {
-            shadeImage = [UIImage imageNamed:@"help_3_done_1136.png"];
+            if (isChineseSystem) {
+                shadeImage = [UIImage imageNamed:@"help_3_done_1136.png"];
+            }
+            else{
+                shadeImage = [UIImage imageNamed:@"help_3_done_1136_en.png"];
+            }
         }
         else{
-            shadeImage = [UIImage imageNamed:@"help_3_done.png"];
+            if (isChineseSystem) {
+                shadeImage = [UIImage imageNamed:@"help_3_done.png"];
+            }
+            else{
+                shadeImage = [UIImage imageNamed:@"help_3_done_en.png"];
+            }
         }
         UIImageView *doneShareView = [[UIImageView alloc] initWithImage:shadeImage];
         doneShareView.frame = CGRectMake(0, 0, 320, shadeImage.size.height);
@@ -548,7 +739,13 @@
         doneShareView.userInteractionEnabled = YES;
         
         //add button
-        UIImage *iknowImage = [UIImage imageNamed:@"help_3_button.png"];
+        UIImage *iknowImage;
+        if (isChineseSystem) {
+            iknowImage = [UIImage imageNamed:@"help_3_button.png"];
+        }
+        else{
+            iknowImage = [UIImage imageNamed:@"help_3_button_en.png"];
+        }
         UIButton *iknow = [UIButton buttonWithType:UIButtonTypeCustom];
         [iknow setImage:iknowImage forState:UIControlStateNormal];
         iknow.frame = CGRectMake((320 - iknowImage.size.width) / 2.0, 200, iknowImage.size.width, iknowImage.size.height);
@@ -570,10 +767,20 @@
 {
     UIImage *image;
     if (IS_IPHONE5) {
-        image = [UIImage imageNamed:@"help_4_background_words_1136.png"];
+        if (isChineseSystem) {
+            image = [UIImage imageNamed:@"help_4_background_words_1136.png"];
+        }
+        else{
+            image = [UIImage imageNamed:@"help_4_background_words_1136_en.png"];
+        }
     }
     else{
-        image = [UIImage imageNamed:@"help_4_background_words.png"];
+        if (isChineseSystem) {
+            image = [UIImage imageNamed:@"help_4_background_words.png"];
+        }
+        else{
+            image = [UIImage imageNamed:@"help_4_background_words_en.png"];
+        }
     }
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     _fourthImageView = imageView;
@@ -585,7 +792,7 @@
     UIImageView *fingerImageView = [[UIImageView alloc] initWithImage:leftFiner];
     _shareFinerView = fingerImageView;
     [_fourthImageView addSubview:fingerImageView];
-    fingerImageView.frame = CGRectMake(320 - 30 - leftFiner.size.width, 195, leftFiner.size.width, leftFiner.size.height);
+    fingerImageView.frame = CGRectMake(320 - 30 - leftFiner.size.width, 250, leftFiner.size.width, leftFiner.size.height);
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(moveShareImageFinger) userInfo:nil repeats:NO];
     
     UIImageView *subImageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"help_4_picture_1.png"]];
@@ -595,6 +802,7 @@
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
     [subImageView1 addGestureRecognizer:pan];
     _subImageView1 = subImageView1;
+    [_fourthImageView bringSubviewToFront:fingerImageView];
 }
 
 - (void)moveShareImageFinger
@@ -659,16 +867,29 @@
 
 - (void)showSharingImageEffect
 {
+    UIView *blockView = [[UIView alloc] initWithFrame:CGRectMake(0, 284, 320 - 29 - 100, 150)];
+    blockView.backgroundColor = [UIColor colorWithRed:50.0 / 255.0 green:50.0 / 255.0 blue:50.0 / 255.0 alpha:1.0];
+    UIView *blockView1 = [[UIView alloc] initWithFrame:CGRectMake(320 - 29, 284, 30, 150)];
+    blockView1.backgroundColor = [UIColor colorWithRed:50.0 / 255.0 green:50.0 / 255.0 blue:50.0 / 255.0 alpha:1.0];
+    [_fourthImageView addSubview:blockView1];
+    [_fourthImageView addSubview:blockView];
+    [_fourthImageView bringSubviewToFront:_subImageView2];
+    
     [UIView animateWithDuration:1.0 animations:^{
         _subImageView2.frame = CGRectMake(29, 284, 100, 150);
     } completion:^(BOOL finished) {
         _subImageView1.frame = CGRectMake(320 - 29 - 100, 284, 100, 150);
+        
         UIImageView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"help_4_picture_2.png"]];
         view.frame = CGRectMake(320 - 29, 284, 100, 150);
         [_fourthImageView addSubview:view];
+        [_fourthImageView bringSubviewToFront:blockView1];
         [UIView animateWithDuration:1.0 animations:^{
             view.frame = CGRectMake(320 - 29 - 100, 284, 100, 150);
+            _subImageView1.frame = CGRectMake(320 - 29 - 200, 284, 100, 150);
         } completion:^(BOOL finished) {
+            [blockView removeFromSuperview];
+            [blockView1 removeFromSuperview];
             [_subImageView1 removeFromSuperview];
             [self performSelector:@selector(showButton) withObject:nil afterDelay:1.0];
         }];
@@ -679,14 +900,30 @@
 {
     UIImage *doneShareImage;
     if (IS_IPHONE5) {
-        doneShareImage = [UIImage imageNamed:@"help_4_done_1136.png"];
+        if (isChineseSystem) {
+            doneShareImage = [UIImage imageNamed:@"help_4_done_1136.png"];
+        }
+        else{
+            doneShareImage = [UIImage imageNamed:@"help_4_done_1136_en.png"];
+        }
     }
     else{
-        doneShareImage = [UIImage imageNamed:@"help_4_done.png"];
+        if (isChineseSystem) {
+            doneShareImage = [UIImage imageNamed:@"help_4_done.png"];
+        }
+        else{
+            doneShareImage = [UIImage imageNamed:@"help_4_done_en.png"];
+        }
     }
     _fourthImageView.image = doneShareImage;
     
-    UIImage *buttonImage = [UIImage imageNamed:@"help_4_button.png"];
+    UIImage *buttonImage;
+    if (isChineseSystem) {
+        buttonImage = [UIImage imageNamed:@"help_4_button.png"];
+    }
+    else{
+        buttonImage = [UIImage imageNamed:@"help_4_button_en.png"];
+    }
     UIButton *iknow = [UIButton buttonWithType:UIButtonTypeCustom];
     [iknow setImage:buttonImage forState:UIControlStateNormal];
     iknow.frame = CGRectMake((320 - buttonImage.size.width) / 2.0, 200, buttonImage.size.width, buttonImage.size.height);
@@ -705,10 +942,20 @@
 {
     UIImage *image;
     if (IS_IPHONE5) {
-        image = [UIImage imageNamed:@"help_5_background_words_1136.png"];
+        if (isChineseSystem) {
+            image = [UIImage imageNamed:@"help_5_background_words_1136.png"];
+        }
+        else{
+            image = [UIImage imageNamed:@"help_5_background_words_1136_en.png"];
+        }
     }
     else{
-        image = [UIImage imageNamed:@"help_5_background_words.png"];
+        if (isChineseSystem) {
+            image = [UIImage imageNamed:@"help_5_background_words.png"];
+        }
+        else{
+            image = [UIImage imageNamed:@"help_5_background_words_en.png"];
+        }
     }
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     _fifthImageView = imageView;
@@ -716,7 +963,13 @@
     [_scrollView addSubview:imageView];
     imageView.userInteractionEnabled = YES;
     
-    UIImage *buttonImage = [UIImage imageNamed:@"help_5_button.png"];
+    UIImage *buttonImage;
+    if (isChineseSystem) {
+        buttonImage = [UIImage imageNamed:@"help_5_button.png"];
+    }
+    else{
+        buttonImage = [UIImage imageNamed:@"help_5_button_en.png"];
+    }
     UIButton *iknow = [UIButton buttonWithType:UIButtonTypeCustom];
     [iknow setImage:buttonImage forState:UIControlStateNormal];
     iknow.frame = CGRectMake((320 - buttonImage.size.width) / 2.0, 225, buttonImage.size.width, buttonImage.size.height);
@@ -731,8 +984,15 @@
     UIImage *avatar = [UIImage imageNamed:@"aragon_avatar.png"];
     NSString *name = @"Aragorn";
     
+    NSString *content;
+    if (isChineseSystem) {
+        content = @"给我打个电话吧";
+    }
+    else{
+        content = @"Call me";
+    }
     NSDate *date = [NSDate date];
-    [historyCell setHistoryMainCell:@"lg" avatar:avatar Name:name Time:[Utils readableTimeFromSecondsSince1970LikeWeixin:[date timeIntervalSince1970]] Content:@"给我打个电话吧"];
+    [historyCell setHistoryMainCell:@"lg" avatar:avatar Name:name Time:[Utils readableTimeFromSecondsSince1970LikeWeixin:[date timeIntervalSince1970]] Content:content];
     historyCell.frame = CGRectMake(0, 300, historyCell.frame.size.width, historyCell.frame.size.height);
     historyCell.shouldAnimateCellReset = YES;
     [imageView addSubview:historyCell];

@@ -232,46 +232,112 @@ const float kCaptchaNonInputCoverAlpha = 0.2f;
             [userDefaults synchronize];
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
             SignUpEditProfileViewController *editProfileCV = [storyboard instantiateViewControllerWithIdentifier:@"SignUpEditProfileViewController"];
-            [self performSelectorOnMainThread:@selector(showEditProfileController:) withObject:editProfileCV waitUntilDone:NO];
+            [self performSelectorOnMainThread:@selector(showViewController:) withObject:editProfileCV waitUntilDone:NO];
+            UIImage *avatar = [UserDataAccessor getUserProfile];
+            if (avatar) {
+                [UserDataTransUtils patchUserProfile:avatar number:_number Completion:nil];
+            }
+            UIImage *bigProfile = [UserDataAccessor getUserPhoneDispImage];
+            if (bigProfile) {
+                [UserDataTransUtils patchUserPhoneDispImage:bigProfile number:_number Completion:nil];
+            }
+            NSString *name = [UserDataAccessor getUserName];
+            if (name) {
+                [UserDataTransUtils patchUserName:name number:_number Completion:nil];
+            }
+        }
+        else if (status == 2){
+            //waitinglist primary number
+            [captchaInput resignFirstResponder];
+            [self deactivateButtonContinue];
+            [UserDataAccessor setUserWaitingNumber:_number];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:YES forKey:kWaitingKey];
+            [userDefaults synchronize];
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            WaitingViewController *waitingVC = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+            waitingVC.succeed = NO;
+            waitingVC.isPartner = NO;
+            [self performSelectorOnMainThread:@selector(presentWaitingVC:) withObject:waitingVC waitUntilDone:NO];
+        }
+        else if (status == 3){
+            //waitedlist
+            [captchaInput resignFirstResponder];
+            [self deactivateButtonContinue];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:YES forKey:kSingUpKey];
+            [userDefaults synchronize];
+            [UserDataAccessor setUserRemoteParty:_number];
+            [UserDataAccessor setUserWaitingNumber:_number];
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            WaitingViewController *waitingVC = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+            waitingVC.succeed = YES;
+            [self performSelectorOnMainThread:@selector(presentWaitingVC:) withObject:waitingVC waitUntilDone:NO];
+        }
+        else if (status == 4){
+            //waitinglist partner number
+            [captchaInput resignFirstResponder];
+            [self deactivateButtonContinue];
+            [UserDataAccessor setUserWaitingNumber:_number];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:YES forKey:kWaitingKey];
+            [userDefaults setBool:YES forKey:@"isPartner"];
+            [userDefaults synchronize];
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            WaitingViewController *waitingVC = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+            waitingVC.succeed = NO;
+            waitingVC.isPartner = YES;
+            [self performSelectorOnMainThread:@selector(presentWaitingVC:) withObject:waitingVC waitUntilDone:NO];
         }
         else if (status == 0){
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"captchaErrorTitle", nil) message:NSLocalizedString(@"captchaErrorMessage", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"captchaErrorButton", nil) otherButtonTitles:nil];
             [alertView show];
-
         }
 
     }];
 }
 
-- (void)showEditProfileController:(SignUpEditProfileViewController *)verifyCV
+- (void)presentWaitingVC:(UIViewController *)viewController
 {
-    [self.navigationController pushViewController:verifyCV animated:YES];
+    UINavigationController *naviVC = [[UINavigationController alloc] init];
+    naviVC.viewControllers = @[viewController];
+    [self presentViewController:naviVC animated:YES completion:nil];
+}
+
+- (void)showViewController:(UIViewController *)viewController
+{
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 - (void)noCaptcha
 {
-    // 再发送一次验证码
-    if (isFirstTap) {
-        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"sendAgain", nil), _readableNumber];
-        UIAlertView *noCaptchaFirstTap = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"sendAgainTitle", nil) message:message delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Confirm", nil), nil];
-        [noCaptchaFirstTap show];
-    }
-    // 如果是第二次按则显示我们的邮箱
-    else {
-        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"sendAgainAgain", nil)];
-        UIAlertView *noCaptchaSecondTap = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"sendAgainAgainTitle", nil) message:message delegate:self cancelButtonTitle:NSLocalizedString(@"Confirm", nil) otherButtonTitles:nil];
-        [noCaptchaSecondTap show];
-    }
+    NSString *str = NSLocalizedString(@"voiceCaptchaIntro", nil);
+    UIAlertView *noCaptchaSecondTap = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"voiceCaptchaTitle", nil) message:str delegate:self cancelButtonTitle:NSLocalizedString(@"message", nil) otherButtonTitles:NSLocalizedString(@"phoneCall", nil),nil];
+    [noCaptchaSecondTap show];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     if (buttonIndex == 0) {
-        NSLog(@"user pressed Cancel");
+        // send the verification code again
+        NSString *udid = [Utils getDeviceUDID];
+        [PictureManager registerWithUDID:udid Password:_number Name:_number PhoneNumber:_number Email:@"" OS:@"i" Avatar:nil Success:nil];
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"AlreadySent", nil) message:NSLocalizedString(@"SendCodeMessage", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"SendOK", nil) otherButtonTitles:nil];
+        [alertView show];
     }
     else {
-        isFirstTap = NO;
-        NSString *udid = [Utils getDeviceUDID];
-        [PictureManager registerWithUDID:udid Password:_number Name:_number PhoneNumber:_number Email:@"" OS:@"i" Avatar:nil Success:^(int status){}];
+        //make auido call to tell user the verification code
+        [PictureManager getVerificationCodeByAudio:_number Success:^(int status) {
+            if (status == 1) {
+                // the right
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"AlreadyCall", nil) message:NSLocalizedString(@"AudioCodeMessage", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"SendOK", nil) otherButtonTitles:nil];
+                [alertView show];
+            }
+            else{
+                //error
+            }
+        }];
     }
 }
 

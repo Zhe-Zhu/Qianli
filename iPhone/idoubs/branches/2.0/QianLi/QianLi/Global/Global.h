@@ -70,6 +70,7 @@ nil]
 #define kBaseURL @"http://112.124.36.134:8080"
 #define kSemiModalAnimationDuration 0.3f
 
+#define kInCall @"UserInCall"
 #define PageWidth 340
 
 #define kImagePath @"IMAGEPATH"
@@ -151,6 +152,7 @@ nil]
 // Umeng SDK Key
 #define kUmengSDKKey @"527c513f56240b352905fbfb"
 #define kSingUpKey @"SignedUp"
+#define kWaitingKey @"InWaitingList"
 
 //notification
 #define kHistoryChangedNotification @"HistoryChanged"
@@ -176,6 +178,10 @@ nil]
 #define kDoodleLineWidth @"doodlelinewidth"
 #define kDoodleEraseWidth @"doodleerasewidth"
 #define kDoodleLineColor @"doodlelinecolor"
+
+//waitinglist
+#define kCheckStatusNotification @"statusnotification"
+#define kAddPartnerNotification @"addpartnernotification"
 
 //QianLi Robot
 #define QianLiRobotNumber @"008600000000000"

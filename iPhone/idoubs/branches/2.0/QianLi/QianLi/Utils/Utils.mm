@@ -289,6 +289,16 @@
     return image;
 }
 
++ (BOOL)isChineseSystem
+{
+    NSString * language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    //@"zh-Hans" @"zh-Hant"
+    if ([language isEqualToString:@"zh-Hans"] || [language isEqualToString:@"zh-Hant"]) {
+        return YES;
+    }
+    return NO;
+}
+
 + (void)clearAllSharedInstance
 {
     [[SipCallManager SharedInstance] clearCallManager];

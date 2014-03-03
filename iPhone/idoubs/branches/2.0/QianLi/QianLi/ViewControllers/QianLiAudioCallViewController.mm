@@ -173,7 +173,7 @@
             break;
         }
     }
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onInviteEvent:) name:kNgnInviteEventArgs_Name object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveIncomingGettingImageMessage:) name:@"receivedImageNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handelAudioRouteChange) name:AVAudioSessionRouteChangeNotification object:nil];
@@ -184,7 +184,8 @@
     videoBeginTime = 0;
     _didEndCallBySelf = NO;
     didEndCall = NO;
-    callBeginTime = [[NSDate alloc] init];
+    _didPressEndCall = NO;
+    
     
     if (!IS_OS_7_OR_LATER) {
         [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forBarMetrics:UIBarMetricsDefault];
@@ -199,6 +200,16 @@
     [super viewWillAppear:animated];
     if (_bigProfileImage.image == nil) {
         [self setBigDisplayImage];
+    }
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    UIDevice *device = [UIDevice currentDevice];
+    // Register for proximity notifications
+    [device setProximityMonitoringEnabled:YES];
+    
+    if ([device isProximityMonitoringEnabled]) {
+        [notificationCenter addObserver:self selector:@selector(proximityChanged) name:UIDeviceProximityStateDidChangeNotification object:nil];
+    } else {
+        NSLog(@"No Proximity Sensor");
     }
 }
 
@@ -220,6 +231,7 @@
     [super viewWillDisappear:animated];
     [[SipStackUtils sharedInstance].soundService stopRingBackTone];
     [[SipStackUtils sharedInstance].soundService stopRingTone];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -240,6 +252,11 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)proximityChanged
+{
+    //
 }
 
 - (void)handelAudioRouteChange
@@ -290,6 +307,7 @@
     [_buttonAdd setEnabled:YES];
     [_buttonAdd setTintColor:activeButtonTintColor];
     // Add Time Label
+    callBeginTime = [[NSDate alloc] init];
     [self addTimeLabel];
     
     _viewState = InCall;
@@ -599,6 +617,8 @@
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotEndCall", nil),((int)time) / 60,((int)time) % 60, kQianLiRobotSharedPhotoNum, kQianLiRobotSharedDoodleNum, kQianLiRobotSharedWebNum, kQianLiRobotsharedVideoNum]];
     }
     //[[SipStackUtils sharedInstance].audioService hangUpCall];
+    _didPressEndCall = YES;
+    [[SipStackUtils sharedInstance].soundService stopInCallSound];
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [_timer invalidate]; // 停止计时并从Runloop中释放
@@ -613,9 +633,6 @@
         _activeEvent.status = kHistoryEventStatus_OutgoingCancelled;
         [[DetailHistoryAccessor sharedInstance] addHistEntry:_activeEvent];
     }
-    
-    // TODO: 寻求更健壮的方案
-    // 本地强制结束
     
     // 如果Menu Bar升起则将其dismiss
     if (menuBar) {
@@ -652,6 +669,7 @@
     // 被叫者名字和"拨号中"指示文字
     UILabel *herName = [[UILabel alloc] initWithFrame:CGRectMake(160 - 200/2, 0, 200, 40)];
     NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:_remotePartyNumber];
+    herName.backgroundColor = [UIColor clearColor];
     if (name) {
         herName.text = name;
     }
@@ -741,16 +759,16 @@
             // 因为目前无法检测网络状态,所以不加入此功能
             //    [self addNetworkIndicator];
             
-            [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
+            [[SipStackUtils sharedInstance].soundService stopRingTone];
+            [[SipStackUtils sharedInstance].soundService performSelector:@selector(enableBackgroundSound) withObject:nil afterDelay:0.5];
         }
         else{
             
         }
     }
     else{
-       
+       [[SipStackUtils sharedInstance].soundService stopRingTone];
     }
-    [[SipStackUtils sharedInstance].soundService stopRingTone];
 }
 
 #pragma mark QianLiUIMenuBar delegate Method
@@ -838,6 +856,9 @@
 
 - (void)selectVideo
 {
+    if (kIsCallingQianLiRobot) {
+        [[SipStackUtils sharedInstance].audioService sendDTMF:0];
+    }
     videoBeginTime = [[NSDate date] timeIntervalSince1970];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     _vedioVC = [storyboard instantiateViewControllerWithIdentifier:@"VideoViewController"];
@@ -1384,8 +1405,8 @@
     
     else if ([message isEqualToString:kPlayVideo]){
         if ([words count] == 2) {
-            _vedioVC.url = [words objectAtIndex:1];
-            [_vedioVC playMovieStream:[NSURL URLWithString:[words objectAtIndex:1]]];
+            //_vedioVC.url = [words objectAtIndex:1];
+            [_vedioVC playMovieStream:[words objectAtIndex:1]];
         }
     }
     else if ([message isEqualToString:kVideoPlayerCancel]){
@@ -1537,6 +1558,10 @@
     }
     else if ([message isEqualToString:kHangUpcall]){
         [self hangUpCallFromRemoteParty];
+    }
+    else if ([message isEqualToString:kInCall]){
+        [[SipStackUtils sharedInstance].soundService performSelector:@selector(stopRingBackTone) withObject:nil afterDelay:5.0];
+        [[SipStackUtils sharedInstance].soundService performSelector:@selector(playInCallSound) withObject:nil afterDelay:5.5];
     }
 }
 

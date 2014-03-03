@@ -649,6 +649,7 @@
     [_updateArray addObject:number];
 }
 
+// update user info functions
 - (void)updateNameToNumber:(NSArray *)array
 {
     if ([array count] < 2) {
@@ -695,8 +696,12 @@
     NSArray *items = [[QianLiContactsAccessor sharedInstance] getAllContacts];
     for (int i = 0; i < [items count]; ++i) {
         NSManagedObject *object = [items objectAtIndex:i];
+        NSString *number = [object valueForKey:@"number"];
+        if ([number isEqualToString:QianLiRobotNumber]) {
+            continue;
+        }
         NSInteger counter = [(NSNumber *)[object valueForKey:@"updatecounter"] integerValue];
-        [UserDataTransUtils getUserUpdateInfo:[object valueForKey:@"number"] Completion:^(NSInteger updateTime) {
+        [UserDataTransUtils getUserUpdateInfo:number Completion:^(NSInteger updateTime) {
             if (!(updateTime ==  counter)) {
                 [UserDataTransUtils getUserData:[object valueForKey:@"number"] Completion:^(NSString *name, NSString *avatarURL) {
                     NSString *number = (NSString *)[object valueForKey:@"number"];
@@ -805,7 +810,7 @@
     }
     else{
         NSLog(@"no country code");
-        // TODO:LLGG
+        // TODO:LLGG just for simulator
         [self getAddressBookPermission];
         _finished = NO;
         [self sendContactsToServer];

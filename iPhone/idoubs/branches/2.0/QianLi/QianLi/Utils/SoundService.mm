@@ -9,6 +9,13 @@
 #import "SoundService.h"
 #import "SipCallManager.h"
 
+@interface SoundService(){
+    
+}
+
+@property(strong, nonatomic) AVAudioPlayer *inCallPlayer;
+@end
+
 @implementation SoundService
 
 #pragma mark -- utilies --
@@ -127,11 +134,41 @@
     [[NgnEngine sharedInstance].soundService stopRingBackTone];
 }
 
+- (void)playInCallSound
+{
+    if (![SipCallManager SharedInstance].audioVC || [SipCallManager SharedInstance].audioVC.didPressEndCall == YES) {
+        return;
+    }
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"CallLater" ofType:@"wav"];
+    NSURL *url = [NSURL fileURLWithPath: path];
+	NSError *error;
+	AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    player.delegate = self;
+    player.numberOfLoops = 2;
+    self.inCallPlayer = player;
+	if (player == nil){
+		return;
+	}
+    [player play];
+}
+
+- (void)stopInCallSound
+{
+    [self.inCallPlayer stop];
+    self.inCallPlayer = nil;
+}
+
 - (void)playDtmf:(int)tag
 {
-    
     [[NgnEngine sharedInstance].soundService playDtmf:tag];
-    
+}
+
+#pragma mark --AVAudioPlayerDelegate--
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    if (player == _inCallPlayer) {
+        self.inCallPlayer = nil;
+    }
 }
 
 @end

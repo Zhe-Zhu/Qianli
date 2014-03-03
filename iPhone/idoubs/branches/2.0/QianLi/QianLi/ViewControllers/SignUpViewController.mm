@@ -16,6 +16,7 @@
 @interface SignUpViewController ()
 {
     NSString *oldPhoneNumber; // 存储旧号码,如果用户未更改过号码则不弹出确认AlertView
+    BOOL didPressCancel;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *phoneNumber;
@@ -79,6 +80,7 @@
     self.navigationItem.title = NSLocalizedString(@"welcome", nil);
     [_buttonContinue setTitle:NSLocalizedString(@"continue", nil) forState:UIControlStateNormal];
     [self.navigationItem.backBarButtonItem setTitle:NSLocalizedString(@"back", nil)];
+    didPressCancel = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -135,7 +137,12 @@
     NSString *confirmationMessage = [NSString stringWithFormat:NSLocalizedString(@"numberConfirmation", nil), [self stripCountryName], _phoneNumber.text];
     UIAlertView *confirmation = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"numberConfirmationTitle", nil) message:confirmationMessage delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Confirm", nil), nil];
     if ([_phoneNumber.text isEqualToString:oldPhoneNumber]) {
-        [self tryToRegisterTheNumber];
+        if (!didPressCancel) {
+            [self tryToRegisterTheNumber];
+        }
+        else{
+            [confirmation show];
+        }
     }
     else {
         oldPhoneNumber = _phoneNumber.text;
@@ -186,8 +193,46 @@
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setBool:YES forKey:kSingUpKey];
             [userDefaults synchronize];
-            QianLiAppDelegate *qianliAppDelegate = (QianLiAppDelegate*)[UIApplication sharedApplication].delegate;
+            QianLiAppDelegate *qianliAppDelegate = (QianLiAppDelegate *)[UIApplication sharedApplication].delegate;
             [qianliAppDelegate performSelectorOnMainThread:@selector(resetRootViewController) withObject:nil waitUntilDone:YES];
+        }
+        else if (status == 3){
+            // waiting list primary number
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            WaitingViewController *waitingCV = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+            waitingCV.succeed = NO;
+            waitingCV.isPartner = NO;
+            [UserDataAccessor setUserWaitingNumber:number];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:YES forKey:kWaitingKey];
+            [userDefaults synchronize];
+            [self performSelectorOnMainThread:@selector(showVC:) withObject:waitingCV waitUntilDone:NO];
+        }
+        else if (status == 4){
+            // waitinglist partner number
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            WaitingViewController *waitingCV = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+            waitingCV.succeed = NO;
+            waitingCV.isPartner = YES;
+            [UserDataAccessor setUserWaitingNumber:number];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:YES forKey:kWaitingKey];
+            [userDefaults synchronize];
+            [userDefaults setBool:YES forKey:@"isPartner"];
+            [self performSelectorOnMainThread:@selector(showVC:) withObject:waitingCV waitUntilDone:NO];
+        }
+        else if (status == 5){
+            // waited list
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+            WaitingViewController *waitingCV = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+            waitingCV.succeed = YES;
+            waitingCV.isPartner = NO;
+            [UserDataAccessor setUserWaitingNumber:number];
+            [UserDataAccessor setUserRemoteParty:number];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:YES forKey:kSingUpKey];
+            [userDefaults synchronize];
+            [self performSelectorOnMainThread:@selector(showVC:) withObject:waitingCV waitUntilDone:NO];
         }
         else if (status < 0) {
             // Show the Alert View
@@ -199,6 +244,13 @@
             [self activateButtonContinue];
         }
     }];
+}
+
+- (void)showVC:(UIViewController *)viewController
+{
+    UINavigationController *naviVC = [[UINavigationController alloc] init];
+    naviVC.viewControllers = @[viewController];
+    [self presentViewController:naviVC animated:YES completion:nil];
 }
 
 - (void)showVerifyingVC:(SignUpVerificationCodeViewController *)verifyCV
@@ -215,16 +267,17 @@
 {
     UITableViewController *tableView = [[UITableViewController alloc] init];
     tableView.title = NSLocalizedString(@"countryCode", nil);
-    [self.navigationController pushViewController:tableView  animated:YES];
+    //[self.navigationController pushViewController:tableView  animated:YES];
 }
 
 # pragma mark - UIAlertView delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
-        NSLog(@"user pressed Cancel");
+        didPressCancel = YES;
     }
     else {
         [self tryToRegisterTheNumber];
+        didPressCancel = NO;
     }
 }
 

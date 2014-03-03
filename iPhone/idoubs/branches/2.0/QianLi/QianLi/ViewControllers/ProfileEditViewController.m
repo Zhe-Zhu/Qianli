@@ -62,7 +62,7 @@
     [self.view sendSubviewToBack:_imageView];
     effectiveScale = 1.0;
     
-    UIImageView *rectImage = [[UIImageView alloc] initWithFrame:self.view.frame];
+    UIImageView *rectImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, winSize.width, winSize.height)];
     _rectImageViw = rectImage;
     [self.view insertSubview:rectImage aboveSubview:_imageView];
 //    [self.view addSubview:rectImage];
@@ -120,7 +120,8 @@
         return CGRectZero;
     }
     CGRect imageRect;
-    CGRect winSize = [UIScreen mainScreen].bounds;
+    CGFloat diff = 70;
+    CGRect winSize = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - diff);
     CGSize imageSize = _profile.size;
     
     CGFloat height =  kProfileSize / imageSize.width * imageSize.height;
@@ -203,7 +204,8 @@
     CGFloat originY = _imageView.frame.origin.y;
     CGFloat pX = originX + _imageView.frame.size.width;
     CGFloat pY = originY + _imageView.frame.size.height;
-    CGSize winSize = [UIScreen mainScreen].bounds.size;
+    CGFloat diff = 70;
+    CGSize winSize = CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - diff);
     
     CGFloat xOffset = 0, yOffset = 0;
     

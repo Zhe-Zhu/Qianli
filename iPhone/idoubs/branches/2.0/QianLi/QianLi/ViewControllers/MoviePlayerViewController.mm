@@ -15,6 +15,9 @@
 
 @interface MoviePlayerViewController ()
 {
+    CGFloat totalDurationLength;
+    CGFloat totalDuration;
+    BOOL firstTimeHideControls;
 }
 
 @property (weak, nonatomic) UIView *movieView;
@@ -25,6 +28,11 @@
 @property (strong, nonatomic) MPMoviePlayerController *moviePlayerController;
 @property (strong, nonatomic) UIButton *pauseButton;
 
+@property (weak, nonatomic) UIView *playingProgress;
+@property (weak, nonatomic) UIView *availableProgress;
+@property (weak, nonatomic) NSTimer *progressTimer;
+@property (weak, nonatomic) UILabel *totalTimeLabel;
+@property (weak, nonatomic) UILabel *currentTimeLabel;
 @end
 
 @implementation MoviePlayerViewController
@@ -42,6 +50,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDuration) name:MPMovieDurationAvailableNotification object:nil];
+    firstTimeHideControls = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -87,6 +97,14 @@
     }
 }
 
+- (void)setUpProgressTimer
+{
+    if (!_progressTimer) {
+        NSTimer *progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(adjustProgress) userInfo:nil repeats:YES];
+        _progressTimer = progressTimer;
+    }
+}
+
 - (BOOL)prefersStatusBarHidden
 {
     return YES;
@@ -98,9 +116,111 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_progressTimer invalidate];
+}
+
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscape | UIInterfaceOrientationMaskLandscapeRight;
+}
+
+- (void)getDuration
+{
+    totalDuration = floorf(_moviePlayerController.duration);
+    NSInteger minute = floorf(totalDuration / 60);
+    if (minute < 10) {
+        NSString *str;
+        if (int(totalDuration - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"0%d:%d", minute, int(totalDuration - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"0%d:0%d", minute, int(totalDuration - minute * 60)];
+        }
+        _totalTimeLabel.text = str;
+    }
+    else{
+        NSString *str;
+        if (int(totalDuration - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"%d:%d", minute, int(totalDuration - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"%d:0%d", minute, int(totalDuration - minute * 60)];
+        }
+        _totalTimeLabel.text = str;
+    }
+    [self setProgress];
+    [self setUpProgressTimer];
+}
+
+- (void)adjustProgress
+{
+    CGFloat currentTime = floorf(_moviePlayerController.currentPlaybackTime);
+    NSInteger minute = floorf(currentTime / 60);
+    if (minute < 10) {
+        NSString *str;
+        if (int(currentTime - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"0%d:%d", minute, int(currentTime - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"0%d:0%d", minute, int(currentTime - minute * 60)];
+        }
+        _currentTimeLabel.text = str;
+    }
+    else{
+        NSString *str;
+        if (int(currentTime - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"%d:%d", minute, int(currentTime - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"%d:0%d", minute, int(currentTime - minute * 60)];
+        }
+        _currentTimeLabel.text = str;
+    }
+    if (currentTime > totalDuration) {
+        currentTime = totalDuration;
+    }
+    CGFloat length = totalDurationLength * currentTime / totalDuration;
+    CGRect frame = _playingProgress.frame;
+    frame = CGRectMake(frame.origin.x, frame.origin.y, length, frame.size.height);
+    [UIView animateWithDuration:1.0 animations:^{
+        _playingProgress.frame = frame;
+    }];
+}
+
+- (void)setProgress
+{
+    CGFloat currentTime = floorf(_moviePlayerController.currentPlaybackTime);
+    NSInteger minute = floorf(currentTime / 60);
+    if (minute < 10) {
+        NSString *str;
+        if (int(currentTime - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"0%d:%d", minute, int(currentTime - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"0%d:0%d", minute, int(currentTime - minute * 60)];
+        }
+        _currentTimeLabel.text = str;
+    }
+    else{
+        NSString *str;
+        if (int(currentTime - minute * 60) > 9) {
+            str = [NSString stringWithFormat:@"%d:%d", minute, int(currentTime - minute * 60)];
+        }
+        else{
+            str = [NSString stringWithFormat:@"%d:0%d", minute, int(currentTime - minute * 60)];
+        }
+        _currentTimeLabel.text = str;
+    }
+    if (currentTime > totalDuration) {
+        currentTime = totalDuration;
+    }
+    CGFloat length = totalDurationLength * currentTime / totalDuration;
+    CGRect frame = _playingProgress.frame;
+    frame = CGRectMake(frame.origin.x, frame.origin.y, length, frame.size.height);
+    _playingProgress.frame = frame;
 }
 
 -(void)createAndConfigurePlayerWithURL:(NSURL *)movieURL sourceType:(MPMovieSourceType)sourceType
@@ -116,7 +236,7 @@
         [self setMoviePlayerController:player];
         [player setContentURL:movieURL];
         [player setMovieSourceType:sourceType];
-        [player setRepeatMode: MPMovieRepeatModeOne];
+        [player setRepeatMode: MPMovieRepeatModeNone];
         player.controlStyle = MPMovieControlStyleNone;
         player.scalingMode = MPMovieScalingModeAspectFit;
        // player.useApplicationAudioSession = YES;
@@ -128,35 +248,63 @@
         [[player view] setFrame:viewInsetRect];
         [player view].backgroundColor = [UIColor lightGrayColor];
         
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, player.view.bounds.size.height - 60, player.view.bounds.size.width, 60)];
-        view.backgroundColor = [UIColor grayColor];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, player.view.bounds.size.height - 60, player.view.bounds.size.width, 70)];
+        view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         _controls = view;
+
+        totalDurationLength = player.view.bounds.size.width - 160;
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(80, 12, totalDurationLength, 2)];
+        lineView.backgroundColor = [UIColor colorWithRed:99 / 255.0 green:99 / 255.0 blue:99 / 255.0 alpha:1.0];
+        [view addSubview:lineView];
+        
+        UILabel *totalTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(totalDurationLength + 80 + 7, 6, 70, 15)];
+        totalTimeLabel.backgroundColor = [UIColor clearColor];
+        _totalTimeLabel = totalTimeLabel;
+        totalTimeLabel.textColor = [UIColor whiteColor];
+        totalTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
+        [view addSubview:totalTimeLabel];
+        
+        UILabel *totalTimeLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(41, 6, 70, 15)];
+        totalTimeLabel1.backgroundColor = [UIColor clearColor];
+        _currentTimeLabel = totalTimeLabel1;
+        totalTimeLabel1.textColor = [UIColor whiteColor];
+        totalTimeLabel1.font = [UIFont fontWithName:@"Helvetica" size:13];
+        [view addSubview:totalTimeLabel1];
+        
+//        UIView *availableProgress = [[UIView alloc] initWithFrame: CGRectMake(50, 12, 0, 3)];
+//        availableProgress.backgroundColor = [UIColor yellowColor];
+//        [view addSubview:availableProgress];
+        
+        UIView *playingProgress = [[UIView alloc] initWithFrame: CGRectMake(80, 12, 0, 2)];
+        playingProgress.backgroundColor = [UIColor whiteColor];
+        [view addSubview:playingProgress];
+        _playingProgress = playingProgress;
         
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [cancelButton setTitle:NSLocalizedString(@"Quit", nil) forState:UIControlStateNormal];
         [cancelButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
-        cancelButton.frame = CGRectMake(0, 5, 90, 55);
+        cancelButton.frame = CGRectMake(0, 15, 90, 55);
         [view addSubview:cancelButton];
         
         UIButton *forwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [forwardButton setImage:[UIImage imageNamed:@"videoForward.png"] forState:UIControlStateNormal];
         [forwardButton addTarget:self action:@selector(forward) forControlEvents:UIControlEventTouchUpInside];
-        forwardButton.frame = CGRectMake(winSize.height * 3 / 4.0, 10, 60, 40);
+        forwardButton.frame = CGRectMake(winSize.height * 3 / 4.0, 20, 60, 40);
         [view addSubview:forwardButton];
         
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [backButton setImage:[UIImage imageNamed:@"videoBackward.png"] forState:UIControlStateNormal];
         [backButton addTarget:self action:@selector(backward) forControlEvents:UIControlEventTouchUpInside];
-        backButton.frame = CGRectMake(winSize.height * 1 / 4.0, 10, 60, 40);
+        backButton.frame = CGRectMake(winSize.height * 1 / 4.0, 20, 60, 40);
         [view addSubview:backButton];
         
         _pauseButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_pauseButton setImage:[UIImage imageNamed:@"videoPause.png"] forState:UIControlStateNormal];
         [_pauseButton addTarget:self action:@selector(pause) forControlEvents:UIControlEventTouchUpInside];
-        _pauseButton.frame = CGRectMake(winSize.height * 2 / 4.0, 10, 60, 40);
+        _pauseButton.frame = CGRectMake(winSize.height * 2 / 4.0, 20, 60, 40);
         [view addSubview:_pauseButton];
-        _hideControlsTimer = [NSTimer scheduledTimerWithTimeInterval:kVideoHideControls target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
+        _hideControlsTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
         [player.view addSubview:view];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
@@ -182,15 +330,25 @@
 
 - (void)hideControls
 {
+    if (firstTimeHideControls) {
+        firstTimeHideControls = NO;
+        CGFloat currentTime = _moviePlayerController.currentPlaybackTime;
+        if ( currentTime < 0.5) {
+            [self playVideoUsingAnotherURL];
+        }
+    }
     [UIView animateWithDuration:0.5 animations:^{
         _controls.alpha = 0.0;
     } completion:^(BOOL finished) {
         _controlON = NO;
+        [_progressTimer invalidate];
     }];
 }
 
 - (void)showControls
 {
+    [self setProgress];
+    [self setUpProgressTimer];
     [UIView animateWithDuration:0.3 animations:^{
         _controls.alpha = 1.0;
     } completion:^(BOOL finished) {
@@ -204,6 +362,12 @@
 {
     [_hideControlsTimer invalidate];
     _hideControlsTimer = [NSTimer scheduledTimerWithTimeInterval:kVideoHideControls target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
+}
+
+- (void)playVideoUsingAnotherURL
+{
+    NSString *str = [NSString stringWithFormat:@"http://v.youku.com/player/getRealM3U8/vid/%@/type/mp4/v.m3u8", self.videoID];
+    [self playMovieStream:[NSURL URLWithString:str]];
 }
 
 - (void)forwardFromRemote:(float)currentTime
@@ -307,6 +471,11 @@
 
 -(void)cancel
 {
+    if (kIsCallingQianLiRobot) {
+        [[SipStackUtils sharedInstance].audioService sendDTMF:2];
+        //[[SipStackUtils sharedInstance].messageService sendMessage: @"make a appointment" toRemoteParty:QianLiRobotNumber];
+        
+    }
     [self cancelMoviePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
     [[SipStackUtils sharedInstance].messageService sendMessage:kVideoPlayerCancel toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
@@ -327,6 +496,8 @@
 {
     [_moviePlayerController pause];
     [_moviePlayerController stop];
+    [_progressTimer invalidate];
+    [_hideControlsTimer invalidate];
 }
 
 @end

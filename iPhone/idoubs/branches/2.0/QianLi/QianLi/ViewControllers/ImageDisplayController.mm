@@ -196,10 +196,16 @@
             if (![_imageScrollView viewWithTag:1000 + i]) {
                 image = [UIImage imageNamed:@"blankImage.png"];
                 CGSize newImageSize = [self adjustImageFrame:image.size];
+                //Do not add any more uiimageview on contentView
                 UIView *contentView = [[UIImageView alloc] initWithFrame:CGRectMake(i * PageWidth, 0, 320, frame.size.height)];
                 UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake((320-newImageSize.width)/2, (frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
                 if (!IS_OS_7_OR_LATER) {
-                    imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height-newImageSize.height-108)/2, newImageSize.width, newImageSize.height);
+                    if (self.navigationController.navigationBarHidden) {
+                        imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height);
+                    }
+                    else{
+                        imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height - newImageSize.height - 108)/2, newImageSize.width, newImageSize.height);
+                    }
                 }
                 
                 imageView.image = image;
@@ -215,6 +221,14 @@
                 UIImageView *imageView = (UIImageView *)[contentView viewWithTag:kImageViewTagInContentView];
                 CGSize newImageSize = [self adjustImageFrame:image.size];
                 imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height);
+                if (!IS_OS_7_OR_LATER) {
+                    if (self.navigationController.navigationBarHidden) {
+                        imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height);
+                    }
+                    else{
+                        imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height - newImageSize.height - 108)/2, newImageSize.width, newImageSize.height);
+                    }
+                }
                 imageView.image = image;
             }
         }
@@ -227,7 +241,12 @@
                 UIView *contentView = [[UIImageView alloc] initWithFrame:CGRectMake(i * PageWidth, 0, 320, frame.size.height)];
                 UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake((320-newImageSize.width)/2, (frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
                 if (!IS_OS_7_OR_LATER) {
-                    imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height-newImageSize.height-108)/2, newImageSize.width, newImageSize.height);
+                    if (self.navigationController.navigationBarHidden) {
+                        imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height);
+                    }
+                    else{
+                        imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height - newImageSize.height - 108)/2, newImageSize.width, newImageSize.height);
+                    }
                 }
                 
                 imageView.image = image;
@@ -247,6 +266,14 @@
                 UIImageView *imageView = (UIImageView *)[contentView viewWithTag:kImageViewTagInContentView];
                 CGSize newImageSize = [self adjustImageFrame:image.size];
                 imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height);
+                if (!IS_OS_7_OR_LATER) {
+                    if (self.navigationController.navigationBarHidden) {
+                        imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height);
+                    }
+                    else{
+                        imageView.frame = CGRectMake((320-newImageSize.width)/2, (frame.size.height - newImageSize.height - 108)/2, newImageSize.width, newImageSize.height);
+                    }
+                }
                 imageView.image = image;
             }
         }
@@ -310,8 +337,22 @@
 {
     [self setIndicator];
     if (kIsCallingQianLiRobot) {
-        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSlidePhoto", nil),_currentPage]];
-        //TODO: add or not
+        NSString *str;
+        switch (_currentPage) {
+            case 1:
+                str = @"st";
+                break;
+            case 2:
+                str = @"nd";
+                break;
+            case 3:
+                str = @"rd";
+                break;
+            default:
+                str = @"th";
+                break;
+        }
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotSlidePhoto", nil), _currentPage, str]];
         return;
     }
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
@@ -379,13 +420,38 @@
 {
     [[UIApplication sharedApplication] setStatusBarHidden:!self.navigationController.navigationBarHidden];
     [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:YES];
+    CGRect frame = _imageScrollView.frame;
     [UIView animateWithDuration:0.6 animations:^{
         _toolBar.hidden = !_toolBar.hidden;
         if (self.navigationController.navigationBarHidden) {
             _imageScrollView.backgroundColor = [UIColor blackColor];
+            for (int i = 0; i < _totalNumber; ++i) {
+                UIView *view = [_imageScrollView viewWithTag:1000 + i];
+                if (view) {
+                    if (!IS_OS_7_OR_LATER) {
+                        for (UIView *subView in view.subviews) {
+                            if ([subView isKindOfClass:[UIImageView class]]) {
+                                subView.frame = CGRectMake((320-subView.frame.size.width)/2, (frame.size.height-subView.frame.size.height)/2, subView.frame.size.width, subView.frame.size.height);
+                            }
+                        }
+                    }
+                }
+            }
         }
         else {
             _imageScrollView.backgroundColor = [UIColor whiteColor];
+            for (int i = 0; i < _totalNumber; ++i) {
+                UIView *view = [_imageScrollView viewWithTag:1000 + i];
+                if (view) {
+                    if (!IS_OS_7_OR_LATER) {
+                        for (UIView *subView in view.subviews) {
+                            if ([subView isKindOfClass:[UIImageView class]]) {
+                                subView.frame = CGRectMake((320-subView.frame.size.width)/2, (frame.size.height-subView.frame.size.height - 108)/2, subView.frame.size.width, subView.frame.size.height);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }];
 }
@@ -526,14 +592,14 @@
     _toolBar.hidden = YES;
     UIImage *image = (UIImage *)[_images objectAtIndex:index];
     CGSize imageSize = [self adjustImageFrame:image.size];
-    CGRect scrollFrame = self.view.frame;//_imageScrollView.frame;
-    CGRect frame = CGRectMake((320 - imageSize.width) / 2.0, (scrollFrame.size.height-imageSize.height) / 2.0, imageSize.width, imageSize.height);
+    CGRect scrollFrame = _imageScrollView.frame;
+    CGRect frame = CGRectMake((320 - imageSize.width) / 2.0, (scrollFrame.size.height-imageSize.height - 108) / 2.0, imageSize.width, imageSize.height);
     DoodleView *view = [[DoodleView alloc] initWithFrame:frame];
     _doodleView = view;
     _doodleView.image = image;
     _doodleView.delegate = self;
     
-    DoodleBackView *backView = [[DoodleBackView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    DoodleBackView *backView = [[DoodleBackView alloc] initWithFrame:CGRectMake(0, 0, scrollFrame.size.width, scrollFrame.size.height)];
     backView.image = image;
     [backView setImageView:frame];
     _doodlebackView = backView;
@@ -627,8 +693,24 @@
 {
     [[UIApplication sharedApplication] setStatusBarHidden:!self.navigationController.navigationBarHidden];
     [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:YES];
+    CGRect scrollFrame = _imageScrollView.frame;
+    CGSize imageSize = _doodleView.frame.size;
     [UIView animateWithDuration:0.6 animations:^{
         _doodleToolBar.hidden = !_doodleToolBar.hidden;
+        if (_doodleToolBar.hidden) {
+            if (!IS_OS_7_OR_LATER) {
+                CGRect frame = CGRectMake((320 - imageSize.width) / 2.0, (scrollFrame.size.height-imageSize.height) / 2.0, imageSize.width, imageSize.height);
+                _doodleView.frame = frame;
+                [_doodlebackView setImageView:frame];
+            }
+        }
+        else{
+            if (!IS_OS_7_OR_LATER) {
+                CGRect frame = CGRectMake((320 - imageSize.width) / 2.0, (scrollFrame.size.height-imageSize.height - 108) / 2.0, imageSize.width, imageSize.height);
+                _doodleView.frame = frame;
+                [_doodlebackView setImageView:frame];
+            }
+        }
     }];
 }
 

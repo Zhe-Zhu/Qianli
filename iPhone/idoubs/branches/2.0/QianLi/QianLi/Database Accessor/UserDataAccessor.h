@@ -12,12 +12,12 @@
 
 + (UIImage *)getUserProfile;
 + (BOOL)setUserProfile:(UIImage *)image;
++ (UIImage *)getUserPhoneDispImage;
++ (BOOL)setUserPhoneDispImage:(UIImage *)image;
++ (void)deleteUserImages;
 
 + (NSString *)getUserRemoteParty;
 + (void)setUserRemoteParty:(NSString *)remoteParty;
-
-+ (UIImage *)getUserPhoneDispImage;
-+ (BOOL)setUserPhoneDispImage:(UIImage *)image;
 
 + (NSString *)getUserName;
 + (void)setUserName:(NSString *)name;
@@ -25,4 +25,9 @@
 //+ (UIImage *)getCacheBigPhoto:(NSString *)remoteParty;
 //+ (void)setCacheBigPhoto:(NSString *)remoteParty setImage:(UIImage *)bigPhoto;
 
++ (NSString *)getUserWaitingNumber;
++ (void)setUserWaitingNumber:(NSString *)number;
+
++ (NSString *)getUserPartnerNumber;
++ (void)setUserPartnerNumber:(NSString *)number;
 @end

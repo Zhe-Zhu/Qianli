@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (weak, nonatomic) MoviePlayerViewController *moviePlayer;
 @property (strong, nonatomic) NSMutableArray *vedioThumbs;
+@property (strong, nonatomic) NSString *currentVideoID;
 
 @end
 
@@ -112,6 +113,11 @@
     [_vedioThumbs removeAllObjects];
 }
 
+- (void)dealloc
+{
+    _webView.delegate = nil;
+}
+
 #pragma mark  -- UIWebViewDelegate --
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
@@ -126,13 +132,12 @@
         if ([[words objectAtIndex:i] isEqualToString:@"v_show"]){
             NSArray *array = [[words objectAtIndex:i + 1] componentsSeparatedByString:@"."];
             NSString *videoID = [[array objectAtIndex:0] substringFromIndex:3];
-            NSString *videoURL = [self getVedioURL:videoID];
-            [self playMovieStream:[NSURL URLWithString:videoURL]];
+            [self playMovieStream:videoID];
             if (kIsCallingQianLiRobot) {
                 kQianLiRobotsharedVideoNum++;
-                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotPlayVieo", nil), @"Unknow"]];
+                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotPlayVieo", nil)]];
             }
-            NSString *message = [NSString stringWithFormat:@"%@%@%@",kPlayVideo, kSeparator, videoURL];
+            NSString *message = [NSString stringWithFormat:@"%@%@%@",kPlayVideo, kSeparator, videoID];
             [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
             [self getHistoryImage];
             return NO;
@@ -158,9 +163,10 @@
     [_webView loadRequest:request];
 }
 
-- (NSString *)getVedioURL:(NSString *)vedioID
+- (NSString *)getVideoURL:(NSString *)videoID
 {
-    NSString *str = [NSString stringWithFormat:@"http://v.youku.com/player/getRealM3U8/vid/%@/type//video.m3u8", vedioID];
+    //NSString *str = [NSString stringWithFormat:@"http://v.youku.com/player/getRealM3U8/vid/%@/type/mp4/v.m3u8", videoID];
+    NSString *str = [NSString stringWithFormat:@"http://v.youku.com/player/getRealM3U8/vid/%@/type//video.m3u8", videoID];
     return str;
 }
 
@@ -218,13 +224,21 @@
     }
 }
 
--(void)playMovieStream:(NSURL *)movieFileURL
+-(void)playMovieStream:(NSString *)videoID
 {
+    // added by Xiangwen
+    // if calling QianLi Robot, stop the background music.
+    if (kIsCallingQianLiRobot) {
+        [[SipStackUtils sharedInstance].audioService sendDTMF:1];
+    }
+    self.currentVideoID = videoID;
+    NSURL *movieFileURL = [NSURL URLWithString:[self getVideoURL:videoID]];
     MoviePlayerViewController *player = [[MoviePlayerViewController alloc] init];
     //CODE_REVIEW:可以不用传递_videoThumbs，在MoviePlayer里不能截屏。
     player.thumbs = _vedioThumbs;
-    _moviePlayer = player;
-   [self presentViewController:player animated:YES completion: nil];
+    self.moviePlayer = player;
+    player.videoID = self.currentVideoID;
+    [self presentViewController:player animated:YES completion: nil];
     [_moviePlayer playMovieStream:movieFileURL];
 }
 

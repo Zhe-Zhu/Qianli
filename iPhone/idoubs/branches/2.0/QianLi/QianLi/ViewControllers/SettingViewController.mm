@@ -17,6 +17,8 @@
 #import "Utils.h"
 #import "UserDataTransUtils.h"
 #import "UMFeedback.h"
+#import "DetailHistoryAccessor.h"
+#import "WebHistoryDataAccessor.h"
 
 @interface SettingViewController (){
     int repliesCountNumber;
@@ -30,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *repliesCount;
 @property (weak, nonatomic) IBOutlet UIImageView *repliesCountBackground;
 @property (weak, nonatomic) IBOutlet UITableViewCell *aboutQianli;
+@property (weak, nonatomic) IBOutlet UITableViewCell *rateUs;
 
 @property (weak, nonatomic) IBOutlet UILabel *labelProfile;
 @property (weak, nonatomic) IBOutlet UILabel *labelSMS;
@@ -37,6 +40,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelFeedback;
 @property (weak, nonatomic) IBOutlet UILabel *labelSignout;
 @property (weak, nonatomic) IBOutlet UILabel *labelAbout;
+@property (weak, nonatomic) IBOutlet UILabel *rateUsLabel;
 
 
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
@@ -72,6 +76,7 @@
     _labelFeedback.text = NSLocalizedString(@"labelFeedback", nil);
     _labelSignout.text = NSLocalizedString(@"labelSignout", nil);
     _labelAbout.text = NSLocalizedString(@"labelAbout", nil);
+    _rateUsLabel.text = NSLocalizedString(@"RateUs", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -80,7 +85,8 @@
     // 读取用户的照片
     [self getNameAndAvatar];
     self.profilePhoto.clipsToBounds = YES;
-    self.profilePhoto.layer.cornerRadius = CGRectGetWidth(self.profilePhoto.bounds)/2.0;
+    CGFloat radius = 19;//CGRectGetWidth(self.profilePhoto.bounds) / 2.0;
+    self.profilePhoto.layer.cornerRadius = radius;
     self.profilePhoto.image = [UserDataAccessor getUserProfile];
     
     repliesCountNumber = [[NSUserDefaults standardUserDefaults] integerForKey:@"RepliesCount"];
@@ -104,6 +110,11 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
 }
 
 - (void)didReceiveMemoryWarning
@@ -169,7 +180,7 @@
         }
         else
         {
-            UIAlertView * warningView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"emailWarningTitle", nil) message:NSLocalizedString(@"emailWarningMessage", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"emailWarningOK", nil) otherButtonTitles:nil, nil];
+            UIAlertView * warningView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"emailWarningTitle", nil) message:NSLocalizedString(@"emailWarningMessage", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"emailWarningOK", nil) otherButtonTitles:nil, nil];
             [warningView show];
             [_activityIndicator stopAnimating];
         }
@@ -205,6 +216,16 @@
         [UMFeedback showFeedback:self withAppkey:kUmengSDKKey];
         [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"RepliesCount"];
     }
+    else if ([indexPath isEqual:[tableView indexPathForCell:_rateUs]]) {
+        // rate us
+        // add here
+        int appId = 830277724;//830277724; //595247165
+        SKStoreProductViewController *storeViewController = [[SKStoreProductViewController alloc] init];
+        NSDictionary *parameters = @{SKStoreProductParameterITunesItemIdentifier:[NSNumber numberWithInteger: appId]};
+        [storeViewController loadProductWithParameters:parameters completionBlock:nil];
+        storeViewController.delegate = self;
+        [self presentViewController:storeViewController animated:YES completion:nil];
+    }
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller
@@ -235,28 +256,35 @@
     if (buttonIndex == alertView.firstOtherButtonIndex){
         [self removeAccount];
     }
+    else if (buttonIndex == alertView.cancelButtonIndex){
+        [_deleteAccount setSelected:NO animated:YES];
+        [_sendEmailCell setSelected:NO animated:YES];
+    }
 }
 
 - (void)removeAccount
 {
-    //TODO:
-//    [UserDataTransUtils deleteAccount:[UserDataAccessor getUserRemoteParty] Completion:^(BOOL updateTime) {
-//        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//        [userDefaults setBool:NO forKey:@"SignedUp"];
-//        [userDefaults synchronize];
-//        [[MainHistoryDataAccessor sharedInstance] deleteAllObjects];
-//        [[SipStackUtils sharedInstance].historyService deleteAllObjects];
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Successfully deleted account" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alertView show];
-//    }];
-    
-    // 返回到注册界面
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    UINavigationController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
-    [[UIApplication sharedApplication] delegate].window.rootViewController = signUpEditProfileViewController;
+    [UserDataTransUtils deleteAccount:[UserDataAccessor getUserRemoteParty] Completion:nil];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:NO forKey:kSingUpKey];
     [userDefaults synchronize];
+    [UserDataAccessor setUserName:@""];
+    [UserDataAccessor setUserPartnerNumber:@""];
+    [UserDataAccessor deleteUserImages];
+    [[MainHistoryDataAccessor sharedInstance] deleteAllObjects];
+    [[DetailHistoryAccessor sharedInstance] deleteAllHistory];
+    [[WebHistoryDataAccessor sharedInstance] deleteObjectForType:@"HISTORY"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"partner_verified"];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    UINavigationController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
+    [[UIApplication sharedApplication] delegate].window.rootViewController = signUpEditProfileViewController;
+}
+
+#pragma mark  --SKStoreProductViewControllerDelegate Method--
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController{
+    //
+    [viewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 # pragma mark -- Umeng Feedback

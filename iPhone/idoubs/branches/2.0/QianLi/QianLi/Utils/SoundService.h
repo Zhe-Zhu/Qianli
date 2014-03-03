@@ -10,7 +10,7 @@
 #import "iOSNgnStack.h"
 
 // this class is warpper of the SoundService of IOS-NGN-Stack
-@interface SoundService : NSObject
+@interface SoundService : NSObject<AVAudioPlayerDelegate>
 
 - (BOOL)configureAudioSession;
 - (BOOL)startAudioSession;
@@ -22,12 +22,13 @@
 - (BOOL)configureSpeakerEnabled:(BOOL)speakerEnabled;
 
 - (void)playRingTone;
-
 - (void)stopRingTone;
 
 - (void)playRingBackTone;
-
 - (void)stopRingBackTone;
+
+- (void)playInCallSound;
+- (void)stopInCallSound;
 
 - (void)playDtmf:(int)tag;
 

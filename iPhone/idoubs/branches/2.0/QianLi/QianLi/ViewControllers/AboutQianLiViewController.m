@@ -12,7 +12,6 @@
 
 @interface AboutQianLiViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *labelVersion;
-@property (weak, nonatomic) IBOutlet UILabel *labelVersionNumber;
 
 @end
 
@@ -32,11 +31,15 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    _labelVersion.text = NSLocalizedString(@"version", nil);
-    _labelVersionNumber.text = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    _labelVersion.text = [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"version", nil), [infoDictionary objectForKey:@"CFBundleShortVersionString"]];
     if (!IS_OS_7_OR_LATER) {
         [Utils changeNavigationBarButtonLookingForiOS6];
     }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
 }
 
 - (void)didReceiveMemoryWarning

@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
+#import "WaitingListUtils.h"
+#import <StoreKit/StoreKit.h>
 
-@interface SettingViewController : UITableViewController <MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate>
+@interface SettingViewController : UITableViewController <MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate, SKStoreProductViewControllerDelegate>
 
 - (void)clearImages;
 - (void)restoreImages;

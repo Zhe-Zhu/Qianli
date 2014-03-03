@@ -93,6 +93,12 @@
 
 @end
 
+@interface AudioVerificacion : NSObject
+
+@property(nonatomic, strong) NSString  *phone_number;
+@property(nonatomic, strong) NSString  *country_code;
+@end
+
 
 @implementation VerifyStatus
 
@@ -132,6 +138,11 @@
 
 @implementation Picture
 @synthesize name, date, sender, receiver, sessionID,available, index, url;
+@end
+
+@implementation AudioVerificacion
+@synthesize phone_number, country_code;
+
 @end
 
 @interface PictureManager ()
@@ -398,7 +409,7 @@ static PictureManager *pictureManager;
     return [PictureManager sharedInstance].imageSessionID;
 }
 
-+(void)registerWithUDID:(NSString *)udid Password:(NSString *)password Name:(NSString *)name PhoneNumber:(NSString *)phoneNumber Email:(NSString *)email OS:(NSString *)os Avatar:(UIImage *)avatar Success:(void(^)(int status))success
++ (void)registerWithUDID:(NSString *)udid Password:(NSString *)password Name:(NSString *)name PhoneNumber:(NSString *)phoneNumber Email:(NSString *)email OS:(NSString *)os Avatar:(UIImage *)avatar Success:(void(^)(int status))success
 {
     RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString: kBaseURL]];
     // For registration.
@@ -423,51 +434,28 @@ static PictureManager *pictureManager;
     account.bigAvatarURL = nil;
     account.password = [Utils stringbyRmovingSpaceFromString:password];
     // If the shared object manager is nil, we initialize a new one.
-    if (avatar) {
-        // If the user provide an image as profile, we translate all the information along with the image to the server.
-        NSMutableURLRequest *request = [manager multipartFormRequestWithObject:account method:RKRequestMethodPOST path:@"/users/register/" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData){
-            [formData appendPartWithFileData:UIImageJPEGRepresentation(avatar, 1)
-                                        name:@"avatar"
-                                    fileName:@"photo.jpeg"
-                                    mimeType:@"image/jpeg"];
-        }];
-        
-        RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^( RKObjectRequestOperation *operation , RKMappingResult *mappingResult ){
-            RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
-            if (success) {
-                success(regStatus.status);
-            }
-            
-        } failure:^( RKObjectRequestOperation *operation , NSError *error){
-            if (success) {
-                success(-1);
-            }
-        }];
-        [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
-    }
-    else{
-        // If the user does not provide profile, then we just use all the information to register an account.
-        [[RKObjectManager sharedManager] postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    // If the user does not provide profile, then we just use all the information to register an account.
+    [manager postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
+        if (success) {
+            success(regStatus.status);
+        }
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [manager postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
             if (success) {
                 success(regStatus.status);
             }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            [[RKObjectManager sharedManager] postObject:account path:@"/users/register/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                RegistrationStatus *regStatus = (RegistrationStatus *)[mappingResult firstObject];
-                if (success) {
-                    success(regStatus.status);
-                }
-            } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                if (success) {
-                    success(-1);
-                }
-            }];
+            if (success) {
+                success(-1);
+            }
         }];
-    }
+    }];
+
 }
 
-+(void)verifyWithUDID:(NSString *)udid Password:(NSString *)password Name:(NSString *)name PhoneNumber:(NSString *)phoneNumber Email:(NSString *)email OS:(NSString *)os Avatar:(UIImage *)avatar Verification:(NSString *)verificationCode Success:(void(^)(int status))success
++ (void)verifyWithUDID:(NSString *)udid Password:(NSString *)password Name:(NSString *)name PhoneNumber:(NSString *)phoneNumber Email:(NSString *)email OS:(NSString *)os Avatar:(UIImage *)avatar Verification:(NSString *)verificationCode Success:(void(^)(int status))success
 {
     RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString: kBaseURL]];
     // For registration.
@@ -481,7 +469,7 @@ static PictureManager *pictureManager;
     [manager addRequestDescriptor:verifyDescriptor];
     [manager addResponseDescriptor:verifyResponseDescriptor];
     
-    // Initilize a new account used to mapped to the registration request Json stuction during registration.
+    // Initilize a new account used to mapped to the registration request Json structure during registration.
     VerifyAccount *account = [VerifyAccount new];
     account.nickname = [Utils stringbyRmovingSpaceFromString:name];
     account.udid = [Utils stringbyRmovingSpaceFromString:udid];
@@ -504,6 +492,45 @@ static PictureManager *pictureManager;
                 success(regStatus.status);
             }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"");
+        }];
+    }];
+}
+
++ (void)getVerificationCodeByAudio:(NSString *)number Success:(void(^)(int status))success
+{
+    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString: kBaseURL]];
+    
+    RKObjectMapping *verifyMapping = [RKObjectMapping mappingForClass:[VerifyStatus class]];
+    [verifyMapping addAttributeMappingsFromDictionary:@{@"status": @"status"}];
+    RKResponseDescriptor *verifyResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:verifyMapping method:RKRequestMethodPOST pathPattern:@"/captcha/sendcaptchabyvoice/" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    RKObjectMapping *verifyRequestMapping = [RKObjectMapping requestMapping];
+    [verifyRequestMapping addAttributeMappingsFromDictionary:@{@"phone_number": @"phone_number", @"country_code": @"country_code"}];
+    RKRequestDescriptor *verifyDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:verifyRequestMapping objectClass:[AudioVerificacion class] rootKeyPath:nil method:RKRequestMethodPOST];
+    [manager addRequestDescriptor:verifyDescriptor];
+    [manager addResponseDescriptor:verifyResponseDescriptor];
+    
+    // Initilize a new account used to mapped to the registration request Json structure during registration.
+    AudioVerificacion *verification = [AudioVerificacion new];
+    NSString *pnumber = [number substringWithRange:NSMakeRange(4, [number length] - 4)];
+    NSString *code = [number substringWithRange:NSMakeRange(0, 4)];
+    verification.country_code = code;
+    verification.phone_number = pnumber;
+    
+    [manager postObject:verification path:@"/captcha/sendcaptchabyvoice/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        VerifyStatus *regStatus = (VerifyStatus *)[mappingResult firstObject];
+        if (success) {
+            success(regStatus.status);
+        }
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [manager postObject:verification path:@"/captcha/sendcaptchabyvoice/" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            VerifyStatus *regStatus = (VerifyStatus *)[mappingResult firstObject];
+            if (success) {
+                success(regStatus.status);
+            }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"");
         }];
     }];
 }

@@ -54,7 +54,6 @@
     }
     more.tintColor = [UIColor whiteColor];
     [self.navigationItem setRightBarButtonItem:more];
-    //[self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     // 加入遮盖原view的imageview
     UITapGestureRecognizer *tapCover = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissMenuBar)];
@@ -64,6 +63,9 @@
     [_cover addGestureRecognizer:tapCover];
     _cover.userInteractionEnabled = YES;
     [self.view addSubview:_cover];
+    if (!IS_OS_7_OR_LATER) {
+        [Utils changeNavigationBarButtonLookingForiOS6];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayHistoryWithEntryNumber) name:kHistoryChangedNotification object:nil];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
@@ -307,6 +309,10 @@
 {
     if (![Utils checkInternetAndDispWarning:YES]) {
         return;
+    }
+    if ([_remotePartyPhoneNumber isEqualToString:QianLiRobotNumber]) {
+        UIAlertView *QianLiRobotAlwaysAvailable= [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"QianLiRobotAlwaysAvailableTitle", nil) message:NSLocalizedString(@"QianLiRobotAlwaysAvailableMessage", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Confirm", nil) otherButtonTitles: nil];
+        [QianLiRobotAlwaysAvailable show];
     }
     
     NSString *message = [NSString stringWithFormat:@"%@%@%@", kAppointment,kSeparator,[UserDataAccessor getUserRemoteParty]];

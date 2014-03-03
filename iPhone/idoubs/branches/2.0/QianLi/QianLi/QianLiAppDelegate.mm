@@ -22,10 +22,10 @@
 #import "UMFeedback.h"
 #import "SipCallManager.h"
 #import "Global.h"
+#import "WaitingViewController.h"
 
 @interface QianLiAppDelegate (){
     UITabBarController *_tabController;
-    SignUpEditProfileViewController *_signUpEditProfileViewController;
     BOOL multitaskingSupported;
     BOOL didLaunch;
     UIBackgroundTaskIdentifier backgroundTaskID;
@@ -48,13 +48,17 @@
 @synthesize tabController = _tabController;
 
 // 最近通话 联系人 设置界面的Navigation Bar颜色
-const float kColorH = 187/360.0;
-const float kColorS = 70/100.0;
-const float kColorB = 60/100.0;
+const float kColorH = 156/360.0;
+const float kColorS = 98/100.0;
+const float kColorB = 75/100.0;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //[self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+    if (!IS_OS_7_OR_LATER) {
+        [UIApplication sharedApplication].statusBarHidden = NO;
+    }
+    kIsCallingQianLiRobot = NO;
     _didJustLaunch = YES;
     didLaunch = YES;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -74,11 +78,20 @@ const float kColorB = 60/100.0;
         [self registerAPNS];
         //[self setHelpView];
     }
+    else if ([userDefaults boolForKey:kWaitingKey]){
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        WaitingViewController *waitingVC = [storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+        waitingVC.isPartner = [[NSUserDefaults standardUserDefaults] boolForKey:@"isPartner"];
+        waitingVC.succeed = NO;
+        UINavigationController *naviVC = [[UINavigationController alloc] init];
+        naviVC.viewControllers = @[waitingVC];
+        self.window.rootViewController = naviVC;
+        [self registerAPNS];
+    }
     else{
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         if ([userDefaults boolForKey:@"noHelp"]) {
             SignUpEditProfileViewController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
-            _signUpEditProfileViewController = signUpEditProfileViewController;
             self.window.rootViewController = signUpEditProfileViewController;
         }
         else {
@@ -93,6 +106,7 @@ const float kColorB = 60/100.0;
     [UMFeedback checkWithAppkey:kUmengSDKKey];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(umCheck:) name:UMFBCheckFinishedNotification object:nil];
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNetworkEvent:) name:kNgnNetworkEventArgs_Name object:nil];
+    
     return YES;
 }
 
@@ -106,7 +120,7 @@ const float kColorB = 60/100.0;
             CGRect oldFrame = _tabController.tabBar.frame;
             [_tabController.tabBar setFrame:CGRectMake(CGRectGetMinX(oldFrame), [[UIScreen mainScreen]bounds].size.height - 49, CGRectGetWidth(oldFrame), 49)];
             [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"iOS6TabbarEmptySelected.png"]];
-            UIColor *titleHighlightedColor = [UIColor colorWithRed:94/255.0 green:201/255.0 blue:217/255.0 alpha:1.0];
+            UIColor *titleHighlightedColor = [UIColor colorWithRed:4/255.0 green:190/255.0 blue:117/255.0 alpha:1.0];
             [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                titleHighlightedColor, UITextAttributeTextColor,
                                                                nil] forState:UIControlStateHighlighted];
@@ -197,7 +211,7 @@ const float kColorB = 60/100.0;
         
         NSArray *controllers = @[histroyNaviCV, contactNavigationVC, settingNavigationController];
         _tabController.viewControllers = controllers;
-        [_tabController.tabBar setTintColor:[UIColor colorWithRed:56/255.0 green:181/255.0 blue:199/255.0 alpha:1.0]];
+        [_tabController.tabBar setTintColor:[UIColor colorWithRed:4/255.0 green:190/255.0 blue:117/255.0 alpha:1.0]];
         if ([_tabController.tabBar respondsToSelector:@selector(setTranslucent:)]) {
             [_tabController.tabBar setTranslucent:YES];
         }
@@ -207,7 +221,8 @@ const float kColorB = 60/100.0;
 
 - (void)resetRootViewController
 {
-    [UIView transitionFromView:_signUpEditProfileViewController.view toView:_tabController.view duration:0.5 options:UIViewAnimationOptionCurveEaseIn|UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished){
+    UIView *view = self.tabController.view;
+    [UIView transitionFromView:nil toView:view duration:0.5 options:UIViewAnimationOptionCurveEaseIn|UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished){
         self.window.rootViewController = self.tabController;
         [self setHelpView];
     }];
@@ -236,75 +251,83 @@ const float kColorB = 60/100.0;
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    
-    backgroundTaskID = [application beginBackgroundTaskWithExpirationHandler:^{
-        [application endBackgroundTask:backgroundTaskID];
-        backgroundTaskID = UIBackgroundTaskInvalid;
-    }];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-        [application setKeepAliveTimeout:600 handler:^{
-            backgroundKeepAliveID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                [[UIApplication sharedApplication] endBackgroundTask:backgroundKeepAliveID];
-                backgroundKeepAliveID = UIBackgroundTaskInvalid;
-            }];
-            [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults boolForKey:kSingUpKey]) {
+        backgroundTaskID = [application beginBackgroundTaskWithExpirationHandler:^{
+            [application endBackgroundTask:backgroundTaskID];
+            backgroundTaskID = UIBackgroundTaskInvalid;
         }];
         
-        [_contactViewController clearContacts];
-        [_historyMainController clearHistory];
-        [_settingViewController clearImages];
-        if ([SipCallManager SharedInstance].audioVC == nil) {
-            [self clearManagedObjects];
-            [[SipStackUtils sharedInstance].soundService disableAudioSession];
-            [Utils clearAllSharedInstance];
-        }
-        [application endBackgroundTask:backgroundTaskID];
-        backgroundTaskID = UIBackgroundTaskInvalid;
-    });
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+            [application setKeepAliveTimeout:600 handler:^{
+                backgroundKeepAliveID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                    [[UIApplication sharedApplication] endBackgroundTask:backgroundKeepAliveID];
+                    backgroundKeepAliveID = UIBackgroundTaskInvalid;
+                }];
+                [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+            }];
+            
+            [_contactViewController clearContacts];
+            [_historyMainController clearHistory];
+            [_settingViewController clearImages];
+            if ([SipCallManager SharedInstance].audioVC == nil) {
+                [self clearManagedObjects];
+                [[SipStackUtils sharedInstance].soundService disableAudioSession];
+                [Utils clearAllSharedInstance];
+            }
+            [application endBackgroundTask:backgroundTaskID];
+            backgroundTaskID = UIBackgroundTaskInvalid;
+        });
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    if (_window.rootViewController == nil) {
-        _window.rootViewController = self.tabController;
-    }
-    if ([SipCallManager SharedInstance].audioVC == nil) {
-        [[SipStackUtils sharedInstance].soundService startAudioSession];
-    }
-    [[HistoryTransUtils sharedInstance] getHistoryInBackground:NO];
-    [application clearKeepAliveTimeout];
-    switch (_tabController.selectedIndex) {
-        case 0:
-            [_historyMainController restoreHistory];
-            break;
-        case 1:
-            [_contactViewController restoreContacts];
-            break;
-        case 2:
-            [_settingViewController restoreImages];
-            break;
-        default:
-            break;
-    }
-    
-    if (!didLaunch) {
-        ConnectionState_t registrationState = [[NgnEngine sharedInstance].sipService getRegistrationState];
-        switch (registrationState) {
-            case CONN_STATE_CONNECTING:
-            case CONN_STATE_CONNECTED:
-                break;
-            default:
-                [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-                break;
-        }
-    }
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults boolForKey:kSingUpKey]) {
+        if (_window.rootViewController == nil) {
+            _window.rootViewController = self.tabController;
+        }
+        if ([SipCallManager SharedInstance].audioVC == nil) {
+            [[SipStackUtils sharedInstance].soundService startAudioSession];
+        }
+        [[HistoryTransUtils sharedInstance] getHistoryInBackground:NO];
+        [application clearKeepAliveTimeout];
+        switch (_tabController.selectedIndex) {
+            case 0:
+                [_historyMainController restoreHistory];
+                break;
+            case 1:
+                [_contactViewController restoreContacts];
+                break;
+            case 2:
+                [_settingViewController restoreImages];
+                break;
+            default:
+                break;
+        }
+        
+        if (!didLaunch) {
+            ConnectionState_t registrationState = [[NgnEngine sharedInstance].sipService getRegistrationState];
+            switch (registrationState) {
+                case CONN_STATE_CONNECTING:
+                case CONN_STATE_CONNECTED:
+                    break;
+                default:
+                    [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+                    break;
+            }
+        }
+
         [self displayNoPushNotificationWarning];
         [self displayNoRecordingWarning];
+    }
+    else if ([userDefaults boolForKey:kWaitingKey]){
+        if (!didLaunch) {
+            [[WaitingListUtils sharedInstance] getWaitingStatus];
+        }
     }
 }
 
@@ -574,6 +597,11 @@ const float kColorB = 60/100.0;
     else{
         handler(UIBackgroundFetchResultNoData);
     }
+    if ([type isEqualToString:@"YOURTURN"]) {
+        if (application.applicationState == UIApplicationStateActive) {
+            [[WaitingListUtils sharedInstance] getWaitingStatus];
+        }
+    }
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -585,6 +613,9 @@ const float kColorB = 60/100.0;
         NSString *type = [dic objectForKey:@"loc-key"];
         if ([type isEqualToString:@"PUSHCALLING"]) {
             [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
+        }
+        if ([type isEqualToString:@"YOURTURN"]) {
+            [[WaitingListUtils sharedInstance] getWaitingStatus];
         }
     }
 }

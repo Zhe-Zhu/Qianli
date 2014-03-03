@@ -32,11 +32,12 @@ CGFloat cellHeight = 44;
 
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, cellHeight/2.0 - avatarDiameter/2.0, avatarDiameter, avatarDiameter)];
         _profileImageView = imageView;
-        imageView.layer.cornerRadius = avatarDiameter/2.0;
+        imageView.layer.cornerRadius = avatarDiameter / 2.0;
         imageView.clipsToBounds = YES;
         [self addSubview:_profileImageView];
         
         UILabel *labelName = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, 200, 44)];
+        labelName.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:16];
         _nameLabel = labelName;
         [self addSubview:_nameLabel];
         

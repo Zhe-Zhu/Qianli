@@ -52,7 +52,7 @@
    // [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     self.avatar.clipsToBounds = YES;
-    self.avatar.layer.cornerRadius = CGRectGetWidth(self.avatar.frame)/2.0;
+    self.avatar.layer.cornerRadius = 22;//CGRectGetWidth(self.avatar.frame)/2.0;
     
     NSString *name = [UserDataAccessor getUserName];
     if (!name || [name isEqualToString:@""]) {
@@ -108,7 +108,6 @@
          forState:UIControlStateDisabled
          barMetrics:UIBarMetricsDefault];
     }
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -167,7 +166,6 @@
 }
 
 - (UIImage *)reSizeImage:(UIImage *)image toSize:(CGSize)reSize
-
 {
     UIGraphicsBeginImageContext(CGSizeMake(reSize.width, reSize.height));
     [image drawInRect:CGRectMake(0, 0, reSize.width, reSize.height)];
@@ -197,6 +195,10 @@
 {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
         [self openPhotoSourceWithIndex:buttonIndex];
+    }
+    else{
+        [_cellAvatar setSelected:NO animated:YES];
+        [_cellBigPhoto setSelected:NO animated:YES];
     }
 }
 
@@ -274,6 +276,10 @@
 
 - (void)didFinishEditing:(UIImage *)profile
 {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if (![Utils checkInternetAndDispWarning:YES]) {
+        return;
+    }
     if (_isBigPhoto) {
         UIImage *smallProfile = [self reSizeImage:profile toSize:CGSizeMake(76, 104)];
         [UserDataTransUtils patchUserPhoneDispImage:profile number:[UserDataAccessor getUserRemoteParty] Completion:^(BOOL success) {
@@ -282,14 +288,12 @@
         }];
     }
     else {
-        UIImage *image = [self reSizeImage:profile toSize:CGSizeMake(88, 88)];
+        UIImage *image = [self reSizeImage:profile toSize:CGSizeMake(120, 120)];
         [UserDataTransUtils patchUserProfile:image number:[UserDataAccessor getUserRemoteParty] Completion:^(BOOL success) {
             [UserDataAccessor setUserProfile:image];
             [_avatar performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
         }];
     }
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -303,8 +307,7 @@
 
 - (void)nameChanged:(NSString *)newName
 {
-    [UserDataAccessor setUserName:newName];
-    self.name.text = [UserDataAccessor getUserName];
+    [self.name performSelectorOnMainThread:@selector(setText:) withObject:[UserDataAccessor getUserName] waitUntilDone:NO];
 }
 
 @end
