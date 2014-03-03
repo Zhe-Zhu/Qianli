@@ -84,7 +84,6 @@ static WaitingListUtils *waitingListUtils;
     [request setHTTPMethod:@"GET"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setTimeoutInterval:30.0];
-    
     NSURLConnection *m_URLConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     if (m_URLConnection == nil) {
         return;

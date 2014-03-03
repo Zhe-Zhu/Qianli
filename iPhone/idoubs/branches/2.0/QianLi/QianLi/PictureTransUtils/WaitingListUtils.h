@@ -14,4 +14,5 @@
 + (WaitingListUtils *)sharedInstance;
 - (void)getWaitingStatus;
 - (void)addPartner:(NSString *)partnerNumber;
+
 @end

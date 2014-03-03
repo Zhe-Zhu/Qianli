@@ -11,6 +11,7 @@
 #import "WaitingListUtils.h"
 #import "AddPartnerViewController.h"
 #import "WaitedViewController.h"
+#import "SignUpEditProfileViewController.h"
 
 @interface WaitingViewController : UIViewController
 

@@ -218,7 +218,7 @@
 "SendCodeMessage" = "Another code has been sent to you, it may take a few seconds, thanks for your patience";
 "SendOK" = "OK";
 "AlreadyCall" = "Call You";
-"AudioCodeMessage" = "Qianli will call you now, please anwser the call to get the code. Thanks for using Qianli";
+"AudioCodeMessage" = "You are about to receive a call from Qianli, please anwser the call to get the code. Thanks for using Qianli";
 "PartnerNumber" = "Parter Number";
 "PartnerNumberText"= "Your partner number is %@, make sure it is correct because you can not change the number once set";
 "PartnerNumberOK" = "Confirm";
