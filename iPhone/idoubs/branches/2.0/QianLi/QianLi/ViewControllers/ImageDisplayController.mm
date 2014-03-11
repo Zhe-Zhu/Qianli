@@ -593,9 +593,12 @@
     UIImage *image = (UIImage *)[_images objectAtIndex:index];
     CGSize imageSize = [self adjustImageFrame:image.size];
     CGRect scrollFrame = _imageScrollView.frame;
-    CGRect frame = CGRectMake((320 - imageSize.width) / 2.0, (scrollFrame.size.height-imageSize.height - 108) / 2.0, imageSize.width, imageSize.height);
+    CGRect frame;
     if (IS_OS_7_OR_LATER) {
         frame = CGRectMake((320 - imageSize.width) / 2.0, (scrollFrame.size.height-imageSize.height) / 2.0, imageSize.width, imageSize.height);
+    }
+    else{
+        frame = CGRectMake((320 - imageSize.width) / 2.0, (scrollFrame.size.height-imageSize.height - 108) / 2.0, imageSize.width, imageSize.height);
     }
     DoodleView *view = [[DoodleView alloc] initWithFrame:frame];
     _doodleView = view;
