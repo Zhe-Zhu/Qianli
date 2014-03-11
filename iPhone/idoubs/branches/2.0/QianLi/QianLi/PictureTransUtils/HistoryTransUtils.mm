@@ -61,7 +61,7 @@ static HistoryTransUtils *histUtils;
     
     _didFinishUpdateHist = NO;
     _finished = NO;
-    NSString *urlString= [NSString stringWithFormat:@"http://112.124.36.134:8080/dialrecords/missedcalls/%@/", [UserDataAccessor getUserRemoteParty]];
+    NSString *urlString= [NSString stringWithFormat:@"%@/dialrecords/missedcalls/%@/", kBaseURL,[UserDataAccessor getUserRemoteParty]];
     NSURL* url = [[NSURL alloc] initWithString:urlString];
     //NSLog(@"json1:%@",jsonRequest);
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
