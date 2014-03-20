@@ -423,14 +423,14 @@ const float kColorB = 75/100.0;
 - (void)configureParmsWithNumber:(NSString *)number
 {
     [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_DISPLAY_NAME andValue:number];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@112.124.36.134",number]];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@%@",number, kServerIP]];
 //    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@115.28.37.152",number]];
     [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPI andValue:number];
     [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_PASSWORD andValue:number];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:@"112.124.36.134"];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:kServerIP];
 //    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:@"115.28.37.152"];
     [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_EARLY_IMS andValue:YES];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:@"112.124.36.134"];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:kServerIP];
 //    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:@"115.28.37.152"];
    // [[NgnEngine sharedInstance].configurationService setBoolWithKey:NATT_USE_STUN_DISCO andValue:YES];
     [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_KEEPAWAKE andValue:YES];
@@ -535,7 +535,7 @@ const float kColorB = 75/100.0;
     NSLog(@"get token:%@",deviceToken);
     NSString *tokenJson = [NSString stringWithFormat:@"%@*%@",deviceToken,[UserDataAccessor getUserRemoteParty]];
     
-    NSString *urlString= @"http://112.124.36.134:8080/notification/gettoken/";
+    NSString *urlString= [NSString stringWithFormat:@"%@/notification/gettoken/", kBaseURL];
     NSURL* url = [[NSURL alloc] initWithString:urlString];
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
     

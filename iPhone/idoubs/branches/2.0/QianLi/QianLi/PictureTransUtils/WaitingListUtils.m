@@ -71,10 +71,10 @@ static WaitingListUtils *waitingListUtils;
     NSString *urlString;
     
     if (type == WaitingList_CheckingStatus) {
-        urlString= [NSString stringWithFormat:@"http://112.124.36.134:8080/waitinglist/waitingstatus/%@/", [UserDataAccessor getUserWaitingNumber]];
+        urlString= [NSString stringWithFormat:@"%@/waitinglist/waitingstatus/%@/",kBaseURL ,[UserDataAccessor getUserWaitingNumber]];
     }
     else if (type == WaitingList_AddPartner){
-        urlString= [NSString stringWithFormat:@"http://112.124.36.134:8080/waitinglist/addpartner/%@/%@/", [UserDataAccessor getUserWaitingNumber], [info valueForKey:@"partner"]];
+        urlString= [NSString stringWithFormat:@"%@/waitinglist/addpartner/%@/%@/",kBaseURL ,[UserDataAccessor getUserWaitingNumber], [info valueForKey:@"partner"]];
     }
     _finished = NO;
     

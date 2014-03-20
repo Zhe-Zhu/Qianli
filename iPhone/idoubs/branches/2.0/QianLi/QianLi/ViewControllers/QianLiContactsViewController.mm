@@ -465,7 +465,7 @@
     }
     jsonRequest = [NSString stringWithFormat:@"%@]",jsonRequest];
     //CODEREVIEW: urlString 可以放在global文件里或者当前类文件的头部
-    NSString *urlString= @"http://112.124.36.134:8080/users/whoisactive/.json";
+    NSString *urlString= [NSString stringWithFormat:@"%@/users/whoisactive/.json", kBaseURL];
     NSURL* url = [[NSURL alloc] initWithString:urlString];
     
     NSData* requestData = [jsonRequest dataUsingEncoding:NSUTF8StringEncoding];
