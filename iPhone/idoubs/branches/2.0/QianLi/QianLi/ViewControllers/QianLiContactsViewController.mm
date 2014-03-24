@@ -811,9 +811,9 @@
     else{
         NSLog(@"no country code");
         // LLGG just for simulator
-//        [self getAddressBookPermission];
-//        _finished = NO;
-//        [self sendContactsToServer];
+        [self getAddressBookPermission];
+        _finished = NO;
+        [self sendContactsToServer];
     }
 }
 
