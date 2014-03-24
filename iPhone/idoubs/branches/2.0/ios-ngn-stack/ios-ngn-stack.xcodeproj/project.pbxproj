@@ -8827,6 +8827,7 @@
 		1DEB922308733DC00010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_INCLUDES = "$DOUBANGO_HOME/tinySDP/include $DOUBANGO_HOME/tinySMS/include $DOUBANGO_HOME/tinyHTTP/include $DOUBANGO_HOME/tinySIP/include $DOUBANGO_HOME/tinyRTP/include $DOUBANGO_HOME/tinyMEDIA/include $DOUBANGO_HOME/tinyNET/src $DOUBANGO_HOME/tinyDAV/include $DOUBANGO_HOME/thirdparties/iphone/include $DOUBANGO_HOME/thirdparties/common/include";
@@ -8870,12 +8871,14 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
 		1DEB922408733DC00010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_INCLUDES = "$DOUBANGO_HOME/tinySDP/include $DOUBANGO_HOME/tinySMS/include $DOUBANGO_HOME/tinyHTTP/include $DOUBANGO_HOME/tinySIP/include $DOUBANGO_HOME/tinyRTP/include $DOUBANGO_HOME/tinyMEDIA/include $DOUBANGO_HOME/tinyNET/src $DOUBANGO_HOME/tinyDAV/include $DOUBANGO_HOME/thirdparties/iphone/include $DOUBANGO_HOME/thirdparties/common/include";
@@ -8915,6 +8918,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};

@@ -30,5 +30,7 @@
 + (UIImage*)screenshot:(UIView *)view toSize:(CGSize)size;
 + (BOOL)isChineseSystem;
 
++ (void)lookupHostIPAddressForURL:(NSURL*)url;
++ (void)configureParmsWithNumber:(NSString *)number;
 + (void)clearAllSharedInstance;
 @end
