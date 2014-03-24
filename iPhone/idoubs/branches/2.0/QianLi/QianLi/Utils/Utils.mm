@@ -334,7 +334,8 @@
 
 + (void)configureParmsWithNumber:(NSString *)number
 {
-    NSString *ipStr = [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey];
+    //NSString *ipStr = [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey];
+    NSString *ipStr = kServerIP;
     if (ipStr == nil || [ipStr isEqualToString:@""]) {
         ipStr = kServerIP;
         [[NSUserDefaults standardUserDefaults] setObject:kServerIP forKey:kHostIPKey];
