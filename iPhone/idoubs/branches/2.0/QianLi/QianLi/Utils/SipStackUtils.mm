@@ -173,6 +173,7 @@ static SipStackUtils * sipStackUtilsInstance;
                 if([UIApplication sharedApplication].applicationState == UIApplicationStateActive){
                     [[HistoryTransUtils sharedInstance] getHistoryInBackground:YES];
                 }
+                [Utils lookupHostIPAddressForURL:[NSURL URLWithString:@"http://www.qlcall.com"]];
 			}
             else{
                 // the network becomes unreachable.

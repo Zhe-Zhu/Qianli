@@ -234,7 +234,7 @@ static PictureManager *pictureManager;
                                     fileName:@"image.jpeg"
                                     mimeType:@"image/jpeg"];
         }];
-        
+        [request setHTTPShouldUsePipelining:YES];
         RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^( RKObjectRequestOperation *operation , RKMappingResult *mappingResult ){
             // If the operation is successful, RestKit will automatically map the reponse json to a local picure instance. We can access this instance to get the path of image stored in the server.
             Picture *reponsedPic = (Picture *)[mappingResult firstObject];
