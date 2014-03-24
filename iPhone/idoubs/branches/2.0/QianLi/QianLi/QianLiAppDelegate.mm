@@ -54,7 +54,6 @@ const float kColorB = 75/100.0;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //[self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
     if (!IS_OS_7_OR_LATER) {
         [UIApplication sharedApplication].statusBarHidden = NO;
     }
@@ -72,7 +71,7 @@ const float kColorB = 75/100.0;
     if ([userDefaults boolForKey:kSingUpKey]) {
         self.window.rootViewController = self.tabController;
         [[SipStackUtils sharedInstance] start];
-        [self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+        [Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
         [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
         [self registerAPNS];
@@ -228,7 +227,7 @@ const float kColorB = 75/100.0;
     }];
     
     [[SipStackUtils sharedInstance] start];
-    [self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+    [Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
     [[SipStackUtils sharedInstance].soundService configureAudioSession];
     [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
     // Register remote notification
@@ -340,6 +339,8 @@ const float kColorB = 75/100.0;
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
     didLaunch = NO;
+    [Utils lookupHostIPAddressForURL:[NSURL URLWithString:@"http://www.qlcall.com"]];
+    
     // Umeng
     [UMFeedback checkWithAppkey:kUmengSDKKey];
 }
@@ -420,24 +421,6 @@ const float kColorB = 75/100.0;
     }
 }
 
-- (void)configureParmsWithNumber:(NSString *)number
-{
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_DISPLAY_NAME andValue:number];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@%@",number, kServerIP]];
-//    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@115.28.37.152",number]];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPI andValue:number];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_PASSWORD andValue:number];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:kServerIP];
-//    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:@"115.28.37.152"];
-    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_EARLY_IMS andValue:YES];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:kServerIP];
-//    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:@"115.28.37.152"];
-   // [[NgnEngine sharedInstance].configurationService setBoolWithKey:NATT_USE_STUN_DISCO andValue:YES];
-    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_KEEPAWAKE andValue:YES];
-    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_3G andValue:YES];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_TRANSPORT andValue:@"tcp"];
-    //112.124.36.134  192.168.1.200
-}
 
 #pragma mark - Core Data stack
 

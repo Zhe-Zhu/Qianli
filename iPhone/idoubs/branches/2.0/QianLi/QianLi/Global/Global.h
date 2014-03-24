@@ -66,11 +66,12 @@ nil]
 #define kImageBaloonIn @"baloon_in"
 #define kImageBaloonOut @"baloon_out"
 
-//115.28.209.97
-#define kBaseURL @"http://112.124.36.134:8080"
+//115.28.209.97  //112.124.36.134 www.qlcall.com  //http://112.124.36.134:8080
+#define kBaseURL [NSString stringWithFormat:@"http://%@:8080", [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey]]
 #define kServerIP @"112.124.36.134"
-#define kSemiModalAnimationDuration 0.3f
+#define kHostIPKey @"HostIP"
 
+#define kSemiModalAnimationDuration 0.3f
 #define kInCall @"UserInCall"
 #define PageWidth 340
 

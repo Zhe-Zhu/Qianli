@@ -637,7 +637,7 @@
     // 如果Menu Bar升起则将其dismiss
     if (menuBar) {
         [menuBar dismiss];
-        menuBar=nil;
+        menuBar = nil;
     }
     // starts timer suicide
     [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:0.5];

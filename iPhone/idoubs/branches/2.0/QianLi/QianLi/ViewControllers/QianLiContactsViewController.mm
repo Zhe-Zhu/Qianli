@@ -472,6 +472,7 @@
     NSString* requestDataLengthString = [[NSString alloc] initWithFormat:@"%d", [requestData length]];
      
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPShouldUsePipelining:YES];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:requestData];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];

@@ -265,6 +265,9 @@
     //firstTime = NO;
     remoteDrawing = drawing;
     NSArray *array = [self calculateSmoothLinePoints:points];
+    if (array == nil) {
+        array = points;
+    }
     for (int i = 0; i < [array count]; ++i) {
         if (!remotePathHasPoints) {
             CGPoint p = [[array objectAtIndex:i] CGPointValue];
