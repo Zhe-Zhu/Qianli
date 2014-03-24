@@ -94,7 +94,7 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     // 通过字符改变位置和所改变字符来判定当前输入号码是否到达11位
-    NSInteger lengthLimit = 11; // 11位电话号码 TODO
+    NSInteger lengthLimit = 11; // 11位电话号码
     if ((range.location == lengthLimit-1 && ![string isEqual:@""]) || (range.location == lengthLimit && [string isEqual:@""])) {
         [self activateButtonContinue];
     }

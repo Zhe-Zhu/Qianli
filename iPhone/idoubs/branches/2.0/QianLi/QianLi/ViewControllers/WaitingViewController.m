@@ -159,6 +159,13 @@
             
         }];
     }
+    else if (result == -1){
+        //interal error of server
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        SignUpEditProfileViewController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
+        [self presentViewController:signUpEditProfileViewController animated:YES completion:nil];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kWaitingKey];
+    }
 }
 
 - (IBAction)addPartner:(id)sender
@@ -167,4 +174,5 @@
     AddPartnerViewController *addPartnerVC = [storyboard instantiateViewControllerWithIdentifier:@"AddPartnerViewController"];
     [self.navigationController pushViewController:addPartnerVC animated:YES];
 }
+
 @end

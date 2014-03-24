@@ -37,6 +37,7 @@ CGFloat cellHeight = 44;
         [self addSubview:_profileImageView];
         
         UILabel *labelName = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, 200, 44)];
+        labelName.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:16];
         _nameLabel = labelName;
         [self addSubview:_nameLabel];
         
@@ -58,6 +59,10 @@ CGFloat cellHeight = 44;
         _checkBox.image = [UIImage imageNamed:@"checkBox.png"];
         [_checkBox setHidden:YES];
         [self addSubview:_checkBox];
+        
+        UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(290, cellHeight/2.0 - 20.8/2.0, 20.5, 20.5)];
+        _icon = icon;
+        [self addSubview:icon];
     }
     return self;
 }
@@ -68,17 +73,18 @@ CGFloat cellHeight = 44;
     _nameLabel.text = contact.name;
     _numberLabel.text = [NSString stringWithFormat:@"Mobile:%@",contact.tel];
     if (needIcon) {
-        UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(290, cellHeight/2.0 - 20.8/2.0, 20.5, 20.5)];
-        _icon = icon;
-        [self addSubview:icon];
         _icon.image = [UIImage imageNamed:@"contactsPhoneIcon.png"];
-        
+        _icon.alpha = 1.0;
         //        UILabel *qianLiLabel = [[UILabel alloc] initWithFrame:CGRectMake(285, cellHeight/2.0 - 20, 40, 40)];
         //        _qianLiLabel = qianLiLabel;
         //        _qianLiLabel.text = @"千里";
         //        _qianLiLabel.textColor = [UIColor colorWithRed:80/255.0 green:177/255.0 blue:182/255.0 alpha:1.0f];
         //        _qianLiLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:14.0f];
         //        [self addSubview:_qianLiLabel];
+    }
+    else{
+        _icon.image = nil;
+        _icon.alpha = 0.0;
     }
 }
 

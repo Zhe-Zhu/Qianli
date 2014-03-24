@@ -77,7 +77,7 @@
 "callingRingingText" = "ringing...";
 "Quit" = "Cancel";
 "emailSubject" = "Join Qianli with me!";
-"emailBody" = "Qianli is a free VOIP app, which allows you to share pictures, url links or even videos with others while talking. To know more and how to download Qianli, please click: https://www.qianliapp.cn";
+"emailBody" = "Qianli is a free VOIP app, which allows you to share pictures, url links or even videos with others while talking. To know more and download Qianli: http://itunes.apple.com/cn/app/qianli/id830277724?mt=8";
 "emailWarningTitle" = "Can't send email";
 "emailWarningMessage" = "We can't send out email. Please check your email setting.";
 "emailWarningOK" = "OK";
@@ -218,8 +218,9 @@
 "SendCodeMessage" = "Another code has been sent to you, it may take a few seconds, thanks for your patience";
 "SendOK" = "OK";
 "AlreadyCall" = "Call You";
-"AudioCodeMessage" = "Qianli will call you now, please anwser the call to get the code. Thanks for using Qianli";
+"AudioCodeMessage" = "You are about to receive a call from Qianli, please anwser the call to get the code. Thanks for using Qianli";
 "PartnerNumber" = "Parter Number";
 "PartnerNumberText"= "Your partner number is %@, make sure it is correct because you can not change the number once set";
 "PartnerNumberOK" = "Confirm";
 "PartnerNumberCancel" = "Cancel";
+"RateUs" = "Rate Us";

@@ -299,6 +299,60 @@
     return NO;
 }
 
++ (void)lookupHostIPAddressForURL:(NSURL*)url
+{
+    NSString *ipStr = [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey];
+    if (![Utils checkInternetAndDispWarning:NO]) {
+        return;
+    }
+    
+    // Ask the unix subsytem to query the DNS
+    struct hostent *remoteHostEnt = gethostbyname([[url host] UTF8String]);
+    if (remoteHostEnt == nil) {
+        return;
+    }
+    // Get address info from host entry
+    struct in_addr *remoteInAddr = (struct in_addr *)remoteHostEnt->h_addr_list[0];
+    if (remoteInAddr == nil) {
+        return;
+    }
+    // Convert numeric addr to ASCII string
+    char *sRemoteInAddr = inet_ntoa(*remoteInAddr);
+    // hostIP
+    NSString* hostIP = [NSString stringWithUTF8String:sRemoteInAddr];
+    if (hostIP == nil || [hostIP isEqualToString:@""]) {
+        return;
+    }
+    else{
+        if (![ipStr isEqualToString:hostIP]) {
+            [[NSUserDefaults standardUserDefaults] setObject:hostIP forKey:kHostIPKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+        }
+    }
+}
+
++ (void)configureParmsWithNumber:(NSString *)number
+{
+    NSString *ipStr = [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey];
+    if (ipStr == nil || [ipStr isEqualToString:@""]) {
+        ipStr = kServerIP;
+        [[NSUserDefaults standardUserDefaults] setObject:kServerIP forKey:kHostIPKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_DISPLAY_NAME andValue:number];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@%@",number, ipStr]];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPI andValue:number];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_PASSWORD andValue:number];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:ipStr];
+    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_EARLY_IMS andValue:YES];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:ipStr];
+    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_KEEPAWAKE andValue:YES];
+    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_3G andValue:YES];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_TRANSPORT andValue:@"tcp"];
+    //112.124.36.134  192.168.1.200
+}
+
 + (void)clearAllSharedInstance
 {
     [[SipCallManager SharedInstance] clearCallManager];

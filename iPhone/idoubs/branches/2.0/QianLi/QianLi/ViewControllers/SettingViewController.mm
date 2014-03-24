@@ -32,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *repliesCount;
 @property (weak, nonatomic) IBOutlet UIImageView *repliesCountBackground;
 @property (weak, nonatomic) IBOutlet UITableViewCell *aboutQianli;
+@property (weak, nonatomic) IBOutlet UITableViewCell *rateUs;
 
 @property (weak, nonatomic) IBOutlet UILabel *labelProfile;
 @property (weak, nonatomic) IBOutlet UILabel *labelSMS;
@@ -39,6 +40,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelFeedback;
 @property (weak, nonatomic) IBOutlet UILabel *labelSignout;
 @property (weak, nonatomic) IBOutlet UILabel *labelAbout;
+@property (weak, nonatomic) IBOutlet UILabel *rateUsLabel;
 
 
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
@@ -74,6 +76,7 @@
     _labelFeedback.text = NSLocalizedString(@"labelFeedback", nil);
     _labelSignout.text = NSLocalizedString(@"labelSignout", nil);
     _labelAbout.text = NSLocalizedString(@"labelAbout", nil);
+    _rateUsLabel.text = NSLocalizedString(@"RateUs", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -213,6 +216,16 @@
         [UMFeedback showFeedback:self withAppkey:kUmengSDKKey];
         [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"RepliesCount"];
     }
+    else if ([indexPath isEqual:[tableView indexPathForCell:_rateUs]]) {
+        // rate us
+        // add here
+        int appId = 830277724;//830277724; //595247165
+        SKStoreProductViewController *storeViewController = [[SKStoreProductViewController alloc] init];
+        NSDictionary *parameters = @{SKStoreProductParameterITunesItemIdentifier:[NSNumber numberWithInteger: appId]};
+        [storeViewController loadProductWithParameters:parameters completionBlock:nil];
+        storeViewController.delegate = self;
+        [self presentViewController:storeViewController animated:YES completion:nil];
+    }
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller
@@ -266,6 +279,12 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     UINavigationController *signUpEditProfileViewController = [storyboard instantiateViewControllerWithIdentifier:@"RegisterNavigationController"];
     [[UIApplication sharedApplication] delegate].window.rootViewController = signUpEditProfileViewController;
+}
+
+#pragma mark  --SKStoreProductViewControllerDelegate Method--
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController{
+    //
+    [viewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 # pragma mark -- Umeng Feedback

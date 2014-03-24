@@ -170,7 +170,7 @@ static PictureManager *pictureManager;
         return nil;
     }
     
-    NSString *path = [NSString stringWithFormat:@"%@%@/%@/",@"http://112.124.36.134:8080/pictures/getpic/",[[PictureManager sharedInstance] getImageSession], index];
+    NSString *path = [NSString stringWithFormat:@"%@%@/%@/",[NSString stringWithFormat:@"%@/pictures/getpic/", kBaseURL],[[PictureManager sharedInstance] getImageSession], index];
     NSError *error;
     // Downloading Image is a very basic operation, therefore, we just invoke the method provided by ios.
     NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&error];
@@ -234,7 +234,7 @@ static PictureManager *pictureManager;
                                     fileName:@"image.jpeg"
                                     mimeType:@"image/jpeg"];
         }];
-        
+        [request setHTTPShouldUsePipelining:YES];
         RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^( RKObjectRequestOperation *operation , RKMappingResult *mappingResult ){
             // If the operation is successful, RestKit will automatically map the reponse json to a local picure instance. We can access this instance to get the path of image stored in the server.
             Picture *reponsedPic = (Picture *)[mappingResult firstObject];

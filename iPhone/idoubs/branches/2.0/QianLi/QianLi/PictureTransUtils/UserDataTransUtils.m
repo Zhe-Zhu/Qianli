@@ -173,7 +173,7 @@
 
 + (UIImage *)getImageAtPath:(NSString *)relavtivePath
 {
-    NSString *path = [NSString stringWithFormat:@"http://112.124.36.134:8080/users/avatar/%@/", relavtivePath];
+    NSString *path = [NSString stringWithFormat:@"%@/users/avatar/%@/",kBaseURL ,relavtivePath];
     NSError *error;
     // Downloading Image is a very basic operation, therefore, we just invoke the method provided by ios.
     NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&error];

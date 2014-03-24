@@ -83,7 +83,7 @@
 "callingRingingText" = "响铃中...";
 "Quit" = "退出";
 "emailSubject" = "邀请加入千里";
-"emailBody" = "千里是一款很酷的语音通信软件,它可以让您在和朋友语音的同时以更有趣的方式分享图片和网址链接。了解更多和下载千里,请点击http://www.qianliapp.cn";
+"emailBody" = "千里是一款很酷的语音通信软件,它可以让您在和朋友语音的同时以更有趣的方式分享图片和网址链接。了解更多和下载请点击：http://itunes.apple.com/cn/app/qianli/id830277724?mt=8";
 "emailWarningTitle" = "无法发送邮件";
 "emailWarningMessage" = "千里不能发出邮件,请您检查下您的邮件设置。";
 "emailWarningOK" = "知道了哦,马上去";
@@ -183,7 +183,7 @@
 "QianLiRobotPlayVieo" = "我的视频开始播放";
 "QianLiRobotPauseVideo" = "我的视频被暂停了";
 "QianLiRobotForwardBackVideo" = "现在视频是%d分%d秒";
-"QianLiRobotEndCall" = "再见! 我们的通话持续了%d 分钟 %d 秒, 你和我 \n [*分享了%d张照片; \n *完成了%d篇涂鸦; \n *浏览了%d个网页; \n *观看了%d个视频]";
+"QianLiRobotEndCall" = "再见! 我们的通话持续了%d 分钟 %d 秒, 你和我 \n [分享了%d张照片; \n 完成了%d篇涂鸦; \n 浏览了%d个网页; \n 观看了%d个视频]";
 "QianLiRobotDrawingGood" = "你画得那么好, 你父母知道吗?";
 "CallQianLiRobotSuccessfully" = "通话已经接通了，赶快试下千里都有哪些功能吧!";
 "beforeText" = "你离千里还有";
@@ -219,13 +219,14 @@
 "inviteEmail" = "邮件邀请";
 "waitNote" = "*排队成功后会自动发送短信通知";
 
-"AlreadySent" = "已发送";
-"SendCodeMessage" = "已经再次向你发送验证码，谢谢您的耐心等待。";
+"AlreadySent" = "验证码短信已发送";
+"SendCodeMessage" = "已经再次向您发送验证码短信，请您耐心等待。";
 "SendOK" = "好的";
-"AlreadyCall" = "打电话";
-"AudioCodeMessage" = "千里会马上打电话给您，请接听电话并获得验证码，谢谢使用千里。";
+"AlreadyCall" = "已收到电话验证码请求";
+"AudioCodeMessage" = "千里会马上打电话给您，请您接听电话并听取验证码。";
 "PartnerNumber" = "亲友号码";
-"PartnerNumberText"= "你的亲友号码是%@, 请确认您输入的亲友号码是正确的。亲友号经过确认后将不能修改";
+"PartnerNumberText"= "您的亲友号码是%@, 请确认输入的亲友号码是正确的，经过确认后将不能修改";
 "PartnerNumberOK" = "确认";
 "PartnerNumberCancel" = "取消";
+"RateUs" = "给我们评分";
 

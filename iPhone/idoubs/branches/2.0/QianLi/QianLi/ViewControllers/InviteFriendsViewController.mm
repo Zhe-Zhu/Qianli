@@ -586,7 +586,6 @@
         [activityIndicator startAnimating];
         [self.navigationItem setRightBarButtonItem:nil];
         
-        //TODO: change the text
         MFMessageComposeViewController *messageVC = [[MFMessageComposeViewController alloc] init];
         messageVC.recipients = recipients;
         if (IS_OS_7_OR_LATER) {

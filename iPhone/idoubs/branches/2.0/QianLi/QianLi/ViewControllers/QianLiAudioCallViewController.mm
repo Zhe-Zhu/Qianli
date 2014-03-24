@@ -273,7 +273,6 @@
 
 - (void)setBigDisplayImage
 {
-    //TODO: how to set qianli's big photo
     [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
     UIImageView *imageView = _bigProfileImage;
     [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
@@ -638,7 +637,7 @@
     // 如果Menu Bar升起则将其dismiss
     if (menuBar) {
         [menuBar dismiss];
-        menuBar=nil;
+        menuBar = nil;
     }
     // starts timer suicide
     [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:0.5];
