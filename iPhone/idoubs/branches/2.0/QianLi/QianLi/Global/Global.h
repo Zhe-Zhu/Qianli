@@ -66,6 +66,10 @@ nil]
 #define kImageBaloonIn @"baloon_in"
 #define kImageBaloonOut @"baloon_out"
 
+//115.28.209.97
+//#define kBaseURL @"http://115.28.209.97:8080"
+#define kServerIP @"115.28.209.97"
+#define kSemiModalAnimationDuration 0.3f
 
 //115.28.209.97 112.124.36.134
 //115.28.209.97  //112.124.36.134 www.qlcall.com  //http://112.124.36.134:8080

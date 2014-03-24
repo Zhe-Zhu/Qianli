@@ -136,6 +136,8 @@
         descriptionText.textAlignment = NSTextAlignmentCenter;
         descriptionText.textColor = [UIColor colorWithRed:119/255. green:119/255.0 blue:119/255.0 alpha:1.0];
         descriptionText.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:13.0f];
+        descriptionText.editable = NO;
+        descriptionText.userInteractionEnabled = NO;
         [self.scrollView addSubview: descriptionText];
         
         switch (i+1) {
