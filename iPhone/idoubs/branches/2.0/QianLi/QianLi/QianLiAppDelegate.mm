@@ -71,7 +71,7 @@ const float kColorB = 75/100.0;
     if ([userDefaults boolForKey:kSingUpKey]) {
         self.window.rootViewController = self.tabController;
         [[SipStackUtils sharedInstance] start];
-        [Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+        //[Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
         [[SipStackUtils sharedInstance] performSelectorInBackground:@selector(queryConfigurationAndRegister) withObject:nil];
         [self performSelectorInBackground:@selector(registerAPNS) withObject:nil];
