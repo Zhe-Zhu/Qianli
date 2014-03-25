@@ -2662,6 +2662,7 @@
 					"\"${PODS_ROOT}/Headers/RestKit\"",
 				);
 				INFOPLIST_FILE = "QianLi/QianLi-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					$DOUBANGO_LIBS,
@@ -2752,6 +2753,7 @@
 					"\"${PODS_ROOT}/Headers\"",
 				);
 				INFOPLIST_FILE = "QianLi/QianLi-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					$DOUBANGO_LIBS,

@@ -157,9 +157,9 @@ static SipStackUtils * sipStackUtilsInstance;
                     
                     //sometimes when 3g and wifi are available at the same time
                     if (willSendMessage) {
-                        [[SipCallManager SharedInstance] sendNetworkChangeMessage];
-//                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
-//                        [[NgnEngine sharedInstance].sipService registerIdentity];
+//                        [[SipCallManager SharedInstance] sendNetworkChangeMessage];
+                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+                        [[NgnEngine sharedInstance].sipService registerIdentity];
 //                        [[SipStackUtils sharedInstance].messageService sendMessage:kHangUpcall toRemoteParty:str];
                     }
                     else
@@ -316,9 +316,9 @@ static SipStackUtils * sipStackUtilsInstance;
                     [[NSNotificationCenter defaultCenter] postNotification:receivedImageNotification];
                     
                     if (localNofificationTimes == 0) {
-                        localNofificationTimes ++;
                         NSArray* words = [str componentsSeparatedByString:kSeparator];
-                        if (![[words objectAtIndex:0] isEqualToString:kAppointment]) {
+                        if (![[words objectAtIndex:0] isEqualToString:kAppointment] && ![[words objectAtIndex:0] isEqualToString:kEndInterruptionCall]) {
+                            localNofificationTimes ++;
                             NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
                             if ((name == nil) | [name isEqualToString:@""]) {
                                 name = [[MainHistoryDataAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
