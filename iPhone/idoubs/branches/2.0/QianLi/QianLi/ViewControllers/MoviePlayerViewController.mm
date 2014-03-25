@@ -72,7 +72,7 @@
     }
     [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMoviePlayback error:&setCategoryError];
     if (setCategoryError){
-        NSLog(@"error");
+       // NSLog(@"error");
     }
 }
 

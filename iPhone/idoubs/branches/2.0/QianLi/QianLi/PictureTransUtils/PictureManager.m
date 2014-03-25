@@ -493,7 +493,7 @@ static PictureManager *pictureManager;
                 success(regStatus.status);
             }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            NSLog(@"");
+           // NSLog(@"");
         }];
     }];
 }
@@ -531,7 +531,7 @@ static PictureManager *pictureManager;
                 success(regStatus.status);
             }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            NSLog(@"");
+           // NSLog(@"");
         }];
     }];
 }

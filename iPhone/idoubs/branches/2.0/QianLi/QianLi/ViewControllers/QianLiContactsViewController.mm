@@ -496,7 +496,7 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog(@"didFailWithError");
+    //NSLog(@"didFailWithError");
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -800,7 +800,7 @@
         _countryName = [iosCC uppercaseString];
     }
     else{
-        NSLog(@"No country code!");
+        //NSLog(@"No country code!");
     }
     
     // ipad如果没有sim卡, 也是无法拿到countryName的
@@ -810,7 +810,7 @@
         [self sendContactsToServer];
     }
     else{
-        NSLog(@"no country code");
+       // NSLog(@"no country code");
         // LLGG just for simulator
         [self getAddressBookPermission];
         _finished = NO;

@@ -549,12 +549,12 @@ static SipStackUtils * sipStackUtilsInstance;
 {
     NSArray *array = [remoteUri componentsSeparatedByString:@"@"];
     if ([array count] < 1) {
-        NSLog(@"remoteparty error");
+        //NSLog(@"remoteparty error");
         return nil;
     }
     NSArray *subArr = [[array objectAtIndex:0] componentsSeparatedByString:@":"];
     if ([subArr count] < 2) {
-        NSLog(@"remoteparty error");
+        //NSLog(@"remoteparty error");
         return nil;
     }
     NSString *number = [subArr objectAtIndex:1];

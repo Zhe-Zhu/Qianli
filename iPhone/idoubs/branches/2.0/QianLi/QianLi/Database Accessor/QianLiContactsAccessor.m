@@ -76,7 +76,7 @@ static QianLiContactsAccessor *contactsAccessor;
         }
     }
     else{
-        NSLog(@"fetch error");
+       // NSLog(@"fetch error");
     }
     [self.managedObjectContext unlock];
     return nil;
@@ -105,11 +105,11 @@ static QianLiContactsAccessor *contactsAccessor;
         }
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
     }
     
     if (![_managedObjectContext save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        //NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
     [self.managedObjectContext unlock];
 }
@@ -134,7 +134,7 @@ static QianLiContactsAccessor *contactsAccessor;
         }
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
     }
     [self.managedObjectContext unlock];
     return nil;
@@ -164,7 +164,7 @@ static QianLiContactsAccessor *contactsAccessor;
     // Save the context.
     NSError *error = nil;
     if (![_managedObjectContext save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+       // NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
     [self.managedObjectContext unlock];
 }
@@ -192,7 +192,7 @@ static QianLiContactsAccessor *contactsAccessor;
         [_managedObjectContext deleteObject:managedObject];
     }
     if (![_managedObjectContext save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        //NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
     [self.managedObjectContext unlock];
 }
@@ -215,12 +215,12 @@ static QianLiContactsAccessor *contactsAccessor;
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating");
+               // NSLog(@"saving error during updating");
             }
         }
     }
     else{
-        NSLog(@"no such item");
+        //NSLog(@"no such item");
     }
     [self.managedObjectContext unlock];
 }
@@ -244,12 +244,12 @@ static QianLiContactsAccessor *contactsAccessor;
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating");
+                //NSLog(@"saving error during updating");
             }
         }
     }
     else{
-        NSLog(@"no such item");
+        //NSLog(@"no such item");
     }
     [self.managedObjectContext unlock];
 }
@@ -274,12 +274,12 @@ static QianLiContactsAccessor *contactsAccessor;
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating");
+               // NSLog(@"saving error during updating");
             }
         }
     }
     else{
-        NSLog(@"no such item");
+        //NSLog(@"no such item");
     }
     [self.managedObjectContext unlock];
 }
@@ -302,12 +302,12 @@ static QianLiContactsAccessor *contactsAccessor;
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating");
+                //NSLog(@"saving error during updating");
             }
         }
     }
     else{
-        NSLog(@"no such item");
+       // NSLog(@"no such item");
     }
     [self.managedObjectContext unlock];
 }

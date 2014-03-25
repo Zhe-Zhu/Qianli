@@ -27,14 +27,14 @@
         case SipRegisterFailed:
         {
             //TODO: inform user that user register failed
-            NSLog(@"Sip Register Failed");
+            //NSLog(@"Sip Register Failed");
             assert(NO);
             break;
         }
         case DecodeMessageContentFailed:
         {
             //TODO: inform user that decodeMessage ContentFailed.
-            NSLog(@"Decode message content failed");
+            //NSLog(@"Decode message content failed");
             assert(NO);
         }
             

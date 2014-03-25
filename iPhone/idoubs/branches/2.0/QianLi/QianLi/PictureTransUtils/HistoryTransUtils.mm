@@ -48,7 +48,7 @@ static HistoryTransUtils *histUtils;
             [_backThread start];
         }
         else{
-            NSLog(@"not finished");
+            //NSLog(@"not finished");
         }
     }
 }
@@ -87,7 +87,7 @@ static HistoryTransUtils *histUtils;
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog(@"didFailWithError");
+   // NSLog(@"didFailWithError");
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection

@@ -102,7 +102,7 @@
     else{
         [_selectedAssets removeObject:set];
     }
-    NSLog(@"%d",[_selectedAssets count]);
+    //NSLog(@"%d",[_selectedAssets count]);
 }
 
 - (void)doneSelectImages
