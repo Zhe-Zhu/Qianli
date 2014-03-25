@@ -356,9 +356,9 @@ const float kColorB = 75/100.0;
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
-    [[NgnEngine sharedInstance].contactService unload];
-	[[NgnEngine sharedInstance].historyService clear];
-	[[NgnEngine sharedInstance].storageService clearFavorites];
+//    [[NgnEngine sharedInstance].contactService unload];
+//	[[NgnEngine sharedInstance].historyService clear];
+//	[[NgnEngine sharedInstance].storageService clearFavorites];
 }
 
 - (void)saveContext
