@@ -72,11 +72,11 @@
         
     }
     else if([[userInfo objectForKey:AVAudioSessionInterruptionTypeKey] integerValue]== AVAudioSessionInterruptionTypeEnded){
-        if ([SipCallManager SharedInstance].audioVC && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
+        if ([SipCallManager SharedInstance].audioVC.viewState == InCall && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
             [self enableBackgroundSound];
             [[SipCallManager SharedInstance] reconnectVoiceCall:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
         }
-        else if ([SipCallManager SharedInstance].audioVC){
+        else if ([SipCallManager SharedInstance].audioVC.viewState == InCall){
             [self disableBackgroundSound];
             [[SipCallManager SharedInstance].audioVC dismissAllViewController];
         }
