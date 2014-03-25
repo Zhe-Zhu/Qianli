@@ -134,7 +134,12 @@
     
     CGFloat height =  kProfileSize / imageSize.width * imageSize.height;
     if (IS_IPHONE5) {
-        imageRect  = CGRectMake((winSize.size.width - kProfileSize) / 2.0, (winSize.size.height - 38) / 2.0 - height / 2.0, kProfileSize, height);
+        if (IS_OS_7_OR_LATER) {
+            imageRect  = CGRectMake((winSize.size.width - kProfileSize) / 2.0, (winSize.size.height - 38) / 2.0 - height / 2.0, kProfileSize, height);
+        }
+        else{
+            imageRect  = CGRectMake((winSize.size.width - kProfileSize) / 2.0, (winSize.size.height - 18) / 2.0 - height / 2.0, kProfileSize, height);
+        }
     }
     else{
         imageRect  = CGRectMake((winSize.size.width - kProfileSize) / 2.0, winSize.size.height / 2.0 - height / 2.0, kProfileSize, height);

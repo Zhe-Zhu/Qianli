@@ -49,13 +49,14 @@
     _partnerLabel.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1.0];
     _numberField.backgroundColor = [UIColor colorWithRed:220 / 255.0 green:220 / 255.0 blue:220 / 255.0 alpha:1.0];
     
+    CGSize winSize = [UIScreen mainScreen].bounds.size;
     self.navigationController.navigationBarHidden = NO;
     NSString *str = NSLocalizedString(@"addPartnerIntro", nil);
     CGSize constraintSize;
     constraintSize.width = 260;
     constraintSize.height = MAXFLOAT;
     CGSize contentSize = [str sizeWithFont:[UIFont fontWithName:@"ArialHebrew" size:17] constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((320 - contentSize.width) / 2.0, 81, contentSize.width, contentSize.height)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((winSize.width - contentSize.width) / 2.0, 81, contentSize.width, contentSize.height)];
     label.text = str;
     label.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:15];
     label.textAlignment = NSTextAlignmentCenter;
