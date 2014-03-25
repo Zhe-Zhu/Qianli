@@ -401,7 +401,7 @@
     UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     
     CGSize newImageSize = [self adjustImageFrame:_image.size];
-    [_image drawInRect:CGRectMake((320 - newImageSize.width) / 2.0, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
+    [_image drawInRect:CGRectMake((winWidth - newImageSize.width) / 2.0, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     [[self layer] renderInContext:context];

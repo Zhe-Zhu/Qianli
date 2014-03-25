@@ -66,6 +66,9 @@ nil]
 #define kImageBaloonIn @"baloon_in"
 #define kImageBaloonOut @"baloon_out"
 
+#define winWidth [UIScreen mainScreen].bounds.size.width
+#define winHeight [UIScreen mainScreen].bounds.size.height
+
 //115.28.209.97
 //#define kBaseURL @"http://115.28.209.97:8080"
 #define kServerIP @"115.28.209.97"
