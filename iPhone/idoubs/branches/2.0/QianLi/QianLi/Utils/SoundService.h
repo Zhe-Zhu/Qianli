@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "iOSNgnStack.h"
+#import <CoreTelephony/CoreTelephonyDefines.h>
+#import <CoreTelephony/CTCallCenter.h>
+#import <CoreTelephony/CTCall.h>
 
 // this class is warpper of the SoundService of IOS-NGN-Stack
 @interface SoundService : NSObject<AVAudioPlayerDelegate>
@@ -31,5 +34,6 @@
 - (void)stopInCallSound;
 
 - (void)playDtmf:(int)tag;
+- (void)stopInterruptionCall;
 
 @end

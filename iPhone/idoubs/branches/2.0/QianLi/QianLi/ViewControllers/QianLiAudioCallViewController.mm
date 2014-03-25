@@ -201,16 +201,8 @@
     if (_bigProfileImage.image == nil) {
         [self setBigDisplayImage];
     }
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    UIDevice *device = [UIDevice currentDevice];
+    [self enableBlackScreen];
     // Register for proximity notifications
-    [device setProximityMonitoringEnabled:YES];
-    
-    if ([device isProximityMonitoringEnabled]) {
-        [notificationCenter addObserver:self selector:@selector(proximityChanged) name:UIDeviceProximityStateDidChangeNotification object:nil];
-    } else {
-        NSLog(@"No Proximity Sensor");
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -257,6 +249,21 @@
 - (void)proximityChanged
 {
     //
+}
+
+- (void)enableBlackScreen
+{
+    if (!_isSpeakerOn) {
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        UIDevice *device = [UIDevice currentDevice];
+        [device setProximityMonitoringEnabled:YES];
+        
+        if ([device isProximityMonitoringEnabled]) {
+            [notificationCenter addObserver:self selector:@selector(proximityChanged) name:UIDeviceProximityStateDidChangeNotification object:nil];
+        } else {
+            NSLog(@"No Proximity Sensor");
+        }
+    }
 }
 
 - (void)handelAudioRouteChange
@@ -558,18 +565,22 @@
         [SVStatusHUD showWithImage:[UIImage imageNamed:@"hudEarphone.png"] status:NSLocalizedString(@"hudEarphone", nil)];
         return;
     }
-    if (_isSpeakerOn) {
+    _isSpeakerOn = !_isSpeakerOn;
+    if (!_isSpeakerOn) {
         // deactivate this button
+        [self enableBlackScreen];
         [_buttonSpeaker setTintColor:inactiveButtonTintColor];
         [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOff.png"] status:NSLocalizedString(@"speakerOff", nil)];
     }
     else {
+        UIDevice *device = [UIDevice currentDevice];
+        [device setProximityMonitoringEnabled:NO];
         // activate this button
         [_buttonSpeaker setTintColor:activeButtonTintColor];
         [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
     }
     // record current button state
-    _isSpeakerOn = !_isSpeakerOn;
+    
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
 }
 
@@ -641,6 +652,13 @@
     }
     // starts timer suicide
     [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:0.5];
+    
+    //handle the case that partner is interrupted by phone call
+    if ([SipCallManager SharedInstance].endWithoutDismissAudioVC) {
+        [SipCallManager SharedInstance].endWithoutDismissAudioVC = NO;
+        [SipCallManager SharedInstance].didHavePhoneCall = NO;
+        [[SipStackUtils sharedInstance].messageService sendMessage:kEndInterruptionCall toRemoteParty:_remotePartyNumber];
+    }
 }
 
 # pragma mark Receieve a Call View Methods
@@ -790,9 +808,11 @@
         return;
     }
     if (_isSpeakerOn) {
+        [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
         return;
     }
     _isSpeakerOn = YES;
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
     [_buttonSpeaker setTintColor:activeButtonTintColor];
     [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
@@ -801,9 +821,11 @@
 - (void)shutUpSpeaker
 {
     if (!_isSpeakerOn) {
+        [self enableBlackScreen];
         return;
     }
     _isSpeakerOn = NO;
+    [self enableBlackScreen];
     [_buttonSpeaker setTintColor:inactiveButtonTintColor];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
 }
@@ -1041,11 +1063,14 @@
             if (!didWantResumeCall) {
                 [self timerSuicideTick];
             }
-            if ([SipCallManager SharedInstance].netDidWorkChanged) {
-                [SipCallManager SharedInstance].netDidWorkChanged = NO;
-                [[SipCallManager SharedInstance] reconnectVoiceCall:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+            else{
+                if ([SipCallManager SharedInstance].didHavePhoneCall){
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"phone call" message:@"phone call" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    [alertView show];
+                }
+
             }
-			break;
+            break;
 		}
 	}
 }
