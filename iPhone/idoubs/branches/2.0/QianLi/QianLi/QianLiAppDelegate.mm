@@ -536,22 +536,22 @@ const float kColorB = 75/100.0;
      {
          if ([data length] >0 && error == nil)
          {
-             NSLog(@"Data:%@",[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding]);
+             //NSLog(@"Data:%@",[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding]);
          }
          else if ([data length] == 0 && error == nil)
          {
-             NSLog(@"Nothing was downloaded.");
+             //NSLog(@"Nothing was downloaded.");
          }
          else if (error != nil)
          {
-             NSLog(@"Error = %@", error.localizedDescription);
+             //NSLog(@"Error = %@", error.localizedDescription);
          }
      }];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    NSLog(@"Error in registration. Error: %@", error);
+    //NSLog(@"Error in registration. Error: %@", error);
 }
 
 + (QianLiAppDelegate *)sharedInstance

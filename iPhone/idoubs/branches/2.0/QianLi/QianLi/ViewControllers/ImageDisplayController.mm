@@ -259,7 +259,7 @@
                 //CODE_REVIEW:下面这段代码可以不要？
                 if (ind < [_images count]) {
                     image = [_images objectAtIndex:ind];
-                    NSLog(@"%d", image.imageOrientation);
+                    //NSLog(@"%d", image.imageOrientation);
                 }
 //                UIImageView *imageView = (UIImageView *)[_imageScrollView viewWithTag:1000 + i];
                 UIView * contentView = (UIView *)[_imageScrollView viewWithTag:1000+i];
@@ -486,7 +486,7 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
-        NSLog(@"end session");
+        //NSLog(@"end session");
     }];
     
     // Add to history

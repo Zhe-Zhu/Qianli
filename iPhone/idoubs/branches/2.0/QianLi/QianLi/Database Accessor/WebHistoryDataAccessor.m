@@ -46,7 +46,7 @@ static WebHistoryDataAccessor *webHistAccessor;
     // Save the context.
     NSError *error = nil;
     if (![_managedObjectContext save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+       // NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
     [self.managedObjectContext unlock];
 }
@@ -71,7 +71,7 @@ static WebHistoryDataAccessor *webHistAccessor;
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating");
+               // NSLog(@"saving error during updating");
             }
         }
     }
@@ -98,7 +98,7 @@ static WebHistoryDataAccessor *webHistAccessor;
         return items;
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
         [self.managedObjectContext unlock];
         return nil;
     }
@@ -123,11 +123,11 @@ static WebHistoryDataAccessor *webHistAccessor;
         }
     }
     else{
-        NSLog(@"fetch error");
+       // NSLog(@"fetch error");
     }
     NSError *saveError;
     if (![self.managedObjectContext save:&saveError]) {
-        NSLog(@"saving error during updating");
+        //NSLog(@"saving error during updating");
     }
     [self.managedObjectContext unlock];
 }

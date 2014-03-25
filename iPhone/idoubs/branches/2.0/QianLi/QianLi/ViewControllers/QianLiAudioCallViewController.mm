@@ -261,7 +261,7 @@
         if ([device isProximityMonitoringEnabled]) {
             [notificationCenter addObserver:self selector:@selector(proximityChanged) name:UIDeviceProximityStateDidChangeNotification object:nil];
         } else {
-            NSLog(@"No Proximity Sensor");
+            //NSLog(@"No Proximity Sensor");
         }
     }
 }

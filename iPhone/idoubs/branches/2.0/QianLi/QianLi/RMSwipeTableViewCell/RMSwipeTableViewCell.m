@@ -75,7 +75,7 @@
     if ([panGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] && self.revealDirection != RMSwipeTableViewCellRevealDirectionNone) {
         CGPoint translation = [panGestureRecognizer translationInView:[self superview]];
         BOOL ret = (fabs(translation.x) >= fabs(translation.y)) ? YES : NO;
-        NSLog(@"ret:%hhd",ret);
+        //NSLog(@"ret:%hhd",ret);
         return ret;
     } else {
         return NO;

@@ -294,7 +294,7 @@
 #pragma mark  -- UIWebViewDelegate --
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    NSLog(@"error load:%@", [[webView.request URL] absoluteString]);
+    //NSLog(@"error load:%@", [[webView.request URL] absoluteString]);
     //_fromRemote = NO;
 }
 
@@ -330,7 +330,7 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    NSLog(@"did start url:%@", [[webView.request URL] absoluteString]);
+    //NSLog(@"did start url:%@", [[webView.request URL] absoluteString]);
 //    if (_fromRemote) {
 //        if ([[[webView.request URL] absoluteString] isEqualToString:_remoteURL]) {
 //            //_fromRemote = NO;

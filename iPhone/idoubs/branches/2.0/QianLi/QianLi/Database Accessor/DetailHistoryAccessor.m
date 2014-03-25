@@ -53,7 +53,7 @@ static DetailHistoryAccessor *detailHistAccessor = nil;
         return results;
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
         [self.managedObjectContext unlock];
         return nil;
     }
@@ -79,7 +79,7 @@ static DetailHistoryAccessor *detailHistAccessor = nil;
         return results;
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
         [self.managedObjectContext unlock];
         return nil;
     }
@@ -102,7 +102,7 @@ static DetailHistoryAccessor *detailHistAccessor = nil;
     // Save the context.
     NSError *error = nil;
     if (![_managedObjectContext save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        //NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
     [self.managedObjectContext unlock];
 }
@@ -136,11 +136,11 @@ static DetailHistoryAccessor *detailHistAccessor = nil;
         }
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
     }
     NSError *saveError;
     if (![self.managedObjectContext save:&saveError]) {
-        NSLog(@"saving error during updating");
+        //NSLog(@"saving error during updating");
     }
     [self.managedObjectContext unlock];
 }
@@ -160,11 +160,11 @@ static DetailHistoryAccessor *detailHistAccessor = nil;
         }
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
     }
     NSError *saveError;
     if (![self.managedObjectContext save:&saveError]) {
-        NSLog(@"saving error during updating");
+        //NSLog(@"saving error during updating");
     }
     [self.managedObjectContext unlock];
 }
