@@ -55,7 +55,7 @@
     self.backgroundView = backgroundView;
     
     [self.backgroundView addSubview:self.backView];
-    [self.backView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    //[self.backView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
 }
 
 -(void)prepareForReuse {
