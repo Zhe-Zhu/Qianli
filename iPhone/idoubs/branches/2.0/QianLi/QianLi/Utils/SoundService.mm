@@ -78,7 +78,7 @@
         }
         else if ([SipCallManager SharedInstance].audioVC){
             [self disableBackgroundSound];
-            [[SipCallManager SharedInstance].audioVC dismissViewControllerAnimated:YES completion:nil];
+            [[SipCallManager SharedInstance].audioVC dismissAllViewController];
         }
     }
 }
