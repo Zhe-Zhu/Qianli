@@ -23,6 +23,10 @@ static SipCallManager *callManager = nil;
 {
     if (callManager == nil) {
         callManager = [[SipCallManager alloc] init];
+        callManager.didEndInerruptionCall = NO;
+        callManager.didHavePhoneCall = NO;
+        callManager.endWithoutDismissAudioVC = NO;
+        callManager.netDidWorkChanged = NO;
         [[NSNotificationCenter defaultCenter] addObserver:callManager selector:@selector(receiveIncomingMessage:) name:@"receivedImageNotification" object:nil];
     }
     return callManager;
@@ -175,6 +179,7 @@ static SipCallManager *callManager = nil;
         [[SipStackUtils sharedInstance].audioService hangUpCall];
     }
     else if ([message isEqualToString:kEndInterruptionCall]){
+        _didEndInerruptionCall = YES;
         [[SipStackUtils sharedInstance].soundService stopInterruptionCall];
     }
     else if ([message isEqualToString:kInterruptionOK]){

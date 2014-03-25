@@ -317,7 +317,7 @@ static SipStackUtils * sipStackUtilsInstance;
                     
                     if (localNofificationTimes == 0) {
                         NSArray* words = [str componentsSeparatedByString:kSeparator];
-                        if (![[words objectAtIndex:0] isEqualToString:kAppointment] || ![[words objectAtIndex:0] isEqualToString:kEndInterruptionCall]) {
+                        if (![[words objectAtIndex:0] isEqualToString:kAppointment] && ![[words objectAtIndex:0] isEqualToString:kEndInterruptionCall]) {
                             localNofificationTimes ++;
                             NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
                             if ((name == nil) | [name isEqualToString:@""]) {
