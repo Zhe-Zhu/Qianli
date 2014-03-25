@@ -340,7 +340,6 @@ const float kColorB = 75/100.0;
     }
     didLaunch = NO;
     [Utils lookupHostIPAddressForURL:[NSURL URLWithString:@"http://www.qlcall.com"]];
-    
     // Umeng
     [UMFeedback checkWithAppkey:kUmengSDKKey];
 }

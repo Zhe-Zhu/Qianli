@@ -411,6 +411,7 @@ static PictureManager *pictureManager;
 
 + (void)registerWithUDID:(NSString *)udid Password:(NSString *)password Name:(NSString *)name PhoneNumber:(NSString *)phoneNumber Email:(NSString *)email OS:(NSString *)os Avatar:(UIImage *)avatar Success:(void(^)(int status))success
 {
+    ///users/register/
     RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString: kBaseURL]];
     // For registration.
     RKObjectMapping *registerMapping = [RKObjectMapping mappingForClass:[RegistrationStatus class]];

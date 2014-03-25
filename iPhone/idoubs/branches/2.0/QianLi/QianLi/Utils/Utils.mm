@@ -155,9 +155,9 @@
     NSString *retrieveuuid = [SSKeychain passwordForService:@"com.ashstudio.qianli" account:@"udid"];
     if (retrieveuuid == nil) {
         // if this is the first time app lunching , create key for device
-        NSString *uuid  = [self createNewUUID];
+        retrieveuuid  = [self createNewUUID];
         // save newly created key to Keychain
-        [SSKeychain setPassword:uuid forService:@"com.ashstudio.qianli" account:@"udid"];
+        [SSKeychain setPassword:retrieveuuid forService:@"com.ashstudio.qianli" account:@"udid"];
     }
     return retrieveuuid;
 }
