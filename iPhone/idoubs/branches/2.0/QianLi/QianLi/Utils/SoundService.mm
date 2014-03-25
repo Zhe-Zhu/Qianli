@@ -76,7 +76,8 @@
             [self enableBackgroundSound];
             [[SipCallManager SharedInstance] reconnectVoiceCall:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
         }
-        else if ([SipCallManager SharedInstance].audioVC.viewState == InCall){
+        else if ([SipCallManager SharedInstance].audioVC.viewState == InCall && [SipCallManager SharedInstance].didEndInerruptionCall){
+            [SipCallManager SharedInstance].didEndInerruptionCall = NO;
             [self disableBackgroundSound];
             [[SipCallManager SharedInstance].audioVC dismissAllViewController];
         }

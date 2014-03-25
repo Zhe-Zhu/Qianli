@@ -17,6 +17,7 @@
 @property(nonatomic, weak) QianLiAudioCallViewController *audioVC;
 @property(nonatomic, assign) BOOL endWithoutDismissAudioVC;
 @property(nonatomic, assign) BOOL didHavePhoneCall;
+@property(nonatomic, assign) BOOL didEndInerruptionCall;
 @property(nonatomic, assign) BOOL netDidWorkChanged;
 
 + (SipCallManager *)SharedInstance;
