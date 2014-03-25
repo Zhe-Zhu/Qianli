@@ -281,6 +281,9 @@
     remoteDrawing = drawing;
     [_remotePath removeAllPoints];
     NSArray *array = [self calculateSmoothLinePoints:points];
+    if (array == nil) {
+        array = points;
+    }
     if (drawing) {
         [_remotePath setLineWidth:width];
         _remoteLineWidth = width;
