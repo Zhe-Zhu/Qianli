@@ -255,7 +255,6 @@
 
 - (void)cancelFromRemoteParty
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
     if ([_synImages count] == 0) {
         [self addImages:[Utils screenshot:self.view toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
@@ -275,6 +274,7 @@
         imageEvent.status = kHistoryEventStatus_Outgoing;
     }
     [[DetailHistoryAccessor sharedInstance] addHistEntry:imageEvent];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)quit

@@ -118,6 +118,11 @@
     return YES;
 }
 
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 - (CGRect)calculateFrame
 {
     if (_profile == nil) {

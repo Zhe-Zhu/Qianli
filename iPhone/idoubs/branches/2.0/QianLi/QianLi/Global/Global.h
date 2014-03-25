@@ -128,6 +128,8 @@ nil]
 #define kHangUpcall @"hangUpCall"
 
 #define kInterruption @"interruption"
+#define kEndInterruptionCall @"endinterruption"
+#define kPhoneCallInterruption @"phoneInterruption"
 #define kChangeNetWork @"changenetwork"
 #define kInterruptionOK @"interruptionOK"
 #define kChangeNetworkOK @"changenetworkOK"
