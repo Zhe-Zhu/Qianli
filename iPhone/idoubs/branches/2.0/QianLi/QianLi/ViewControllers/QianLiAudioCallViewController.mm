@@ -79,6 +79,7 @@
 }
 
 @property(weak, nonatomic) NSTimer *timer;
+@property(weak, nonatomic) NSTimer *imageTimer;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMicroPhone;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSpeaker;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonAdd;
@@ -232,6 +233,7 @@
     if (didEndCall) {
         [self resumeMusicAppIfNeeded];
         [_timer invalidate];
+        [_imageTimer invalidate];
     }
 }
 
@@ -633,6 +635,7 @@
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [_timer invalidate]; // 停止计时并从Runloop中释放
+    [_imageTimer invalidate];
     
     _didEndCallBySelf = YES;
     if (_viewState == InCall) {
@@ -974,7 +977,7 @@
         }
     }
          
-    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleTimer:) userInfo:imageArray repeats:YES];
+    _imageTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleTimer:) userInfo:imageArray repeats:YES];
     if (_imageDispVC == nil) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         _imageDispVC = [storyboard instantiateViewControllerWithIdentifier:@"ImageDisplayVC"];
@@ -1139,6 +1142,7 @@
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [_timer invalidate];
+    [_imageTimer invalidate];
     if (menuBar) {
         [menuBar dismiss];
         menuBar = nil;
@@ -1594,7 +1598,7 @@
     [self dismissAllViewController];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [_timer invalidate]; // 停止计时并从Runloop中释放
-    
+    [_imageTimer invalidate];
     _didEndCallBySelf = YES;
     if (_viewState == InCall) {
         _activeEvent.end = [[NSDate date] timeIntervalSince1970];
