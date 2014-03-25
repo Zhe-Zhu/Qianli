@@ -73,8 +73,8 @@ const float kColorB = 75/100.0;
         [[SipStackUtils sharedInstance] start];
         [Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
-        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-        [self registerAPNS];
+        [[SipStackUtils sharedInstance] performSelectorInBackground:@selector(queryConfigurationAndRegister) withObject:nil];
+        [self performSelectorInBackground:@selector(registerAPNS) withObject:nil];
         //[self setHelpView];
     }
     else if ([userDefaults boolForKey:kWaitingKey]){
@@ -85,7 +85,7 @@ const float kColorB = 75/100.0;
         UINavigationController *naviVC = [[UINavigationController alloc] init];
         naviVC.viewControllers = @[waitingVC];
         self.window.rootViewController = naviVC;
-        [self registerAPNS];
+        [self performSelectorInBackground:@selector(registerAPNS) withObject:nil];
     }
     else{
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -236,8 +236,10 @@ const float kColorB = 75/100.0;
 
 - (void)registerAPNS
 {
-    UIApplication *app = [UIApplication sharedApplication];
-    [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+    if ([Utils checkInternetAndDispWarning:NO]) {
+        UIApplication *app = [UIApplication sharedApplication];
+        [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
