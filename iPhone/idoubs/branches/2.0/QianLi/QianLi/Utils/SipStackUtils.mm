@@ -448,10 +448,7 @@ static SipStackUtils * sipStackUtilsInstance;
                 }
             }
             
-            if (_localNotif) {
-                [[UIApplication sharedApplication] cancelLocalNotification:_localNotif];
-                self.localNotif = nil;
-            }
+            [self cancelCallingNotification];
 			break;
 		}
             
@@ -460,6 +457,14 @@ static SipStackUtils * sipStackUtilsInstance;
 			break;
 		}
 	}
+}
+
+- (void)cancelCallingNotification
+{
+    if (_localNotif) {
+        [[UIApplication sharedApplication] cancelLocalNotification:_localNotif];
+        self.localNotif = nil;
+    }
 }
 
 - (void)receiveIncomingCall:(NgnAVSession*)session
