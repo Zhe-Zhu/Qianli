@@ -224,7 +224,7 @@
     [super viewWillDisappear:animated];
     [[SipStackUtils sharedInstance].soundService stopRingBackTone];
     [[SipStackUtils sharedInstance].soundService stopRingTone];
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+    [self disableBlackScreen];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -268,14 +268,25 @@
     }
 }
 
+- (void)disableBlackScreen
+{
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    UIDevice *device = [UIDevice currentDevice];
+    [device setProximityMonitoringEnabled:NO];
+    [notificationCenter removeObserver:self name:UIDeviceProximityStateDidChangeNotification object:nil];
+
+}
+
 - (void)handelAudioRouteChange
 {
     if (![Utils isHeadsetPluggedIn]) {
         if (self.presentedViewController) {
             [self openSpeaker];
         }
+        [self enableBlackScreen];
     }
     else{
+        [self disableBlackScreen];
         [self shutUpSpeaker];
     }
 }
@@ -575,8 +586,7 @@
         [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOff.png"] status:NSLocalizedString(@"speakerOff", nil)];
     }
     else {
-        UIDevice *device = [UIDevice currentDevice];
-        [device setProximityMonitoringEnabled:NO];
+        [self disableBlackScreen];
         // activate this button
         [_buttonSpeaker setTintColor:activeButtonTintColor];
         [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
@@ -811,11 +821,11 @@
         return;
     }
     if (_isSpeakerOn) {
-        [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+        [self disableBlackScreen];
         return;
     }
     _isSpeakerOn = YES;
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+    [self disableBlackScreen];
     [_buttonSpeaker setTintColor:activeButtonTintColor];
     [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
