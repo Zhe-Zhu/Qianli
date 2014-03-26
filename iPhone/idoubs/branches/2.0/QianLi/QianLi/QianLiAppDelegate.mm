@@ -343,12 +343,11 @@ const float kColorB = 75/100.0;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    
+    [[SipStackUtils sharedInstance] cancelCallingNotification];
     //set the call back function of YouMeng Social share.
     [UMSocialSnsService  applicationDidBecomeActive];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-    [[SipStackUtils sharedInstance] cancelCallingNotification];
     if (_tabController.selectedIndex == 0) {
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
@@ -619,6 +618,10 @@ const float kColorB = 75/100.0;
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     //add code @{@"IDKey": @"IncomingCall"}
+    NSDictionary *userinfo = notification.userInfo;
+    if ([[userinfo objectForKey:@"IDKey"] isEqualToString:@"IncomingCall"]) {
+        [application cancelLocalNotification:notification];
+    }
 }
 
 - (id)getAppDelegateAudioVC
