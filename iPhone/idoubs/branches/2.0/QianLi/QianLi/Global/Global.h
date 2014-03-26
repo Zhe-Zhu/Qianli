@@ -70,8 +70,6 @@ nil]
 #define winHeight [UIScreen mainScreen].bounds.size.height
 
 //115.28.209.97
-//#define kBaseURL @"http://115.28.209.97:8080"
-#define kServerIP @"115.28.209.97"
 #define kSemiModalAnimationDuration 0.3f
 
 //115.28.209.97 112.124.36.134
