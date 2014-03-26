@@ -23,6 +23,11 @@
 #import "SipCallManager.h"
 #import "Global.h"
 #import "WaitingViewController.h"
+#import "UMSocial.h"
+#import "UMSocialWechatHandler.h"
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentOAuth.h>
+
 
 @interface QianLiAppDelegate (){
     UITabBarController *_tabController;
@@ -100,11 +105,15 @@ const float kColorB = 75/100.0;
     }
     
 //    NSDictionary *remoteNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    //set UMSocial AppID
+    [UMSocialData setAppKey:kUmengSDKKey];
     // 初始化UmengSDK
     [MobClick startWithAppkey:kUmengSDKKey];
     [UMFeedback checkWithAppkey:kUmengSDKKey];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(umCheck:) name:UMFBCheckFinishedNotification object:nil];
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNetworkEvent:) name:kNgnNetworkEventArgs_Name object:nil];
+    // enable the sharing to Social Platform through YouMeng SDK
+    [self setSocialPlatformAppID];
     
     return YES;
 }
@@ -334,6 +343,9 @@ const float kColorB = 75/100.0;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    
+    //set the call back function of YouMeng Social share.
+    [UMSocialSnsService  applicationDidBecomeActive];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
     [[SipStackUtils sharedInstance] cancelCallingNotification];
@@ -666,6 +678,37 @@ const float kColorB = 75/100.0;
 {
     HelpView *helpView = [[HelpView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.window addSubview:helpView];
+}
+
+//设置分享到社交平台的开关
+- (void)setSocialPlatformAppID
+{
+    //设置微信AppId，url地址传nil，将默认使用友盟的网址
+    //需要#import "UMSocialWechatHandler.h"
+    [UMSocialWechatHandler setWXAppId:kWeiXinID url:nil];
+    //打开Qzone的SSO开关，
+    //需要#import <TencentOpenAPI/QQApiInterface.h>  #import <TencentOpenAPI/TencentOAuth.h>
+    [UMSocialConfig setSupportQzoneSSO:YES importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
+    [UMSocialConfig setShareQzoneWithQQSDK:YES url:@"http://www.umeng.com/social" importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
+    //需要#import <TencentOpenAPI/QQApiInterface.h>  #import <TencentOpenAPI/TencentOAuth.h>
+    //设置手机QQ的AppId，url传nil，将使用友盟的网址
+    [UMSocialConfig setQQAppId:kQQAppID url:nil importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
+    //打开新浪微博的SSO开关
+    [UMSocialConfig setSupportSinaSSO:YES];
+    
+}
+
+//设置友盟的SSO分享的系统回调函数
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
+}
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
 }
 
 @end

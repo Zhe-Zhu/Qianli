@@ -10,6 +10,8 @@
 #import "SSKeychain.h"
 #import "Reachability.h"
 #import <sys/utsname.h>
+#import "UMSocial.h"
+
 
 // this class implement some useful utilites functions.
 @interface Utils : NSObject
@@ -35,4 +37,5 @@
 + (void)configureParmsWithNumber:(NSString *)number;
 + (NSString*)deviceModelName;
 + (void)clearAllSharedInstance;
++ (void)shareThingsToSocialMedia:(UIViewController *)inController text:(NSString *)text Image:(UIImage *)image delegate:(id<UMSocialUIDelegate>)delegate;
 @end

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3OY-Nm-vgF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3OY-Nm-vgF">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
         <!--History Records Main View Controller-->
@@ -1664,46 +1664,12 @@
                             </tableViewSection>
                             <tableViewSection id="pkb-2K-bEH">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="jAt-b7-AP0">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="XGE-kW-ML1">
                                         <rect key="frame" x="0.0" y="99" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jAt-b7-AP0" id="d3r-Hq-Zed">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XGE-kW-ML1" id="ZMI-AL-3IO">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="短信邀请好友" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cwc-p3-n1i">
-                                                    <rect key="frame" x="60" y="11" width="200" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="15"/>
-                                                    <color key="textColor" red="0.31372549019607843" green="0.31372549019607843" blue="0.31372549019607843" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="settingSMS.png" translatesAutoresizingMaskIntoConstraints="NO" id="sXk-PB-6Gh">
-                                                    <rect key="frame" x="6" y="3" width="38" height="38"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                </imageView>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="Bj6-yl-NLk">
-                                        <rect key="frame" x="0.0" y="143" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Bj6-yl-NLk" id="Fj0-2B-xsT">
-                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="邮件邀请好友" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1TM-Ag-LJL">
-                                                    <rect key="frame" x="60" y="11" width="200" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="15"/>
-                                                    <color key="textColor" red="0.31372549019607843" green="0.31372549019607843" blue="0.31372549019607843" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="settingEmail.png" translatesAutoresizingMaskIntoConstraints="NO" id="cQT-SY-uee">
-                                                    <rect key="frame" x="6" y="3" width="38" height="38"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                </imageView>
-                                            </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -1711,7 +1677,7 @@
                             <tableViewSection id="9I7-oX-QjJ">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="Klj-J5-1Va">
-                                        <rect key="frame" x="0.0" y="207" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="163" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Klj-J5-1Va" id="J9J-uO-uUq">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -1747,7 +1713,7 @@
                             <tableViewSection id="B7V-W3-Wmp">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="1ab-GD-b3h">
-                                        <rect key="frame" x="0.0" y="271" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="227" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1ab-GD-b3h" id="v1Z-4f-zXY">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -1768,7 +1734,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="wsz-tk-cOR">
-                                        <rect key="frame" x="0.0" y="315" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="271" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wsz-tk-cOR" id="rPa-TS-SUG">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -1796,7 +1762,7 @@
                             <tableViewSection id="yzk-Es-2rX">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="DaH-q5-eg7">
-                                        <rect key="frame" x="0.0" y="379" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="335" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DaH-q5-eg7" id="2z7-2n-6Xu">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -1829,18 +1795,15 @@
                         <outlet property="deleteAccount" destination="DaH-q5-eg7" id="BsY-Rn-Dln"/>
                         <outlet property="feedback" destination="Klj-J5-1Va" id="RBz-WX-WIt"/>
                         <outlet property="labelAbout" destination="zlQ-DA-Sqe" id="bVT-Vd-pMI"/>
-                        <outlet property="labelEmail" destination="1TM-Ag-LJL" id="Swg-5x-sQU"/>
                         <outlet property="labelFeedback" destination="1Ku-P2-HOG" id="Eif-2F-eee"/>
                         <outlet property="labelProfile" destination="6sr-HC-itp" id="eTd-vG-gWX"/>
-                        <outlet property="labelSMS" destination="cwc-p3-n1i" id="SFi-hZ-Feu"/>
                         <outlet property="labelSignout" destination="A2W-rk-dqM" id="iV0-DA-i44"/>
                         <outlet property="profilePhoto" destination="M54-Vo-XQ1" id="Ink-03-T2A"/>
                         <outlet property="rateUs" destination="1ab-GD-b3h" id="DcQ-GH-uel"/>
                         <outlet property="rateUsLabel" destination="4Qy-vq-NhH" id="Hzd-cf-c6X"/>
                         <outlet property="repliesCount" destination="C91-tq-NnQ" id="XCk-6I-Tcz"/>
                         <outlet property="repliesCountBackground" destination="kGy-4r-kw7" id="upW-Zo-dmR"/>
-                        <outlet property="sendEmailCell" destination="Bj6-yl-NLk" id="l2u-lm-pW4"/>
-                        <outlet property="sendMessageCell" destination="jAt-b7-AP0" id="Cit-2p-wkz"/>
+                        <outlet property="sendToSocialMediaCell" destination="XGE-kW-ML1" id="Nbd-6h-ufE"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="53Y-Q3-woi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1873,13 +1836,7 @@
         <image name="browserForward.png" width="35" height="35"/>
         <image name="browserHistory.png" width="35" height="35"/>
         <image name="buttonContinueBackground.png" width="280" height="44"/>
-        <image name="buttonContinueBackground.png" width="280" height="44"/>
-        <image name="buttonContinueBackground.png" width="280" height="44"/>
         <image name="captchaCover.png" width="40" height="40"/>
-        <image name="captchaCover.png" width="40" height="40"/>
-        <image name="captchaCover.png" width="40" height="40"/>
-        <image name="captchaCover.png" width="40" height="40"/>
-        <image name="edit.png" width="27" height="26"/>
         <image name="edit.png" width="27" height="26"/>
         <image name="profileButtonCancel.png" width="40" height="40"/>
         <image name="profileButtonDone.png" width="40" height="40"/>
@@ -1887,7 +1844,6 @@
         <image name="profilePhotoCover.png" width="20" height="20"/>
         <image name="repliesCountBackground.png" width="30" height="30"/>
         <image name="settingAvatar.png" width="38" height="38"/>
-        <image name="settingEmail.png" width="38" height="38"/>
         <image name="settingFeedback.png" width="38" height="38"/>
         <image name="settingInformation.png" width="38" height="38"/>
         <image name="settingName.png" width="38" height="38"/>
@@ -1895,14 +1851,11 @@
         <image name="settingPhoto.png" width="38" height="38"/>
         <image name="settingPower.png" width="38" height="38"/>
         <image name="settingProfile.png" width="38" height="38"/>
-        <image name="settingSMS.png" width="38" height="38"/>
         <image name="settingStar.png" width="38" height="38"/>
         <image name="waiting_begin_button.png" width="248" height="60"/>
         <image name="waiting_done_button.png" width="248" height="60"/>
         <image name="waiting_done_disable_button.png" width="248" height="60"/>
         <image name="waiting_email_button.png" width="53" height="53"/>
-        <image name="waiting_logo.png" width="75" height="75"/>
-        <image name="waiting_logo.png" width="75" height="75"/>
         <image name="waiting_logo.png" width="75" height="75"/>
         <image name="waiting_partner_button.png" width="53" height="53"/>
         <image name="waiting_sms_button.png" width="53" height="53"/>

@@ -140,8 +140,9 @@ static SipCallManager *callManager = nil;
 
 - (void)handleConnectionChange
 {
-    [[NgnEngine sharedInstance].sipService stopStackSynchronously];
-    [[NgnEngine sharedInstance].sipService registerIdentity];
+    //[[NgnEngine sharedInstance].sipService stopStackSynchronously];
+    //[[NgnEngine sharedInstance].sipService registerIdentity];
+    [[SipStackUtils sharedInstance] performSelectorInBackground:@selector(stopSipStackAndRegisterAgain) withObject:nil];
     [[SipCallManager SharedInstance] sendInterruptionMessage:kChangeNetWork];
 }
 
