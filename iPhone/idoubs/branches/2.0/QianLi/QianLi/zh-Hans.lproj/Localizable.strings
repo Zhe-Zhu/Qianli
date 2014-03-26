@@ -46,17 +46,17 @@
 "Camera" = "拍照";
 
 // Helpview Controller
-"beginToUse" = "开始使用";
-"helpViewOneTitle" = "欢迎使用千里";
-"helpViewOneDescription" = "千里是一款通话软件,当你和好友手机上都安装千里时,你们就可以通过无线网络通话,享受清晰和稳定的通话质量";
-"helpViewTwoTitle" = "更好的交流";
+"beginToUse" = "进入千里";
+"helpViewOneTitle" = "免费语音通话";
+"helpViewOneDescription" = "想聊多久就聊多久，千里共婵娟";
+"helpViewTwoTitle" = "边看边聊";
 "helpViewTwoQuote" = "除了声音以外我们还可以有更多的方式表达心中所想";
-"helpViewTwoDescription" = "通话过程中你可以给对方发送图片,网页链接等有意思的信息,让通话变得更有趣!";
-"helpViewThreeTitle" = "同步的感觉";
+"helpViewTwoDescription" = "除了动口还要动眼的电话，在通话中随意与好友分享各种快乐";
+"helpViewThreeTitle" = "实时同步互动";
 "helpViewThreeQuote" = "不一样的分享体验";
-"helpViewThreeDescription" = "在分享图片或观看视频时,千里会同步你们的操作和屏幕显示,让快乐的分享更直接";
-"helpViewFourTitle" = "对方现在是否有空?";
-"helpViewFourDescription" = "在最近通话界面中右滑,可以向对方发起通话预约,如果对方有空就会回复你哦";
+"helpViewThreeDescription" = "与好友的屏幕保持实时同步，还可以一起画画和同步看视频";
+"helpViewFourTitle" = "对方是否有空?";
+"helpViewFourDescription" = "除了打电话，还可以向好友发起通话预约，不用担心打扰到对方";
 "unset" = "未设置";
 "send" = "发送";
 "addMore" = "继续添加";
