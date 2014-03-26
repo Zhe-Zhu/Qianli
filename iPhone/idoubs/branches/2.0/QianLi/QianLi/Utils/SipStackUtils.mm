@@ -143,7 +143,7 @@ static SipStackUtils * sipStackUtilsInstance;
 				if(on3G && !use3G){
                     // can not use 3G
                     [ErrorHandling handleError:Network3GNotEnabled];
-					[[NgnEngine sharedInstance].sipService stopStackSynchronously];
+					[[NgnEngine sharedInstance].sipService stopStackAsynchronously];
 				}
 				else {
                     // "on3G and use3G" or on WiFi
@@ -158,14 +158,16 @@ static SipStackUtils * sipStackUtilsInstance;
                     //sometimes when 3g and wifi are available at the same time
                     if (willSendMessage) {
 //                        [[SipCallManager SharedInstance] sendNetworkChangeMessage];
-                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
-                        [[NgnEngine sharedInstance].sipService registerIdentity];
+//                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+                        //[[NgnEngine sharedInstance].sipService registerIdentity];
+                        [self performSelectorInBackground:@selector(stopSipStackAndRegisterAgain) withObject:nil];
 //                        [[SipStackUtils sharedInstance].messageService sendMessage:kHangUpcall toRemoteParty:str];
                     }
                     else
                     {
-                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
-                        [[NgnEngine sharedInstance].sipService registerIdentity];
+//                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+                        //[[NgnEngine sharedInstance].sipService registerIdentity];
+                        [self performSelectorInBackground:@selector(stopSipStackAndRegisterAgain) withObject:nil];
                     }
 				}
                 
@@ -178,7 +180,7 @@ static SipStackUtils * sipStackUtilsInstance;
             else{
                 // the network becomes unreachable.
                 if([NgnEngine sharedInstance].sipService.registered){
-                    [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+                    [[NgnEngine sharedInstance].sipService stopStackAsynchronously];
                 }
                 if ([SipCallManager SharedInstance].audioVC) {
                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notice", nil) message:NSLocalizedString(@"TerminateCall", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"iknow", nil) otherButtonTitles: nil];
@@ -233,7 +235,8 @@ static SipStackUtils * sipStackUtilsInstance;
 			if(scheduleRegistration){
                 // if schedule a new registration, then do it.
 				scheduleRegistration = FALSE;
-				[[NgnEngine sharedInstance].sipService registerIdentity];
+				//[[NgnEngine sharedInstance].sipService registerIdentity];
+                [self queryConfigurationAndRegister];
 			}
 			break;
 			
@@ -499,8 +502,18 @@ static SipStackUtils * sipStackUtilsInstance;
 		return NO;
     }
 	else {
-		return [[NgnEngine sharedInstance].sipService registerIdentity];
+		//return [[NgnEngine sharedInstance].sipService registerIdentity];
+		[[NgnEngine sharedInstance].sipService performSelectorInBackground:@selector(registerIdentity) withObject:nil];
+        return YES;
+        
 	}
+    
+}
+
+- (void)stopSipStackAndRegisterAgain
+{
+    [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+    [[NgnEngine sharedInstance].sipService registerIdentity];
     
 }
 

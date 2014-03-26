@@ -366,4 +366,14 @@
     [[MainHistoryDataAccessor sharedInstance] clearSharedInstance];
 }
 
+// send something to social media
++ (void)shareThingsToSocialMedia:(UIViewController *)inController text:(NSString *)text Image:(UIImage *)image delegate:(id<UMSocialUIDelegate>)delegate
+{
+    [UMSocialSnsService presentSnsIconSheetView:inController
+                                         appKey:kUmengSDKKey
+                                      shareText:text
+                                     shareImage:nil
+                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToSina,UMShareToQQ,UMShareToQzone,UMShareToSms,UMShareToEmail,nil]
+                                       delegate:delegate];
+}
 @end

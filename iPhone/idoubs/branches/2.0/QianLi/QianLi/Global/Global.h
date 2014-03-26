@@ -162,6 +162,9 @@ nil]
 
 // Umeng SDK Key
 #define kUmengSDKKey @"527c513f56240b352905fbfb"
+#define kQQAppID @"101046453"
+#define kWeiXinID @"wxb6d74eb70d99d3dc"
+
 #define kSingUpKey @"SignedUp"
 #define kWaitingKey @"InWaitingList"
 
