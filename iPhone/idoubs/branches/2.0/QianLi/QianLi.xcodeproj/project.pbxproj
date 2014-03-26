@@ -320,6 +320,7 @@
 		CE1E8D2B184384C800A956A2 /* speakerOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8D26184384C800A956A2 /* speakerOn@2x.png */; };
 		CE1E8D4A184462D900A956A2 /* callingIndicatorSpin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1E8D49184462D900A956A2 /* callingIndicatorSpin@2x.png */; };
 		CE22107117E17DA300DE9F77 /* arrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE22107017E17DA300DE9F77 /* arrowRight@2x.png */; };
+		CE22121F18E2E93C0087CD1C /* settingShare@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE22121E18E2E93C0087CD1C /* settingShare@2x.png */; };
 		CE345F6517CB13FF009D52D4 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = CE345F4217CB13FF009D52D4 /* add.png */; };
 		CE345F6617CB13FF009D52D4 /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE345F4317CB13FF009D52D4 /* add@2x.png */; };
 		CE345F6917CB13FF009D52D4 /* buttonContinueBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE345F4617CB13FF009D52D4 /* buttonContinueBackground@2x.png */; };
@@ -990,6 +991,7 @@
 		CE1E8D26184384C800A956A2 /* speakerOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOn@2x.png"; sourceTree = "<group>"; };
 		CE1E8D49184462D900A956A2 /* callingIndicatorSpin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callingIndicatorSpin@2x.png"; sourceTree = "<group>"; };
 		CE22107017E17DA300DE9F77 /* arrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowRight@2x.png"; sourceTree = "<group>"; };
+		CE22121E18E2E93C0087CD1C /* settingShare@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingShare@2x.png"; sourceTree = "<group>"; };
 		CE345F4217CB13FF009D52D4 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
 		CE345F4317CB13FF009D52D4 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
 		CE345F4617CB13FF009D52D4 /* buttonContinueBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonContinueBackground@2x.png"; sourceTree = "<group>"; };
@@ -1788,6 +1790,7 @@
 		505A077617B09FB40053E1B7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CE22121E18E2E93C0087CD1C /* settingShare@2x.png */,
 				CE9C033518C442B00083B75F /* settingStar@2x.png */,
 				CE345F4217CB13FF009D52D4 /* add.png */,
 				CE345F4317CB13FF009D52D4 /* add@2x.png */,
@@ -2363,6 +2366,7 @@
 				18096A0D187181B600198CD6 /* doodle_color_2_selected@2x.png in Resources */,
 				18EDB41918BCAAD9001DBB20 /* help_2_button_en@2x.png in Resources */,
 				18EDB42718BCAB21001DBB20 /* help_1_background_words_1136_en@2x.png in Resources */,
+				CE22121F18E2E93C0087CD1C /* settingShare@2x.png in Resources */,
 				CE345F8017CB13FF009D52D4 /* pickupTheCall@2x.png in Resources */,
 				18EA7DD8187CF1450098A824 /* help_1_background_words@2x.png in Resources */,
 				18E36D78187807FC00D685EA /* arwen_avatar@2x.png in Resources */,

@@ -148,7 +148,7 @@
 "AM" = "AM";
 
 "version" = "Version";
-"labelAbout" = "About Qianli";
+"labelAbout" = "About Chatly";
 
 //Local notification
 "IncomingCallWithOutName" = "you have a call, tap to answer";
@@ -223,4 +223,5 @@
 "PartnerNumberText"= "Your partner number is %@, make sure it is correct because you can not change the number once set";
 "PartnerNumberOK" = "Confirm";
 "PartnerNumberCancel" = "Cancel";
-"RateUs" = "Rate Us";
+"RateUs" = "Rate us";
+"share" = "Share with friends";

@@ -32,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *repliesCountBackground;
 @property (weak, nonatomic) IBOutlet UITableViewCell *aboutQianli;
 @property (weak, nonatomic) IBOutlet UITableViewCell *rateUs;
+@property (weak, nonatomic) IBOutlet UITableViewCell *share;
 
 @property (weak, nonatomic) IBOutlet UILabel *labelProfile;
 @property (weak, nonatomic) IBOutlet UILabel *labelSMS;
@@ -40,6 +41,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelSignout;
 @property (weak, nonatomic) IBOutlet UILabel *labelAbout;
 @property (weak, nonatomic) IBOutlet UILabel *rateUsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *shareLabel;
 
 
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
@@ -76,6 +78,7 @@
     _labelSignout.text = NSLocalizedString(@"labelSignout", nil);
     _labelAbout.text = NSLocalizedString(@"labelAbout", nil);
     _rateUsLabel.text = NSLocalizedString(@"RateUs", nil);
+    _shareLabel.text = NSLocalizedString(@"share", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated

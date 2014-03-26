@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3OY-Nm-vgF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3OY-Nm-vgF">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -1670,6 +1670,19 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XGE-kW-ML1" id="ZMI-AL-3IO">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="推荐千里给好友" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iFD-We-MfL">
+                                                    <rect key="frame" x="60" y="11" width="160" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="15"/>
+                                                    <color key="textColor" red="0.31372549020000001" green="0.31372549020000001" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="settingShare.png" translatesAutoresizingMaskIntoConstraints="NO" id="wcM-1y-31b">
+                                                    <rect key="frame" x="6" y="3" width="38" height="38"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
+                                            </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -1804,6 +1817,8 @@
                         <outlet property="repliesCount" destination="C91-tq-NnQ" id="XCk-6I-Tcz"/>
                         <outlet property="repliesCountBackground" destination="kGy-4r-kw7" id="upW-Zo-dmR"/>
                         <outlet property="sendToSocialMediaCell" destination="XGE-kW-ML1" id="Nbd-6h-ufE"/>
+                        <outlet property="share" destination="XGE-kW-ML1" id="Vjc-B8-S4S"/>
+                        <outlet property="shareLabel" destination="iFD-We-MfL" id="obF-mz-0Wn"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="53Y-Q3-woi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1851,6 +1866,7 @@
         <image name="settingPhoto.png" width="38" height="38"/>
         <image name="settingPower.png" width="38" height="38"/>
         <image name="settingProfile.png" width="38" height="38"/>
+        <image name="settingShare.png" width="38" height="38"/>
         <image name="settingStar.png" width="38" height="38"/>
         <image name="waiting_begin_button.png" width="248" height="60"/>
         <image name="waiting_done_button.png" width="248" height="60"/>
