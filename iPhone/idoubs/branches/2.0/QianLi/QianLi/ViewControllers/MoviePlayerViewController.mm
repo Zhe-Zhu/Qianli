@@ -71,6 +71,7 @@
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
     }
     [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMoviePlayback error:&setCategoryError];
+    
     if (setCategoryError){
        // NSLog(@"error");
     }

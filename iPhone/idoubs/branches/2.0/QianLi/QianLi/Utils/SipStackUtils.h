@@ -63,4 +63,5 @@
 // Get the number of remoteParty not the uri
 - (NSString *)getRemotePartyNumber;
 - (void)setRemotePartyNumber:(NSString *)remoteParty;
+- (void)cancelCallingNotification;
 @end

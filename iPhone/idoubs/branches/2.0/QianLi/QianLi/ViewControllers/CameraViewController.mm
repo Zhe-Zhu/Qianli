@@ -99,6 +99,9 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    //TODO
+//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"内存不足，建议少拍一些照片！" delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles: nil];
+//    [alertView show];
 }
 
 - (BOOL)prefersStatusBarHidden
