@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SSKeychain.h"
 #import "Reachability.h"
+#import <sys/utsname.h>
 
 // this class implement some useful utilites functions.
 @interface Utils : NSObject
@@ -32,5 +33,6 @@
 
 + (void)lookupHostIPAddressForURL:(NSURL*)url;
 + (void)configureParmsWithNumber:(NSString *)number;
++ (NSString*)deviceModelName;
 + (void)clearAllSharedInstance;
 @end

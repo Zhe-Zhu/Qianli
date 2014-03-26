@@ -75,6 +75,7 @@
     BOOL didEndCall;
     BOOL shouldPlayRingTone;
     BOOL shouldPlayMusic;
+    BOOL shouldGetBigAvater;
     double videoBeginTime;
 }
 
@@ -136,7 +137,7 @@
             // calling someone
             // Load someone's Profile Photo
             
-            [self setBigDisplayImage];
+            [self performSelectorInBackground:@selector(setBigDisplayImage) withObject:nil];
             // Make the Photo dark
             _bigProfileImage.alpha = 0.4f;
             // Present all the icons
@@ -151,13 +152,14 @@
             [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
             shouldPlayRingTone = YES;
             shouldPlayMusic = NO;
+            shouldGetBigAvater = YES;
             break;
         }
         case ReceivingCall: {
             // called
             // Load Caller's Profile Photo
             [[SipStackUtils sharedInstance].soundService enableInComingCallSound];
-            [self setBigDisplayImage];
+            [self performSelectorInBackground:@selector(setBigDisplayImage) withObject:nil];
             // Hide the navigation bar
             [self.navigationController.navigationBar setHidden:YES];
             // Hide the toolbar
@@ -168,6 +170,7 @@
             [self raiseCallerBulletinBoard];
             shouldPlayRingTone = NO;
             shouldPlayMusic = YES;
+            shouldGetBigAvater = YES;
             break;
         }
         default: {
@@ -199,9 +202,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (_bigProfileImage.image == nil) {
-        [self setBigDisplayImage];
-    }
     [self enableBlackScreen];
     // Register for proximity notifications
 }
@@ -216,6 +216,12 @@
     if (shouldPlayMusic) {
         shouldPlayMusic = NO;
         [[SipStackUtils sharedInstance].soundService playRingTone];
+    }
+    if (shouldGetBigAvater) {
+        shouldGetBigAvater = NO;
+        if ([[Utils deviceModelName] isEqualToString:@"iPhone 4"]) {
+            [self performSelectorInBackground:@selector(getBigAvatar) withObject:nil];
+        }
     }
 }
 
@@ -294,6 +300,13 @@
 - (void)setBigDisplayImage
 {
     [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
+    if (![[Utils deviceModelName] isEqualToString:@"iPhone 4"]) {
+        [self getBigAvatar];
+    }
+}
+
+- (void)getBigAvatar
+{
     UIImageView *imageView = _bigProfileImage;
     [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
         UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];

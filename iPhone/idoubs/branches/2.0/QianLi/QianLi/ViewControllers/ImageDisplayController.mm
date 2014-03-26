@@ -493,7 +493,7 @@
     NSMutableArray *array = [NSMutableArray array];
     //CODE_REVIEW:建议将下面imageByResizing函数放到第二线程去跑，以防止阻塞主线程。
     for (UIImage *image in _images) {
-        [array addObject:[image imageByResizing:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
+        [array addObject:[image imageByScalingAndCroppingForSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
     NSData *imageData = [NSKeyedArchiver archivedDataWithRootObject:array];
     DetailHistEvent *imageEvent = [[DetailHistEvent alloc] init];
