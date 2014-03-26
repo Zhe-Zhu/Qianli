@@ -47,6 +47,7 @@
 - (void)clearAllService;
 // sip register method
 - (BOOL)queryConfigurationAndRegister;
+- (void)stopSipStackAndRegisterAgain;
 - (BOOL)unRegisterIdentity;
 // start the NgnEngine of IOS-NGN-Stack
 - (void)start;

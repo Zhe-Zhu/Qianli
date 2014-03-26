@@ -11,6 +11,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "WaitingListUtils.h"
 #import <StoreKit/StoreKit.h>
+#import "UMSocial.h"
 
 @interface SettingViewController : UITableViewController <MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate, SKStoreProductViewControllerDelegate>
 
