@@ -381,7 +381,7 @@ static SipStackUtils * sipStackUtilsInstance;
                 self.remoteParty = [self getRemoteParty:remotePartyUri];
 				[self receiveIncomingCall:incomingSession];
 			}
-			if (incomingSession && [UIApplication sharedApplication].applicationState ==  UIApplicationStateBackground) {
+			if (incomingSession && (([UIApplication sharedApplication].applicationState ==  UIApplicationStateBackground) || ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive))) {
                 // when app is in background, post a local notification to inform user.
                 UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
                 NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
