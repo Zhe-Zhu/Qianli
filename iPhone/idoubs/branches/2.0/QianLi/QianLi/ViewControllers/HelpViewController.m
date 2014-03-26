@@ -63,6 +63,7 @@
     self.scrollView.delegate = self;
     self.scrollView.userInteractionEnabled = YES;
     self.scrollView.backgroundColor = [UIColor colorWithRed:245/255.0 green:245/255.0 blue:245/255.0 alpha:1.0f];
+    self.scrollView.bounces = NO;
     [self.view addSubview:self.scrollView];
     
     if (IS_OS_7_OR_LATER) {
