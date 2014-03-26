@@ -581,10 +581,12 @@
 - (IBAction)doodle:(id)sender
 {
    int index = [_indexs indexOfObject:[NSString stringWithFormat:@"%d",_currentPage - 1]];
-    NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    NSString *str = [NSString stringWithFormat:@"%@%@%d",kDoodleImageIndex,kSeparator,_currentPage - 1];
-    [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
-    [self beginDoodle:index];
+    if (index < [_images count]) {
+        NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+        NSString *str = [NSString stringWithFormat:@"%@%@%d",kDoodleImageIndex,kSeparator,_currentPage - 1];
+        [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
+        [self beginDoodle:index];
+    }
 }
 
 - (void)beginDoodle:(NSInteger)index
