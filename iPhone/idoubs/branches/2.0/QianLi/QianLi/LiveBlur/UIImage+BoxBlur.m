@@ -39,8 +39,9 @@
     //create vImage_Buffer for output
     pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
     
-    if(pixelBuffer == NULL)
+    if(pixelBuffer == NULL){
         //NSLog(@"No pixelbuffer");
+    }
     
     outBuffer.data = pixelBuffer;
     outBuffer.width = CGImageGetWidth(img);

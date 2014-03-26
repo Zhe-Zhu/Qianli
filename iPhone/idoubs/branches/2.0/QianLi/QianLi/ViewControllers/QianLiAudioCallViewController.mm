@@ -581,15 +581,15 @@
         [_buttonSpeaker setTintColor:activeButtonTintColor];
         [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
     }
-    // record current button state
     
+    // record current button state
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
 }
 
 - (void)pressButtonAdd
 {
     if (menuBar) {
-        if (menuBar.isShow==YES) {
+        if (menuBar.isShow == YES) {
             [menuBar dismiss];
             return;
         }

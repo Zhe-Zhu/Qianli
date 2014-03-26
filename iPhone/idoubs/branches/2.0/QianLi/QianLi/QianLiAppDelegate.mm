@@ -515,7 +515,7 @@ const float kColorB = 75/100.0;
 // Remote Notification Delegate
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    NSLog(@"get token:%@",deviceToken);
+    //NSLog(@"get token:%@",deviceToken);
     NSString *tokenJson = [NSString stringWithFormat:@"%@*%@",deviceToken,[UserDataAccessor getUserRemoteParty]];
     
     NSString *urlString= [NSString stringWithFormat:@"%@/notification/gettoken/", kBaseURL];
