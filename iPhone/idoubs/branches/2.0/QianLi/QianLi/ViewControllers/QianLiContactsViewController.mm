@@ -104,7 +104,7 @@
         didLoadFromStarting = NO;
     }
     else{
-        [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+        [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     }
     // 如果没有联系人则显示"提示邀请好友加入"界面
     [self showOrHideNoContacts];

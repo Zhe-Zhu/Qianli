@@ -271,7 +271,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //NSLog(@"selected row %d",  indexPath.row);
+    [self buttonMorePressed];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 // ScrollView Delegate;
