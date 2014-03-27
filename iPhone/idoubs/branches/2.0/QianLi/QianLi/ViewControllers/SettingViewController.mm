@@ -182,11 +182,23 @@
         // rate us
         // add here
         int appId = 830277724;//830277724; //595247165
-        SKStoreProductViewController *storeViewController = [[SKStoreProductViewController alloc] init];
-        NSDictionary *parameters = @{SKStoreProductParameterITunesItemIdentifier:[NSNumber numberWithInteger: appId]};
-        [storeViewController loadProductWithParameters:parameters completionBlock:nil];
-        storeViewController.delegate = self;
-        [self presentViewController:storeViewController animated:YES completion:nil];
+        // user should press the store button to go to the apple store in IOS7. Thus we directly open the apple store url in IOS7.
+        if (!IS_OS_7_OR_LATER) {
+            [_rateUs setSelected:NO animated:YES];
+            SKStoreProductViewController *storeViewController = [[SKStoreProductViewController alloc] init];
+            NSDictionary *parameters = @{SKStoreProductParameterITunesItemIdentifier:[NSNumber numberWithInteger: appId]};
+            [storeViewController loadProductWithParameters:parameters completionBlock:nil];
+            storeViewController.delegate = self;
+            [self presentViewController:storeViewController animated:YES completion:nil];
+        }
+        else
+        {
+            [_rateUs setSelected:NO animated:YES];
+            NSString *str = [NSString stringWithFormat:
+                             @"itms-apps://itunes.apple.com/app/id%d",appId];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+        }
+        
     }
 }
 

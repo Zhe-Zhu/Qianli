@@ -89,7 +89,6 @@
     _starTime = [[NSDate date] timeIntervalSince1970];
     // Pan guesture
     [_addButton setTitle:NSLocalizedString(@"addMore", nil)];
-
     [_doodleButton setTitle:NSLocalizedString(@"doodle", nil)];
     
     _indicator = [[UILabel alloc] initWithFrame:CGRectMake(160-50, 1, 100, _toolBar.frame.size.height)];
@@ -145,6 +144,15 @@
         [self.navigationItem.leftBarButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor colorWithRed:0 green:0.5 blue:1 alpha:1],  UITextAttributeTextColor,nil] forState:UIControlStateNormal];
         
         [_toolBar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forToolbarPosition:UIBarPositionBottom barMetrics:UIBarMetricsDefault];
+        
+//        [[UIBarButtonItem appearance] setTitleTextAttributes:
+//         @{ UITextAttributeFont: [UIFont systemFontOfSize:17.0],
+//            UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetZero],
+//            UITextAttributeTextColor: [UIColor colorWithRed:34/255.0 green:136/255.0 blue:237/255.0 alpha:1.0]} forState:UIControlStateNormal];
+        
+//        [[UIBarButtonItem appearance] setBackgroundImage:[UIImage new]
+//                                                forState:UIControlStateNormal
+//                                              barMetrics:UIBarMetricsDefault];
     }
 }
 
@@ -621,22 +629,24 @@
     UIView *tool = [[UIView alloc] initWithFrame:CGRectMake(0, winSize.height - 44, 320, 44)];
     _doodleToolBar = tool;
     _doodleToolBar.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.8];
-    _doodleToolBar.tintColor = [UIColor blackColor];
+    if (IS_OS_7_OR_LATER) {
+        _doodleToolBar.tintColor = [UIColor blackColor];
+    }
     [self.view addSubview:_doodleToolBar];
     
-    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [saveButton addTarget:self action:@selector(savePhoto) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:saveButton];
     saveButton.frame = CGRectMake(20, 2, 40, 40);
     [saveButton setImage:[UIImage imageNamed:@"doodle_Download.png"] forState:UIControlStateNormal];
     
-    UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:clearButton];
     clearButton.frame = CGRectMake(260, 2, 40, 40);
     [clearButton setImage:[UIImage imageNamed:@"doodle_Trash.png"] forState:UIControlStateNormal];
 
-    UIButton *erase = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *erase = [UIButton buttonWithType:UIButtonTypeCustom];
     [erase addTarget:self action:@selector(erase:) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:erase];
     erase.frame = CGRectMake(140, 2, 40, 40);
