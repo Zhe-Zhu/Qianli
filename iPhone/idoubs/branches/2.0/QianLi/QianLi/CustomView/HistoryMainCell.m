@@ -118,7 +118,7 @@
     UIImage *circleConver = [UIImage imageNamed:@"circle_cover_50.png"];
     UIImageView *coverView = [[UIImageView alloc] initWithFrame:CGRectMake(12, 80/2.0-25, 50, 50)];
     coverView.image = circleConver;
-    [self addSubview:coverView];
+    [self.contentView addSubview:coverView];
     
     _nameLabel.frame = CGRectMake(75, -1, 180, 50);
     CGFloat timeNameWidth = 100;

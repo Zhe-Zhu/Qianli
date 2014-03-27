@@ -27,6 +27,7 @@
 #import "SVStatusHUD.h"
 #import "SipCallManager.h"
 #import "SVProgressHUD.h"
+#import "NotificationHeader.h"
 
 
 @interface QianLiAudioCallViewController (MusicApp)
