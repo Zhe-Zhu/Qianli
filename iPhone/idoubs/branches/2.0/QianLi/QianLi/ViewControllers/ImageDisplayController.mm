@@ -620,38 +620,42 @@
     CGSize winSize = self.view.frame.size;
     UIView *tool = [[UIView alloc] initWithFrame:CGRectMake(0, winSize.height - 44, 320, 44)];
     _doodleToolBar = tool;
-    _doodleToolBar.backgroundColor = [UIColor whiteColor];
+    _doodleToolBar.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.8];
+    _doodleToolBar.tintColor = [UIColor blackColor];
     [self.view addSubview:_doodleToolBar];
     
     UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [saveButton addTarget:self action:@selector(savePhoto) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:saveButton];
-    saveButton.frame = CGRectMake(20, 1, 44, 42);
-    [saveButton setTitle:NSLocalizedString(@"save", nil) forState:UIControlStateNormal];
+    saveButton.frame = CGRectMake(20, 2, 40, 40);
+    [saveButton setImage:[UIImage imageNamed:@"doodle_Download.png"] forState:UIControlStateNormal];
     
     UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:clearButton];
-    clearButton.frame = CGRectMake(138, 1, 44, 42);
-    [clearButton setTitle:NSLocalizedString(@"Clear", nil) forState:UIControlStateNormal];
+    clearButton.frame = CGRectMake(260, 2, 40, 40);
+    [clearButton setImage:[UIImage imageNamed:@"doodle_Trash.png"] forState:UIControlStateNormal];
 
     UIButton *erase = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [erase addTarget:self action:@selector(erase:) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:erase];
-    erase.frame = CGRectMake(234, 1, 66, 42);
-    [erase setTitle:NSLocalizedString(@"eraser", nil) forState:UIControlStateNormal];
+    erase.frame = CGRectMake(140, 2, 40, 40);
+    [erase setImage:[UIImage imageNamed:@"doodle_eraser.png"] forState:UIControlStateNormal];
     
     [self.navigationItem.leftBarButtonItem setTitle:NSLocalizedString(@"cancelDoodle", nil)];
+//    [self.navigationItem.leftBarButtonItem setImage:[UIImage imageNamed:@"doodle_quit.png"]];
 }
 
 - (void)erase:(id)sender
 {
     [_doodleView changePaintingMode];
     if (_doodleView.isDrawing) {
-        [sender setTitle:NSLocalizedString(@"eraser", nil) forState:UIControlStateNormal];
+//        [sender setTitle:NSLocalizedString(@"eraser", nil) forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:@"doodle_eraser.png"] forState:UIControlStateNormal];
     }
     else{
-        [sender setTitle:NSLocalizedString(@"pen", nil) forState:UIControlStateNormal];
+//        [sender setTitle:NSLocalizedString(@"pen", nil) forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:@"doodle_pen_1.png"] forState:UIControlStateNormal];
     }
 }
 
