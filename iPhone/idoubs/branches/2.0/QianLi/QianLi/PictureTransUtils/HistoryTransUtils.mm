@@ -151,7 +151,7 @@ static HistoryTransUtils *histUtils;
             event.start = startingTime;
             event.end = startingTime;
             [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:YES];
-            //                NSString *contentStr = [NSString stringWithFormat:@"Appointment from %@", name];
+            
             NSString *contentStr = NSLocalizedString(@"appointmentNoName", nil);
             NSArray *array = @[remoteParty, contentStr, [NSNumber numberWithDouble:startingTime], @"Appointment"];
             [self performSelectorOnMainThread:@selector(writeHistory:) withObject:array waitUntilDone:YES];

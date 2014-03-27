@@ -355,6 +355,26 @@ const float kColorB = 75/100.0;
     [Utils lookupHostIPAddressForURL:[NSURL URLWithString:@"http://www.qlcall.com"]];
     // Umeng
     [UMFeedback checkWithAppkey:kUmengSDKKey];
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"AutoMainHistory"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"AutoMainHistory"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        NSArray *array = [[MainHistoryDataAccessor sharedInstance] getAllObjects];
+        if ([array count] < 1) {
+            [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:QianLiRobotNumber Content:NSLocalizedString(@"appointmentNoName", nil) Time:[[NSDate date] timeIntervalSince1970] Type:kMainHistAppMark];
+            [Utils updateMainHistNameForRemoteParty:QianLiRobotNumber];
+            
+            DetailHistEvent *event = [[DetailHistEvent alloc] init];
+            event.type = kMediaType_Audio;
+            event.remoteParty = QianLiRobotNumber;
+            event.status = kHistoryEventStatus_Appointment;
+            double startingTime = [[NSDate date] timeIntervalSince1970];
+            event.start = startingTime;
+            event.end = startingTime;
+            [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:NO];
+        }
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

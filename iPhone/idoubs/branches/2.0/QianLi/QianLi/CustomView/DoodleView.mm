@@ -225,8 +225,9 @@
 
 - (void)sendDoodleMessage:(NSString *)drawing
 {
+    // 1 is red, 2 is blue, other is black
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@%@%d%@%f", kDoodleImagePoints, kSeparator, drawing, kSeparator, _pointsMessage, kSeparator, 1, kSeparator, _lineWidth];
+    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@%@%d%@%f", kDoodleImagePoints, kSeparator, drawing, kSeparator, _pointsMessage, kSeparator, 2, kSeparator, _lineWidth];
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
 }
 
