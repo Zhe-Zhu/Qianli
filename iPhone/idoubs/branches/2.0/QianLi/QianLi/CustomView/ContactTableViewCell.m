@@ -24,7 +24,7 @@
 
 CGFloat cellHeight = 44;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withCheckBox:(BOOL)hasCheckBox
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -32,7 +32,7 @@ CGFloat cellHeight = 44;
 
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, cellHeight/2.0 - avatarDiameter/2.0, avatarDiameter, avatarDiameter)];
         _profileImageView = imageView;
-        imageView.layer.cornerRadius = avatarDiameter / 2.0;
+        //imageView.layer.cornerRadius = avatarDiameter / 2.0;
         imageView.clipsToBounds = YES;
         [self addSubview:_profileImageView];
         
@@ -47,18 +47,20 @@ CGFloat cellHeight = 44;
         //        [self addSubview:line];
         
         // Add uncheck Box
-        UIImageView *uncheckBox = [[UIImageView alloc] initWithFrame:CGRectMake(275.5-28/2, 22.5-28/2, 28, 28)];
-        _uncheckBox = uncheckBox;
-        _uncheckBox.image = [UIImage imageNamed:@"uncheckBox.png"];
-        [_uncheckBox setHidden:YES];
-        [self addSubview:_uncheckBox];
-        
-        // Add check Box
-        UIImageView *checkBox = [[UIImageView alloc] initWithFrame:CGRectMake(275.5, 22.5, 0, 0)];
-        _checkBox = checkBox;
-        _checkBox.image = [UIImage imageNamed:@"checkBox.png"];
-        [_checkBox setHidden:YES];
-        [self addSubview:_checkBox];
+        if (hasCheckBox) {
+            UIImageView *uncheckBox = [[UIImageView alloc] initWithFrame:CGRectMake(275.5-28/2, 22.5-28/2, 28, 28)];
+            _uncheckBox = uncheckBox;
+            _uncheckBox.image = [UIImage imageNamed:@"uncheckBox.png"];
+            [_uncheckBox setHidden:YES];
+            [self addSubview:_uncheckBox];
+            
+            // Add check Box
+            UIImageView *checkBox = [[UIImageView alloc] initWithFrame:CGRectMake(275.5, 22.5, 0, 0)];
+            _checkBox = checkBox;
+            _checkBox.image = [UIImage imageNamed:@"checkBox.png"];
+            [_checkBox setHidden:YES];
+            [self addSubview:_checkBox];
+        }
         
         UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(290, cellHeight/2.0 - 20.8/2.0, 20.5, 20.5)];
         _icon = icon;

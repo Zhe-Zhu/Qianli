@@ -239,7 +239,6 @@
 		505A076F17B09E520053E1B7 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 505A076E17B09E520053E1B7 /* AddressBookUI.framework */; };
 		505A077117B09E5D0053E1B7 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 505A077017B09E5C0053E1B7 /* AddressBook.framework */; };
 		505A077517B09FA90053E1B7 /* QianLiAddressBookItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 505A077417B09FA90053E1B7 /* QianLiAddressBookItem.m */; };
-		505A077917B09FB40053E1B7 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = 505A077717B09FB40053E1B7 /* blank.png */; };
 		505A077A17B09FB40053E1B7 /* blank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 505A077817B09FB40053E1B7 /* blank@2x.png */; };
 		505A078117B0A6720053E1B7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 505A078017B0A6720053E1B7 /* QuartzCore.framework */; };
 		505A078C17B0A9430053E1B7 /* checkBox.png in Resources */ = {isa = PBXBuildFile; fileRef = 505A078817B0A9420053E1B7 /* checkBox.png */; };
@@ -878,7 +877,6 @@
 		505A077017B09E5C0053E1B7 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		505A077317B09FA90053E1B7 /* QianLiAddressBookItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QianLiAddressBookItem.h; sourceTree = "<group>"; };
 		505A077417B09FA90053E1B7 /* QianLiAddressBookItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QianLiAddressBookItem.m; sourceTree = "<group>"; };
-		505A077717B09FB40053E1B7 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
 		505A077817B09FB40053E1B7 /* blank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank@2x.png"; sourceTree = "<group>"; };
 		505A078017B0A6720053E1B7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		505A078817B0A9420053E1B7 /* checkBox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkBox.png; sourceTree = "<group>"; };
@@ -1804,7 +1802,6 @@
 				CE1E8CE71843377A00A956A2 /* barButtonDisabled@2x.png */,
 				CE1E8CE81843377A00A956A2 /* barButtonPressed@2x.png */,
 				CE6D2A5F18069B9B00AF6289 /* bigPhotoCoverIphone5@2x.png */,
-				505A077717B09FB40053E1B7 /* blank.png */,
 				505A077817B09FB40053E1B7 /* blank@2x.png */,
 				CE6BD29317EE87040001CF67 /* blankImage@2x.png */,
 				CEBAFC49182223990021764A /* browserBackward@2x.png */,
@@ -2519,7 +2516,6 @@
 				18F2762118BCA41F00CD83D8 /* robot_avatar@2x.png in Resources */,
 				18FD1E8C1884E1F4006D3D51 /* help_1_done_background_words_1136@2x.png in Resources */,
 				CEB99B8118210E28000551E1 /* cameraTakePhotoNormal@2x.png in Resources */,
-				505A077917B09FB40053E1B7 /* blank.png in Resources */,
 				505A077A17B09FB40053E1B7 /* blank@2x.png in Resources */,
 				CE7CEA1117CF4B870042F057 /* requestOK@2x.png in Resources */,
 				18096A22187181B600198CD6 /* doodle_pen_5@2x.png in Resources */,
