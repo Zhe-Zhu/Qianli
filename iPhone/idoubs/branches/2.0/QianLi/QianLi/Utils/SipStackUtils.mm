@@ -470,6 +470,11 @@ static SipStackUtils * sipStackUtilsInstance;
     }
 }
 
+- (void)muteLocalNotification
+{
+    self.localNotif.soundName = nil;
+}
+
 - (void)receiveIncomingCall:(NgnAVSession*)session
 {
     // jump the audio calling view
