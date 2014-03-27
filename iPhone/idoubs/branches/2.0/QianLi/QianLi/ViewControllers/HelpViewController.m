@@ -39,7 +39,7 @@
     CGFloat screenHeight = self.view.frame.size.height;
     CGFloat iPhone5Offset = 0;
     if (abs(screenHeight-568)<=0.1) {
-        iPhone5Offset = 14;
+        iPhone5Offset = 5;
     }
     
     self.scrollView = [[UIScrollView alloc]init];
@@ -62,7 +62,8 @@
     self.scrollView.scrollsToTop = NO;
     self.scrollView.delegate = self;
     self.scrollView.userInteractionEnabled = YES;
-    self.scrollView.backgroundColor = [UIColor colorWithRed:253/255.0 green:253/255.0 blue:253/255.0 alpha:1.0f];
+    self.scrollView.backgroundColor = [UIColor colorWithRed:245/255.0 green:245/255.0 blue:245/255.0 alpha:1.0f];
+    self.scrollView.bounces = NO;
     [self.view addSubview:self.scrollView];
     
     if (IS_OS_7_OR_LATER) {
@@ -80,9 +81,12 @@
     self.pageControl.currentPage = 0;
     self.pageControl.pageIndicatorTintColor = [UIColor grayColor];
     self.pageControl.currentPageIndicatorTintColor = [UIColor blackColor];
+    if (!IS_OS_7_OR_LATER) {
+        self.pageControl.frame = CGRectMake(self.pageControl.frame.origin.x, self.pageControl.frame.origin.y+15, self.pageControl.frame.size.width, self.pageControl.frame.size.height);
+    }
     [self.view addSubview:self.pageControl];
     
-    self.view.backgroundColor = [UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0];
+    self.view.backgroundColor = [UIColor colorWithRed:245/255.0 green:245/255.0 blue:245/255.0 alpha:1.0];
     
     // 加入[开始使用]按钮
     CGFloat startButtonWidth = 374/2.0;
@@ -90,13 +94,16 @@
     self.startButton = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth/2.0 - startButtonWidth/2.0, screenHeight/2.0 + CGRectGetMaxY(self.scrollView.frame)/2.0 - startButtonHeight/2.0, startButtonWidth, startButtonHeight)];
     [self.startButton setImage:[UIImage imageNamed:@"helpButton.png"] forState:UIControlStateNormal];
     [self.startButton addTarget:self action:@selector(startButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    if (!IS_OS_7_OR_LATER) {
+        self.startButton.frame = CGRectMake(self.startButton.frame.origin.x, self.startButton.frame.origin.y+15, self.startButton.frame.size.width, self.startButton.frame.size.height);
+    }
     [self.view addSubview:self.startButton];
     
     UILabel *startLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, startButtonWidth, startButtonHeight)];
     startLabel.text = NSLocalizedString(@"beginToUse", nil);
     startLabel.textAlignment = NSTextAlignmentCenter;
     startLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:14.0f];
-    startLabel.textColor = [UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0];
+    startLabel.textColor = [UIColor colorWithRed:57/255.0 green:189/255.0 blue:76/255.0 alpha:1.0];
     startLabel.backgroundColor = [UIColor clearColor];
     [self.startButton addSubview:startLabel];
     
@@ -109,9 +116,9 @@
     [self.startButton insertSubview:startLabelShadow belowSubview:startLabel];
     
     // 加入分割scrollview和底层view的分割线
-    UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.scrollView.frame), pageWidth, 1)];
-    lineView.backgroundColor = [UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0];
-    [self.view addSubview:lineView];
+    // UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.scrollView.frame), pageWidth, 1)];
+    // lineView.backgroundColor = [UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0];
+    // [self.view addSubview:lineView];
     
     for (int i = 0; i < 4; ++i) {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i * pageWidth, 0, pageWidth , 295.5)];
@@ -121,7 +128,8 @@
         // 加入文案标题栏
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(i * pageWidth, CGRectGetHeight(imageView.frame) + 4 + iPhone5Offset, pageWidth, 40)];
         titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:18.0f];
+        titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:26.0f];
+        titleLabel.backgroundColor = [UIColor clearColor];
         [self.scrollView addSubview:titleLabel];
         
         // 加入文案副标题栏
@@ -129,15 +137,17 @@
         quoteLabel.textColor = [UIColor colorWithRed:150/255.0 green:150/255.0 blue:150/255.0 alpha:1.0];
         quoteLabel.font = [UIFont fontWithName:@"STHeitiSC-Light" size:11.0f];
         quoteLabel.textAlignment = NSTextAlignmentCenter;
-        [self.scrollView addSubview:quoteLabel];
+        quoteLabel.backgroundColor = [UIColor clearColor];
+//        [self.scrollView addSubview:quoteLabel];
         
         // 加入文案描述栏
-        UITextView *descriptionText = [[UITextView alloc] initWithFrame:CGRectMake(i * pageWidth + 25, CGRectGetMaxY(titleLabel.frame) + iPhone5Offset*2, pageWidth - 50, 60)];
+        UITextView *descriptionText = [[UITextView alloc] initWithFrame:CGRectMake(i * pageWidth + 15, CGRectGetMaxY(titleLabel.frame) + iPhone5Offset*2, pageWidth - 30, 100)];
         descriptionText.textAlignment = NSTextAlignmentCenter;
         descriptionText.textColor = [UIColor colorWithRed:119/255. green:119/255.0 blue:119/255.0 alpha:1.0];
-        descriptionText.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:13.0f];
+        descriptionText.font = [UIFont fontWithName:@"STHeitiSC-Light" size:16.0f];
         descriptionText.editable = NO;
         descriptionText.userInteractionEnabled = NO;
+        descriptionText.backgroundColor = [UIColor clearColor];
         [self.scrollView addSubview: descriptionText];
         
         switch (i+1) {
@@ -149,13 +159,13 @@
             case 2:
                 titleLabel.text = NSLocalizedString(@"helpViewTwoTitle", nil);
                 quoteLabel.text = NSLocalizedString(@"helpViewTwoQuote", nil);
-                descriptionText.frame = CGRectMake(i * pageWidth + 25, CGRectGetMaxY(titleLabel.frame)+12+iPhone5Offset*2, pageWidth - 50, 60);
+//                descriptionText.frame = CGRectMake(i * pageWidth + 25, CGRectGetMaxY(titleLabel.frame)+12+iPhone5Offset*2, pageWidth - 50, 60);
                 descriptionText.text = NSLocalizedString(@"helpViewTwoDescription", nil);
                 break;
             case 3:
                 titleLabel.text = NSLocalizedString(@"helpViewThreeTitle", nil);
                 quoteLabel.text = NSLocalizedString(@"helpViewThreeQuote", nil);
-                descriptionText.frame = CGRectMake(i * pageWidth + 25, CGRectGetMaxY(titleLabel.frame)+12+iPhone5Offset*2, pageWidth - 50, 60);
+//                descriptionText.frame = CGRectMake(i * pageWidth + 25, CGRectGetMaxY(titleLabel.frame)+12+iPhone5Offset*2, pageWidth - 50, 60);
                 descriptionText.text = NSLocalizedString(@"helpViewThreeDescription", nil);
                 break;
             case 4:

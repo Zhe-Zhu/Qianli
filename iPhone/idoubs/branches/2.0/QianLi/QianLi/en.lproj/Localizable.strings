@@ -42,15 +42,15 @@
 "Album" = "Album";
 "Camera" = "Camera";
 "beginToUse" = "Let's Start";
-"helpViewOneTitle" = "Welcome to Qianli";
-"helpViewTwoTitle" = "Better Communication";
+"helpViewOneTitle" = "Free to call";
+"helpViewTwoTitle" = "Easy to share";
 "helpViewTwoQuote" = "We could have more than voice to express our thoughts";
-"helpViewTwoDescription" = "You can share pictures,website link and other interesting information during the call.";
-"helpViewThreeTitle" = "Feel Together";
+"helpViewTwoDescription" = "Share pictures and other funny thing during the call.";
+"helpViewThreeTitle" = "Feel like together";
 "helpViewThreeQuote" = "Just think about the feeling when someone is around";
-"helpViewThreeDescription" = "When you share pictures or videos with others, Qianli can sychronize your screens and make it more interesting.";
+"helpViewThreeDescription" = "Chatly will sync screens and make it more interesting.";
 "helpViewFourTitle" = "Busy or not?";
-"helpViewFourDescription" = "Send an appointment through Qianli. They will call back if they are available.";
+"helpViewFourDescription" = "Send an appointment before your call.";
 "unset" = " ";
 "send" = "Send";
 "addMore" = "Add more";
@@ -133,7 +133,7 @@
 
 "urlInput" = "Input url or search";
 "go" = "Go";
-"helpViewOneDescription" = "Qianli is a VOIP app. With Qianli in your phone, you and your friends can enjoy free and stable voice call.";
+"helpViewOneDescription" = "Call your friend freely as long as you want!";
 
 //date
 "yesterday" = "Yesterday";
