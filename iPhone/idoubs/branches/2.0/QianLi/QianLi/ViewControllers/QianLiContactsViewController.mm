@@ -15,6 +15,7 @@
     NSMutableArray *_allContacts; // 所有联系人的号码
     NSMutableArray *_updateArray; // 需要去update信息的号码
     BOOL didLoadFromStarting;
+    BOOL backFromInvite;
     double startingTime;
 }
 @property (nonatomic, weak) IBOutlet UITableView *friendsTableView;
@@ -51,6 +52,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    backFromInvite = NO;
     [self setCountryCodes];
     CGFloat buttonHeight = 60;
     _buttonInviteFriends = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -84,6 +86,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if (backFromInvite) {
+        backFromInvite = NO;
+        return;
+    }
     if (!_contacts) {
         _contacts = [[NSMutableArray alloc] init];
     }
@@ -583,7 +589,8 @@
     }
     
     [self performSelectorOnMainThread:@selector(showOrHideNoContacts) withObject:nil waitUntilDone:NO];
-    [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    //[_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    [_friendsTableView reloadData];
     [self updateQianLiContacts:items];
 }
 
@@ -607,7 +614,7 @@
             }
         }
         if (!doHasIt) {
-            [[QianLiContactsAccessor sharedInstance] performSelectorOnMainThread:@selector(deleteItemForRemoteParty:) withObject:num waitUntilDone:YES];
+            [[QianLiContactsAccessor sharedInstance] performSelectorOnMainThread:@selector(deleteItemForRemoteParty:) withObject:num waitUntilDone:NO];
         }
     }
     
@@ -709,7 +716,8 @@
                     // If address has name, we use that name; otherwise, we use the name set by user
                     if (![object valueForKey:@"name"]) {
                         NSArray *array= @[name, number];
-                        [self performSelectorOnMainThread:@selector(updateNameToNumber:) withObject:array waitUntilDone:YES];
+                        [self performSelectorOnMainThread:@selector(updateNameToNumber:) withObject:array waitUntilDone:NO];
+                        [self updateAvatar:number withImage:nil withName:name];
                         [self addToUpdateList:number name:name];
                     }
                     // update profile and updateCounter
@@ -718,15 +726,15 @@
                        image = [UserDataTransUtils getImageAtPath:avatarURL];
                         if (image) {
                             NSArray *array = @[image, [NSNumber numberWithInteger:updateTime], number];
-                            [self performSelectorOnMainThread:@selector(updateProfile:) withObject:array waitUntilDone:YES];
+                            [self performSelectorOnMainThread:@selector(updateProfile:) withObject:array waitUntilDone:NO];
+                            [self updateAvatar:number withImage:image withName:nil];
                         }
                     }
                     else
                     {
                         NSArray *array = @[[NSNumber numberWithInteger:updateTime], number];
-                        [self performSelectorOnMainThread:@selector(updateUpdateTime:) withObject:array waitUntilDone:YES];
+                        [self performSelectorOnMainThread:@selector(updateUpdateTime:) withObject:array waitUntilDone:NO];
                     }
-                    [self showAllContacts];
                 }];
             }
         }];
@@ -739,11 +747,37 @@
     }
 }
 
-- (void)showAllContacts
+- (void)updateAvatar:(NSString *)number withImage:(UIImage *)image withName:(NSString *)name;
 {
-    //Display core data contacts 
-    [self getAllQianLiFriends];
-    [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    for (int j = 0; j < [_contacts count]; ++j) {
+        NSArray *array = [_contacts objectAtIndex:j];
+        BOOL found = NO;
+        for (int i = 0; i < [array count]; ++i) {
+            QianLiContactsItem *contactItem = [array objectAtIndex:i];
+            if ([contactItem.tel isEqualToString:number]) {
+                if (image) {
+                    contactItem.thumbnail = image;
+                }
+                if (name) {
+                    contactItem.name = name;
+                }
+                found = YES;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:j];
+                if (indexPath) {
+                    [self updateContactsAt:indexPath];
+                }
+                break;
+            }
+        }
+        if (found) {
+            break;
+        }
+    }
+}
+
+- (void)updateContactsAt:(NSIndexPath *)indexPath
+{
+    [_friendsTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)getAllQianLiFriends
@@ -824,12 +858,12 @@
     _inviteController = [storyBoard instantiateViewControllerWithIdentifier:@"InviteController"];
     _inviteController.title = @"Invite";
     if (_allContacts) {
-        _inviteController.contacts = [_allContacts mutableCopy];
-        _allContacts = nil;
+        _inviteController.contacts = _allContacts;
     }
     _inviteController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:_inviteController animated:YES];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    backFromInvite = YES;
 }
 
 #pragma mark - Table View Delegate
@@ -970,7 +1004,7 @@
         _noContactBody = noContactBody;
     }
  
-    if (!_noContactBody2) {
+    if (!_noContactBody2){
         UILabel *noContactBody2 = [[UILabel alloc] initWithFrame:CGRectMake(160-100, 305, 200, 80)];
         noContactBody2.textAlignment = NSTextAlignmentCenter;
         noContactBody2.text = NSLocalizedString(@"noContactBody2", nil);
