@@ -1095,8 +1095,8 @@
             }
             else{
                 if ([SipCallManager SharedInstance].didHavePhoneCall){
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"phone call" message:@"phone call" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                    [alertView show];
+                    // TODO:test
+                    [NotificationHeader presentNotificationHeader:self.view inPosition:CGPointMake(0, 0) withIcon:[UIImage imageNamed:@"header_icon_stop.png"] andText:@"对方有电话进入，请稍候"];
                 }
 
             }
