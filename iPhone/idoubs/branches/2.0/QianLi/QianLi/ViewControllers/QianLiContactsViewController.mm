@@ -590,8 +590,7 @@
     }
     
     [self performSelectorOnMainThread:@selector(showOrHideNoContacts) withObject:nil waitUntilDone:NO];
-    //[_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-    [_friendsTableView reloadData];
+    [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
     [self updateQianLiContacts:items];
 }
 
@@ -765,7 +764,7 @@
                 found = YES;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:j];
                 if (indexPath) {
-                    [self updateContactsAt:indexPath];
+                    [self performSelectorOnMainThread:@selector(updateContactsAt:) withObject:indexPath waitUntilDone:NO];
                 }
                 break;
             }
