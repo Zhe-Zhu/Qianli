@@ -851,7 +851,7 @@
 	ContactTableViewCell *contactCell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
 	if (contactCell == nil) {
-		contactCell = [[ContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+		contactCell = [[ContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier withCheckBox:NO];
 		contactCell.frame = CGRectMake(0.0, 0.0, 320.0, 44);
     }
     

@@ -113,7 +113,7 @@
     
     _line.frame = CGRectMake(0, 79, 320, 1);
     _avatar.frame = CGRectMake(12, 80/2.0-25, 50, 50);
-    _avatar.layer.cornerRadius = _avatar.frame.size.height / 2.0;
+    //_avatar.layer.cornerRadius = _avatar.frame.size.height / 2.0;
     _avatar.clipsToBounds = YES;
     _nameLabel.frame = CGRectMake(75, -1, 180, 50);
     CGFloat timeNameWidth = 100;
