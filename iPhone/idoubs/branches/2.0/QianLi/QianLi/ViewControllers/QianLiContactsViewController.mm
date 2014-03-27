@@ -8,6 +8,7 @@
 
 #import "QianLiContactsViewController.h"
 #import "SipCallManager.h"
+#import "NotificationHeader.h"
 
 @interface QianLiContactsViewController()
 {

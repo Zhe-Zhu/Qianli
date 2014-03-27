@@ -163,6 +163,7 @@
 		18FD1E991884E1F4006D3D51 /* help_5_background_words_1136@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FD1E8A1884E1F4006D3D51 /* help_5_background_words_1136@2x.png */; };
 		18FD1EC918850B2A006D3D51 /* help_2_calling_1136@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FD1EC718850B2A006D3D51 /* help_2_calling_1136@2x.png */; };
 		18FD1ECA18850B2A006D3D51 /* help_2_calling@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FD1EC818850B2A006D3D51 /* help_2_calling@2x.png */; };
+		2F35709918E3CF4A00EB6A5A /* NotificationHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F35709818E3CF4A00EB6A5A /* NotificationHeader.m */; };
 		2F6F0A0A1876A6B1004769A2 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D57182C8AF8001536CB /* libMobClickLibrary.a */; };
 		2F81373117AFB54500DB23F2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F81373017AFB54500DB23F2 /* UIKit.framework */; };
 		2F81373317AFB54500DB23F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F81373217AFB54500DB23F2 /* Foundation.framework */; };
@@ -776,6 +777,8 @@
 		18FD1E8A1884E1F4006D3D51 /* help_5_background_words_1136@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_5_background_words_1136@2x.png"; sourceTree = "<group>"; };
 		18FD1EC718850B2A006D3D51 /* help_2_calling_1136@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_2_calling_1136@2x.png"; sourceTree = "<group>"; };
 		18FD1EC818850B2A006D3D51 /* help_2_calling@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help_2_calling@2x.png"; sourceTree = "<group>"; };
+		2F35709718E3CF4A00EB6A5A /* NotificationHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationHeader.h; sourceTree = "<group>"; };
+		2F35709818E3CF4A00EB6A5A /* NotificationHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationHeader.m; sourceTree = "<group>"; };
 		2F81372C17AFB54500DB23F2 /* QianLi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QianLi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F81373017AFB54500DB23F2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2F81373217AFB54500DB23F2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1665,6 +1668,8 @@
 				507B182118116ADA00DE6D88 /* WebHistoryCell.m */,
 				18E36D561877F6CD00D685EA /* HelpView.h */,
 				18E36D571877F6CD00D685EA /* HelpView.mm */,
+				2F35709718E3CF4A00EB6A5A /* NotificationHeader.h */,
+				2F35709818E3CF4A00EB6A5A /* NotificationHeader.m */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -2665,6 +2670,7 @@
 				2F81375817AFB83700DB23F2 /* SignUpVerificationCodeViewController.mm in Sources */,
 				2F81375B17AFBA3E00DB23F2 /* QianLiContactsViewController.mm in Sources */,
 				509B368417D87D3C00AA872D /* UIImageExtras.m in Sources */,
+				2F35709918E3CF4A00EB6A5A /* NotificationHeader.m in Sources */,
 				2F81375E17AFBA5D00DB23F2 /* InviteFriendsViewController.mm in Sources */,
 				CE4E88F317DDA28F0012D34E /* QianLiTableMenuBarItem.m in Sources */,
 				2F81376117AFBBCE00DB23F2 /* HistoryRecordsMainViewController.mm in Sources */,
