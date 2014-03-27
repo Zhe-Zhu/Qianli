@@ -325,7 +325,7 @@
             }
         }
         else{
-            personImage = [UIImage imageNamed:@"blank.png"];
+            //personImage = [UIImage imageNamed:@"blank.png"];
         }
         [addressBook setThumbnail: personImage];
         addressBook.rowSelected = NO;
@@ -836,11 +836,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        return 1;
-	} else {
-        return [_contacts count];
-    }
+    return [_contacts count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -861,6 +857,9 @@
     
     QianLiAddressBookItem *contact = nil;
     contact = (QianLiAddressBookItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    if (!contact.thumbnail) {
+        contact.thumbnail = [UIImage imageNamed:@"blank.png"];
+    }
     [contactCell setContactProfile: contact NeedIcon:YES];
     
     // Set seperator line
