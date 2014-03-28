@@ -426,6 +426,7 @@
 // send something to social media
 + (void)shareThingsToSocialMedia:(UIViewController *)inController text:(NSString *)text Image:(UIImage *)image delegate:(id<UMSocialUIDelegate>)delegate
 {
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeText;
     [UMSocialSnsService presentSnsIconSheetView:inController
                                          appKey:kUmengSDKKey
                                       shareText:text
