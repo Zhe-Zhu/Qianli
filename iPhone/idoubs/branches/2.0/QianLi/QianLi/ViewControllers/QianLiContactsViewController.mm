@@ -590,7 +590,7 @@
     }
     
     [self performSelectorOnMainThread:@selector(showOrHideNoContacts) withObject:nil waitUntilDone:NO];
-    [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [self updateQianLiContacts:items];
 }
 
@@ -614,7 +614,7 @@
             }
         }
         if (!doHasIt) {
-            [[QianLiContactsAccessor sharedInstance] performSelectorOnMainThread:@selector(deleteItemForRemoteParty:) withObject:num waitUntilDone:NO];
+            [[QianLiContactsAccessor sharedInstance] performSelectorOnMainThread:@selector(deleteItemForRemoteParty:) withObject:num waitUntilDone:YES];
         }
     }
     
@@ -716,7 +716,7 @@
                     // If address has name, we use that name; otherwise, we use the name set by user
                     if (![object valueForKey:@"name"]) {
                         NSArray *array= @[name, number];
-                        [self performSelectorOnMainThread:@selector(updateNameToNumber:) withObject:array waitUntilDone:NO];
+                        [self performSelectorOnMainThread:@selector(updateNameToNumber:) withObject:array waitUntilDone:YES];
                         [self updateAvatar:number withImage:nil withName:name];
                         [self addToUpdateList:number name:name];
                     }
@@ -726,14 +726,14 @@
                        image = [UserDataTransUtils getImageAtPath:avatarURL];
                         if (image) {
                             NSArray *array = @[image, [NSNumber numberWithInteger:updateTime], number];
-                            [self performSelectorOnMainThread:@selector(updateProfile:) withObject:array waitUntilDone:NO];
+                            [self performSelectorOnMainThread:@selector(updateProfile:) withObject:array waitUntilDone:YES];
                             [self updateAvatar:number withImage:image withName:nil];
                         }
                     }
                     else
                     {
                         NSArray *array = @[[NSNumber numberWithInteger:updateTime], number];
-                        [self performSelectorOnMainThread:@selector(updateUpdateTime:) withObject:array waitUntilDone:NO];
+                        [self performSelectorOnMainThread:@selector(updateUpdateTime:) withObject:array waitUntilDone:YES];
                     }
                 }];
             }
@@ -764,7 +764,7 @@
                 found = YES;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:j];
                 if (indexPath) {
-                    [self performSelectorOnMainThread:@selector(updateContactsAt:) withObject:indexPath waitUntilDone:NO];
+                    [self performSelectorOnMainThread:@selector(updateContactsAt:) withObject:indexPath waitUntilDone:YES];
                 }
                 break;
             }
