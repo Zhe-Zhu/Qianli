@@ -19,6 +19,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        self.selectionStyle = UITableViewCellSelectionStyleGray;
         UILabel *lable = [[UILabel alloc] initWithFrame:CGRectMake(30, 5, 260, 25)];
         _titelLabel = lable;
         [self addSubview:lable];
