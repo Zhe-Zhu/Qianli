@@ -890,6 +890,16 @@
     }
     
     QianLiAddressBookItem *contact = nil;
+    if ([_contacts count] <= indexPath.section) {
+        return nil;
+    }
+    else{
+        NSArray *array = [_contacts objectAtIndex:indexPath.section];
+        if ([array count] <= indexPath.row) {
+            return nil;
+        }
+    }
+    
     contact = (QianLiAddressBookItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (!contact.thumbnail) {
         contact.thumbnail = [UIImage imageNamed:@"blank.png"];
@@ -923,6 +933,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Call someone
+    if ([_contacts count] <= indexPath.section) {
+        return;
+    }
+    else{
+        NSArray *array = [_contacts objectAtIndex:indexPath.section];
+        if ([array count] <= indexPath.row) {
+            return;
+        }
+    }
     QianLiContactsItem *item = (QianLiContactsItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     NSString *remoteParty = item.tel;
     [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
@@ -932,6 +951,15 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
+    if ([_contacts count] <= indexPath.section) {
+        return;
+    }
+    else{
+        NSArray *array = [_contacts objectAtIndex:indexPath.section];
+        if ([array count] <= indexPath.row) {
+            return;
+        }
+    }
 	QianLiAddressBookItem *addressBook = nil;
     addressBook = (QianLiAddressBookItem*)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
@@ -946,6 +974,9 @@
 -(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger lastSection = [self getLastSection];
+    if ([_contacts count] <= lastSection) {
+        return;
+    }
     if((indexPath.section == lastSection) && (indexPath.row == [[_contacts objectAtIndex:lastSection] count] - 1)){
         if (didLoadFromStarting){
             didLoadFromStarting = NO;
