@@ -711,11 +711,11 @@ const float kColorB = 75/100.0;
     [UMSocialWechatHandler setWXAppId:kWeiXinID url:nil];
     //打开Qzone的SSO开关，
     //需要#import <TencentOpenAPI/QQApiInterface.h>  #import <TencentOpenAPI/TencentOAuth.h>
-    [UMSocialConfig setSupportQzoneSSO:YES importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
-    [UMSocialConfig setShareQzoneWithQQSDK:YES url:@"http://www.umeng.com/social" importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
+    //[UMSocialConfig setSupportQzoneSSO:YES importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
+    //[UMSocialConfig setShareQzoneWithQQSDK:YES url:@"http://www.umeng.com/social" importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
     //需要#import <TencentOpenAPI/QQApiInterface.h>  #import <TencentOpenAPI/TencentOAuth.h>
     //设置手机QQ的AppId，url传nil，将使用友盟的网址
-    [UMSocialConfig setQQAppId:kQQAppID url:nil importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
+    //[UMSocialConfig setQQAppId:kQQAppID url:nil importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
     //打开新浪微博的SSO开关
     [UMSocialConfig setSupportSinaSSO:YES];
     

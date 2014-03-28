@@ -430,7 +430,7 @@
                                          appKey:kUmengSDKKey
                                       shareText:text
                                      shareImage:nil
-                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToSina,UMShareToQQ,UMShareToQzone,UMShareToSms,UMShareToEmail,nil]
+                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToSina,UMShareToSms,UMShareToEmail,nil]
                                        delegate:delegate];
 }
 @end

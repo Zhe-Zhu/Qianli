@@ -78,6 +78,8 @@
     BOOL shouldPlayMusic;
     BOOL shouldGetBigAvater;
     double videoBeginTime;
+    
+    __weak NotificationHeader * header;
 }
 
 @property(weak, nonatomic) NSTimer *timer;
@@ -1095,8 +1097,7 @@
             }
             else{
                 if ([SipCallManager SharedInstance].didHavePhoneCall){
-                    // TODO:test
-                    [NotificationHeader presentNotificationHeader:self.view inPosition:CGPointMake(0, 0) withIcon:[UIImage imageNamed:@"header_icon_stop.png"] andText:@"对方有电话进入，请稍候"];
+                    header = [NotificationHeader presentNotificationHeader:self.view inPosition:CGPointMake(0, 0) withIcon:[UIImage imageNamed:@"header_icon_stop.png"] andText:@"对方有电话进入，请稍候"];
                 }
 
             }
@@ -1115,6 +1116,8 @@
 			}
 			case INVITE_STATE_INCOMING:
 			{
+                [NotificationHeader dismissNotificationHeader:header];
+                header = nil;
 				break;
 			}
 			case INVITE_STATE_REMOTE_RINGING:
