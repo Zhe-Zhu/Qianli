@@ -53,6 +53,7 @@
 //        [self addSubview:_contentLabel];
         
         // 加入label和指示符号
+        self.selectionStyle = UITableViewCellSelectionStyleGray;
         UILabel *contentlabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 7.5, 180, 19)];
         contentlabel.backgroundColor = [UIColor clearColor];
         contentlabel.lineBreakMode = NSLineBreakByWordWrapping;

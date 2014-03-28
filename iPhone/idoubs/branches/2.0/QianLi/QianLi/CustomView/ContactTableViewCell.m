@@ -28,8 +28,8 @@ CGFloat cellHeight = 44;
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+         self.selectionStyle = UITableViewCellSelectionStyleGray;
         // Initialization code
-
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, cellHeight/2.0 - avatarDiameter/2.0, avatarDiameter, avatarDiameter)];
         _profileImageView = imageView;
         //imageView.layer.cornerRadius = avatarDiameter / 2.0;
