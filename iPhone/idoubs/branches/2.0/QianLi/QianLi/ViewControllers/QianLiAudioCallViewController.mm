@@ -235,6 +235,11 @@
     [[SipStackUtils sharedInstance].soundService stopRingBackTone];
     [[SipStackUtils sharedInstance].soundService stopRingTone];
     [self disableBlackScreen];
+    if (menuBar) {
+        if (menuBar.isShow == YES) {
+            [menuBar dismiss];
+        }
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
