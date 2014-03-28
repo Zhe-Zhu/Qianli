@@ -2815,8 +2815,8 @@
 					armv7s,
 					"$(ARCHS_STANDARD_32_BIT)",
 				);
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: zhe zhu (87N4K2M736)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhe zhu (87N4K2M736)";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_LIBS = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/i386;
 				"DOUBANGO_LIBS[arch=armv7]" = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/armv7;
@@ -2896,7 +2896,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7CBB70E1-523F-49A0-8FE5-077E3FBDD5E7";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2912,8 +2912,8 @@
 					armv7s,
 					"$(ARCHS_STANDARD_32_BIT)",
 				);
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: zhe zhu (87N4K2M736)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhe zhu (87N4K2M736)";
 				DOUBANGO_HOME = ../../../../../doubango/branches/2.0/doubango;
 				DOUBANGO_LIBS = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/i386;
 				"DOUBANGO_LIBS[arch=armv7]" = ../../../../../doubango/branches/2.0/doubango/thirdparties/iphone/lib/armv7;
@@ -2993,7 +2993,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7CBB70E1-523F-49A0-8FE5-077E3FBDD5E7";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
