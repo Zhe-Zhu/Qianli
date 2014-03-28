@@ -67,11 +67,12 @@
     }
     [MobClick beginEvent:@"watchVideo"];
     NSError *setCategoryError = nil;
-    if (![Utils isHeadsetPluggedIn]) {
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
+    if (![[Utils deviceModelName] isEqualToString:@"iPhone 4"]) {
+        if (![Utils isHeadsetPluggedIn]) {
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: &setCategoryError];
+        }
+        [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMoviePlayback error:&setCategoryError];
     }
-    [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMoviePlayback error:&setCategoryError];
-    
     if (setCategoryError){
        // NSLog(@"error");
     }
@@ -80,6 +81,12 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    if ([[Utils deviceModelName] isEqualToString:@"iPhone 4"]) {
+        if (![Utils isHeadsetPluggedIn]) {
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+        }
+        [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMoviePlayback error:nil];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

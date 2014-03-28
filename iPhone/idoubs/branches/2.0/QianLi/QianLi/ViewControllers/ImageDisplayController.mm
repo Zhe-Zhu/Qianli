@@ -638,13 +638,13 @@
     [saveButton addTarget:self action:@selector(savePhoto) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:saveButton];
     saveButton.frame = CGRectMake(20, 2, 40, 40);
-    [saveButton setImage:[UIImage imageNamed:@"doodle_Download.png"] forState:UIControlStateNormal];
+    [saveButton setImage:[UIImage imageNamed:@"doodle_download.png"] forState:UIControlStateNormal];
     
     UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:clearButton];
     clearButton.frame = CGRectMake(260, 2, 40, 40);
-    [clearButton setImage:[UIImage imageNamed:@"doodle_Trash.png"] forState:UIControlStateNormal];
+    [clearButton setImage:[UIImage imageNamed:@"doodle_trash.png"] forState:UIControlStateNormal];
 
     UIButton *erase = [UIButton buttonWithType:UIButtonTypeCustom];
     [erase addTarget:self action:@selector(erase:) forControlEvents:UIControlEventTouchUpInside];

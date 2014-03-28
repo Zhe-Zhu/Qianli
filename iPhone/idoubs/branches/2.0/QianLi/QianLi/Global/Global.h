@@ -74,9 +74,9 @@ nil]
 
 //115.28.209.97 112.124.36.134
 //115.28.209.97  //112.124.36.134 www.qlcall.com  //http://112.124.36.134:8080
-//#define kBaseURL [NSString stringWithFormat:@"http://%@:8080", [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey]]
-#define kBaseURL [NSString stringWithFormat:@"http://%@:8080", @"115.28.209.97"]
-#define kServerIP @"115.28.209.97"
+#define kBaseURL [NSString stringWithFormat:@"http://%@:8080", [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey]]
+//#define kBaseURL [NSString stringWithFormat:@"http://%@:8080", @"115.28.209.97"]
+#define kServerIP @"112.124.36.134"
 #define kHostIPKey @"HostIP"
 
 #define kSemiModalAnimationDuration 0.3f

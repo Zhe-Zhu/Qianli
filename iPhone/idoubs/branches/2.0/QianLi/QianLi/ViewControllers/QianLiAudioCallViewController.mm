@@ -784,8 +784,6 @@
 // 按下拒绝接听按钮
 - (void)pressRejectButton
 {
-    //[[SipStackUtils sharedInstance] cancelCallingNotification];
-    [[SipStackUtils sharedInstance] muteLocalNotification];
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
         
@@ -802,8 +800,6 @@
 // 按下接听按钮
 - (void)pressAcceptButton
 {
-    [[SipStackUtils sharedInstance] cancelCallingNotification];
-    //[[SipStackUtils sharedInstance] muteLocalNotification];
     if([[SipStackUtils sharedInstance].audioService doesExistOnGoingAudioSession]){
         if (_viewState == ReceivingCall) {
             //[[SipStackUtils sharedInstance].audioService acceptCall];
