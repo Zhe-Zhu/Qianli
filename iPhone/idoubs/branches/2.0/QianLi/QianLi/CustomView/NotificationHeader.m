@@ -97,7 +97,8 @@
     header.shownLabel.center = CGPointMake(header.frame.size.width / 2, header.frame.size.height /2);
     
     // setting of the notification header
-    header.backgroundColor = [UIColor colorWithWhite:0 alpha:0.75];
+    //header.backgroundColor = [UIColor colorWithWhite:0 alpha:0.75];
+    header.backgroundColor = [UIColor redColor];
     header.clipsToBounds = YES;
     
     //do animation to present the notification header.

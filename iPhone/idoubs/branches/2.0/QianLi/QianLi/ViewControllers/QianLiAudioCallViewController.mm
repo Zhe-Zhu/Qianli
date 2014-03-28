@@ -84,6 +84,7 @@
 
 @property(weak, nonatomic) NSTimer *timer;
 @property(weak, nonatomic) NSTimer *imageTimer;
+
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMicroPhone;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSpeaker;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonAdd;
@@ -243,6 +244,9 @@
         [self resumeMusicAppIfNeeded];
         [_timer invalidate];
         [_imageTimer invalidate];
+        [_headerTimer invalidate];
+        [SipCallManager SharedInstance].endWithoutDismissAudioVC = NO;
+        [SipCallManager SharedInstance].audioVC = nil;
     }
 }
 
@@ -656,6 +660,9 @@
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotEndCall", nil),((int)time) / 60,((int)time) % 60, kQianLiRobotSharedPhotoNum, kQianLiRobotSharedDoodleNum, kQianLiRobotSharedWebNum, kQianLiRobotsharedVideoNum]];
     }
     //[[SipStackUtils sharedInstance].audioService hangUpCall];
+    [_timer invalidate];
+    [_imageTimer invalidate];
+    [_headerTimer invalidate];
     _didPressEndCall = YES;
     [[SipStackUtils sharedInstance].soundService stopInCallSound];
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
@@ -680,12 +687,13 @@
         menuBar = nil;
     }
     // starts timer suicide
-    [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:0.5];
+    [self performSelector:@selector(dismissAllViewController) withObject:nil afterDelay:0.5];
     
     //handle the case that partner is interrupted by phone call
     if ([SipCallManager SharedInstance].endWithoutDismissAudioVC) {
         [SipCallManager SharedInstance].endWithoutDismissAudioVC = NO;
         [SipCallManager SharedInstance].didHavePhoneCall = NO;
+        [SipCallManager SharedInstance].audioVC = nil;
         [[SipStackUtils sharedInstance].messageService sendMessage:kEndInterruptionCall toRemoteParty:_remotePartyNumber];
     }
 }
@@ -1097,7 +1105,8 @@
             }
             else{
                 if ([SipCallManager SharedInstance].didHavePhoneCall){
-                    header = [NotificationHeader presentNotificationHeader:self.view inPosition:CGPointMake(0, 0) withIcon:[UIImage imageNamed:@"header_icon_stop.png"] andText:@"对方有电话进入，请稍候"];
+                    header = [NotificationHeader presentNotificationHeader:self.navigationController.view inPosition:CGPointMake(0, 64) withIcon:[UIImage imageNamed:@"header_icon_stop.png"] andText:NSLocalizedString(@"CallInerruption", nil)];
+                    _headerTimer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(pressButtonEndCall) userInfo:nil repeats:NO];
                 }
 
             }

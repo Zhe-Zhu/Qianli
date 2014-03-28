@@ -372,7 +372,7 @@ static SipStackUtils * sipStackUtilsInstance;
                     }
                     else{
                         //resume previous call if the call is interrupted
-                        if ([SipCallManager SharedInstance].audioVC && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
+                        if ([SipCallManager SharedInstance].audioVC.viewState == InCall && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
                             [[SipCallManager SharedInstance] resumeCallWithID:eargs.sessionId];
                             return;
                         }

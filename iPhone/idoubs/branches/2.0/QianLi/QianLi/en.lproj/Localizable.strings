@@ -225,3 +225,5 @@
 "PartnerNumberCancel" = "Cancel";
 "RateUs" = "Rate us";
 "share" = "Share with friends";
+"CallInerruption" = "partner receiving a call, please wait a moment!";
+

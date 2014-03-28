@@ -121,6 +121,7 @@ static SipCallManager *callManager = nil;
         _endWithoutDismissAudioVC = NO;
         _didHavePhoneCall = NO;
         _audioVC.audioSessionID = callID;
+        [self.audioVC.headerTimer invalidate];
         [[SipStackUtils sharedInstance].audioService acceptCall];
     }
 }
