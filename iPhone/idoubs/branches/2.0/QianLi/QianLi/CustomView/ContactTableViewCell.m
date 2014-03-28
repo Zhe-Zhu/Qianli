@@ -32,14 +32,18 @@ CGFloat cellHeight = 44;
         // Initialization code
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, cellHeight/2.0 - avatarDiameter/2.0, avatarDiameter, avatarDiameter)];
         _profileImageView = imageView;
-        //imageView.layer.cornerRadius = avatarDiameter / 2.0;
-        //imageView.clipsToBounds = YES;
         [self addSubview:_profileImageView];
         
         UIImage *circleConver = [UIImage imageNamed:@"circle_cover_30.png"];
         UIImageView *coverView = [[UIImageView alloc] initWithFrame:CGRectMake(20, cellHeight/2.0 - avatarDiameter/2.0, avatarDiameter, avatarDiameter)];
         coverView.image = circleConver;
         [self addSubview:coverView];
+        if (IS_OS_7_OR_LATER) {
+            [coverView setHighlightedImage:[UIImage imageNamed:@"circle_cover_30_grey.png"]];
+        }
+        else{
+            [coverView setHighlightedImage:[UIImage imageNamed:@"circle_cover_30_grey_ios6.png"]];
+        }
         
         UILabel *labelName = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, 200, 44)];
         labelName.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:16];

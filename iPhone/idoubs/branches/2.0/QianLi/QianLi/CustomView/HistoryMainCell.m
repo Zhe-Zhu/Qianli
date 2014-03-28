@@ -118,8 +118,12 @@
     UIImageView *coverView = [[UIImageView alloc] initWithFrame:CGRectMake(12, 80/2.0-25, 50, 50)];
     coverView.image = circleConver;
     [self.contentView addSubview:coverView];
-    [coverView setHighlightedImage:[UIImage imageNamed:@"barButton.png"]];
-    
+    if (IS_OS_7_OR_LATER) {
+        [coverView setHighlightedImage:[UIImage imageNamed:@"circle_cover_50_grey.png"]];
+    }
+    else{
+        [coverView setHighlightedImage:[UIImage imageNamed:@"circle_cover_50_grey_ios6.png"]];
+    }
     _nameLabel.frame = CGRectMake(75, -1, 180, 50);
     CGFloat timeNameWidth = 100;
     CGFloat timeNameHeight = 40;
