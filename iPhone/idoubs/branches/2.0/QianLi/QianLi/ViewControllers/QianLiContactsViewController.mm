@@ -894,12 +894,12 @@
     
     QianLiAddressBookItem *contact = nil;
     if ([_contacts count] <= indexPath.section) {
-        return nil;
+        return contactCell;
     }
     else{
         NSArray *array = [_contacts objectAtIndex:indexPath.section];
         if ([array count] <= indexPath.row) {
-            return nil;
+            return contactCell;
         }
     }
     
