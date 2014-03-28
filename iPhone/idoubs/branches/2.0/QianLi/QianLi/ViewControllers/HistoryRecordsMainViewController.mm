@@ -14,8 +14,6 @@
 #import "UserDataTransUtils.h"
 #import "SipCallManager.h"
 
-#define CellHeight 80
-
 @interface HistoryRecordsMainViewController ()
 {
     NSMutableArray *_historyRecords;
@@ -173,9 +171,12 @@
     
     static NSString *CellIdentifier = @"HistoryMainCell";
 	HistoryMainCell *historyCell = (HistoryMainCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    // 因为所继承的cell每次都把view清理,所以每次都要重新Init一遍,否则backview会丢失
+     //因为所继承的cell每次都把view清理,所以每次都要重新Init一遍,否则backview会丢失
     
-    historyCell = [[HistoryMainCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+//    HistoryMainCell * historyCell = [[HistoryMainCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    if (historyCell == nil) {
+        historyCell = [[HistoryMainCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
     historyCell.historyMainCelldelegate = self;
     UIImage *avatar = entry.profile;
     if (avatar == nil) {

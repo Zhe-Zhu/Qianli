@@ -167,7 +167,7 @@
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     if (networkStatus == NotReachable) {
-        NSLog(@"There IS NO internet connection");
+        //NSLog(@"There IS NO internet connection");
         // Show the Alert View
         UIAlertView *noNetworkConnection = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"noNetworkTitle", nil) message:NSLocalizedString(@"noNetworkMessage", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Confirm", nil) otherButtonTitles: nil];
         [noNetworkConnection show];

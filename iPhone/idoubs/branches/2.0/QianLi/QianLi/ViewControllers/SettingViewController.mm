@@ -25,14 +25,14 @@
 }
 
 @property (weak, nonatomic) IBOutlet UIImageView *profilePhoto;
-@property (weak, nonatomic) IBOutlet UITableViewCell *sendEmailCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *sendMessageCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *sendToSocialMediaCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *deleteAccount;
 @property (weak, nonatomic) IBOutlet UITableViewCell *feedback;
 @property (weak, nonatomic) IBOutlet UILabel *repliesCount;
 @property (weak, nonatomic) IBOutlet UIImageView *repliesCountBackground;
 @property (weak, nonatomic) IBOutlet UITableViewCell *aboutQianli;
 @property (weak, nonatomic) IBOutlet UITableViewCell *rateUs;
+@property (weak, nonatomic) IBOutlet UITableViewCell *share;
 
 @property (weak, nonatomic) IBOutlet UILabel *labelProfile;
 @property (weak, nonatomic) IBOutlet UILabel *labelSMS;
@@ -41,6 +41,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelSignout;
 @property (weak, nonatomic) IBOutlet UILabel *labelAbout;
 @property (weak, nonatomic) IBOutlet UILabel *rateUsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *shareLabel;
 
 
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
@@ -77,6 +78,7 @@
     _labelSignout.text = NSLocalizedString(@"labelSignout", nil);
     _labelAbout.text = NSLocalizedString(@"labelAbout", nil);
     _rateUsLabel.text = NSLocalizedString(@"RateUs", nil);
+    _shareLabel.text = NSLocalizedString(@"share", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -161,51 +163,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([indexPath isEqual:[tableView indexPathForCell: _sendEmailCell]]) {
-        // 发邮件邀请好友
-        // 反馈
-        _activityIndicator.frame = CGRectMake(268-CGRectGetWidth(_activityIndicator.frame)/2.0, CGRectGetMinY(_sendEmailCell.frame)+12, CGRectGetWidth(_activityIndicator.frame), CGRectGetHeight(_activityIndicator.frame));
-        [_activityIndicator startAnimating];
-        if ([MFMailComposeViewController canSendMail]) {
-            MFMailComposeViewController *vc = [[MFMailComposeViewController alloc] init];
-            [vc setSubject:NSLocalizedString(@"emailSubject", nil)];
-            [vc setMessageBody:NSLocalizedString(@"emailBody", nil) isHTML:NO];
-//            [vc setToRecipients:[NSArray arrayWithObjects:@"theashstudio@gmail.com",nil]];
-            vc.mailComposeDelegate = self;
-            if (vc) {
-                [self presentViewController:vc animated:YES completion:^{
-                    [_activityIndicator stopAnimating];
-                }];
-            }
-        }
-        else
-        {
-            UIAlertView * warningView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"emailWarningTitle", nil) message:NSLocalizedString(@"emailWarningMessage", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"emailWarningOK", nil) otherButtonTitles:nil, nil];
-            [warningView show];
-            [_activityIndicator stopAnimating];
-        }
-    }
-    else if ([indexPath isEqual:[tableView indexPathForCell:_sendMessageCell]]) {
-        _activityIndicator.frame = CGRectMake(268-CGRectGetWidth(_activityIndicator.frame)/2.0, CGRectGetMinY(_sendMessageCell.frame)+12, CGRectGetWidth(_activityIndicator.frame), CGRectGetHeight(_activityIndicator.frame));
-        [_activityIndicator startAnimating];
-        if ([MFMessageComposeViewController canSendText]) {
-            MFMessageComposeViewController *messageComposer =
-            [[MFMessageComposeViewController alloc] init];
-            NSString *message = NSLocalizedString(@"emailBody", nil);
-            [messageComposer setBody:message];
-            if (IS_OS_7_OR_LATER) {
-                if ([MFMessageComposeViewController canSendSubject]) {
-                    messageComposer.subject = NSLocalizedString(@"emailSubject", nil);
-                }
-            }
-            messageComposer.messageComposeDelegate = self;
-            [self presentViewController:messageComposer animated:YES completion:^{
-                [_activityIndicator stopAnimating];
-            }];
-        }
-        else {
-            [_activityIndicator stopAnimating];
-        }
+
+    if ([indexPath isEqual:[tableView indexPathForCell:_sendToSocialMediaCell]]) {
+        // send to social media
+        [Utils shareThingsToSocialMedia:self text:NSLocalizedString(@"emailBody", nil) Image:nil delegate:nil];
+        [_sendToSocialMediaCell setSelected:NO animated:YES];
     }
     else if ([indexPath isEqual:[tableView indexPathForCell:_deleteAccount]]){
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"signOutTitle", nil) message:NSLocalizedString(@"signOutBody", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"signOutConfirm", nil), nil];
@@ -220,11 +182,23 @@
         // rate us
         // add here
         int appId = 830277724;//830277724; //595247165
-        SKStoreProductViewController *storeViewController = [[SKStoreProductViewController alloc] init];
-        NSDictionary *parameters = @{SKStoreProductParameterITunesItemIdentifier:[NSNumber numberWithInteger: appId]};
-        [storeViewController loadProductWithParameters:parameters completionBlock:nil];
-        storeViewController.delegate = self;
-        [self presentViewController:storeViewController animated:YES completion:nil];
+        // user should press the store button to go to the apple store in IOS7. Thus we directly open the apple store url in IOS7.
+        if (!IS_OS_7_OR_LATER) {
+            [_rateUs setSelected:NO animated:YES];
+            SKStoreProductViewController *storeViewController = [[SKStoreProductViewController alloc] init];
+            NSDictionary *parameters = @{SKStoreProductParameterITunesItemIdentifier:[NSNumber numberWithInteger: appId]};
+            [storeViewController loadProductWithParameters:parameters completionBlock:nil];
+            storeViewController.delegate = self;
+            [self presentViewController:storeViewController animated:YES completion:nil];
+        }
+        else
+        {
+            [_rateUs setSelected:NO animated:YES];
+            NSString *str = [NSString stringWithFormat:
+                             @"itms-apps://itunes.apple.com/app/id%d",appId];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+        }
+        
     }
 }
 
@@ -258,7 +232,6 @@
     }
     else if (buttonIndex == alertView.cancelButtonIndex){
         [_deleteAccount setSelected:NO animated:YES];
-        [_sendEmailCell setSelected:NO animated:YES];
     }
 }
 

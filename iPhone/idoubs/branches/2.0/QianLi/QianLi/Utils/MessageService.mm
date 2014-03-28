@@ -8,6 +8,7 @@
 
 #import "MessageService.h"
 #import "iOSNgnStack.h"
+#import "SipStackUtils.h"
 
 @implementation MessageService
 

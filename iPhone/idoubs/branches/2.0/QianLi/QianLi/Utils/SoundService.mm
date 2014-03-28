@@ -10,7 +10,7 @@
 #import "SipCallManager.h"
 
 @interface SoundService(){
-    
+    double timeInterval;
 }
 
 @property(strong, nonatomic) AVAudioPlayer *inCallPlayer;
@@ -60,15 +60,45 @@
     NSDictionary *userInfo = notification.userInfo;
     if ([[userInfo objectForKey:AVAudioSessionInterruptionTypeKey] integerValue]== AVAudioSessionInterruptionTypeBegan) {
         if ([SipCallManager SharedInstance].audioVC.viewState == InCall) {
-            [[SipCallManager SharedInstance] sendInterruptionMessage:kInterruption];
+            timeInterval = [[NSDate date] timeIntervalSince1970];
+            CTCallCenter *callCenter = [[CTCallCenter alloc] init];
+            //CTCall *call in callCenter.currentCalls
+            if ([callCenter.currentCalls count] > 0) {
+                [[SipCallManager SharedInstance] sendInterruptionMessage:kPhoneCallInterruption];
+            }
+            else{
+                [[SipCallManager SharedInstance] sendInterruptionMessage:kInterruption];
+            }
         }
+        
     }
     else if([[userInfo objectForKey:AVAudioSessionInterruptionTypeKey] integerValue]== AVAudioSessionInterruptionTypeEnded){
-        if ([SipCallManager SharedInstance].audioVC && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
-            [self enableBackgroundSound];
-            [[SipCallManager SharedInstance] reconnectVoiceCall:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+        if ([SipCallManager SharedInstance].audioVC.viewState == InCall && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
+            if (([[NSDate date] timeIntervalSince1970] - timeInterval > 20)) {
+                [SipCallManager SharedInstance].didEndInerruptionCall = NO;
+                [self disableBackgroundSound];
+                [[SipCallManager SharedInstance].audioVC dismissAllViewController];
+                [SipCallManager SharedInstance].audioVC = nil;
+                [SipCallManager SharedInstance].endWithoutDismissAudioVC = NO;
+            }
+            else{
+                [self enableBackgroundSound];
+                [[SipCallManager SharedInstance] reconnectVoiceCall:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+            }
+        }
+        else if ([SipCallManager SharedInstance].audioVC.viewState == InCall && [SipCallManager SharedInstance].didEndInerruptionCall){
+            [SipCallManager SharedInstance].didEndInerruptionCall = NO;
+            [self disableBackgroundSound];
+            [[SipCallManager SharedInstance].audioVC dismissAllViewController];
+            [SipCallManager SharedInstance].audioVC = nil;
         }
     }
+}
+
+- (void)stopInterruptionCall
+{
+    [SipCallManager SharedInstance].endWithoutDismissAudioVC = NO;
+    [SipCallManager SharedInstance].didHavePhoneCall = NO;
 }
 
 - (BOOL)enableBackgroundSound

@@ -225,8 +225,9 @@
 
 - (void)sendDoodleMessage:(NSString *)drawing
 {
+    // 1 is red, 2 is blue, other is black
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@%@%d%@%f", kDoodleImagePoints, kSeparator, drawing, kSeparator, _pointsMessage, kSeparator, 1, kSeparator, _lineWidth];
+    NSString *str = [NSString stringWithFormat:@"%@%@%@%@%@%@%d%@%f", kDoodleImagePoints, kSeparator, drawing, kSeparator, _pointsMessage, kSeparator, 2, kSeparator, _lineWidth];
     [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
 }
 
@@ -281,6 +282,9 @@
     remoteDrawing = drawing;
     [_remotePath removeAllPoints];
     NSArray *array = [self calculateSmoothLinePoints:points];
+    if (array == nil) {
+        array = points;
+    }
     if (drawing) {
         [_remotePath setLineWidth:width];
         _remoteLineWidth = width;
@@ -398,7 +402,7 @@
     UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     
     CGSize newImageSize = [self adjustImageFrame:_image.size];
-    [_image drawInRect:CGRectMake((320 - newImageSize.width) / 2.0, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
+    [_image drawInRect:CGRectMake((winWidth - newImageSize.width) / 2.0, (self.frame.size.height-newImageSize.height)/2, newImageSize.width, newImageSize.height)];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     [[self layer] renderInContext:context];

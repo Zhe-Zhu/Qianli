@@ -15,6 +15,7 @@
     
 }
 
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withCheckBox:(BOOL)hasCheckBox;
 - (void)setContactProfile:(QianLiAddressBookItem *)contact NeedIcon:(BOOL)needIcon;
 
 @property (nonatomic, weak) UIImageView *checkBox;

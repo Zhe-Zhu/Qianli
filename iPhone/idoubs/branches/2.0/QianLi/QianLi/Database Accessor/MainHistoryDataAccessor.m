@@ -49,7 +49,7 @@
     // Save the context.
     NSError *error = nil;
     if (![_managedObjectContext save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+       // NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
     [self.managedObjectContext unlock];
 }
@@ -69,11 +69,11 @@
         }
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
     }
     NSError *saveError;
     if (![self.managedObjectContext save:&saveError]) {
-        NSLog(@"saving error during updating");
+        //NSLog(@"saving error during updating");
     }
     [self.managedObjectContext unlock];
 }
@@ -97,11 +97,11 @@
         }
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
     }
     NSError *saveError;
     if (![self.managedObjectContext save:&saveError]) {
-        NSLog(@"saving error during updating");
+        //NSLog(@"saving error during updating");
     }
     [self.managedObjectContext unlock];
 }
@@ -129,7 +129,7 @@
             if (!error) {
                 NSError *saveError;
                 if (![self.managedObjectContext save:&saveError]) {
-                    NSLog(@"saving error during updating");
+                    //NSLog(@"saving error during updating");
                 }
             }
 
@@ -159,7 +159,7 @@
         return items;
     }
     else{
-        NSLog(@"fetch error");
+       // NSLog(@"fetch error");
         [self.managedObjectContext unlock];
         return nil;
     }
@@ -183,7 +183,7 @@
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating name");
+               // NSLog(@"saving error during updating name");
             }
         }
     }
@@ -232,7 +232,7 @@
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating type");
+               // NSLog(@"saving error during updating type");
             }
         }
     }

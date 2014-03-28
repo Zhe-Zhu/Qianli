@@ -23,6 +23,11 @@
 #import "SipCallManager.h"
 #import "Global.h"
 #import "WaitingViewController.h"
+#import "UMSocial.h"
+#import "UMSocialWechatHandler.h"
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentOAuth.h>
+
 
 @interface QianLiAppDelegate (){
     UITabBarController *_tabController;
@@ -54,7 +59,6 @@ const float kColorB = 75/100.0;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //[self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
     if (!IS_OS_7_OR_LATER) {
         [UIApplication sharedApplication].statusBarHidden = NO;
     }
@@ -72,10 +76,10 @@ const float kColorB = 75/100.0;
     if ([userDefaults boolForKey:kSingUpKey]) {
         self.window.rootViewController = self.tabController;
         [[SipStackUtils sharedInstance] start];
-        [self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+        //[Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
         [[SipStackUtils sharedInstance].soundService configureAudioSession];
-        [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
-        [self registerAPNS];
+        [[SipStackUtils sharedInstance] performSelectorInBackground:@selector(queryConfigurationAndRegister) withObject:nil];
+        [self performSelectorInBackground:@selector(registerAPNS) withObject:nil];
         //[self setHelpView];
     }
     else if ([userDefaults boolForKey:kWaitingKey]){
@@ -86,7 +90,7 @@ const float kColorB = 75/100.0;
         UINavigationController *naviVC = [[UINavigationController alloc] init];
         naviVC.viewControllers = @[waitingVC];
         self.window.rootViewController = naviVC;
-        [self registerAPNS];
+        [self performSelectorInBackground:@selector(registerAPNS) withObject:nil];
     }
     else{
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -101,11 +105,15 @@ const float kColorB = 75/100.0;
     }
     
 //    NSDictionary *remoteNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    //set UMSocial AppID
+    [UMSocialData setAppKey:kUmengSDKKey];
     // 初始化UmengSDK
     [MobClick startWithAppkey:kUmengSDKKey];
     [UMFeedback checkWithAppkey:kUmengSDKKey];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(umCheck:) name:UMFBCheckFinishedNotification object:nil];
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNetworkEvent:) name:kNgnNetworkEventArgs_Name object:nil];
+    // enable the sharing to Social Platform through YouMeng SDK
+    [self setSocialPlatformAppID];
     
     return YES;
 }
@@ -228,7 +236,7 @@ const float kColorB = 75/100.0;
     }];
     
     [[SipStackUtils sharedInstance] start];
-    [self configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+    [Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
     [[SipStackUtils sharedInstance].soundService configureAudioSession];
     [[SipStackUtils sharedInstance] queryConfigurationAndRegister];
     // Register remote notification
@@ -237,8 +245,10 @@ const float kColorB = 75/100.0;
 
 - (void)registerAPNS
 {
-    UIApplication *app = [UIApplication sharedApplication];
-    [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+    if ([Utils checkInternetAndDispWarning:NO]) {
+        UIApplication *app = [UIApplication sharedApplication];
+        [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -333,15 +343,38 @@ const float kColorB = 75/100.0;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [[SipStackUtils sharedInstance] cancelCallingNotification];
+    //set the call back function of YouMeng Social share.
+    [UMSocialSnsService  applicationDidBecomeActive];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    //NSInteger number = [UIApplication sharedApplication].applicationIconBadgeNumber;
-    //[self setTabItemBadge:number];
+    
     if (_tabController.selectedIndex == 0) {
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
     didLaunch = NO;
+    [Utils lookupHostIPAddressForURL:[NSURL URLWithString:@"http://www.qlcall.com"]];
     // Umeng
     [UMFeedback checkWithAppkey:kUmengSDKKey];
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"AutoMainHistory"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"AutoMainHistory"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        NSArray *array = [[MainHistoryDataAccessor sharedInstance] getAllObjects];
+        if ([array count] < 1) {
+            [[MainHistoryDataAccessor sharedInstance] updateForRemoteParty:QianLiRobotNumber Content:NSLocalizedString(@"appointmentNoName", nil) Time:[[NSDate date] timeIntervalSince1970] Type:kMainHistAppMark];
+            [Utils updateMainHistNameForRemoteParty:QianLiRobotNumber];
+            
+            DetailHistEvent *event = [[DetailHistEvent alloc] init];
+            event.type = kMediaType_Audio;
+            event.remoteParty = QianLiRobotNumber;
+            event.status = kHistoryEventStatus_Appointment;
+            double startingTime = [[NSDate date] timeIntervalSince1970];
+            event.start = startingTime;
+            event.end = startingTime;
+            [[DetailHistoryAccessor sharedInstance] performSelectorOnMainThread:@selector(addHistEntry:) withObject:event waitUntilDone:NO];
+        }
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -354,9 +387,9 @@ const float kColorB = 75/100.0;
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
-    [[NgnEngine sharedInstance].contactService unload];
-	[[NgnEngine sharedInstance].historyService clear];
-	[[NgnEngine sharedInstance].storageService clearFavorites];
+//    [[NgnEngine sharedInstance].contactService unload];
+//	[[NgnEngine sharedInstance].historyService clear];
+//	[[NgnEngine sharedInstance].storageService clearFavorites];
 }
 
 - (void)saveContext
@@ -418,25 +451,6 @@ const float kColorB = 75/100.0;
         else{
         }
     }
-}
-
-- (void)configureParmsWithNumber:(NSString *)number
-{
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_DISPLAY_NAME andValue:number];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@%@",number, kServerIP]];
-//    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@115.28.37.152",number]];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPI andValue:number];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_PASSWORD andValue:number];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:kServerIP];
-//    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:@"115.28.37.152"];
-    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_EARLY_IMS andValue:YES];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:kServerIP];
-//    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:@"115.28.37.152"];
-   // [[NgnEngine sharedInstance].configurationService setBoolWithKey:NATT_USE_STUN_DISCO andValue:YES];
-    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_KEEPAWAKE andValue:YES];
-    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_3G andValue:YES];
-    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_TRANSPORT andValue:@"tcp"];
-    //112.124.36.134  192.168.1.200
 }
 
 #pragma mark - Core Data stack
@@ -532,7 +546,7 @@ const float kColorB = 75/100.0;
 // Remote Notification Delegate
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    NSLog(@"get token:%@",deviceToken);
+    //NSLog(@"get token:%@",deviceToken);
     NSString *tokenJson = [NSString stringWithFormat:@"%@*%@",deviceToken,[UserDataAccessor getUserRemoteParty]];
     
     NSString *urlString= [NSString stringWithFormat:@"%@/notification/gettoken/", kBaseURL];
@@ -553,22 +567,22 @@ const float kColorB = 75/100.0;
      {
          if ([data length] >0 && error == nil)
          {
-             NSLog(@"Data:%@",[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding]);
+             //NSLog(@"Data:%@",[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding]);
          }
          else if ([data length] == 0 && error == nil)
          {
-             NSLog(@"Nothing was downloaded.");
+             //NSLog(@"Nothing was downloaded.");
          }
          else if (error != nil)
          {
-             NSLog(@"Error = %@", error.localizedDescription);
+             //NSLog(@"Error = %@", error.localizedDescription);
          }
      }];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    NSLog(@"Error in registration. Error: %@", error);
+    //NSLog(@"Error in registration. Error: %@", error);
 }
 
 + (QianLiAppDelegate *)sharedInstance
@@ -624,8 +638,8 @@ const float kColorB = 75/100.0;
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     //add code @{@"IDKey": @"IncomingCall"}
-    NSDictionary *dict = notification.userInfo;
-    if ([[dict objectForKey:@"IDKey"] isEqualToString:@"IncomingCall"]) {
+    NSDictionary *userinfo = notification.userInfo;
+    if ([[userinfo objectForKey:@"IDKey"] isEqualToString:@"IncomingCall"]) {
         [application cancelLocalNotification:notification];
     }
 }
@@ -687,6 +701,37 @@ const float kColorB = 75/100.0;
 {
     HelpView *helpView = [[HelpView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.window addSubview:helpView];
+}
+
+//设置分享到社交平台的开关
+- (void)setSocialPlatformAppID
+{
+    //设置微信AppId，url地址传nil，将默认使用友盟的网址
+    //需要#import "UMSocialWechatHandler.h"
+    [UMSocialWechatHandler setWXAppId:kWeiXinID url:nil];
+    //打开Qzone的SSO开关，
+    //需要#import <TencentOpenAPI/QQApiInterface.h>  #import <TencentOpenAPI/TencentOAuth.h>
+    //[UMSocialConfig setSupportQzoneSSO:YES importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
+    //[UMSocialConfig setShareQzoneWithQQSDK:YES url:@"http://www.umeng.com/social" importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
+    //需要#import <TencentOpenAPI/QQApiInterface.h>  #import <TencentOpenAPI/TencentOAuth.h>
+    //设置手机QQ的AppId，url传nil，将使用友盟的网址
+    //[UMSocialConfig setQQAppId:kQQAppID url:nil importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
+    //打开新浪微博的SSO开关
+    [UMSocialConfig setSupportSinaSSO:YES];
+    
+}
+
+//设置友盟的SSO分享的系统回调函数
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
+}
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
 }
 
 @end

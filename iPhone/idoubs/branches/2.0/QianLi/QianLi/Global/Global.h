@@ -66,13 +66,23 @@ nil]
 #define kImageBaloonIn @"baloon_in"
 #define kImageBaloonOut @"baloon_out"
 
+#define winWidth [UIScreen mainScreen].bounds.size.width
+#define winHeight [UIScreen mainScreen].bounds.size.height
+
 //115.28.209.97
-#define kBaseURL @"http://112.124.36.134:8080"
-#define kServerIP @"112.124.36.134"
 #define kSemiModalAnimationDuration 0.3f
 
+//115.28.209.97 112.124.36.134
+//115.28.209.97  //112.124.36.134 www.qlcall.com  //http://112.124.36.134:8080
+#define kBaseURL [NSString stringWithFormat:@"http://%@:8080", [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey]]
+//#define kBaseURL [NSString stringWithFormat:@"http://%@:8080", @"115.28.209.97"]
+#define kServerIP @"112.124.36.134"
+#define kHostIPKey @"HostIP"
+
+#define kSemiModalAnimationDuration 0.3f
 #define kInCall @"UserInCall"
 #define PageWidth 340
+#define CellHeight 80
 
 #define kImagePath @"IMAGEPATH"
 #define kImageTransCompletion @"IMAGETRANSCOMPLETION"
@@ -120,6 +130,8 @@ nil]
 #define kHangUpcall @"hangUpCall"
 
 #define kInterruption @"interruption"
+#define kEndInterruptionCall @"endinterruption"
+#define kPhoneCallInterruption @"phoneInterruption"
 #define kChangeNetWork @"changenetwork"
 #define kInterruptionOK @"interruptionOK"
 #define kChangeNetworkOK @"changenetworkOK"
@@ -152,6 +164,9 @@ nil]
 
 // Umeng SDK Key
 #define kUmengSDKKey @"527c513f56240b352905fbfb"
+#define kQQAppID @"101046453"
+#define kWeiXinID @"wxb6d74eb70d99d3dc"
+
 #define kSingUpKey @"SignedUp"
 #define kWaitingKey @"InWaitingList"
 

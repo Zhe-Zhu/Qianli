@@ -170,14 +170,14 @@
 
 - (void)didFinishEditing:(UIImage *)profile
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
     [_editProfilePhotoButton setImage:profile forState:UIControlStateNormal];
     UIImage *image = [profile imageByResizing:CGSizeMake(120, 120)];
     BOOL success = [UserDataAccessor setUserProfile:image];
     if (!success) {
-        NSLog(@"save profile error!");
+       // NSLog(@"save profile error!");
     }
     [UserDataTransUtils patchUserProfile:image number:[UserDataAccessor getUserRemoteParty] Completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

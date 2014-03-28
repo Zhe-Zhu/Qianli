@@ -14,13 +14,6 @@
 + (CGFloat)setHeightofCellWithString:(NSString *)string constrainedWidth:(CGFloat)width;
 + (CGFloat)setHeightofCellWithPicturesCount:(NSInteger)picturesCount;
 
-- (void)setCallRecord:(NSNumber *)callRecordType avatarMyFriend:(UIImage *)avatarMyFriend avatarMyself:(UIImage *)avatarMyself;
-
-- (void)setString:(NSString *)string avatar:(UIImage *)avatarImage SharedImage:(UIImage *)sharedImage
-     forTableView:(UITableView *)tableView;
-
-- (void)showPictures:(NSArray *)pictures; // 显示图片的cell
-
 // callRecordType目前有四种, (1)呼出通话, (2)呼入通话, (3)未接来电, (4)通话请求
 - (void)setCallRecord:(NSUInteger)callRecordType timeLabel:(NSString *)timeLabel footnote:(NSString *)footnote;
 

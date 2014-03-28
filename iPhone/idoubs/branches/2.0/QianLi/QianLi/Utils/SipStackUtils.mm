@@ -143,7 +143,7 @@ static SipStackUtils * sipStackUtilsInstance;
 				if(on3G && !use3G){
                     // can not use 3G
                     [ErrorHandling handleError:Network3GNotEnabled];
-					[[NgnEngine sharedInstance].sipService stopStackSynchronously];
+					[[NgnEngine sharedInstance].sipService stopStackAsynchronously];
 				}
 				else {
                     // "on3G and use3G" or on WiFi
@@ -157,15 +157,17 @@ static SipStackUtils * sipStackUtilsInstance;
                     
                     //sometimes when 3g and wifi are available at the same time
                     if (willSendMessage) {
-                        [[SipCallManager SharedInstance] sendNetworkChangeMessage];
+//                        [[SipCallManager SharedInstance] sendNetworkChangeMessage];
 //                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
-//                        [[NgnEngine sharedInstance].sipService registerIdentity];
+                        //[[NgnEngine sharedInstance].sipService registerIdentity];
+                        [self performSelectorInBackground:@selector(stopSipStackAndRegisterAgain) withObject:nil];
 //                        [[SipStackUtils sharedInstance].messageService sendMessage:kHangUpcall toRemoteParty:str];
                     }
                     else
                     {
-                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
-                        [[NgnEngine sharedInstance].sipService registerIdentity];
+//                        [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+                        //[[NgnEngine sharedInstance].sipService registerIdentity];
+                        [self performSelectorInBackground:@selector(stopSipStackAndRegisterAgain) withObject:nil];
                     }
 				}
                 
@@ -173,11 +175,12 @@ static SipStackUtils * sipStackUtilsInstance;
                 if([UIApplication sharedApplication].applicationState == UIApplicationStateActive){
                     [[HistoryTransUtils sharedInstance] getHistoryInBackground:YES];
                 }
+                [Utils lookupHostIPAddressForURL:[NSURL URLWithString:@"http://www.qlcall.com"]];
 			}
             else{
                 // the network becomes unreachable.
                 if([NgnEngine sharedInstance].sipService.registered){
-                    [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+                    [[NgnEngine sharedInstance].sipService stopStackAsynchronously];
                 }
                 if ([SipCallManager SharedInstance].audioVC) {
                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notice", nil) message:NSLocalizedString(@"TerminateCall", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"iknow", nil) otherButtonTitles: nil];
@@ -232,7 +235,8 @@ static SipStackUtils * sipStackUtilsInstance;
 			if(scheduleRegistration){
                 // if schedule a new registration, then do it.
 				scheduleRegistration = FALSE;
-				[[NgnEngine sharedInstance].sipService registerIdentity];
+				//[[NgnEngine sharedInstance].sipService registerIdentity];
+                [self queryConfigurationAndRegister];
 			}
 			break;
 			
@@ -315,9 +319,9 @@ static SipStackUtils * sipStackUtilsInstance;
                     [[NSNotificationCenter defaultCenter] postNotification:receivedImageNotification];
                     
                     if (localNofificationTimes == 0) {
-                        localNofificationTimes ++;
                         NSArray* words = [str componentsSeparatedByString:kSeparator];
-                        if (![[words objectAtIndex:0] isEqualToString:kAppointment]) {
+                        if (![[words objectAtIndex:0] isEqualToString:kAppointment] && ![[words objectAtIndex:0] isEqualToString:kEndInterruptionCall]) {
+                            localNofificationTimes ++;
                             NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
                             if ((name == nil) | [name isEqualToString:@""]) {
                                 name = [[MainHistoryDataAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
@@ -368,7 +372,7 @@ static SipStackUtils * sipStackUtilsInstance;
                     }
                     else{
                         //resume previous call if the call is interrupted
-                        if ([SipCallManager SharedInstance].audioVC && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
+                        if ([SipCallManager SharedInstance].audioVC.viewState == InCall && [SipCallManager SharedInstance].endWithoutDismissAudioVC) {
                             [[SipCallManager SharedInstance] resumeCallWithID:eargs.sessionId];
                             return;
                         }
@@ -377,7 +381,7 @@ static SipStackUtils * sipStackUtilsInstance;
                 self.remoteParty = [self getRemoteParty:remotePartyUri];
 				[self receiveIncomingCall:incomingSession];
 			}
-			if (incomingSession && [UIApplication sharedApplication].applicationState ==  UIApplicationStateBackground) {
+			if (incomingSession && (([UIApplication sharedApplication].applicationState ==  UIApplicationStateBackground) || ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive))) {
                 // when app is in background, post a local notification to inform user.
                 UILocalNotification *locaNotif = [[UILocalNotification alloc] init];
                 NSString *name = [[QianLiContactsAccessor sharedInstance] getNameForRemoteParty:self.remoteParty];
@@ -447,10 +451,7 @@ static SipStackUtils * sipStackUtilsInstance;
                 }
             }
             
-            if (_localNotif) {
-                [[UIApplication sharedApplication] cancelLocalNotification:_localNotif];
-                self.localNotif = nil;
-            }
+            [self cancelCallingNotification];
 			break;
 		}
             
@@ -459,6 +460,19 @@ static SipStackUtils * sipStackUtilsInstance;
 			break;
 		}
 	}
+}
+
+- (void)cancelCallingNotification
+{
+    if (_localNotif) {
+        [[UIApplication sharedApplication] cancelLocalNotification:_localNotif];
+        self.localNotif = nil;
+    }
+}
+
+- (void)muteLocalNotification
+{
+    self.localNotif.soundName = nil;
 }
 
 - (void)receiveIncomingCall:(NgnAVSession*)session
@@ -498,8 +512,18 @@ static SipStackUtils * sipStackUtilsInstance;
 		return NO;
     }
 	else {
-		return [[NgnEngine sharedInstance].sipService registerIdentity];
+		//return [[NgnEngine sharedInstance].sipService registerIdentity];
+		[[NgnEngine sharedInstance].sipService performSelectorInBackground:@selector(registerIdentity) withObject:nil];
+        return YES;
+        
 	}
+    
+}
+
+- (void)stopSipStackAndRegisterAgain
+{
+    [[NgnEngine sharedInstance].sipService stopStackSynchronously];
+    [[NgnEngine sharedInstance].sipService registerIdentity];
     
 }
 
@@ -548,12 +572,12 @@ static SipStackUtils * sipStackUtilsInstance;
 {
     NSArray *array = [remoteUri componentsSeparatedByString:@"@"];
     if ([array count] < 1) {
-        NSLog(@"remoteparty error");
+        //NSLog(@"remoteparty error");
         return nil;
     }
     NSArray *subArr = [[array objectAtIndex:0] componentsSeparatedByString:@":"];
     if ([subArr count] < 2) {
-        NSLog(@"remoteparty error");
+        //NSLog(@"remoteparty error");
         return nil;
     }
     NSString *number = [subArr objectAtIndex:1];

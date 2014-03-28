@@ -8,6 +8,7 @@
 
 #import "QianLiContactsViewController.h"
 #import "SipCallManager.h"
+#import "NotificationHeader.h"
 
 @interface QianLiContactsViewController()
 {
@@ -15,6 +16,7 @@
     NSMutableArray *_allContacts; // 所有联系人的号码
     NSMutableArray *_updateArray; // 需要去update信息的号码
     BOOL didLoadFromStarting;
+    BOOL backFromInvite;
     double startingTime;
 }
 @property (nonatomic, weak) IBOutlet UITableView *friendsTableView;
@@ -51,6 +53,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    backFromInvite = NO;
     [self setCountryCodes];
     CGFloat buttonHeight = 60;
     _buttonInviteFriends = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -84,6 +87,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if (backFromInvite) {
+        backFromInvite = NO;
+        return;
+    }
     if (!_contacts) {
         _contacts = [[NSMutableArray alloc] init];
     }
@@ -104,7 +111,7 @@
         didLoadFromStarting = NO;
     }
     else{
-        [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+        [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     }
     // 如果没有联系人则显示"提示邀请好友加入"界面
     [self showOrHideNoContacts];
@@ -325,7 +332,7 @@
             }
         }
         else{
-            personImage = [UIImage imageNamed:@"blank.png"];
+            //personImage = [UIImage imageNamed:@"blank.png"];
         }
         [addressBook setThumbnail: personImage];
         addressBook.rowSelected = NO;
@@ -472,6 +479,7 @@
     NSString* requestDataLengthString = [[NSString alloc] initWithFormat:@"%d", [requestData length]];
      
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPShouldUsePipelining:YES];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:requestData];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -495,7 +503,7 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog(@"didFailWithError");
+    //NSLog(@"didFailWithError");
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -709,6 +717,7 @@
                     if (![object valueForKey:@"name"]) {
                         NSArray *array= @[name, number];
                         [self performSelectorOnMainThread:@selector(updateNameToNumber:) withObject:array waitUntilDone:YES];
+                        [self updateAvatar:number withImage:nil withName:name];
                         [self addToUpdateList:number name:name];
                     }
                     // update profile and updateCounter
@@ -718,6 +727,7 @@
                         if (image) {
                             NSArray *array = @[image, [NSNumber numberWithInteger:updateTime], number];
                             [self performSelectorOnMainThread:@selector(updateProfile:) withObject:array waitUntilDone:YES];
+                            [self updateAvatar:number withImage:image withName:nil];
                         }
                     }
                     else
@@ -725,7 +735,6 @@
                         NSArray *array = @[[NSNumber numberWithInteger:updateTime], number];
                         [self performSelectorOnMainThread:@selector(updateUpdateTime:) withObject:array waitUntilDone:YES];
                     }
-                    [self showAllContacts];
                 }];
             }
         }];
@@ -738,11 +747,37 @@
     }
 }
 
-- (void)showAllContacts
+- (void)updateAvatar:(NSString *)number withImage:(UIImage *)image withName:(NSString *)name;
 {
-    //Display core data contacts 
-    [self getAllQianLiFriends];
-    [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    for (int j = 0; j < [_contacts count]; ++j) {
+        NSArray *array = [_contacts objectAtIndex:j];
+        BOOL found = NO;
+        for (int i = 0; i < [array count]; ++i) {
+            QianLiContactsItem *contactItem = [array objectAtIndex:i];
+            if ([contactItem.tel isEqualToString:number]) {
+                if (image) {
+                    contactItem.thumbnail = image;
+                }
+                if (name) {
+                    contactItem.name = name;
+                }
+                found = YES;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:j];
+                if (indexPath) {
+                    [self performSelectorOnMainThread:@selector(updateContactsAt:) withObject:indexPath waitUntilDone:YES];
+                }
+                break;
+            }
+        }
+        if (found) {
+            break;
+        }
+    }
+}
+
+- (void)updateContactsAt:(NSIndexPath *)indexPath
+{
+    [_friendsTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)getAllQianLiFriends
@@ -799,7 +834,7 @@
         _countryName = [iosCC uppercaseString];
     }
     else{
-        NSLog(@"No country code!");
+        //NSLog(@"No country code!");
     }
     
     // ipad如果没有sim卡, 也是无法拿到countryName的
@@ -809,11 +844,11 @@
         [self sendContactsToServer];
     }
     else{
-        NSLog(@"no country code");
+       // NSLog(@"no country code");
         // LLGG just for simulator
-//        [self getAddressBookPermission];
-//        _finished = NO;
-//        [self sendContactsToServer];
+        [self getAddressBookPermission];
+        _finished = NO;
+        [self sendContactsToServer];
     }
 }
 
@@ -822,26 +857,27 @@
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     _inviteController = [storyBoard instantiateViewControllerWithIdentifier:@"InviteController"];
     _inviteController.title = @"Invite";
-    _inviteController.contacts = [_allContacts mutableCopy];
-    _allContacts = nil;
+    if (_allContacts) {
+        _inviteController.contacts = _allContacts;
+    }
     _inviteController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:_inviteController animated:YES];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    backFromInvite = YES;
 }
 
 #pragma mark - Table View Delegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        return 1;
-	} else {
-        return [_contacts count];
-    }
+    return [_contacts count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if ([_contacts count] <= section) {
+        return 0;
+    }
     return [[_contacts objectAtIndex:section] count];
 }
 
@@ -852,12 +888,25 @@
 	ContactTableViewCell *contactCell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
 	if (contactCell == nil) {
-		contactCell = [[ContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+		contactCell = [[ContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier withCheckBox:NO];
 		contactCell.frame = CGRectMake(0.0, 0.0, 320.0, 44);
     }
     
     QianLiAddressBookItem *contact = nil;
+    if ([_contacts count] <= indexPath.section) {
+        return contactCell;
+    }
+    else{
+        NSArray *array = [_contacts objectAtIndex:indexPath.section];
+        if ([array count] <= indexPath.row) {
+            return contactCell;
+        }
+    }
+    
     contact = (QianLiAddressBookItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    if (!contact.thumbnail) {
+        contact.thumbnail = [UIImage imageNamed:@"blank.png"];
+    }
     [contactCell setContactProfile: contact NeedIcon:YES];
     
     // Set seperator line
@@ -876,17 +925,32 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    if ([_contacts count] <= section) {
+        return nil;
+    }
 	return [[_contacts objectAtIndex:section] count] ? [[[UILocalizedIndexedCollation currentCollation] sectionTitles] objectAtIndex:section] : nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    if ([_contacts count] <= section) {
+        return nil;
+    }
     return [[_contacts objectAtIndex:section] count] ? tableView.sectionHeaderHeight : 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Call someone
+    if ([_contacts count] <= indexPath.section) {
+        return;
+    }
+    else{
+        NSArray *array = [_contacts objectAtIndex:indexPath.section];
+        if ([array count] <= indexPath.row) {
+            return;
+        }
+    }
     QianLiContactsItem *item = (QianLiContactsItem *)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     NSString *remoteParty = item.tel;
     [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
@@ -896,6 +960,15 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
+    if ([_contacts count] <= indexPath.section) {
+        return;
+    }
+    else{
+        NSArray *array = [_contacts objectAtIndex:indexPath.section];
+        if ([array count] <= indexPath.row) {
+            return;
+        }
+    }
 	QianLiAddressBookItem *addressBook = nil;
     addressBook = (QianLiAddressBookItem*)[[_contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
@@ -910,6 +983,9 @@
 -(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger lastSection = [self getLastSection];
+    if ([_contacts count] <= lastSection) {
+        return;
+    }
     if((indexPath.section == lastSection) && (indexPath.row == [[_contacts objectAtIndex:lastSection] count] - 1)){
         if (didLoadFromStarting){
             didLoadFromStarting = NO;
@@ -968,7 +1044,7 @@
         _noContactBody = noContactBody;
     }
  
-    if (!_noContactBody2) {
+    if (!_noContactBody2){
         UILabel *noContactBody2 = [[UILabel alloc] initWithFrame:CGRectMake(160-100, 305, 200, 80)];
         noContactBody2.textAlignment = NSTextAlignmentCenter;
         noContactBody2.text = NSLocalizedString(@"noContactBody2", nil);

@@ -23,6 +23,10 @@ static SipCallManager *callManager = nil;
 {
     if (callManager == nil) {
         callManager = [[SipCallManager alloc] init];
+        callManager.didEndInerruptionCall = NO;
+        callManager.didHavePhoneCall = NO;
+        callManager.endWithoutDismissAudioVC = NO;
+        callManager.netDidWorkChanged = NO;
         [[NSNotificationCenter defaultCenter] addObserver:callManager selector:@selector(receiveIncomingMessage:) name:@"receivedImageNotification" object:nil];
     }
     return callManager;
@@ -102,6 +106,7 @@ static SipCallManager *callManager = nil;
 - (void)reconnectVoiceCall:(NSString *)remoteParty
 {
     _endWithoutDismissAudioVC = NO;
+    _didHavePhoneCall = NO;
     long sID;
     if([[SipStackUtils sharedInstance].audioService makeAudioCallWithRemoteParty:remoteParty andSipStack:[[SipStackUtils sharedInstance].sipService getSipStack]  sessionid:&sID])
     {
@@ -114,7 +119,9 @@ static SipCallManager *callManager = nil;
     if (_audioVC && _endWithoutDismissAudioVC) {
         [SipStackUtils sharedInstance].sessionID = callID;
         _endWithoutDismissAudioVC = NO;
+        _didHavePhoneCall = NO;
         _audioVC.audioSessionID = callID;
+        [self.audioVC.headerTimer invalidate];
         [[SipStackUtils sharedInstance].audioService acceptCall];
     }
 }
@@ -122,6 +129,7 @@ static SipCallManager *callManager = nil;
 - (void)sendInterruptionMessage:(NSString *)message
 {
     [SipCallManager SharedInstance].endWithoutDismissAudioVC = YES;
+    [SipCallManager SharedInstance].didHavePhoneCall = NO;
     [[SipStackUtils sharedInstance].messageService sendMessage:message toRemoteParty:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
 }
 
@@ -133,8 +141,9 @@ static SipCallManager *callManager = nil;
 
 - (void)handleConnectionChange
 {
-    [[NgnEngine sharedInstance].sipService stopStackSynchronously];
-    [[NgnEngine sharedInstance].sipService registerIdentity];
+    //[[NgnEngine sharedInstance].sipService stopStackSynchronously];
+    //[[NgnEngine sharedInstance].sipService registerIdentity];
+    [[SipStackUtils sharedInstance] performSelectorInBackground:@selector(stopSipStackAndRegisterAgain) withObject:nil];
     [[SipCallManager SharedInstance] sendInterruptionMessage:kChangeNetWork];
 }
 
@@ -142,6 +151,7 @@ static SipCallManager *callManager = nil;
 {
     _audioVC = audioVC;
     _endWithoutDismissAudioVC = NO;
+    _didHavePhoneCall = NO;
     _netDidWorkChanged = NO;
 }
 
@@ -162,7 +172,17 @@ static SipCallManager *callManager = nil;
     
     if ([message isEqualToString:kInterruption]) {
         _endWithoutDismissAudioVC = YES;
+        _didHavePhoneCall = NO;
         [[SipStackUtils sharedInstance].audioService hangUpCall];
+    }
+    else if ([message isEqualToString:kPhoneCallInterruption]){
+        _endWithoutDismissAudioVC = YES;
+        _didHavePhoneCall = YES;
+        [[SipStackUtils sharedInstance].audioService hangUpCall];
+    }
+    else if ([message isEqualToString:kEndInterruptionCall]){
+        _didEndInerruptionCall = YES;
+        [[SipStackUtils sharedInstance].soundService stopInterruptionCall];
     }
     else if ([message isEqualToString:kInterruptionOK]){
         

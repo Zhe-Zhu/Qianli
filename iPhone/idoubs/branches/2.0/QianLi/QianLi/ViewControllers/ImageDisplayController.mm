@@ -89,7 +89,6 @@
     _starTime = [[NSDate date] timeIntervalSince1970];
     // Pan guesture
     [_addButton setTitle:NSLocalizedString(@"addMore", nil)];
-
     [_doodleButton setTitle:NSLocalizedString(@"doodle", nil)];
     
     _indicator = [[UILabel alloc] initWithFrame:CGRectMake(160-50, 1, 100, _toolBar.frame.size.height)];
@@ -145,6 +144,15 @@
         [self.navigationItem.leftBarButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor colorWithRed:0 green:0.5 blue:1 alpha:1],  UITextAttributeTextColor,nil] forState:UIControlStateNormal];
         
         [_toolBar setBackgroundImage:[UIImage imageNamed:@"iOS6CallNavigationBackground.png"] forToolbarPosition:UIBarPositionBottom barMetrics:UIBarMetricsDefault];
+        
+//        [[UIBarButtonItem appearance] setTitleTextAttributes:
+//         @{ UITextAttributeFont: [UIFont systemFontOfSize:17.0],
+//            UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetZero],
+//            UITextAttributeTextColor: [UIColor colorWithRed:34/255.0 green:136/255.0 blue:237/255.0 alpha:1.0]} forState:UIControlStateNormal];
+        
+//        [[UIBarButtonItem appearance] setBackgroundImage:[UIImage new]
+//                                                forState:UIControlStateNormal
+//                                              barMetrics:UIBarMetricsDefault];
     }
 }
 
@@ -259,7 +267,7 @@
                 //CODE_REVIEW:下面这段代码可以不要？
                 if (ind < [_images count]) {
                     image = [_images objectAtIndex:ind];
-                    NSLog(@"%d", image.imageOrientation);
+                    //NSLog(@"%d", image.imageOrientation);
                 }
 //                UIImageView *imageView = (UIImageView *)[_imageScrollView viewWithTag:1000 + i];
                 UIView * contentView = (UIView *)[_imageScrollView viewWithTag:1000+i];
@@ -486,14 +494,14 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
-        NSLog(@"end session");
+        //NSLog(@"end session");
     }];
     
     // Add to history
     NSMutableArray *array = [NSMutableArray array];
     //CODE_REVIEW:建议将下面imageByResizing函数放到第二线程去跑，以防止阻塞主线程。
     for (UIImage *image in _images) {
-        [array addObject:[image imageByResizing:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
+        [array addObject:[image imageByScalingAndCroppingForSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
     NSData *imageData = [NSKeyedArchiver archivedDataWithRootObject:array];
     DetailHistEvent *imageEvent = [[DetailHistEvent alloc] init];
@@ -581,10 +589,12 @@
 - (IBAction)doodle:(id)sender
 {
    int index = [_indexs indexOfObject:[NSString stringWithFormat:@"%d",_currentPage - 1]];
-    NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
-    NSString *str = [NSString stringWithFormat:@"%@%@%d",kDoodleImageIndex,kSeparator,_currentPage - 1];
-    [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
-    [self beginDoodle:index];
+    if (index < [_images count]) {
+        NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
+        NSString *str = [NSString stringWithFormat:@"%@%@%d",kDoodleImageIndex,kSeparator,_currentPage - 1];
+        [[SipStackUtils sharedInstance].messageService sendMessage:str toRemoteParty:remotePartyNumber];
+        [self beginDoodle:index];
+    }
 }
 
 - (void)beginDoodle:(NSInteger)index
@@ -618,38 +628,44 @@
     CGSize winSize = self.view.frame.size;
     UIView *tool = [[UIView alloc] initWithFrame:CGRectMake(0, winSize.height - 44, 320, 44)];
     _doodleToolBar = tool;
-    _doodleToolBar.backgroundColor = [UIColor whiteColor];
+    _doodleToolBar.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.8];
+    if (IS_OS_7_OR_LATER) {
+        _doodleToolBar.tintColor = [UIColor blackColor];
+    }
     [self.view addSubview:_doodleToolBar];
     
-    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [saveButton addTarget:self action:@selector(savePhoto) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:saveButton];
-    saveButton.frame = CGRectMake(20, 1, 44, 42);
-    [saveButton setTitle:NSLocalizedString(@"save", nil) forState:UIControlStateNormal];
+    saveButton.frame = CGRectMake(20, 2, 40, 40);
+    [saveButton setImage:[UIImage imageNamed:@"doodle_download.png"] forState:UIControlStateNormal];
     
-    UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:clearButton];
-    clearButton.frame = CGRectMake(138, 1, 44, 42);
-    [clearButton setTitle:NSLocalizedString(@"Clear", nil) forState:UIControlStateNormal];
+    clearButton.frame = CGRectMake(260, 2, 40, 40);
+    [clearButton setImage:[UIImage imageNamed:@"doodle_trash.png"] forState:UIControlStateNormal];
 
-    UIButton *erase = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *erase = [UIButton buttonWithType:UIButtonTypeCustom];
     [erase addTarget:self action:@selector(erase:) forControlEvents:UIControlEventTouchUpInside];
     [_doodleToolBar addSubview:erase];
-    erase.frame = CGRectMake(234, 1, 66, 42);
-    [erase setTitle:NSLocalizedString(@"eraser", nil) forState:UIControlStateNormal];
+    erase.frame = CGRectMake(140, 2, 40, 40);
+    [erase setImage:[UIImage imageNamed:@"doodle_eraser.png"] forState:UIControlStateNormal];
     
     [self.navigationItem.leftBarButtonItem setTitle:NSLocalizedString(@"cancelDoodle", nil)];
+//    [self.navigationItem.leftBarButtonItem setImage:[UIImage imageNamed:@"doodle_quit.png"]];
 }
 
 - (void)erase:(id)sender
 {
     [_doodleView changePaintingMode];
     if (_doodleView.isDrawing) {
-        [sender setTitle:NSLocalizedString(@"eraser", nil) forState:UIControlStateNormal];
+//        [sender setTitle:NSLocalizedString(@"eraser", nil) forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:@"doodle_eraser.png"] forState:UIControlStateNormal];
     }
     else{
-        [sender setTitle:NSLocalizedString(@"pen", nil) forState:UIControlStateNormal];
+//        [sender setTitle:NSLocalizedString(@"pen", nil) forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:@"doodle_pen_1.png"] forState:UIControlStateNormal];
     }
 }
 

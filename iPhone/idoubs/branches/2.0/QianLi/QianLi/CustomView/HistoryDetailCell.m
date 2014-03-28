@@ -53,6 +53,7 @@
 //        [self addSubview:_contentLabel];
         
         // 加入label和指示符号
+        self.selectionStyle = UITableViewCellSelectionStyleGray;
         UILabel *contentlabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 7.5, 180, 19)];
         contentlabel.backgroundColor = [UIColor clearColor];
         contentlabel.lineBreakMode = NSLineBreakByWordWrapping;
@@ -180,6 +181,12 @@
         [self callRecordCallRequest];
     }
     self.frame = CGRectMake(0, 0, CGRectGetWidth([[UIScreen mainScreen] bounds]), 48);
+    
+    for (UIImageView *view in _imageArray) {
+        [view removeFromSuperview];
+    }
+    [_imageArray removeAllObjects];
+    [_imageFootnote removeFromSuperview];
 }
 
 - (void)setCallRecord:(NSUInteger)callRecordType timeLabel:(NSString *)timeLabel footnote:(NSString *)footnote images:(NSArray *)imageArray
@@ -231,16 +238,22 @@
     
     // 加入照片脚注
     NSString *imageFootnoteString = [NSString stringWithFormat:NSLocalizedString(@"photoCount", nil), imageCount];
-    [_imageFootnote removeFromSuperview];
-    UILabel *imageFootnoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_contentLabel.frame)+4, picturesHeight + 48, 80, 20)];
-    imageFootnoteLabel.numberOfLines = 1;
-    imageFootnoteLabel.backgroundColor = [UIColor clearColor];
-    imageFootnoteLabel.textColor = tertiaryColor;
-    imageFootnoteLabel.text = imageFootnoteString;
-    imageFootnoteLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:10.0f];
-    imageFootnoteLabel.textAlignment = NSTextAlignmentLeft;
-    _imageFootnote = imageFootnoteLabel;
-    [self.contentView addSubview:_imageFootnote];
+    if (_imageFootnote == nil) {
+        [_imageFootnote removeFromSuperview];
+        UILabel *imageFootnoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_contentLabel.frame)+4, picturesHeight + 48, 80, 20)];
+        imageFootnoteLabel.numberOfLines = 1;
+        imageFootnoteLabel.backgroundColor = [UIColor clearColor];
+        imageFootnoteLabel.textColor = tertiaryColor;
+        imageFootnoteLabel.text = imageFootnoteString;
+        imageFootnoteLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:10.0f];
+        imageFootnoteLabel.textAlignment = NSTextAlignmentLeft;
+        _imageFootnote = imageFootnoteLabel;
+        [self.contentView addSubview:_imageFootnote];
+    }
+    else{
+        _imageFootnote.frame = CGRectMake(CGRectGetMinX(_contentLabel.frame)+4, picturesHeight + 48, 80, 20);
+        _imageFootnote.text = imageFootnoteString;
+    }
 }
 
 - (void)callRecordCallout

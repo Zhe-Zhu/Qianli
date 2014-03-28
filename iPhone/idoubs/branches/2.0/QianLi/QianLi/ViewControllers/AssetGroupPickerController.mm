@@ -67,7 +67,7 @@
         }
     };
     ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error) {
-        NSLog(@"object %@ failed to load assets groups", self);
+        //NSLog(@"object %@ failed to load assets groups", self);
     };
     
     NSUInteger groupTypes = ALAssetsGroupAll;
@@ -108,7 +108,7 @@
 - (void)cancel
 {
     [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
-        NSLog(@"image session ends now in %@ by pressing cancel button", self);
+        //NSLog(@"image session ends now in %@ by pressing cancel button", self);
     }];
     NSString *remotePartyNumber = [[SipStackUtils sharedInstance] getRemotePartyNumber];
     [[SipStackUtils sharedInstance].messageService sendMessage:kCancelAddImage toRemoteParty:remotePartyNumber];

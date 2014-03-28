@@ -255,7 +255,6 @@
 
 - (void)cancelFromRemoteParty
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
     if ([_synImages count] == 0) {
         [self addImages:[Utils screenshot:self.view toSize:CGSizeMake(HistoryImageSize, HistoryImageSize)]];
     }
@@ -275,6 +274,7 @@
         imageEvent.status = kHistoryEventStatus_Outgoing;
     }
     [[DetailHistoryAccessor sharedInstance] addHistEntry:imageEvent];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)quit
@@ -294,7 +294,7 @@
 #pragma mark  -- UIWebViewDelegate --
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    NSLog(@"error load:%@", [[webView.request URL] absoluteString]);
+    //NSLog(@"error load:%@", [[webView.request URL] absoluteString]);
     //_fromRemote = NO;
 }
 
@@ -330,7 +330,7 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    NSLog(@"did start url:%@", [[webView.request URL] absoluteString]);
+    //NSLog(@"did start url:%@", [[webView.request URL] absoluteString]);
 //    if (_fromRemote) {
 //        if ([[[webView.request URL] absoluteString] isEqualToString:_remoteURL]) {
 //            //_fromRemote = NO;

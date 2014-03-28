@@ -48,4 +48,7 @@ typedef enum
 @property(nonatomic, strong) DetailHistEvent *activeEvent;
 
 @property(nonatomic, assign) BOOL didPressEndCall;
+@property(weak, nonatomic) NSTimer *headerTimer;
+
+- (void)dismissAllViewController;
 @end

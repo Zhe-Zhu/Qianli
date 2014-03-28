@@ -76,7 +76,7 @@ static QianLiContactsAccessor *contactsAccessor;
         }
     }
     else{
-        NSLog(@"fetch error");
+       // NSLog(@"fetch error");
     }
     [self.managedObjectContext unlock];
     return nil;
@@ -105,11 +105,11 @@ static QianLiContactsAccessor *contactsAccessor;
         }
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
     }
     
     if (![_managedObjectContext save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        //NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
     [self.managedObjectContext unlock];
 }
@@ -134,7 +134,7 @@ static QianLiContactsAccessor *contactsAccessor;
         }
     }
     else{
-        NSLog(@"fetch error");
+        //NSLog(@"fetch error");
     }
     [self.managedObjectContext unlock];
     return nil;
@@ -146,25 +146,20 @@ static QianLiContactsAccessor *contactsAccessor;
     [self.managedObjectContext lock];
     NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"QianLiContacts" inManagedObjectContext:_managedObjectContext];
     
-    UIImage *image;
-    if (profile == nil) {
-        image = [UIImage imageNamed:@"blank.png"];
-    }
-    else{
-        image = profile;
-    }
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
     [newManagedObject setValue:name forKey:@"name"];
     [newManagedObject setValue:email forKey:@"email"];
-    [newManagedObject setValue:UIImageJPEGRepresentation(image, 0.5) forKey:@"profile"];
+    if (profile) {
+        [newManagedObject setValue:UIImageJPEGRepresentation(profile, 0.5) forKey:@"profile"];
+    }
     [newManagedObject setValue:number forKey:@"number"];
     [newManagedObject setValue:[NSNumber numberWithInteger:nums] forKey:@"updatecounter"];
     
     // Save the context.
     NSError *error = nil;
     if (![_managedObjectContext save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+       // NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
     [self.managedObjectContext unlock];
 }
@@ -192,7 +187,7 @@ static QianLiContactsAccessor *contactsAccessor;
         [_managedObjectContext deleteObject:managedObject];
     }
     if (![_managedObjectContext save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        //NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
     [self.managedObjectContext unlock];
 }
@@ -215,12 +210,12 @@ static QianLiContactsAccessor *contactsAccessor;
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating");
+               // NSLog(@"saving error during updating");
             }
         }
     }
     else{
-        NSLog(@"no such item");
+        //NSLog(@"no such item");
     }
     [self.managedObjectContext unlock];
 }
@@ -244,12 +239,12 @@ static QianLiContactsAccessor *contactsAccessor;
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating");
+                //NSLog(@"saving error during updating");
             }
         }
     }
     else{
-        NSLog(@"no such item");
+        //NSLog(@"no such item");
     }
     [self.managedObjectContext unlock];
 }
@@ -274,12 +269,12 @@ static QianLiContactsAccessor *contactsAccessor;
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating");
+               // NSLog(@"saving error during updating");
             }
         }
     }
     else{
-        NSLog(@"no such item");
+        //NSLog(@"no such item");
     }
     [self.managedObjectContext unlock];
 }
@@ -302,12 +297,12 @@ static QianLiContactsAccessor *contactsAccessor;
         if (!error) {
             NSError *saveError;
             if (![self.managedObjectContext save:&saveError]) {
-                NSLog(@"saving error during updating");
+                //NSLog(@"saving error during updating");
             }
         }
     }
     else{
-        NSLog(@"no such item");
+       // NSLog(@"no such item");
     }
     [self.managedObjectContext unlock];
 }

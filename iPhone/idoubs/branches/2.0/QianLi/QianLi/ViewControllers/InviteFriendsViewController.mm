@@ -119,7 +119,7 @@
         [self getAddressBookPermission];
     }
     else{
-        [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+        [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     }
 }
 
@@ -326,7 +326,7 @@
     static NSString *CellIdentifier = @"ContactTableViewCell";
 	ContactTableViewCell *contactCell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (contactCell == nil) {
-		contactCell = [[ContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+		contactCell = [[ContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier withCheckBox:YES];
 		contactCell.frame = CGRectMake(0.0, 0.0, 320.0, 44);
     }
     
@@ -403,8 +403,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if (tableView == self.searchDisplayController.searchResultsTableView){
         return 0;
+    }
     return [[_contacts objectAtIndex:section] count] ? tableView.sectionHeaderHeight : 0;
 }
 

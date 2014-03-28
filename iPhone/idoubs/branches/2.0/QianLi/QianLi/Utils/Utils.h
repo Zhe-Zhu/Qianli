@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "SSKeychain.h"
 #import "Reachability.h"
+#import <sys/utsname.h>
+#import "UMSocial.h"
+
 
 // this class implement some useful utilites functions.
 @interface Utils : NSObject
@@ -30,5 +33,9 @@
 + (UIImage*)screenshot:(UIView *)view toSize:(CGSize)size;
 + (BOOL)isChineseSystem;
 
++ (void)lookupHostIPAddressForURL:(NSURL*)url;
++ (void)configureParmsWithNumber:(NSString *)number;
++ (NSString*)deviceModelName;
 + (void)clearAllSharedInstance;
++ (void)shareThingsToSocialMedia:(UIViewController *)inController text:(NSString *)text Image:(UIImage *)image delegate:(id<UMSocialUIDelegate>)delegate;
 @end

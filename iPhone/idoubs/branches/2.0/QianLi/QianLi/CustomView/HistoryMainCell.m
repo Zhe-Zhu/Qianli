@@ -74,6 +74,7 @@
     _avatar = imageView;
     [self.contentView addSubview:_avatar];
     
+    self.selectionStyle = UITableViewCellSelectionStyleGray;
     UILabel *labelName = [[UILabel alloc] init];
     labelName.font = [UIFont fontWithName:@"Arial-BoldMT" size:19.0f];
     _nameLabel = labelName;
@@ -113,8 +114,16 @@
     
     _line.frame = CGRectMake(0, 79, 320, 1);
     _avatar.frame = CGRectMake(12, 80/2.0-25, 50, 50);
-    _avatar.layer.cornerRadius = _avatar.frame.size.height / 2.0;
-    _avatar.clipsToBounds = YES;
+    UIImage *circleConver = [UIImage imageNamed:@"circle_cover_50.png"];
+    UIImageView *coverView = [[UIImageView alloc] initWithFrame:CGRectMake(12, 80/2.0-25, 50, 50)];
+    coverView.image = circleConver;
+    [self.contentView addSubview:coverView];
+    if (IS_OS_7_OR_LATER) {
+        [coverView setHighlightedImage:[UIImage imageNamed:@"circle_cover_50_grey.png"]];
+    }
+    else{
+        [coverView setHighlightedImage:[UIImage imageNamed:@"circle_cover_50_grey_ios6.png"]];
+    }
     _nameLabel.frame = CGRectMake(75, -1, 180, 50);
     CGFloat timeNameWidth = 100;
     CGFloat timeNameHeight = 40;
@@ -435,9 +444,9 @@
     // Configure the view for the selected state
 }
 
-- (void)setHistoryMainCell:(NSString *)id avatar:(UIImage *)avatar Name:(NSString *)name Time:(NSString *)time Content:(NSString *)content
+- (void)setHistoryMainCell:(NSString *)idStr avatar:(UIImage *)avatar Name:(NSString *)name Time:(NSString *)time Content:(NSString *)content
 {
-    _id = id;
+    _id = idStr;
     _timeLabel.text = time;
     _nameLabel.text = name;
     _contentLabel.text = content;

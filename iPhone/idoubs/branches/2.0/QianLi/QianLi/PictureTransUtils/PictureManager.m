@@ -234,7 +234,7 @@ static PictureManager *pictureManager;
                                     fileName:@"image.jpeg"
                                     mimeType:@"image/jpeg"];
         }];
-        
+        [request setHTTPShouldUsePipelining:YES];
         RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^( RKObjectRequestOperation *operation , RKMappingResult *mappingResult ){
             // If the operation is successful, RestKit will automatically map the reponse json to a local picure instance. We can access this instance to get the path of image stored in the server.
             Picture *reponsedPic = (Picture *)[mappingResult firstObject];
@@ -411,6 +411,7 @@ static PictureManager *pictureManager;
 
 + (void)registerWithUDID:(NSString *)udid Password:(NSString *)password Name:(NSString *)name PhoneNumber:(NSString *)phoneNumber Email:(NSString *)email OS:(NSString *)os Avatar:(UIImage *)avatar Success:(void(^)(int status))success
 {
+    ///users/register/
     RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString: kBaseURL]];
     // For registration.
     RKObjectMapping *registerMapping = [RKObjectMapping mappingForClass:[RegistrationStatus class]];
@@ -492,7 +493,7 @@ static PictureManager *pictureManager;
                 success(regStatus.status);
             }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            NSLog(@"");
+           // NSLog(@"");
         }];
     }];
 }
@@ -530,7 +531,7 @@ static PictureManager *pictureManager;
                 success(regStatus.status);
             }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            NSLog(@"");
+           // NSLog(@"");
         }];
     }];
 }

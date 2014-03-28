@@ -296,7 +296,7 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    NSLog(@"did start url:%@", [[webView.request URL] absoluteString]);
+   // NSLog(@"did start url:%@", [[webView.request URL] absoluteString]);
 //    _urlInput.text = [[webView.request URL] absoluteString];
     
 //    if (_fromRemote) {

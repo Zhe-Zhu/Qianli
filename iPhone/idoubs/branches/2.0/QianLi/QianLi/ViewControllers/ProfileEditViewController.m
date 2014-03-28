@@ -109,6 +109,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 - (BOOL)prefersStatusBarHidden
 {
     return YES;
@@ -249,7 +254,6 @@
 {
     UIImage *image = [self screenshot];
     CGRect winSize = [UIScreen mainScreen].bounds;
-//    CGRect fromRect = CGRectMake((winSize.size.width - kProfileSize) / 2.0, (winSize.size.height - kProfileSize) / 2.0, kProfileSize, kProfileSize);
     CGRect fromRect;
     if (abs(winSize.size.height - 568) < 2){
         fromRect = CGRectMake((winSize.size.width - kProfileSize) / 2.0, 180, kProfileSize*2, kProfileSize*2);

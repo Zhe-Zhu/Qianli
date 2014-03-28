@@ -47,6 +47,7 @@
 - (void)clearAllService;
 // sip register method
 - (BOOL)queryConfigurationAndRegister;
+- (void)stopSipStackAndRegisterAgain;
 - (BOOL)unRegisterIdentity;
 // start the NgnEngine of IOS-NGN-Stack
 - (void)start;
@@ -63,4 +64,7 @@
 // Get the number of remoteParty not the uri
 - (NSString *)getRemotePartyNumber;
 - (void)setRemotePartyNumber:(NSString *)remoteParty;
+- (void)cancelCallingNotification;
+- (void)muteLocalNotification;
+
 @end

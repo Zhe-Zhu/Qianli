@@ -155,9 +155,9 @@
     NSString *retrieveuuid = [SSKeychain passwordForService:@"com.ashstudio.qianli" account:@"udid"];
     if (retrieveuuid == nil) {
         // if this is the first time app lunching , create key for device
-        NSString *uuid  = [self createNewUUID];
+        retrieveuuid  = [self createNewUUID];
         // save newly created key to Keychain
-        [SSKeychain setPassword:uuid forService:@"com.ashstudio.qianli" account:@"udid"];
+        [SSKeychain setPassword:retrieveuuid forService:@"com.ashstudio.qianli" account:@"udid"];
     }
     return retrieveuuid;
 }
@@ -283,7 +283,7 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     if (size.width != imageSize.width || size.height != imageSize.height) {
-        UIImage *samllImage = [image imageByResizing:size];
+        UIImage *samllImage = [image imageByScalingAndCroppingForSize:size];
         return samllImage;
     }
     return image;
@@ -299,6 +299,118 @@
     return NO;
 }
 
++ (void)lookupHostIPAddressForURL:(NSURL*)url
+{
+    NSString *ipStr = [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey];
+    if (![Utils checkInternetAndDispWarning:NO]) {
+        return;
+    }
+    
+    // Ask the unix subsytem to query the DNS
+    struct hostent *remoteHostEnt = gethostbyname([[url host] UTF8String]);
+    if (remoteHostEnt == nil) {
+        return;
+    }
+    // Get address info from host entry
+    struct in_addr *remoteInAddr = (struct in_addr *)remoteHostEnt->h_addr_list[0];
+    if (remoteInAddr == nil) {
+        return;
+    }
+    // Convert numeric addr to ASCII string
+    char *sRemoteInAddr = inet_ntoa(*remoteInAddr);
+    // hostIP
+    NSString* hostIP = [NSString stringWithUTF8String:sRemoteInAddr];
+    if (hostIP == nil || [hostIP isEqualToString:@""]) {
+        return;
+    }
+    else{
+        if (![ipStr isEqualToString:hostIP]) {
+            [[NSUserDefaults standardUserDefaults] setObject:hostIP forKey:kHostIPKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+        }
+    }
+}
+
++ (void)configureParmsWithNumber:(NSString *)number
+{
+    //TODO: change ip
+    NSString *ipStr = [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey];
+    if (ipStr == nil || [ipStr isEqualToString:@""]) {
+        ipStr = kServerIP;
+        [[NSUserDefaults standardUserDefaults] setObject:kServerIP forKey:kHostIPKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_DISPLAY_NAME andValue:number];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPU andValue:[NSString stringWithFormat:@"sip:%@@%@",number, ipStr]];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_IMPI andValue:number];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:IDENTITY_PASSWORD andValue:number];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_REALM andValue:ipStr];
+    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_EARLY_IMS andValue:YES];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_PCSCF_HOST andValue:ipStr];
+    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_KEEPAWAKE andValue:YES];
+    [[NgnEngine sharedInstance].configurationService setBoolWithKey:NETWORK_USE_3G andValue:YES];
+    [[NgnEngine sharedInstance].configurationService setStringWithKey:NETWORK_TRANSPORT andValue:@"tcp"];
+    //112.124.36.134  192.168.1.200
+}
+
++ (NSString*)deviceModelName {
+    
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString *machineName = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+    
+    NSDictionary *commonNamesDictionary =
+    @{
+      @"i386":     @"iPhone Simulator",
+      @"x86_64":   @"iPad Simulator",
+      
+      @"iPhone1,1":    @"iPhone",
+      @"iPhone1,2":    @"iPhone 3G",
+      @"iPhone2,1":    @"iPhone 3GS",
+      @"iPhone3,1":    @"iPhone 4",
+      @"iPhone3,2":    @"iPhone 4",
+      @"iPhone3,3":    @"iPhone 4",
+      @"iPhone4,1":    @"iPhone 4S",
+      @"iPhone5,1":    @"iPhone 5(GSM)",
+      @"iPhone5,2":    @"iPhone 5(GSM+CDMA)",
+      @"iPhone5,3":    @"iPhone 5c(GSM)",
+      @"iPhone5,4":    @"iPhone 5c(GSM+CDMA)",
+      @"iPhone6,1":    @"iPhone 5s(GSM)",
+      @"iPhone6,2":    @"iPhone 5s(GSM+CDMA)",
+      
+      @"iPad1,1":  @"iPad",
+      @"iPad2,1":  @"iPad 2(WiFi)",
+      @"iPad2,2":  @"iPad 2(GSM)",
+      @"iPad2,3":  @"iPad 2(CDMA)",
+      @"iPad2,4":  @"iPad 2(WiFi Rev A)",
+      @"iPad2,5":  @"iPad Mini(WiFi)",
+      @"iPad2,6":  @"iPad Mini(GSM)",
+      @"iPad2,7":  @"iPad Mini(GSM+CDMA)",
+      @"iPad3,1":  @"iPad 3(WiFi)",
+      @"iPad3,2":  @"iPad 3(GSM+CDMA)",
+      @"iPad3,3":  @"iPad 3(GSM)",
+      @"iPad3,4":  @"iPad 4(WiFi)",
+      @"iPad3,5":  @"iPad 4(GSM)",
+      @"iPad3,6":  @"iPad 4(GSM+CDMA)",
+      
+      @"iPod1,1":  @"iPod 1st Gen",
+      @"iPod2,1":  @"iPod 2nd Gen",
+      @"iPod3,1":  @"iPod 3rd Gen",
+      @"iPod4,1":  @"iPod 4th Gen",
+      @"iPod5,1":  @"iPod 5th Gen",
+      
+      };
+    
+    NSString *deviceName = commonNamesDictionary[machineName];
+    
+    if (deviceName == nil) {
+        deviceName = machineName;
+    }
+    
+    return deviceName;
+}
+
 + (void)clearAllSharedInstance
 {
     [[SipCallManager SharedInstance] clearCallManager];
@@ -311,4 +423,14 @@
     [[MainHistoryDataAccessor sharedInstance] clearSharedInstance];
 }
 
+// send something to social media
++ (void)shareThingsToSocialMedia:(UIViewController *)inController text:(NSString *)text Image:(UIImage *)image delegate:(id<UMSocialUIDelegate>)delegate
+{
+    [UMSocialSnsService presentSnsIconSheetView:inController
+                                         appKey:kUmengSDKKey
+                                      shareText:text
+                                     shareImage:nil
+                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToSina,UMShareToSms,UMShareToEmail,nil]
+                                       delegate:delegate];
+}
 @end

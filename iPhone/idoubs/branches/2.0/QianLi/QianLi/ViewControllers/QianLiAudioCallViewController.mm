@@ -27,6 +27,7 @@
 #import "SVStatusHUD.h"
 #import "SipCallManager.h"
 #import "SVProgressHUD.h"
+#import "NotificationHeader.h"
 
 
 @interface QianLiAudioCallViewController (MusicApp)
@@ -75,10 +76,15 @@
     BOOL didEndCall;
     BOOL shouldPlayRingTone;
     BOOL shouldPlayMusic;
+    BOOL shouldGetBigAvater;
     double videoBeginTime;
+    
+    __weak NotificationHeader * header;
 }
 
 @property(weak, nonatomic) NSTimer *timer;
+@property(weak, nonatomic) NSTimer *imageTimer;
+
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMicroPhone;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSpeaker;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonAdd;
@@ -135,7 +141,7 @@
             // calling someone
             // Load someone's Profile Photo
             
-            [self setBigDisplayImage];
+            [self performSelectorInBackground:@selector(setBigDisplayImage) withObject:nil];
             // Make the Photo dark
             _bigProfileImage.alpha = 0.4f;
             // Present all the icons
@@ -150,13 +156,14 @@
             [[SipStackUtils sharedInstance].soundService enableBackgroundSound];
             shouldPlayRingTone = YES;
             shouldPlayMusic = NO;
+            shouldGetBigAvater = YES;
             break;
         }
         case ReceivingCall: {
             // called
             // Load Caller's Profile Photo
             [[SipStackUtils sharedInstance].soundService enableInComingCallSound];
-            [self setBigDisplayImage];
+            [self performSelectorInBackground:@selector(setBigDisplayImage) withObject:nil];
             // Hide the navigation bar
             [self.navigationController.navigationBar setHidden:YES];
             // Hide the toolbar
@@ -167,6 +174,7 @@
             [self raiseCallerBulletinBoard];
             shouldPlayRingTone = NO;
             shouldPlayMusic = YES;
+            shouldGetBigAvater = YES;
             break;
         }
         default: {
@@ -198,19 +206,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (_bigProfileImage.image == nil) {
-        [self setBigDisplayImage];
-    }
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    UIDevice *device = [UIDevice currentDevice];
+    [self enableBlackScreen];
     // Register for proximity notifications
-    [device setProximityMonitoringEnabled:YES];
-    
-    if ([device isProximityMonitoringEnabled]) {
-        [notificationCenter addObserver:self selector:@selector(proximityChanged) name:UIDeviceProximityStateDidChangeNotification object:nil];
-    } else {
-        NSLog(@"No Proximity Sensor");
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -224,6 +221,12 @@
         shouldPlayMusic = NO;
         [[SipStackUtils sharedInstance].soundService playRingTone];
     }
+    if (shouldGetBigAvater) {
+        shouldGetBigAvater = NO;
+        if ([[Utils deviceModelName] isEqualToString:@"iPhone 4"]) {
+            [self performSelectorInBackground:@selector(getBigAvatar) withObject:nil];
+        }
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -231,7 +234,12 @@
     [super viewWillDisappear:animated];
     [[SipStackUtils sharedInstance].soundService stopRingBackTone];
     [[SipStackUtils sharedInstance].soundService stopRingTone];
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+    [self disableBlackScreen];
+    if (menuBar) {
+        if (menuBar.isShow == YES) {
+            [menuBar dismiss];
+        }
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -240,6 +248,10 @@
     if (didEndCall) {
         [self resumeMusicAppIfNeeded];
         [_timer invalidate];
+        [_imageTimer invalidate];
+        [_headerTimer invalidate];
+        [SipCallManager SharedInstance].endWithoutDismissAudioVC = NO;
+        [SipCallManager SharedInstance].audioVC = nil;
     }
 }
 
@@ -259,14 +271,40 @@
     //
 }
 
+- (void)enableBlackScreen
+{
+    if (!_isSpeakerOn) {
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        UIDevice *device = [UIDevice currentDevice];
+        [device setProximityMonitoringEnabled:YES];
+        
+        if ([device isProximityMonitoringEnabled]) {
+            [notificationCenter addObserver:self selector:@selector(proximityChanged) name:UIDeviceProximityStateDidChangeNotification object:nil];
+        } else {
+            //NSLog(@"No Proximity Sensor");
+        }
+    }
+}
+
+- (void)disableBlackScreen
+{
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    UIDevice *device = [UIDevice currentDevice];
+    [device setProximityMonitoringEnabled:NO];
+    [notificationCenter removeObserver:self name:UIDeviceProximityStateDidChangeNotification object:nil];
+
+}
+
 - (void)handelAudioRouteChange
 {
     if (![Utils isHeadsetPluggedIn]) {
         if (self.presentedViewController) {
             [self openSpeaker];
         }
+        [self enableBlackScreen];
     }
     else{
+        [self disableBlackScreen];
         [self shutUpSpeaker];
     }
 }
@@ -274,6 +312,13 @@
 - (void)setBigDisplayImage
 {
     [_bigProfileImage setImage:[UIImage imageNamed:@"defaultBigPhoto.png"]];
+    if (![[Utils deviceModelName] isEqualToString:@"iPhone 4"]) {
+        [self getBigAvatar];
+    }
+}
+
+- (void)getBigAvatar
+{
     UIImageView *imageView = _bigProfileImage;
     [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
         UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
@@ -558,25 +603,28 @@
         [SVStatusHUD showWithImage:[UIImage imageNamed:@"hudEarphone.png"] status:NSLocalizedString(@"hudEarphone", nil)];
         return;
     }
-    if (_isSpeakerOn) {
+    _isSpeakerOn = !_isSpeakerOn;
+    if (!_isSpeakerOn) {
         // deactivate this button
+        [self enableBlackScreen];
         [_buttonSpeaker setTintColor:inactiveButtonTintColor];
         [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOff.png"] status:NSLocalizedString(@"speakerOff", nil)];
     }
     else {
+        [self disableBlackScreen];
         // activate this button
         [_buttonSpeaker setTintColor:activeButtonTintColor];
         [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
     }
+    
     // record current button state
-    _isSpeakerOn = !_isSpeakerOn;
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
 }
 
 - (void)pressButtonAdd
 {
     if (menuBar) {
-        if (menuBar.isShow==YES) {
+        if (menuBar.isShow == YES) {
             [menuBar dismiss];
             return;
         }
@@ -617,11 +665,15 @@
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"QianLiRobotEndCall", nil),((int)time) / 60,((int)time) % 60, kQianLiRobotSharedPhotoNum, kQianLiRobotSharedDoodleNum, kQianLiRobotSharedWebNum, kQianLiRobotsharedVideoNum]];
     }
     //[[SipStackUtils sharedInstance].audioService hangUpCall];
+    [_timer invalidate];
+    [_imageTimer invalidate];
+    [_headerTimer invalidate];
     _didPressEndCall = YES;
     [[SipStackUtils sharedInstance].soundService stopInCallSound];
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [_timer invalidate]; // 停止计时并从Runloop中释放
+    [_imageTimer invalidate];
     
     _didEndCallBySelf = YES;
     if (_viewState == InCall) {
@@ -637,10 +689,18 @@
     // 如果Menu Bar升起则将其dismiss
     if (menuBar) {
         [menuBar dismiss];
-        menuBar=nil;
+        menuBar = nil;
     }
     // starts timer suicide
-    [self performSelector:@selector(dismissSelf) withObject:nil afterDelay:0.5];
+    [self performSelector:@selector(dismissAllViewController) withObject:nil afterDelay:0.5];
+    
+    //handle the case that partner is interrupted by phone call
+    if ([SipCallManager SharedInstance].endWithoutDismissAudioVC) {
+        [SipCallManager SharedInstance].endWithoutDismissAudioVC = NO;
+        [SipCallManager SharedInstance].didHavePhoneCall = NO;
+        [SipCallManager SharedInstance].audioVC = nil;
+        [[SipStackUtils sharedInstance].messageService sendMessage:kEndInterruptionCall toRemoteParty:_remotePartyNumber];
+    }
 }
 
 # pragma mark Receieve a Call View Methods
@@ -729,7 +789,6 @@
 // 按下拒绝接听按钮
 - (void)pressRejectButton
 {
-   // [[SipStackUtils sharedInstance].audioService hangUpCall];
     [[SipStackUtils sharedInstance].audioService performSelectorInBackground:@selector(hangUpCall) withObject:nil];
     [PictureManager endImageSession:[[PictureManager sharedInstance] getImageSession] Success:^(BOOL success) {
         
@@ -790,9 +849,11 @@
         return;
     }
     if (_isSpeakerOn) {
+        [self disableBlackScreen];
         return;
     }
     _isSpeakerOn = YES;
+    [self disableBlackScreen];
     [_buttonSpeaker setTintColor:activeButtonTintColor];
     [SVStatusHUD showWithImage:[UIImage imageNamed:@"speakerOn.png"] status:NSLocalizedString(@"speakerOn", nil)];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
@@ -801,9 +862,11 @@
 - (void)shutUpSpeaker
 {
     if (!_isSpeakerOn) {
+        [self enableBlackScreen];
         return;
     }
     _isSpeakerOn = NO;
+    [self enableBlackScreen];
     [_buttonSpeaker setTintColor:inactiveButtonTintColor];
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:_isSpeakerOn];
 }
@@ -952,7 +1015,7 @@
         }
     }
          
-    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleTimer:) userInfo:imageArray repeats:YES];
+    _imageTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleTimer:) userInfo:imageArray repeats:YES];
     if (_imageDispVC == nil) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         _imageDispVC = [storyboard instantiateViewControllerWithIdentifier:@"ImageDisplayVC"];
@@ -1041,11 +1104,14 @@
             if (!didWantResumeCall) {
                 [self timerSuicideTick];
             }
-            if ([SipCallManager SharedInstance].netDidWorkChanged) {
-                [SipCallManager SharedInstance].netDidWorkChanged = NO;
-                [[SipCallManager SharedInstance] reconnectVoiceCall:[[SipStackUtils sharedInstance] getRemotePartyNumber]];
+            else{
+                if ([SipCallManager SharedInstance].didHavePhoneCall){
+                    header = [NotificationHeader presentNotificationHeader:self.navigationController.view inPosition:CGPointMake(0, 64) withIcon:[UIImage imageNamed:@"header_icon_stop.png"] andText:NSLocalizedString(@"CallInerruption", nil)];
+                    _headerTimer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(pressButtonEndCall) userInfo:nil repeats:NO];
+                }
+
             }
-			break;
+            break;
 		}
 	}
 }
@@ -1060,6 +1126,8 @@
 			}
 			case INVITE_STATE_INCOMING:
 			{
+                [NotificationHeader dismissNotificationHeader:header];
+                header = nil;
 				break;
 			}
 			case INVITE_STATE_REMOTE_RINGING:
@@ -1117,6 +1185,7 @@
     [[SipStackUtils sharedInstance].soundService configureSpeakerEnabled:YES];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [_timer invalidate];
+    [_imageTimer invalidate];
     if (menuBar) {
         [menuBar dismiss];
         menuBar = nil;
@@ -1322,7 +1391,7 @@
                 color = [UIColor redColor];
                 break;
             case 2:
-                color = [UIColor greenColor];
+                color = [UIColor blueColor];
                 break;
             default:
                 color = [UIColor blackColor];
@@ -1572,7 +1641,7 @@
     [self dismissAllViewController];
     [[SipStackUtils sharedInstance].soundService disableBackgroundSound];
     [_timer invalidate]; // 停止计时并从Runloop中释放
-    
+    [_imageTimer invalidate];
     _didEndCallBySelf = YES;
     if (_viewState == InCall) {
         _activeEvent.end = [[NSDate date] timeIntervalSince1970];
