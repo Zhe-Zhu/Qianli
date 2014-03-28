@@ -875,6 +875,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if ([_contacts count] <= section) {
+        return 0;
+    }
     return [[_contacts objectAtIndex:section] count];
 }
 
@@ -922,11 +925,17 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    if ([_contacts count] <= section) {
+        return nil;
+    }
 	return [[_contacts objectAtIndex:section] count] ? [[[UILocalizedIndexedCollation currentCollation] sectionTitles] objectAtIndex:section] : nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    if ([_contacts count] <= section) {
+        return nil;
+    }
     return [[_contacts objectAtIndex:section] count] ? tableView.sectionHeaderHeight : 0;
 }
 
