@@ -444,9 +444,9 @@
     // Configure the view for the selected state
 }
 
-- (void)setHistoryMainCell:(NSString *)id avatar:(UIImage *)avatar Name:(NSString *)name Time:(NSString *)time Content:(NSString *)content
+- (void)setHistoryMainCell:(NSString *)idStr avatar:(UIImage *)avatar Name:(NSString *)name Time:(NSString *)time Content:(NSString *)content
 {
-    _id = id;
+    _id = idStr;
     _timeLabel.text = time;
     _nameLabel.text = name;
     _contentLabel.text = content;
