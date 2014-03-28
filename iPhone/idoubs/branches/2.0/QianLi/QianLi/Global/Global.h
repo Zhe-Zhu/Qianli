@@ -82,6 +82,7 @@ nil]
 #define kSemiModalAnimationDuration 0.3f
 #define kInCall @"UserInCall"
 #define PageWidth 340
+#define CellHeight 80
 
 #define kImagePath @"IMAGEPATH"
 #define kImageTransCompletion @"IMAGETRANSCOMPLETION"

@@ -14,8 +14,6 @@
 #import "UserDataTransUtils.h"
 #import "SipCallManager.h"
 
-#define CellHeight 80
-
 @interface HistoryRecordsMainViewController ()
 {
     NSMutableArray *_historyRecords;

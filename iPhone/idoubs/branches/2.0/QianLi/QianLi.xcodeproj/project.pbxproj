@@ -69,6 +69,10 @@
 		18412E6918E2DBF30093C68C /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18412E5718E2DBF30093C68C /* libSocialWechat.a */; };
 		18412E6A18E2DBF30093C68C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18412E5818E2DBF30093C68C /* libWeChatSDK.a */; };
 		184EB7791851C91C00D70240 /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5D0D76182C9E15001536CB /* libUMFeedback.a */; };
+		187B906418E515C300BF0120 /* circle_cover_30_grey_ios6@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187B906018E515C300BF0120 /* circle_cover_30_grey_ios6@2x.png */; };
+		187B906518E515C300BF0120 /* circle_cover_30_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187B906118E515C300BF0120 /* circle_cover_30_grey@2x.png */; };
+		187B906618E515C300BF0120 /* circle_cover_50_grey_ios6@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187B906218E515C300BF0120 /* circle_cover_50_grey_ios6@2x.png */; };
+		187B906718E515C300BF0120 /* circle_cover_50_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187B906318E515C300BF0120 /* circle_cover_50_grey@2x.png */; };
 		18DF837B18AC9C8F006CADD8 /* WaitingListUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DF837A18AC9C8F006CADD8 /* WaitingListUtils.m */; };
 		18E22AF318B444E400A6FBA3 /* WaitedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E22AF218B444E400A6FBA3 /* WaitedViewController.m */; };
 		18E22B1318B4AA6B00A6FBA3 /* waiting_begin_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E22B0C18B4AA6B00A6FBA3 /* waiting_begin_button@2x.png */; };
@@ -680,6 +684,10 @@
 		18412E5918E2DBF30093C68C /* UMSocialWechatHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialWechatHandler.h; sourceTree = "<group>"; };
 		18412E5A18E2DBF30093C68C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		18412E5B18E2DBF30093C68C /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		187B906018E515C300BF0120 /* circle_cover_30_grey_ios6@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_cover_30_grey_ios6@2x.png"; sourceTree = "<group>"; };
+		187B906118E515C300BF0120 /* circle_cover_30_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_cover_30_grey@2x.png"; sourceTree = "<group>"; };
+		187B906218E515C300BF0120 /* circle_cover_50_grey_ios6@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_cover_50_grey_ios6@2x.png"; sourceTree = "<group>"; };
+		187B906318E515C300BF0120 /* circle_cover_50_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_cover_50_grey@2x.png"; sourceTree = "<group>"; };
 		18DF837918AC9C8F006CADD8 /* WaitingListUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitingListUtils.h; sourceTree = "<group>"; };
 		18DF837A18AC9C8F006CADD8 /* WaitingListUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitingListUtils.m; sourceTree = "<group>"; };
 		18E22AF118B444E400A6FBA3 /* WaitedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitedViewController.h; sourceTree = "<group>"; };
@@ -1799,6 +1807,10 @@
 		505A077617B09FB40053E1B7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				187B906018E515C300BF0120 /* circle_cover_30_grey_ios6@2x.png */,
+				187B906118E515C300BF0120 /* circle_cover_30_grey@2x.png */,
+				187B906218E515C300BF0120 /* circle_cover_50_grey_ios6@2x.png */,
+				187B906318E515C300BF0120 /* circle_cover_50_grey@2x.png */,
 				CEB5B84018E435E1002FCE83 /* header_icon_stop@2x.png */,
 				1806584F18E413B900B482D1 /* circle_cover_30@2x.png */,
 				1806585018E413B900B482D1 /* circle_cover_50@2x.png */,
@@ -2352,10 +2364,12 @@
 				18EDB3F718BCAAB5001DBB20 /* help_2_draged_background_words_en@2x.png in Resources */,
 				CE1E8CFF1843377A00A956A2 /* iOS6SignUpNavigationBarBackground@2x.png in Resources */,
 				CE7CEA1517CF52E20042F057 /* requestTalkWhite@2x.png in Resources */,
+				187B906618E515C300BF0120 /* circle_cover_50_grey_ios6@2x.png in Resources */,
 				CEB5B84118E435E1002FCE83 /* header_icon_stop@2x.png in Resources */,
 				18096A27187181B600198CD6 /* doodle_trash_disable@2x.png in Resources */,
 				18EA7DD5187CF1450098A824 /* aragon_avatar@2x.png in Resources */,
 				CE09D18A1831C9540070CDE2 /* MenuBarItemCamera@2x.png in Resources */,
+				187B906418E515C300BF0120 /* circle_cover_30_grey_ios6@2x.png in Resources */,
 				18E22B1818B4AA6B00A6FBA3 /* waiting_partner_button@2x.png in Resources */,
 				18096A14187181B600198CD6 /* doodle_color_6@2x.png in Resources */,
 				CE1E8D021843377A00A956A2 /* settingInformation@2x.png in Resources */,
@@ -2441,6 +2455,7 @@
 				CE5F66B117E94A100098E161 /* doodleEraser@2x.png in Resources */,
 				CE345F6517CB13FF009D52D4 /* add.png in Resources */,
 				18EA7DD6187CF1450098A824 /* arwen_avatar@2x.png in Resources */,
+				187B906518E515C300BF0120 /* circle_cover_30_grey@2x.png in Resources */,
 				CE5F66AD17E945C40098E161 /* doodleWidth@2x.png in Resources */,
 				18096A2D187181B600198CD6 /* doodle_width_2_selected@2x.png in Resources */,
 				CE345F7917CB13FF009D52D4 /* lineUnderPhoneNumber@2x.png in Resources */,
@@ -2539,6 +2554,7 @@
 				CE15EF261824EA750053AB38 /* defaultBigPhoto.png in Resources */,
 				18E22B1718B4AA6B00A6FBA3 /* waiting_logo@2x.png in Resources */,
 				18EA7DE3187CF1450098A824 /* help_3_background_words@2x.png in Resources */,
+				187B906718E515C300BF0120 /* circle_cover_50_grey@2x.png in Resources */,
 				CE6D2A40180659CE00AF6289 /* checkmarkForSync@2x.png in Resources */,
 				CE1E8D001843377A00A956A2 /* iOS6TabbarBackground@2x.png in Resources */,
 				18EA7DEB187CF1450098A824 /* help_4_picture_1@2x.png in Resources */,
