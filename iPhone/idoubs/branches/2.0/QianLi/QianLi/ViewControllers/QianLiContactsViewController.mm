@@ -34,6 +34,7 @@
 @property (nonatomic) BOOL finished; // 是否成功从服务器拿取数据
 @property (nonatomic, weak) InviteFriendsViewController *inviteController;
 @property (nonatomic, weak) NSThread *secondThread;
+@property (nonatomic, strong) NSMutableArray *allQianliContacts;
 
 - (IBAction)inviteFriends:(id)sender;
 
@@ -154,6 +155,11 @@
             if ((currentTime - startingTime) > 600) {
                 [_secondThread cancel];
             }
+        }
+    }
+    else{
+        if (_secondThread) {
+            [_secondThread cancel];
         }
     }
 }
@@ -565,7 +571,10 @@
 
     [_contacts removeAllObjects];
     [self sortContacts:friends sortedContacts:_contacts];
-    NSArray *items = [[QianLiContactsAccessor sharedInstance] getAllContacts];
+    [self performSelectorOnMainThread:@selector(getAllQianliContacts) withObject:nil waitUntilDone:YES];
+    //NSArray *items = [[QianLiContactsAccessor sharedInstance] getAllContacts];
+    NSArray *items = [[NSMutableArray alloc] initWithArray:_allQianliContacts];
+    _allQianliContacts = nil;
     for (int j = 0; j < [_contacts count]; ++j) {
         NSArray *arr = [_contacts objectAtIndex:j];
         for (int k = 0; k < [arr count]; ++k) {
@@ -590,8 +599,13 @@
     }
     
     [self performSelectorOnMainThread:@selector(showOrHideNoContacts) withObject:nil waitUntilDone:NO];
-    [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    [_friendsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
     [self updateQianLiContacts:items];
+}
+
+- (void)getAllQianliContacts
+{
+    _allQianliContacts = [NSMutableArray arrayWithArray:[[QianLiContactsAccessor sharedInstance] getAllContacts]];
 }
 
 - (void)updateQianLiContacts:(NSArray *)items
@@ -614,7 +628,7 @@
             }
         }
         if (!doHasIt) {
-            [[QianLiContactsAccessor sharedInstance] performSelectorOnMainThread:@selector(deleteItemForRemoteParty:) withObject:num waitUntilDone:YES];
+            [[QianLiContactsAccessor sharedInstance] performSelectorOnMainThread:@selector(deleteItemForRemoteParty:) withObject:num waitUntilDone:NO];
         }
     }
     
@@ -630,7 +644,7 @@
                      // update name
                      if (![item.name isEqualToString:[(NSManagedObject *)[items objectAtIndex:i] valueForKey:@"name"]]) {
                          NSArray *array= @[item.name, num];
-                         [self performSelectorOnMainThread:@selector(updateNameToNumber:) withObject:array waitUntilDone:YES];
+                         [self performSelectorOnMainThread:@selector(updateNameToNumber:) withObject:array waitUntilDone:NO];
                          [self addToUpdateList:num name:item.name];
                      }
                      doHasIt = YES;
@@ -640,7 +654,7 @@
             if (!doHasIt) {
                 NSArray *array= @[item, [NSNumber numberWithInteger: -1]];
                 // insert new contacts
-                [self performSelectorOnMainThread:@selector(insertItem:) withObject:array waitUntilDone:YES];
+                [self performSelectorOnMainThread:@selector(insertItem:) withObject:array waitUntilDone:NO];
                 [self addToUpdateList:item.tel name:item.name];
             }
         }
@@ -701,7 +715,11 @@
 
 - (void)updateUserProfile
 {
-    NSArray *items = [[QianLiContactsAccessor sharedInstance] getAllContacts];
+    //NSArray *items = [[QianLiContactsAccessor sharedInstance] getAllContacts];
+    [self performSelectorOnMainThread:@selector(getAllQianliContacts) withObject:nil waitUntilDone:YES];
+    NSArray *items = [[NSMutableArray alloc] initWithArray:_allQianliContacts];
+    _allQianliContacts = nil;
+    
     for (int i = 0; i < [items count]; ++i) {
         NSManagedObject *object = [items objectAtIndex:i];
         NSString *number = [object valueForKey:@"number"];
@@ -716,24 +734,24 @@
                     // If address has name, we use that name; otherwise, we use the name set by user
                     if (![object valueForKey:@"name"]) {
                         NSArray *array= @[name, number];
-                        [self performSelectorOnMainThread:@selector(updateNameToNumber:) withObject:array waitUntilDone:YES];
+                        [self performSelectorOnMainThread:@selector(updateNameToNumber:) withObject:array waitUntilDone:NO];
                         [self updateAvatar:number withImage:nil withName:name];
                         [self addToUpdateList:number name:name];
                     }
                     // update profile and updateCounter
                     UIImage *image;
                     if (avatarURL) {
-                       image = [UserDataTransUtils getImageAtPath:avatarURL];
+                        image = [UserDataTransUtils getImageAtPath:avatarURL];
                         if (image) {
                             NSArray *array = @[image, [NSNumber numberWithInteger:updateTime], number];
-                            [self performSelectorOnMainThread:@selector(updateProfile:) withObject:array waitUntilDone:YES];
+                            [self performSelectorOnMainThread:@selector(updateProfile:) withObject:array waitUntilDone:NO];
                             [self updateAvatar:number withImage:image withName:nil];
                         }
                     }
                     else
                     {
                         NSArray *array = @[[NSNumber numberWithInteger:updateTime], number];
-                        [self performSelectorOnMainThread:@selector(updateUpdateTime:) withObject:array waitUntilDone:YES];
+                        [self performSelectorOnMainThread:@selector(updateUpdateTime:) withObject:array waitUntilDone:NO];
                     }
                 }];
             }
@@ -764,7 +782,7 @@
                 found = YES;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:j];
                 if (indexPath) {
-                    [self performSelectorOnMainThread:@selector(updateContactsAt:) withObject:indexPath waitUntilDone:YES];
+                    [self performSelectorOnMainThread:@selector(updateContactsAt:) withObject:indexPath waitUntilDone:NO];
                 }
                 break;
             }
