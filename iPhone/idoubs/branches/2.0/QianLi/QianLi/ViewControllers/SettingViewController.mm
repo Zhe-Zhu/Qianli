@@ -135,10 +135,13 @@
                 [userData setBool:YES forKey:@"FirstInSetting"];
                 [userData synchronize];
                 if (avatarURL) {
-                    UIImage *image = [UserDataTransUtils getImageAtPath:avatarURL];
-                    [UserDataAccessor setUserProfile:image];
-                    [UserDataAccessor setUserName:name];
-                    [self.profilePhoto performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+                    [UserDataTransUtils getImageAtPath:avatarURL completion:^(UIImage *image) {
+                        if (image) {
+                            [UserDataAccessor setUserProfile:image];
+                            [self.profilePhoto performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+                        }
+                        [UserDataAccessor setUserName:name];
+                    }];
                 }
             }];
         }

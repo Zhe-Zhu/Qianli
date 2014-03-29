@@ -15,7 +15,7 @@
 + (void)getUserUpdateInfo:(NSString *)number Completion:(void(^)(NSInteger updateTime))success;
 + (void)deleteAccount:(NSString *)number Completion:(void(^)(BOOL updateTime))success;
 + (void)getUserData:(NSString *)number Completion:(void(^)(NSString* name, NSString* avatarURL))success;
-+ (UIImage *)getImageAtPath:(NSString *)relavtivePath;
++ (void)getImageAtPath:(NSString *)relavtivePath completion:(void(^)(UIImage *image))success;
 + (void)patchUserName:(NSString *)name number:(NSString *)number Completion:(void(^)(BOOL success))success;
 + (void)patchUserProfile:(UIImage *)image number:(NSString *)number Completion:(void(^)(BOOL success))success;
 + (void)patchUserPhoneDispImage:(UIImage *)image number:(NSString *)number Completion:(void(^)(BOOL success))success;

@@ -321,10 +321,11 @@
 {
     UIImageView *imageView = _bigProfileImage;
     [UserDataTransUtils getUserBigAvatar:_remotePartyNumber Completion:^(NSString *bigAvatarURL) {
-        UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
-        if (image) {
-            [imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
-        }
+        [UserDataTransUtils getImageAtPath:bigAvatarURL completion:^(UIImage *image) {
+            if (image) {
+                [imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
+            }
+        }];
     }];
 }
 
@@ -1314,20 +1315,14 @@
             NSString *sID = [[PictureManager sharedInstance] getImageSession];
             [PictureManager getMaximumIndex:sID Success:^(NSInteger number) {
                 _imageDispVC.totalNumber = number;
-                dispatch_async(getImageQueue, ^{
-                    NSString *path = [NSString stringWithFormat:@"%@",[words objectAtIndex:1]];
-                    NSData * imageData = [PictureManager getImageAtPath:path];
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        if ([_imageDispVC.indexs indexOfObject:[words objectAtIndex:1]] == NSNotFound) {
-                        UIImage *image = [UIImage imageWithData:imageData];
-                            if (image) {
-                                [_imageDispVC.images addObject:image];
-                                [_imageDispVC.indexs addObject:[words objectAtIndex:1]];
-                                [_imageDispVC displayImages];
-                            }
+                NSString *path = [NSString stringWithFormat:@"%@",[words objectAtIndex:1]];
+                [PictureManager getImageAtPath:path completion:^(UIImage *image) {
+                    if (image) {
+                        [_imageDispVC.images addObject:image];
+                        [_imageDispVC.indexs addObject:[words objectAtIndex:1]];
+                        [_imageDispVC performSelectorOnMainThread:@selector(displayImages) withObject:nil waitUntilDone:NO];
                     }
-                    });
-                });
+                }];
             }];
         }
     }
@@ -1421,20 +1416,13 @@
                 for (int i = 0; i < number; ++i) {
                     NSInteger ind = [_imageDispVC.indexs indexOfObject:[NSString stringWithFormat:@"%d",i]];
                     if (ind == NSNotFound) {
-                        dispatch_async(getImageQueue, ^{
-                            NSData * imageData = [PictureManager getImageAtPath:[NSString stringWithFormat:@"%d",i]];
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                if ([_imageDispVC.indexs indexOfObject:[NSString stringWithFormat:@"%d",i]] == NSNotFound) {
-                                UIImage *image = [UIImage imageWithData:imageData];
-                                    if (image) {
-                                        [_imageDispVC.indexs addObject:[NSString stringWithFormat:@"%d",i]];
-                                        [_imageDispVC.images addObject:image];
-                                        [_imageDispVC displayImages];
-                                    }
-                                }
-                            });
-                        });
-                        
+                        [PictureManager getImageAtPath:[NSString stringWithFormat:@"%d",i] completion:^(UIImage *image) {
+                            if (image) {
+                                [_imageDispVC.indexs addObject:[NSString stringWithFormat:@"%d",i]];
+                                [_imageDispVC.images addObject:image];
+                                [_imageDispVC performSelectorOnMainThread:@selector(displayImages) withObject:nil waitUntilDone:NO];
+                            }
+                        }];
                     }
                 }
             }
