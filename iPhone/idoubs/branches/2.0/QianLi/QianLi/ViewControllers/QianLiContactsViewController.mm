@@ -91,6 +91,9 @@
     [super viewWillAppear:animated];
     if (backFromInvite) {
         backFromInvite = NO;
+        if (_secondThread == nil) {
+            [self getAllQianLiFriends];
+        }
         return;
     }
     if (!_contacts) {
@@ -100,7 +103,9 @@
          _allContacts = [[NSMutableArray alloc] init];
     }
     didLoadFromStarting = YES;
-    [self getAllQianLiFriends];
+    if (_secondThread == nil) {
+        [self getAllQianLiFriends];
+    }
     int contactNumber = 0;
     for (NSArray *contactArray in _contacts) {
         if ([contactArray count] > 0) {
