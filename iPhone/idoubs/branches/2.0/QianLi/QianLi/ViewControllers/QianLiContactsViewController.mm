@@ -18,6 +18,7 @@
     BOOL didLoadFromStarting;
     BOOL backFromInvite;
     double startingTime;
+    NSInteger updateIndex;
 }
 @property (nonatomic, weak) IBOutlet UITableView *friendsTableView;
 
@@ -717,15 +718,28 @@
 {
     //NSArray *items = [[QianLiContactsAccessor sharedInstance] getAllContacts];
     [self performSelectorOnMainThread:@selector(getAllQianliContacts) withObject:nil waitUntilDone:YES];
-    NSArray *items = [[NSMutableArray alloc] initWithArray:_allQianliContacts];
-    _allQianliContacts = nil;
+    [self updateProfileFromServer];
     
-    for (int i = 0; i < [items count]; ++i) {
-        NSManagedObject *object = [items objectAtIndex:i];
-        NSString *number = [object valueForKey:@"number"];
-        if ([number isEqualToString:QianLiRobotNumber]) {
-            continue;
+    if ([_updateArray count] > 0) {
+        for (int i = 0; i < [_updateArray count] / 2; ++ i) {
+            // update user name for calling display
+            [UserDataTransUtils updateOneFriendName:[_updateArray objectAtIndex: 2 * i] number:[_updateArray objectAtIndex:2 * i + 1] completion:nil];
         }
+        [_updateArray removeAllObjects];
+    }
+}
+
+- (void)updateProfileFromServer
+{
+    if (updateIndex >= [_allQianliContacts count]) {
+        _allQianliContacts = nil;
+        updateIndex = 0;
+        return;
+    }
+    __weak __typeof(&*self)weakSelf = self;
+    NSManagedObject *object = [_allQianliContacts objectAtIndex:updateIndex];
+    NSString *number = [object valueForKey:@"number"];
+    if (![number isEqualToString:QianLiRobotNumber]) {
         NSInteger counter = [(NSNumber *)[object valueForKey:@"updatecounter"] integerValue];
         [UserDataTransUtils getUserUpdateInfo:number Completion:^(NSInteger updateTime) {
             if (!(updateTime ==  counter)) {
@@ -739,29 +753,34 @@
                         [self addToUpdateList:number name:name];
                     }
                     // update profile and updateCounter
-                    UIImage *image;
                     if (avatarURL) {
-                        image = [UserDataTransUtils getImageAtPath:avatarURL];
-                        if (image) {
-                            NSArray *array = @[image, [NSNumber numberWithInteger:updateTime], number];
-                            [self performSelectorOnMainThread:@selector(updateProfile:) withObject:array waitUntilDone:NO];
-                            [self updateAvatar:number withImage:image withName:nil];
-                        }
+                        [UserDataTransUtils getImageAtPath:avatarURL completion:^(UIImage *image) {
+                            if (image) {
+                                NSArray *array = @[image, [NSNumber numberWithInteger:updateTime], number];
+                                [self performSelectorOnMainThread:@selector(updateProfile:) withObject:array waitUntilDone:NO];
+                                [self updateAvatar:number withImage:image withName:nil];
+                            }
+                        }];
                     }
                     else
                     {
                         NSArray *array = @[[NSNumber numberWithInteger:updateTime], number];
                         [self performSelectorOnMainThread:@selector(updateUpdateTime:) withObject:array waitUntilDone:NO];
                     }
+                    
+                    updateIndex++;
+                    [weakSelf updateProfileFromServer];
                 }];
+            }
+            else{
+                updateIndex++;
+                [weakSelf updateProfileFromServer];
             }
         }];
     }
-    if ([_updateArray count] > 0) {
-        for (int i = 0; i < [_updateArray count] / 2; ++ i) {
-            [UserDataTransUtils updateOneFriendName:[_updateArray objectAtIndex: 2 * i] number:[_updateArray objectAtIndex:2 * i + 1] completion:nil];
-        }
-        [_updateArray removeAllObjects];
+    else{
+        updateIndex++;
+        [weakSelf updateProfileFromServer];
     }
 }
 

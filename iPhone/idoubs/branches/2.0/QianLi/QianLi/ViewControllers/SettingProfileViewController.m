@@ -133,9 +133,12 @@
                 [userData setBool:YES forKey:@"FirstInProfile"];
                 [userData synchronize];
                 if (bigAvatarURL) {
-                    UIImage *image = [UserDataTransUtils getImageAtPath:bigAvatarURL];
-                    [UserDataAccessor setUserPhoneDispImage:image];
-                    [_bigProfilePhoto performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+                    [UserDataTransUtils getImageAtPath:bigAvatarURL completion:^(UIImage *image) {
+                        if (image) {
+                            [UserDataAccessor setUserPhoneDispImage:image];
+                            [_bigProfilePhoto performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+                        }
+                    }];
                 }
             }];
         }
