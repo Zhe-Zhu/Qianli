@@ -14,7 +14,7 @@
 @interface PictureManager : NSObject
 
 // Load image from server.
-+ (NSData *)getImageAtPath:(NSString *)path;
++ (void)getImageAtPath:(NSString *)index completion:(void(^)(UIImage *image))success;
 
 // post an image to server，if the opreation succeed, the string of the block parameter is the path of the poted image in server.
 + (void)putImages:(NSArray *)imageArray SessionID:(NSString *)sessionID StartIndex:(NSInteger)index Receiver:(NSString *)receiver Sender:(NSString *)sender Success:(void(^)(NSArray *info))success Completion:(void(^)(BOOL finished))completion;

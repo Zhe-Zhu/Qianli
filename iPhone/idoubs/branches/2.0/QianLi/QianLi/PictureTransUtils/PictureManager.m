@@ -162,26 +162,83 @@ static PictureManager *pictureManager;
     return pictureManager;
 }
 
-+ (NSData *)getImageAtPath:(NSString *)index
+//+ (NSData *)getImageAtPath:(NSString *)index
+//{
+//    // If path is nil, then we throw an exception.
+//    if (index == nil) {
+//        [NSException raise:@"Image path can not be nil" format:@"Image path must not be nil"];
+//        return nil;
+//    }
+//    
+//    NSString *path = [NSString stringWithFormat:@"%@%@/%@/",[NSString stringWithFormat:@"%@/pictures/getpic/", kBaseURL],[[PictureManager sharedInstance] getImageSession], index];
+//    NSError *error;
+//    // Downloading Image is a very basic operation, therefore, we just invoke the method provided by ios.
+//    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&error];
+//    if (error) {
+//        NSError *err;
+//        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&err];
+//        if (err) {
+//            return nil;
+//        }
+//    }
+//    return imageData;
+//}
+
++ (void)getImageAtPath:(NSString *)index completion:(void(^)(UIImage *image))success
 {
-    // If path is nil, then we throw an exception.
-    if (index == nil) {
-        [NSException raise:@"Image path can not be nil" format:@"Image path must not be nil"];
-        return nil;
-    }
-    
     NSString *path = [NSString stringWithFormat:@"%@%@/%@/",[NSString stringWithFormat:@"%@/pictures/getpic/", kBaseURL],[[PictureManager sharedInstance] getImageSession], index];
-    NSError *error;
-    // Downloading Image is a very basic operation, therefore, we just invoke the method provided by ios.
-    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&error];
-    if (error) {
-        NSError *err;
-        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&err];
-        if (err) {
-            return nil;
-        }
+    //NSError *error;
+    if (IS_OS_7_OR_LATER) {
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        NSURLSessionTask *task = [session dataTaskWithURL:[NSURL URLWithString:path] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error == NULL) {
+                success([UIImage imageWithData:data]);
+            }
+            else{
+                NSURLSessionTask *secondTask = [session dataTaskWithURL:[NSURL URLWithString:path] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                    if (error == NULL) {
+                        success([UIImage imageWithData:data]);
+                    }
+                    else{
+                        success(nil);
+                    }
+                }];
+                [secondTask resume];
+            }
+        }];
+        [task resume];
     }
-    return imageData;
+    else{
+        NSURL *url = [NSURL URLWithString:path];
+        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error)
+         {
+             if ([data length] > 0 && error == nil){
+                 success([UIImage imageWithData:data]);
+             }
+             else if ([data length] == 0 && error == nil){
+                 success(nil);
+             }
+             else if (error != nil){
+                 [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error)
+                  {
+                      if ([data length] > 0 && error == nil){
+                          success([UIImage imageWithData:data]);
+                      }
+                      else if ([data length] == 0 && error == nil){
+                          success(nil);
+                      }
+                      else if (error != nil && error.code == NSURLErrorTimedOut){
+                          success(nil);
+                      }
+                      else if (error != nil){
+                          success(nil);
+                      }
+                  }];
+             }
+         }];
+    }
 }
 
 + (void)putImages:(NSArray *)imageArray SessionID:(NSString *)sessionID StartIndex:(NSInteger)index Receiver:(NSString *)receiver Sender:(NSString *)sender Success:(void(^)(NSArray *info))success Completion:(void(^)(BOOL finished))completion

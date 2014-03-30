@@ -73,6 +73,11 @@
 @synthesize bigAavatar;
 @end
 
+@interface UserDataTransUtils ()
+
+@property(nonatomic, strong)  NSURLSessionDataTask *task;
+@end
+
 @implementation UserDataTransUtils
 
 + (void)getUserUpdateInfo:(NSString *)number Completion:(void(^)(NSInteger updateTime))success
@@ -171,19 +176,61 @@
      }];
 }
 
-+ (UIImage *)getImageAtPath:(NSString *)relavtivePath
++ (void)getImageAtPath:(NSString *)relavtivePath completion:(void(^)(UIImage *image))success
 {
     NSString *path = [NSString stringWithFormat:@"%@/users/avatar/%@/",kBaseURL ,relavtivePath];
-    NSError *error;
-    // Downloading Image is a very basic operation, therefore, we just invoke the method provided by ios.
-    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&error];
-    if (error) {
-        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:path] options:NSDataReadingMappedIfSafe error:&error];
-        if (error) {
-            return nil;
-        };
+    //NSError *error;
+    if (IS_OS_7_OR_LATER) {
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        NSURLSessionTask *task = [session dataTaskWithURL:[NSURL URLWithString:path] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error == NULL) {
+                success([UIImage imageWithData:data]);
+            }
+            else{
+                NSURLSessionTask *secondTask = [session dataTaskWithURL:[NSURL URLWithString:path] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                    if (error == NULL) {
+                        success([UIImage imageWithData:data]);
+                    }
+                    else{
+                        success(nil);
+                    }
+                }];
+                [secondTask resume];
+            }
+        }];
+        [task resume];
     }
-    return [UIImage imageWithData:imageData];
+    else{
+        NSURL *url = [NSURL URLWithString:path];
+        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error)
+        {
+            if ([data length] > 0 && error == nil){
+                success([UIImage imageWithData:data]);
+            }
+            else if ([data length] == 0 && error == nil){
+                success(nil);
+            }
+            else if (error != nil){
+                [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error)
+                 {
+                     if ([data length] > 0 && error == nil){
+                         success([UIImage imageWithData:data]);
+                     }
+                     else if ([data length] == 0 && error == nil){
+                         success(nil);
+                     }
+                     else if (error != nil && error.code == NSURLErrorTimedOut){
+                         success(nil);
+                     }
+                     else if (error != nil){
+                         success(nil);
+                     }
+                 }];
+            }
+        }];
+    }
 }
 
 + (void)patchUserName:(NSString *)name number:(NSString *)number Completion:(void(^)(BOOL success))success
