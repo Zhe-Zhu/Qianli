@@ -301,42 +301,40 @@
 
 + (void)lookupHostIPAddressForURL:(NSURL*)url
 {
-    NSString *ipStr = [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey];
-    if (![Utils checkInternetAndDispWarning:NO]) {
-        return;
-    }
+    dispatch_queue_t DNSQueue;
+    DNSQueue = dispatch_queue_create("com.dns.Queue", NULL);
     
-    // Ask the unix subsytem to query the DNS
-    struct hostent *remoteHostEnt = gethostbyname([[url host] UTF8String]);
-    if (remoteHostEnt == nil) {
-        return;
-    }
-    // Get address info from host entry
-    struct in_addr *remoteInAddr = (struct in_addr *)remoteHostEnt->h_addr_list[0];
-    if (remoteInAddr == nil) {
-        return;
-    }
-    // Convert numeric addr to ASCII string
-    char *sRemoteInAddr = inet_ntoa(*remoteInAddr);
-    // hostIP
-    NSString* hostIP = [NSString stringWithUTF8String:sRemoteInAddr];
-    if (hostIP == nil || [hostIP isEqualToString:@""]) {
-        return;
-    }
-    else{
-        if (![ipStr isEqualToString:hostIP]) {
-            [[NSUserDefaults standardUserDefaults] setObject:hostIP forKey:kHostIPKey];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            [Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+    dispatch_async(DNSQueue, ^{
+        NSString *ipStr = [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey];
+        if ([Utils checkInternetAndDispWarning:NO]) {
+            // Ask the unix subsytem to query the DNS
+            struct hostent *remoteHostEnt = gethostbyname([[url host] UTF8String]);
+            if (remoteHostEnt != nil) {
+                // Get address info from host entry
+                struct in_addr *remoteInAddr = (struct in_addr *)remoteHostEnt->h_addr_list[0];
+                if (remoteInAddr != nil) {
+                    // Convert numeric addr to ASCII string
+                    char *sRemoteInAddr = inet_ntoa(*remoteInAddr);
+                    // hostIP
+                    NSString* hostIP = [NSString stringWithUTF8String:sRemoteInAddr];
+                    if ((hostIP != nil) && (![hostIP isEqualToString:@""])) {
+                        if (![ipStr isEqualToString:hostIP]) {
+                            [[NSUserDefaults standardUserDefaults] setObject:hostIP forKey:kHostIPKey];
+                            [[NSUserDefaults standardUserDefaults] synchronize];
+                            [Utils configureParmsWithNumber:[UserDataAccessor getUserRemoteParty]];
+                        }
+                    }
+                }
+            }
         }
-    }
+    });
 }
 
 + (void)configureParmsWithNumber:(NSString *)number
 {
     //TODO: change ip
-   // NSString *ipStr = [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey];
-    NSString *ipStr = kServerIP;
+    NSString *ipStr = [[NSUserDefaults standardUserDefaults] objectForKey:kHostIPKey];
+   // NSString *ipStr = kServerIP;
     if (ipStr == nil || [ipStr isEqualToString:@""]) {
         ipStr = kServerIP;
         [[NSUserDefaults standardUserDefaults] setObject:kServerIP forKey:kHostIPKey];

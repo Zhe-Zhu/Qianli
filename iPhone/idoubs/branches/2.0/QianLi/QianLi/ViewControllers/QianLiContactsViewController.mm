@@ -91,6 +91,9 @@
     [super viewWillAppear:animated];
     if (backFromInvite) {
         backFromInvite = NO;
+        if (_secondThread == nil) {
+            [self getAllQianLiFriends];
+        }
         return;
     }
     if (!_contacts) {
@@ -100,7 +103,10 @@
          _allContacts = [[NSMutableArray alloc] init];
     }
     didLoadFromStarting = YES;
-    [self getAllQianLiFriends];
+    
+    if (_secondThread == nil) {
+        [self getAllQianLiFriends];
+    }
     int contactNumber = 0;
     for (NSArray *contactArray in _contacts) {
         if ([contactArray count] > 0) {
@@ -852,6 +858,9 @@
 
 - (void)clearContacts
 {
+    if(_secondThread){
+        [_secondThread cancel];
+    }
     _allContacts = nil;
     _contacts = nil;
     if (_inviteController) {
@@ -979,6 +988,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Call someone
+    //[self.friendsTableView deselectRowAtIndexPath:indexPath animated:YES];
     if ([_contacts count] <= indexPath.section) {
         return;
     }
@@ -992,7 +1002,6 @@
     NSString *remoteParty = item.tel;
     [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
     [self callWithRemoteParty:remoteParty];
-    [self.friendsTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
