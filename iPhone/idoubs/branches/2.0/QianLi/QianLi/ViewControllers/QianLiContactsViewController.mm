@@ -123,6 +123,8 @@
     }
     // 如果没有联系人则显示"提示邀请好友加入"界面
     [self showOrHideNoContacts];
+    NSIndexPath *selectdPath = [_friendsTableView indexPathForSelectedRow];
+    [_friendsTableView deselectRowAtIndexPath:selectdPath animated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated

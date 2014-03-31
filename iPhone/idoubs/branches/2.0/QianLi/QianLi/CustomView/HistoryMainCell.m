@@ -311,6 +311,7 @@
             self.backView.backgroundColor = [UIColor colorWithRed:98/255.0 green:217/255.0 blue:98/255.0 alpha:1.0];
             self.phoneIconImageView.image = nil;
             [self.phoneIconImageViewWhite setAlpha:1];
+            [self.phoneIconImageViewWhite setImage:[UIImage imageNamed:@"phoneWhite.png"]];
             if (self.isCrossTriggerLengthRight == NO) {
                 self.isCrossTriggerLengthRight = YES;
                 [UIView animateWithDuration:0.1f animations: ^{
@@ -405,7 +406,7 @@
                      }
                      completion:^(BOOL finished) {
                          self.shouldAnimateCellReset = YES;
-                         [self cleanupBackView];
+                         //[self cleanupBackView];
                          self.userInteractionEnabled = YES;
                      }];
 }
@@ -413,7 +414,12 @@
 - (void)prepareForReuse
 {
     [super prepareForReuse];
-    [self cleanupBackView];
+    [self stopAllAnimation];
+    // reset the frame of contentview
+    self.contentView.frame = CGRectOffset(self.contentView.bounds, 0, 0);
+    self.phoneIconImageViewWhite.image = nil;
+    self.requestLoading.frame = self.requestIconImageView.bounds;
+    //[self cleanupBackView];
 }
 
 // super类中会自动执行该函数,并且会将backview remove
@@ -483,6 +489,8 @@
 }
 
 - (void)startSpin {
+    NSLog(@"%f, %f, %f, %f, %f, %@", self.requestLoading.frame.origin.x, self.requestLoading.frame.origin.y, self.requestLoading.frame.size.width, self.requestLoading.frame.size.height, self.requestLoading.alpha, self.requestLoading.image);
+    self.requestLoading.alpha = 1.0;
     if (!animating) {
         animating = YES;
         [self spinWithOptions: UIViewAnimationOptionCurveEaseIn];
@@ -518,6 +526,7 @@
     if (self.isRequested == YES) {
 //        self.contentView.frame = CGRectOffset(self.contentView.bounds, -kRequestOffset-10, 0);
         [self.phoneIconImageView setFrame:CGRectMake(CGRectGetMaxX(self.contentView.frame) + 10 -kRequestOffset, CGRectGetMinY(self.phoneIconImageView.frame), CGRectGetWidth(self.phoneIconImageView.frame), CGRectGetHeight(self.phoneIconImageView.frame))];
+        [self.phoneIconImageView setImage:[UIImage imageNamed:@"arrowLeft.png"]];
         self.backView.backgroundColor = [UIColor colorWithRed:98/255.0 green:217/255.0 blue:98/255.0 alpha:1.0];
         // 加入前后抖动动画
         if (self.isAnimated) {
