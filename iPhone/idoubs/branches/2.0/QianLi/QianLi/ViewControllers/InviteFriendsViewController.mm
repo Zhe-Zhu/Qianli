@@ -12,7 +12,7 @@
 @interface InviteFriendsViewController (){
     NSMutableArray * _contacts;
     NSMutableArray *_filteredListContent;
-    BOOL searchDisplayIsOn;
+    BOOL searchDisplayIsOn; 
 }
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;

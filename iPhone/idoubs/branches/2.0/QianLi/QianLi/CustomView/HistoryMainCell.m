@@ -419,6 +419,7 @@
     self.contentView.frame = CGRectOffset(self.contentView.bounds, 0, 0);
     self.phoneIconImageViewWhite.image = nil;
     self.requestLoading.frame = self.requestIconImageView.bounds;
+    self.requestLoading.alpha = 0.0;
     //[self cleanupBackView];
 }
 
@@ -489,7 +490,6 @@
 }
 
 - (void)startSpin {
-    NSLog(@"%f, %f, %f, %f, %f, %@", self.requestLoading.frame.origin.x, self.requestLoading.frame.origin.y, self.requestLoading.frame.size.width, self.requestLoading.frame.size.height, self.requestLoading.alpha, self.requestLoading.image);
     self.requestLoading.alpha = 1.0;
     if (!animating) {
         animating = YES;
