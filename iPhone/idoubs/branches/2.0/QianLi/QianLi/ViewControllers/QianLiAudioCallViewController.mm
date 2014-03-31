@@ -185,6 +185,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onInviteEvent:) name:kNgnInviteEventArgs_Name object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveIncomingGettingImageMessage:) name:@"receivedImageNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handelAudioRouteChange) name:AVAudioSessionRouteChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEnterForground:) name:UIApplicationDidBecomeActiveNotification object:nil];
     getImageQueue = dispatch_queue_create("com.ashstudio.getImageQueue", NULL);
     imageSessionExists = NO;
     getIndexArray = NO;
@@ -264,6 +265,13 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)appEnterForground:(NSNotification *)notif
+{
+    if (_viewState == Calling) {
+        [self spinActivityIndicator];
+    }
 }
 
 - (void)proximityChanged
