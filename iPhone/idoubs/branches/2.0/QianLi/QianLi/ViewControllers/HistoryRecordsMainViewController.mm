@@ -173,7 +173,7 @@
 	HistoryMainCell *historyCell = (HistoryMainCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
      //因为所继承的cell每次都把view清理,所以每次都要重新Init一遍,否则backview会丢失
     
-//    HistoryMainCell * historyCell = [[HistoryMainCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    //HistoryMainCell * historyCell = [[HistoryMainCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     if (historyCell == nil) {
         historyCell = [[HistoryMainCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }

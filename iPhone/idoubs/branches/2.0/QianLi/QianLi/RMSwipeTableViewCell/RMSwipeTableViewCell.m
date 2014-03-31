@@ -112,7 +112,9 @@
     if ([self.delegate respondsToSelector:@selector(swipeTableViewCellDidStartSwiping:)]) {
         [self.delegate swipeTableViewCellDidStartSwiping:self];
     }
-    [self.backgroundView addSubview:self.backView];
+    if ([self.backView superview] == nil) {
+        [self.backgroundView addSubview:self.backView];
+    }
     [self.backView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
 }
 
@@ -161,7 +163,7 @@
                                                                        self.contentView.frame = self.contentView.bounds;
                                                                    }
                                                                    completion:^(BOOL finished) {
-                                                                       [self cleanupBackView];
+                                                                       //[self cleanupBackView];
                                                                        if ([self.delegate respondsToSelector:@selector(swipeTableViewCellDidResetState:fromPoint:animation:velocity:)]) {
                                                                            [self.delegate swipeTableViewCellDidResetState:self fromPoint:point animation:self.animationType velocity:velocity];
                                                                        }
@@ -179,7 +181,7 @@
                              self.contentView.frame = CGRectOffset(self.contentView.bounds, 0, 0);
                          }
                          completion:^(BOOL finished) {
-                             [self cleanupBackView];
+                             //[self cleanupBackView];
                              if ([self.delegate respondsToSelector:@selector(swipeTableViewCellDidResetState:fromPoint:animation:velocity:)]) {
                                  [self.delegate swipeTableViewCellDidResetState:self fromPoint:point animation:self.animationType velocity:velocity];
                              }

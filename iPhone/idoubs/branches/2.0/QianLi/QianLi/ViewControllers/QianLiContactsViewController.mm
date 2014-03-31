@@ -103,6 +103,7 @@
          _allContacts = [[NSMutableArray alloc] init];
     }
     didLoadFromStarting = YES;
+
     if (_secondThread == nil) {
         [self getAllQianLiFriends];
     }
@@ -122,6 +123,8 @@
     }
     // 如果没有联系人则显示"提示邀请好友加入"界面
     [self showOrHideNoContacts];
+    NSIndexPath *selectdPath = [_friendsTableView indexPathForSelectedRow];
+    [_friendsTableView deselectRowAtIndexPath:selectdPath animated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -857,6 +860,9 @@
 
 - (void)clearContacts
 {
+    if(_secondThread){
+        [_secondThread cancel];
+    }
     _allContacts = nil;
     _contacts = nil;
     if (_inviteController) {
@@ -984,6 +990,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Call someone
+    //[self.friendsTableView deselectRowAtIndexPath:indexPath animated:YES];
     if ([_contacts count] <= indexPath.section) {
         return;
     }
@@ -997,7 +1004,6 @@
     NSString *remoteParty = item.tel;
     [[SipStackUtils sharedInstance] setRemotePartyNumber:remoteParty];
     [self callWithRemoteParty:remoteParty];
-    [self.friendsTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath

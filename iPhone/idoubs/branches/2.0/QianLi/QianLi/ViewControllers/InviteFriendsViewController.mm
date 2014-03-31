@@ -121,6 +121,8 @@
     else{
         [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     }
+    NSIndexPath *selectdPath = [_tableView indexPathForSelectedRow];
+    [_tableView deselectRowAtIndexPath:selectdPath animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -413,11 +415,11 @@
 {
 	if (tableView == self.searchDisplayController.searchResultsTableView) {
 		[self tableView:self.searchDisplayController.searchResultsTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
-		[self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:YES];
+		//[self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:YES];
 	}
 	else {
 		[self tableView:self.tableView accessoryButtonTappedForRowWithIndexPath:indexPath];
-		[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+		//[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 	}
 }
 
